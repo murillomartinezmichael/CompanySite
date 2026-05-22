@@ -719,6 +719,138 @@
       }
     }
 
+    /* === PRODUCTS === */
+    .products-section {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 140px 0;
+    }
+
+    .products-section .section-label {
+      color: var(--clay);
+    }
+
+    .products-section .section-title {
+      color: var(--cream);
+    }
+
+    .products-section .section-title em {
+      color: var(--clay);
+    }
+
+    .products-section .section-intro {
+      color: rgba(244, 239, 230, 0.65);
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 64px;
+    }
+
+    @media (max-width: 768px) {
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .product-card {
+      border: 1px solid rgba(244, 239, 230, 0.12);
+      border-radius: 4px;
+      padding: 48px 40px;
+      position: relative;
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .product-card:hover {
+      border-color: var(--clay);
+      background: rgba(244, 239, 230, 0.03);
+    }
+
+    .product-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--clay);
+      font-weight: 500;
+      margin-bottom: 28px;
+    }
+
+    .product-live-dot {
+      width: 6px;
+      height: 6px;
+      background: #5a7a4a;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    .product-card h3 {
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      font-size: 32px;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      color: var(--cream);
+    }
+
+    .product-card h3 em {
+      font-style: italic;
+      color: var(--clay);
+    }
+
+    .product-desc {
+      font-size: 15px;
+      color: rgba(244, 239, 230, 0.65);
+      line-height: 1.65;
+      margin-bottom: 32px;
+    }
+
+    .product-features {
+      list-style: none;
+      margin-bottom: 40px;
+    }
+
+    .product-features li {
+      font-size: 13px;
+      color: rgba(244, 239, 230, 0.5);
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(244, 239, 230, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .product-features li::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      background: var(--clay);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .btn-product {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--cream);
+      border-bottom: 1px solid rgba(244, 239, 230, 0.3);
+      padding-bottom: 2px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-product:hover {
+      color: var(--clay);
+      border-color: var(--clay);
+    }
+
     /* === UTILITIES === */
     .reveal {
       opacity: 0;
@@ -758,6 +890,7 @@
       </a>
       <div class="nav-links">
         <a href="#work">Work</a>
+        <a href="#products">Products</a>
         <a href="#process">Process</a>
         <a href="#about">About</a>
         <a href="#contact" class="btn-contact">Get in touch</a>
@@ -849,6 +982,71 @@
             content scheduling · Finance, gaming, and niche channel automation · Custom upload pipelines for any platform
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== LIVE PRODUCTS =================== -->
+  <section class="products-section" id="products">
+    <div class="container">
+      <div class="section-label">— Live Products</div>
+      <h2 class="section-title">Already built.<br><em>Already running.</em></h2>
+      <p class="section-intro">
+        These aren't mock-ups. These bots are live, running on real accounts, posting real content.
+        Want one pointed at your channel? We can deploy it for you.
+      </p>
+
+      <div class="products-grid">
+
+        <div class="product-card">
+          <div class="product-live">
+            <span class="product-live-dot"></span>
+            Live &amp; running
+          </div>
+          <h3>Finance <em>Reel Bot</em></h3>
+          <p class="product-desc">
+            A fully automated pipeline that sources finance content, formats it for short-form video,
+            and uploads directly to YouTube — on schedule, every day, without touching it.
+          </p>
+          <ul class="product-features">
+            <li>Automated content sourcing &amp; formatting</li>
+            <li>Scheduled YouTube Shorts &amp; video uploads</li>
+            <li>Runs 24/7 with zero manual input</li>
+            <li>Finance niche optimized — one of YouTube's highest CPM categories</li>
+          </ul>
+          <a href="#contact" class="btn-product">
+            Get this for your channel
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M13 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+
+        <div class="product-card">
+          <div class="product-live">
+            <span class="product-live-dot"></span>
+            Live &amp; running
+          </div>
+          <h3>Twitch Clip <em>Compiler</em></h3>
+          <p class="product-desc">
+            Pulls top clips from Twitch, compiles them into highlight reels, and auto-posts
+            to YouTube across multiple accounts. Turns your stream's best moments into
+            a content machine that runs while you play.
+          </p>
+          <ul class="product-features">
+            <li>Automatic top-clip discovery &amp; download</li>
+            <li>Compiled highlight reels, ready to post</li>
+            <li>Multi-account YouTube publishing</li>
+            <li>Works for any game, any streamer, any niche</li>
+          </ul>
+          <a href="#contact" class="btn-product">
+            Get this for your channel
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M13 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+
       </div>
     </div>
   </section>
