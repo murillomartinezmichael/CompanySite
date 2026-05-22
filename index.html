@@ -66,12 +66,13 @@
       letter-spacing: -0.04em;
     }
     .m3 sup {
-      font-size: 0.52em;
-      vertical-align: super;
+      font-size: 0.45em;
+      position: relative;
+      top: -0.65em;
       color: var(--clay);
       font-weight: 300;
       letter-spacing: 0;
-      line-height: 0;
+      vertical-align: baseline;
     }
 
     /* === NAV === */
@@ -821,11 +822,13 @@
     }
 
     .footer-brand-mark sup {
-      font-size: 0.42em;
-      vertical-align: super;
+      font-size: 0.38em;
+      position: relative;
+      top: -0.9em;
       color: var(--clay);
       font-weight: 300;
       letter-spacing: 0;
+      vertical-align: baseline;
     }
 
     .footer-tagline {
@@ -857,6 +860,181 @@
       gap: 16px;
     }
 
+    /* === SELECTED WORK SHOWCASE === */
+    .showcase-section { padding: 0; }
+
+    .showcase-header {
+      padding: 120px 40px 80px;
+    }
+
+    .showcase-project {
+      position: relative;
+      overflow: hidden;
+      padding: 120px 0;
+      border-top: 1px solid rgba(24,21,15,0.08);
+    }
+
+    .showcase-dark { background: var(--ink); }
+    .showcase-light { background: var(--cream-2); }
+
+    .showcase-bg-num {
+      position: absolute;
+      right: -20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Fraunces', serif;
+      font-size: clamp(200px, 22vw, 360px);
+      font-weight: 700;
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+      letter-spacing: -0.05em;
+    }
+
+    .showcase-dark .showcase-bg-num {
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(245,240,232,0.04);
+    }
+
+    .showcase-light .showcase-bg-num {
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(24,21,15,0.05);
+    }
+
+    .showcase-inner {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .showcase-inner { grid-template-columns: 1fr; gap: 48px; }
+    }
+
+    .showcase-meta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .showcase-badge {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 600;
+      padding: 5px 14px;
+      border-radius: 999px;
+    }
+
+    .badge-acquisition {
+      background: rgba(184,131,90,0.15);
+      color: var(--clay-light);
+      border: 1px solid rgba(184,131,90,0.25);
+    }
+
+    .badge-live {
+      background: rgba(92,138,71,0.12);
+      color: #7ab85a;
+      border: 1px solid rgba(92,138,71,0.2);
+    }
+
+    .badge-oss {
+      background: rgba(245,240,232,0.06);
+      color: rgba(245,240,232,0.4);
+      border: 1px solid rgba(245,240,232,0.1);
+    }
+
+    .showcase-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 300;
+      font-size: clamp(52px, 6vw, 88px);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      color: var(--cream);
+    }
+
+    .showcase-title em {
+      font-style: italic;
+      color: var(--clay-light);
+    }
+
+    .showcase-title-dark { color: var(--ink); }
+    .showcase-title-dark em { color: var(--clay-dark); }
+
+    .showcase-desc {
+      font-size: 15px;
+      color: rgba(245,240,232,0.55);
+      line-height: 1.8;
+      margin-bottom: 48px;
+      font-weight: 300;
+    }
+
+    .showcase-desc-dark {
+      color: var(--muted);
+    }
+
+    .showcase-details {
+      display: flex;
+      gap: 48px;
+      margin-bottom: 40px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid rgba(245,240,232,0.08);
+    }
+
+    .showcase-details-dark {
+      border-bottom-color: rgba(24,21,15,0.1);
+    }
+
+    .showcase-stat { display: flex; flex-direction: column; gap: 4px; }
+
+    .showcase-stat-num {
+      font-family: 'Fraunces', serif;
+      font-size: 40px;
+      font-weight: 300;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: var(--clay-light);
+    }
+
+    .showcase-stat-label {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.3);
+    }
+
+    .showcase-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .showcase-tag {
+      font-size: 11px;
+      color: rgba(245,240,232,0.4);
+      background: rgba(245,240,232,0.05);
+      border: 1px solid rgba(245,240,232,0.08);
+      padding: 5px 13px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+    }
+
+    .showcase-tags-dark { }
+
+    .showcase-tag-dark {
+      font-size: 11px;
+      color: var(--muted);
+      background: rgba(24,21,15,0.04);
+      border: 1px solid rgba(24,21,15,0.1);
+      padding: 5px 13px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+    }
+
     /* === UTILITIES === */
     .reveal {
       opacity: 0;
@@ -882,7 +1060,7 @@
     <div class="container nav-inner">
       <a href="#" class="brand m3">M<sup>3</sup></a>
       <div class="nav-links">
-        <a href="#work">Work</a>
+        <a href="#showcase">Work</a>
         <a href="#products">Products</a>
         <a href="#process">Process</a>
         <a href="#about">About</a>
@@ -949,6 +1127,97 @@
       <span>·</span>
     </div>
   </div>
+
+  <!-- SELECTED WORK -->
+  <section class="showcase-section" id="showcase">
+    <div class="showcase-header container">
+      <div class="section-label">Selected Work</div>
+      <h2 class="section-title">Built things that<br><em>mattered.</em></h2>
+    </div>
+
+    <!-- PROJECT 01 -->
+    <div class="showcase-project showcase-dark">
+      <div class="showcase-bg-num">01</div>
+      <div class="container showcase-inner">
+        <div class="showcase-meta">
+          <span class="showcase-badge badge-acquisition">Acquired · $1B</span>
+          <span class="showcase-badge badge-live">Enterprise</span>
+        </div>
+        <h3 class="showcase-title">AGS DevOps<br><em>Portal</em></h3>
+        <div class="showcase-body">
+          <p class="showcase-desc">
+            Built the entire DevOps portal from scratch for American Gaming Systems — a unified hub that centralized release management, branch automation, build validation, decryption pipelines, and compliance workflows across multiple gaming jurisdictions. Then took every fragmented legacy tool and ported them into a microservices architecture connected through a central hub. Used daily by engineering and QA. AGS was subsequently acquired for $1B.
+          </p>
+          <div class="showcase-details">
+            <div class="showcase-stat">
+              <span class="showcase-stat-num">7+</span>
+              <span class="showcase-stat-label">Microservices built</span>
+            </div>
+            <div class="showcase-stat">
+              <span class="showcase-stat-num">5–10</span>
+              <span class="showcase-stat-label">Engineers daily</span>
+            </div>
+            <div class="showcase-stat">
+              <span class="showcase-stat-num">$1B</span>
+              <span class="showcase-stat-label">Acquisition</span>
+            </div>
+          </div>
+          <div class="showcase-tags">
+            <span class="showcase-tag">C#</span>
+            <span class="showcase-tag">.NET</span>
+            <span class="showcase-tag">ASP.NET</span>
+            <span class="showcase-tag">WPF</span>
+            <span class="showcase-tag">Microservices</span>
+            <span class="showcase-tag">SVN Automation</span>
+            <span class="showcase-tag">Azure DevOps</span>
+            <span class="showcase-tag">Octopus Deploy</span>
+            <span class="showcase-tag">C++</span>
+            <span class="showcase-tag">SQL</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECT 02 -->
+    <div class="showcase-project showcase-light">
+      <div class="showcase-bg-num">02</div>
+      <div class="container showcase-inner">
+        <div class="showcase-meta">
+          <span class="showcase-badge badge-live">Live</span>
+          <span class="showcase-badge badge-oss">Personal Build</span>
+        </div>
+        <h3 class="showcase-title showcase-title-dark">Personal<br><em>Portal</em></h3>
+        <div class="showcase-body">
+          <p class="showcase-desc showcase-desc-dark">
+            A personal life operating system built as a microservices architecture — 7 independent .NET 9 Blazor apps, each owning a domain (Fitness, Gaming, Work, Real Estate, Construction), unified by a central Auth hub with a shared design system. Every portal has its own theme color, its own data layer, and its own logic — connected through one coherent experience. Built to prove the architecture, not just describe it.
+          </p>
+          <div class="showcase-details showcase-details-dark">
+            <div class="showcase-stat showcase-stat-dark">
+              <span class="showcase-stat-num" style="color:var(--clay-dark)">7</span>
+              <span class="showcase-stat-label" style="color:var(--muted)">Independent services</span>
+            </div>
+            <div class="showcase-stat showcase-stat-dark">
+              <span class="showcase-stat-num" style="color:var(--clay-dark)">1</span>
+              <span class="showcase-stat-label" style="color:var(--muted)">Auth hub</span>
+            </div>
+            <div class="showcase-stat showcase-stat-dark">
+              <span class="showcase-stat-num" style="color:var(--clay-dark)">1131</span>
+              <span class="showcase-stat-label" style="color:var(--muted)">Lines of design system CSS</span>
+            </div>
+          </div>
+          <div class="showcase-tags showcase-tags-dark">
+            <span class="showcase-tag-dark">.NET 9</span>
+            <span class="showcase-tag-dark">Blazor Server</span>
+            <span class="showcase-tag-dark">ASP.NET Core</span>
+            <span class="showcase-tag-dark">C#</span>
+            <span class="showcase-tag-dark">Auth / PBKDF2</span>
+            <span class="showcase-tag-dark">Custom Design System</span>
+            <span class="showcase-tag-dark">Microservices</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- SERVICES -->
   <section id="work">
