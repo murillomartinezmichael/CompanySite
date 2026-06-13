@@ -1,103 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!--
-  ╔══════════════════════════════════════════════════════════════════╗
-  ║  M³ — CompanySite                                               ║
-  ║  Single-file static marketing site. No build step, no JS        ║
-  ║  framework. All styles live in the <style> block below.         ║
-  ║                                                                  ║
-  ║  Page sections (in order):                                       ║
-  ║    1.  Head        — meta, fonts, all CSS                        ║
-  ║    2.  Nav         — fixed top bar with smooth-scroll links      ║
-  ║    3.  Hero        — headline + CTAs                             ║
-  ║    4.  Ticker      — scrolling capability marquee                ║
-  ║    5.  Work        — showcase of two real projects (#showcase)   ║
-  ║    6.  Services    — the four service offerings (#work)          ║
-  ║    7.  Products    — two live bots available to license          ║
-  ║    8.  Process     — three-step engagement model                 ║
-  ║    9.  About       — background + tech stack                     ║
-  ║   10.  Contact     — form (Formspree) + direct email             ║
-  ║   11.  Footer      — links, copyright                            ║
-  ╚══════════════════════════════════════════════════════════════════╝
--->
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>M³ — Systems your business runs on</title>
   <meta name="description" content="Websites, automation tools, and content bots. Precision-built software from an engineer with a background in gaming and fintech." />
-
-  <!-- Open Graph tags control link previews on LinkedIn, Slack, iMessage, etc. -->
   <meta property="og:title" content="M³" />
   <meta property="og:description" content="We build the systems your business runs on." />
 
-  <!-- Google Fonts: Fraunces (editorial serif for headings) + Inter (clean UI body text) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <style>
-
-    /* ================================================================
-       DESIGN TOKENS
-       All colors are defined here as CSS custom properties.
-       Use these variables everywhere — never hard-code a hex value
-       anywhere else in the stylesheet.
-
-       Palette:
-         --cream*    warm off-white backgrounds (3 shades, lightest → darkest)
-         --clay*     terracotta brand accent  (dark = hover, light = stat numbers)
-         --ink*      near-black text          (soft = secondary text)
-         --muted     gray-brown for supporting / caption text
-         --accent    spare alias for clay; reserved for future use
-    ================================================================ */
     :root {
-      --cream:      #F5F0E8;  /* main page background */
-      --cream-2:    #EDE5D4;  /* slightly darker panels (ticker, process section) */
-      --cream-3:    #E4D9C4;  /* darkest cream — available for future use */
-
-      --clay:       #B8835A;  /* primary terracotta accent */
-      --clay-dark:  #8B5E3C;  /* hover states, strong emphasis */
-      --clay-light: #D4A882;  /* stat numbers, footer brand mark, lighter highlights */
-
-      --ink:        #18150F;  /* headlines, nav bg, footer bg */
-      --ink-soft:   #3A3530;  /* secondary headings, body text */
-      --muted:      #7A7168;  /* captions, descriptions, tag text */
-
-      --accent:     #C4956A;  /* alias for clay — not actively used yet */
+      --cream: #F5F0E8;
+      --cream-2: #EDE5D4;
+      --cream-3: #E4D9C4;
+      --clay: #B8835A;
+      --clay-dark: #8B5E3C;
+      --clay-light: #D4A882;
+      --ink: #18150F;
+      --ink-soft: #3A3530;
+      --muted: #7A7168;
+      --accent: #C4956A;
     }
 
-    /* ================================================================
-       RESET & BASE
-    ================================================================ */
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    /* Enable smooth anchor scrolling for all #section links */
     html { scroll-behavior: smooth; }
 
     body {
       font-family: 'Inter', -apple-system, sans-serif;
       background: var(--cream);
       color: var(--ink);
-      -webkit-font-smoothing: antialiased; /* crisper text rendering on Mac/WebKit */
+      -webkit-font-smoothing: antialiased;
       line-height: 1.6;
-      overflow-x: hidden; /* prevent horizontal scroll caused by oversized decorative elements */
+      overflow-x: hidden;
     }
 
-    /* ----------------------------------------------------------------
-       Grain texture overlay
-       A fixed pseudo-element covers the entire viewport at z-index 100.
-       pointer-events: none means it never blocks clicks or hovers.
-
-       The texture is a tiny inline SVG with an feTurbulence filter
-       (Perlin/fractal noise), baked directly into the CSS as a data URI
-       so there's no external image request.
-
-       mix-blend-mode: multiply — darkens only where there's colour below,
-       leaving the pale cream background mostly unchanged while adding
-       a subtle organic paper texture across images and dark sections.
-    ---------------------------------------------------------------- */
+    /* Grain overlay */
     body::before {
       content: '';
       position: fixed;
@@ -109,55 +51,39 @@
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3CfeColorMatrix values='0 0 0 0 0.08 0 0 0 0 0.06 0 0 0 0 0.04 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
     }
 
-    /* Strip default link underlines; individual components re-add decoration where needed */
     a { color: inherit; text-decoration: none; }
 
-    /* Max-width wrapper used by every section to constrain and center content */
     .container {
       max-width: 1240px;
       margin: 0 auto;
       padding: 0 40px;
     }
 
-    /* ================================================================
-       BRAND MARK  (.m3)
-       Applied to every "M³" logotype on the page.
-       Fraunces + tight letter-spacing is the brand look.
-
-       The <sup> element renders the "³" superscript. Rather than using
-       the browser's default super baseline shift, we manually position it
-       with top: -0.65em so we have exact control over its height.
-    ================================================================ */
+    /* === BRAND MARK === */
     .m3 {
       font-family: 'Fraunces', serif;
       font-weight: 500;
       letter-spacing: -0.04em;
     }
-
     .m3 sup {
       font-size: 0.45em;
       position: relative;
-      top: -0.65em;            /* lift above the cap-height baseline manually */
-      color: var(--clay);      /* clay-coloured superscript for the brand accent */
+      top: -0.65em;
+      color: var(--clay);
       font-weight: 300;
       letter-spacing: 0;
-      vertical-align: baseline; /* override browser's default 'super' shift */
+      vertical-align: baseline;
     }
 
-    /* ================================================================
-       NAV
-       Sticks to the top of the viewport. The background is translucent
-       cream + backdrop-filter: blur so content scrolling underneath
-       shows through softly (frosted-glass effect).
-    ================================================================ */
+    /* === NAV === */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 50;
       padding: 18px 0;
       background: rgba(245, 240, 232, 0.9);
-      backdrop-filter: blur(16px);          /* frosted-glass blur */
-      -webkit-backdrop-filter: blur(16px);  /* Safari prefix */
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(24, 21, 15, 0.07);
     }
 
@@ -167,7 +93,6 @@
       align-items: center;
     }
 
-    /* Logo / brand mark in the nav bar */
     .brand {
       font-size: 20px;
       display: flex;
@@ -175,7 +100,6 @@
       gap: 0;
     }
 
-    /* Desktop navigation links (hidden on mobile) */
     .nav-links {
       display: flex;
       gap: 32px;
@@ -186,15 +110,14 @@
       letter-spacing: 0.01em;
     }
 
-    .nav-links a           { transition: color 0.2s; }
-    .nav-links a:hover     { color: var(--clay-dark); }
+    .nav-links a { transition: color 0.2s; }
+    .nav-links a:hover { color: var(--clay-dark); }
 
-    /* "Get in touch" pill button that sits at the end of the nav */
     .btn-nav {
       background: var(--ink);
       color: var(--cream);
       padding: 9px 20px;
-      border-radius: 999px;   /* large radius on a small element = pill */
+      border-radius: 999px;
       font-size: 13px;
       font-weight: 500;
       letter-spacing: 0.02em;
@@ -203,10 +126,9 @@
 
     .btn-nav:hover {
       background: var(--clay-dark);
-      transform: translateY(-1px); /* subtle lift */
+      transform: translateY(-1px);
     }
 
-    /* On mobile, hide the full link list and show only a single Contact pill */
     .nav-mobile { display: none; }
 
     @media (max-width: 768px) {
@@ -221,40 +143,29 @@
       }
     }
 
-    /* ================================================================
-       HERO
-       The 200px top padding accounts for the fixed nav + generous
-       breathing room. overflow: hidden clips the decorative bg mark.
-
-       The giant "M³" watermark behind the headline uses:
-         color: transparent + -webkit-text-stroke → outline only, no fill
-       This creates the ghost/outline typography effect.
-    ================================================================ */
+    /* === HERO === */
     .hero {
       padding: 200px 0 140px;
       position: relative;
       overflow: hidden;
     }
 
-    /* Decorative oversized "M³" watermark — positioned absolutely, behind the content */
     .hero-bg-mark {
       position: absolute;
       right: -80px;
       top: 50%;
       transform: translateY(-50%);
       font-family: 'Fraunces', serif;
-      /* clamp(min, preferred-viewport, max) — fluid sizing between two breakpoints */
       font-size: clamp(280px, 30vw, 480px);
       font-weight: 300;
-      color: transparent;                               /* no fill */
-      -webkit-text-stroke: 1px rgba(24, 21, 15, 0.06); /* very faint outline only */
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(24, 21, 15, 0.06);
       letter-spacing: -0.05em;
       line-height: 1;
-      pointer-events: none; /* decorative — cannot be clicked */
-      user-select: none;    /* cannot be selected or copied */
+      pointer-events: none;
+      user-select: none;
     }
 
-    /* "Available for new projects · Atlanta, GA" pill badge above the headline */
     .hero-eyebrow {
       display: inline-flex;
       align-items: center;
@@ -267,10 +178,9 @@
       padding: 7px 16px;
       border: 1px solid rgba(24, 21, 15, 0.12);
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.35);
+      background: rgba(255,255,255,0.35);
     }
 
-    /* Animated green availability indicator dot inside the eyebrow badge */
     .status-dot {
       width: 6px; height: 6px;
       background: #5C8A47;
@@ -278,17 +188,14 @@
       animation: pulse 2.5s ease-in-out infinite;
     }
 
-    /* Shared pulse animation — used for .status-dot and .product-live-dot */
     @keyframes pulse {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50%       { opacity: 0.5; transform: scale(0.85); }
+      50% { opacity: 0.5; transform: scale(0.85); }
     }
 
-    /* Main hero headline */
     .hero h1 {
       font-family: 'Fraunces', serif;
       font-weight: 300;
-      /* clamp: 52px on small phones, scales up to 112px on wide screens */
       font-size: clamp(52px, 8.5vw, 112px);
       line-height: 0.93;
       letter-spacing: -0.04em;
@@ -297,10 +204,15 @@
       color: var(--ink);
     }
 
-    .hero h1 em     { font-style: italic; color: var(--clay-dark); }
-    .hero h1 strong { font-weight: 500; }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--clay-dark);
+    }
 
-    /* Supporting subheadline below the h1 */
+    .hero h1 strong {
+      font-weight: 500;
+    }
+
     .hero-sub {
       font-size: clamp(16px, 1.5vw, 20px);
       color: var(--muted);
@@ -310,7 +222,6 @@
       font-weight: 300;
     }
 
-    /* CTA button row */
     .hero-ctas {
       display: flex;
       gap: 20px;
@@ -318,7 +229,6 @@
       align-items: center;
     }
 
-    /* Primary filled pill button */
     .btn-primary {
       background: var(--ink);
       color: var(--cream);
@@ -338,11 +248,9 @@
       transform: translateY(-2px);
     }
 
-    /* Arrow icon inside the primary button slides right on hover */
-    .btn-primary svg       { transition: transform 0.2s; }
+    .btn-primary svg { transition: transform 0.2s; }
     .btn-primary:hover svg { transform: translateX(4px); }
 
-    /* Ghost / underline secondary CTA */
     .btn-secondary {
       font-size: 14px;
       font-weight: 400;
@@ -350,7 +258,7 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      border-bottom: 1px solid rgba(24, 21, 15, 0.25);
+      border-bottom: 1px solid rgba(24,21,15,0.25);
       padding-bottom: 2px;
       transition: color 0.2s, border-color 0.2s;
     }
@@ -360,27 +268,18 @@
       border-color: var(--clay-dark);
     }
 
-    /* ================================================================
-       TICKER  (scrolling marquee)
-       How the seamless loop works:
-         - The items are duplicated exactly once in the HTML.
-         - The animation moves the track left by 50% of its full width,
-           which equals exactly one copy of the items.
-         - When the animation resets to 0%, the user sees the start of
-           the second copy — which looks identical to the first,
-           creating an infinite seamless loop.
-    ================================================================ */
+    /* === TICKER === */
     .ticker-wrap {
       overflow: hidden;
-      border-top: 1px solid rgba(24, 21, 15, 0.1);
-      border-bottom: 1px solid rgba(24, 21, 15, 0.1);
+      border-top: 1px solid rgba(24,21,15,0.1);
+      border-bottom: 1px solid rgba(24,21,15,0.1);
       padding: 14px 0;
       background: var(--cream-2);
     }
 
     .ticker-track {
       display: flex;
-      width: max-content; /* shrink-wraps to the content so the translateX math is correct */
+      width: max-content;
       animation: ticker 22s linear infinite;
     }
 
@@ -393,24 +292,19 @@
       white-space: nowrap;
     }
 
-    /* Bold highlighted words inside ticker items */
-    .ticker-track span b { color: var(--clay); font-weight: 500; }
+    .ticker-track span b {
+      color: var(--clay);
+      font-weight: 500;
+    }
 
-    /* Move left by exactly 50% (= one copy of items) for a seamless loop */
     @keyframes ticker {
-      0%   { transform: translateX(0); }
+      0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
     }
 
-    /* ================================================================
-       SECTION CHROME
-       Shared styles for every major page section.
-    ================================================================ */
-
-    /* Default vertical padding for all <section> elements */
+    /* === SECTIONS === */
     section { padding: 130px 0; position: relative; }
 
-    /* Small all-caps label above each section title e.g. "Selected Work" */
     .section-label {
       font-size: 10px;
       letter-spacing: 0.3em;
@@ -423,7 +317,6 @@
       gap: 12px;
     }
 
-    /* Short horizontal rule appended after the label text via ::after */
     .section-label::after {
       content: '';
       width: 32px;
@@ -431,7 +324,6 @@
       background: var(--clay-light);
     }
 
-    /* Large serif section heading */
     .section-title {
       font-family: 'Fraunces', serif;
       font-weight: 300;
@@ -442,9 +334,11 @@
       max-width: 860px;
     }
 
-    .section-title em { font-style: italic; color: var(--clay-dark); }
+    .section-title em {
+      font-style: italic;
+      color: var(--clay-dark);
+    }
 
-    /* Intro paragraph that sits between the section title and the section content */
     .section-intro {
       font-size: 17px;
       color: var(--muted);
@@ -454,19 +348,11 @@
       font-weight: 300;
     }
 
-    /* ================================================================
-       SERVICES GRID
-       Four cards in a 2×2 grid separated by hairline borders.
-
-       The ghost number watermark in each card's bottom-right corner uses
-       content: attr(data-num) — it reads directly from the HTML attribute
-       data-num="01" on each .service element, so no extra markup is needed.
-       It disappears on hover to keep the hover state clean.
-    ================================================================ */
+    /* === SERVICES === */
     .services-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      border-top: 1px solid rgba(24, 21, 15, 0.1);
+      border-top: 1px solid rgba(24,21,15,0.1);
     }
 
     @media (max-width: 768px) {
@@ -475,14 +361,13 @@
 
     .service {
       padding: 60px 44px;
-      border-bottom: 1px solid rgba(24, 21, 15, 0.1);
+      border-bottom: 1px solid rgba(24,21,15,0.1);
       position: relative;
       transition: background 0.35s;
       cursor: default;
       overflow: hidden;
     }
 
-    /* Ghost number watermark — reads from data-num="01" HTML attribute */
     .service::after {
       content: attr(data-num);
       position: absolute;
@@ -492,24 +377,21 @@
       font-size: 120px;
       font-weight: 300;
       color: transparent;
-      -webkit-text-stroke: 1px rgba(24, 21, 15, 0.05); /* faint outline only */
+      -webkit-text-stroke: 1px rgba(24,21,15,0.05);
       line-height: 1;
       pointer-events: none;
       transition: opacity 0.3s;
     }
 
-    /* Right border between the two columns */
-    .service:nth-child(odd) { border-right: 1px solid rgba(24, 21, 15, 0.1); }
+    .service:nth-child(odd) { border-right: 1px solid rgba(24,21,15,0.1); }
 
     @media (max-width: 768px) {
       .service:nth-child(odd) { border-right: none; }
     }
 
-    /* Hover: fill background, hide the ghost number so only content shows */
-    .service:hover        { background: var(--cream-2); }
+    .service:hover { background: var(--cream-2); }
     .service:hover::after { opacity: 0; }
 
-    /* "01 — Websites" label at the top of each card */
     .service-num {
       font-size: 11px;
       letter-spacing: 0.2em;
@@ -528,7 +410,11 @@
       margin-bottom: 18px;
     }
 
-    .service h3 em { font-style: italic; color: var(--clay-dark); font-weight: 300; }
+    .service h3 em {
+      font-style: italic;
+      color: var(--clay-dark);
+      font-weight: 300;
+    }
 
     .service-desc {
       color: var(--muted);
@@ -539,55 +425,43 @@
       font-weight: 300;
     }
 
-    /* Pill tags row listing specific deliverables */
     .service-tags {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
       padding-top: 24px;
-      border-top: 1px solid rgba(24, 21, 15, 0.08);
+      border-top: 1px solid rgba(24,21,15,0.08);
     }
 
     .service-tag {
       font-size: 11px;
       letter-spacing: 0.05em;
       color: var(--muted);
-      background: rgba(24, 21, 15, 0.04);
+      background: rgba(24,21,15,0.04);
       padding: 5px 12px;
       border-radius: 999px;
-      border: 1px solid rgba(24, 21, 15, 0.08);
+      border: 1px solid rgba(24,21,15,0.08);
     }
 
-    /* ================================================================
-       LIVE PRODUCTS SECTION  (dark panel)
-       The entire section flips to an ink background with cream text.
-       Section-chrome overrides below restore the label/title colours
-       so they're readable on the dark background.
-
-       The 1px grid gap trick: set gap: 1px on the grid and use the
-       grid's own background colour as the "gap colour" — the cards sit
-       on top of it, and the background shows through as a hairline line.
-    ================================================================ */
+    /* === PRODUCTS === */
     .products-section {
       background: var(--ink);
       color: var(--cream);
       padding: 140px 0;
     }
 
-    /* Colour overrides so section chrome reads on the dark background */
-    .products-section .section-label        { color: var(--clay-light); }
+    .products-section .section-label { color: var(--clay-light); }
     .products-section .section-label::after { background: var(--clay); }
-    .products-section .section-title        { color: var(--cream); }
-    .products-section .section-title em     { color: var(--clay-light); }
-    .products-section .section-intro        { color: rgba(245, 240, 232, 0.5); }
+    .products-section .section-title { color: var(--cream); }
+    .products-section .section-title em { color: var(--clay-light); }
+    .products-section .section-intro { color: rgba(245,240,232,0.5); }
 
-    /* Grid where the 1px background shows through as card dividers */
     .products-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 1px;
-      background: rgba(245, 240, 232, 0.08); /* this IS the 1px divider colour */
-      border: 1px solid rgba(245, 240, 232, 0.08);
+      background: rgba(245,240,232,0.08);
+      border: 1px solid rgba(245,240,232,0.08);
       border-radius: 4px;
       overflow: hidden;
     }
@@ -603,9 +477,8 @@
       transition: background 0.3s;
     }
 
-    .product-card:hover { background: #201D16; } /* slightly lighter ink on hover */
+    .product-card:hover { background: #201D16; }
 
-    /* "Live & running" green status badge at the top of each product card */
     .product-live {
       display: inline-flex;
       align-items: center;
@@ -617,12 +490,11 @@
       font-weight: 600;
       margin-bottom: 32px;
       padding: 6px 14px;
-      border: 1px solid rgba(92, 138, 71, 0.25);
+      border: 1px solid rgba(92,138,71,0.25);
       border-radius: 999px;
-      background: rgba(92, 138, 71, 0.08);
+      background: rgba(92,138,71,0.08);
     }
 
-    /* Animated green dot inside the product badge — reuses the @keyframes pulse above */
     .product-live-dot {
       width: 5px; height: 5px;
       background: #5C8A47;
@@ -640,30 +512,34 @@
       color: var(--cream);
     }
 
-    .product-card h3 em { font-style: italic; color: var(--clay-light); }
+    .product-card h3 em {
+      font-style: italic;
+      color: var(--clay-light);
+    }
 
     .product-desc {
       font-size: 14px;
-      color: rgba(245, 240, 232, 0.5);
+      color: rgba(245,240,232,0.5);
       line-height: 1.7;
       margin-bottom: 36px;
       font-weight: 300;
     }
 
-    /* Feature bullet list — list-style: none so we can use a custom ::before bullet */
-    .product-features      { list-style: none; margin-bottom: 44px; }
+    .product-features {
+      list-style: none;
+      margin-bottom: 44px;
+    }
 
     .product-features li {
       font-size: 13px;
-      color: rgba(245, 240, 232, 0.4);
+      color: rgba(245,240,232,0.4);
       padding: 11px 0;
-      border-bottom: 1px solid rgba(245, 240, 232, 0.06);
+      border-bottom: 1px solid rgba(245,240,232,0.06);
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
-    /* Tiny clay dot replaces the default list bullet marker */
     .product-features li::before {
       content: '';
       width: 3px; height: 3px;
@@ -672,7 +548,6 @@
       flex-shrink: 0;
     }
 
-    /* Outlined pill CTA inside each product card */
     .btn-product {
       display: inline-flex;
       align-items: center;
@@ -682,7 +557,7 @@
       color: var(--cream);
       letter-spacing: 0.03em;
       padding: 10px 20px;
-      border: 1px solid rgba(245, 240, 232, 0.2);
+      border: 1px solid rgba(245,240,232,0.2);
       border-radius: 999px;
       transition: all 0.25s;
     }
@@ -693,11 +568,7 @@
       transform: translateY(-1px);
     }
 
-    /* ================================================================
-       PROCESS SECTION
-       Three numbered steps on a slightly darker cream background.
-       Columns are separated by right borders on all but the last step.
-    ================================================================ */
+    /* === PROCESS === */
     .process-section {
       background: var(--cream-2);
       padding: 140px 0;
@@ -708,7 +579,7 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 0;
       margin-top: 64px;
-      border-top: 1px solid rgba(24, 21, 15, 0.1);
+      border-top: 1px solid rgba(24,21,15,0.1);
     }
 
     @media (max-width: 768px) {
@@ -717,24 +588,22 @@
 
     .process-step {
       padding: 48px 40px 48px 0;
-      border-bottom: 1px solid rgba(24, 21, 15, 0.1);
+      border-bottom: 1px solid rgba(24,21,15,0.1);
     }
 
-    /* Right border between columns; removed on the last step */
     .process-step:not(:last-child) {
-      border-right: 1px solid rgba(24, 21, 15, 0.1);
+      border-right: 1px solid rgba(24,21,15,0.1);
+      margin-right: 0;
       padding-right: 40px;
     }
 
-    /* Left padding on all steps after the first (the + sibling combinator) */
     .process-step + .process-step { padding-left: 40px; }
 
     @media (max-width: 768px) {
-      .process-step                 { padding: 40px 0; border-right: none !important; }
+      .process-step { padding: 40px 0; border-right: none !important; }
       .process-step + .process-step { padding-left: 0; }
     }
 
-    /* Large serif step number (01, 02, 03) */
     .process-num {
       font-family: 'Fraunces', serif;
       font-size: 56px;
@@ -760,15 +629,7 @@
       font-weight: 300;
     }
 
-    /* ================================================================
-       ABOUT SECTION
-       Two-column layout:
-         Left  — bio paragraphs
-         Right — sticky tech stack box (sticks while bio scrolls past it)
-
-       The first paragraph inside .about-content gets a special larger
-       Fraunces treatment via :first-child — it acts as a pull-quote lede.
-    ================================================================ */
+    /* === ABOUT === */
     .about-grid {
       display: grid;
       grid-template-columns: 1.1fr 1fr;
@@ -780,7 +641,6 @@
       .about-grid { grid-template-columns: 1fr; gap: 48px; }
     }
 
-    /* Bio paragraphs */
     .about-content p {
       font-size: 17px;
       color: var(--muted);
@@ -789,7 +649,6 @@
       font-weight: 300;
     }
 
-    /* First paragraph is styled as a large lede / pull-quote */
     .about-content p:first-child {
       font-family: 'Fraunces', serif;
       font-size: 24px;
@@ -799,16 +658,14 @@
       letter-spacing: -0.015em;
     }
 
-    /* Dark sticky box listing all technologies */
     .stack-box {
       background: var(--ink);
       padding: 36px;
       border-radius: 4px;
       position: sticky;
-      top: 120px; /* offset enough to clear the fixed nav */
+      top: 120px;
     }
 
-    /* "The Stack" label at the top of the dark box */
     .stack-box-label {
       font-size: 10px;
       letter-spacing: 0.28em;
@@ -818,41 +675,29 @@
       margin-bottom: 24px;
     }
 
-    /* Wrapping flex container for all the technology pills */
     .stack-list {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
     }
 
-    /* Individual tech pill — dim by default, brightens on hover */
     .stack-tag {
-      background: rgba(245, 240, 232, 0.06);
-      border: 1px solid rgba(245, 240, 232, 0.1);
+      background: rgba(245,240,232,0.06);
+      border: 1px solid rgba(245,240,232,0.1);
       padding: 5px 13px;
       border-radius: 999px;
       font-size: 12px;
       font-weight: 400;
-      color: rgba(245, 240, 232, 0.6);
+      color: rgba(245,240,232,0.6);
       transition: all 0.2s;
     }
 
     .stack-tag:hover {
-      background: rgba(245, 240, 232, 0.1);
+      background: rgba(245,240,232,0.1);
       color: var(--cream);
     }
 
-    /* ================================================================
-       CONTACT SECTION
-       Two-column layout:
-         Left  — pitch copy + direct email fallback
-         Right — Formspree form (no backend or server needed)
-
-       Formspree processes the POST submission and sends an email.
-       The hidden _subject field sets the subject line in that email.
-       The hidden _replyto field is populated via JS so replies go to
-       the sender's email address automatically.
-    ================================================================ */
+    /* === CONTACT === */
     .contact-section {
       padding: 160px 0;
       background: var(--cream);
@@ -871,7 +716,6 @@
 
     .contact-left .section-title { margin-bottom: 20px; }
 
-    /* Short persuasive note below the section title */
     .contact-note {
       font-size: 15px;
       color: var(--muted);
@@ -880,7 +724,6 @@
       font-weight: 300;
     }
 
-    /* "Or reach directly: email@…" line below the form pitch */
     .contact-detail {
       font-size: 13px;
       color: var(--muted);
@@ -896,10 +739,8 @@
 
     .contact-detail a:hover { color: var(--clay-dark); border-color: var(--clay-dark); }
 
-    /* Form layout resets */
     form { text-align: left; }
 
-    /* Uppercase field labels */
     label {
       display: block;
       font-size: 10px;
@@ -911,15 +752,13 @@
       margin-top: 28px;
     }
 
-    /* Remove top margin from the very first label so the form starts flush */
     label:first-of-type { margin-top: 0; }
 
-    /* Shared style for all input fields and the textarea */
     input, textarea {
       width: 100%;
       padding: 14px 18px;
-      background: rgba(24, 21, 15, 0.03);
-      border: 1px solid rgba(24, 21, 15, 0.12);
+      background: rgba(24,21,15,0.03);
+      border: 1px solid rgba(24,21,15,0.12);
       border-radius: 4px;
       font-family: inherit;
       font-size: 15px;
@@ -930,12 +769,11 @@
 
     input:focus, textarea:focus {
       border-color: var(--clay-dark);
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255,255,255,0.7);
     }
 
     textarea { resize: vertical; min-height: 140px; }
 
-    /* Full-width pill submit button */
     button[type="submit"] {
       width: 100%;
       margin-top: 28px;
@@ -957,12 +795,7 @@
       transform: translateY(-1px);
     }
 
-    /* ================================================================
-       FOOTER
-       Dark ink background. Two-row layout:
-         Top row    — brand mark + tagline (left), nav links + social links (right)
-         Bottom row — copyright (left), tagline text (right)
-    ================================================================ */
+    /* === FOOTER === */
     footer {
       background: var(--ink);
       color: var(--cream);
@@ -974,12 +807,11 @@
       justify-content: space-between;
       align-items: flex-start;
       padding-bottom: 64px;
-      border-bottom: 1px solid rgba(245, 240, 232, 0.08);
-      flex-wrap: wrap; /* stacks on narrow screens */
+      border-bottom: 1px solid rgba(245,240,232,0.08);
+      flex-wrap: wrap;
       gap: 48px;
     }
 
-    /* Large "M³" brand mark in the footer */
     .footer-brand-mark {
       font-family: 'Fraunces', serif;
       font-weight: 300;
@@ -989,8 +821,6 @@
       color: var(--cream);
     }
 
-    /* The ³ superscript in the footer brand mark — slightly different sizing
-       than the nav mark because the parent font-size context is 80px here */
     .footer-brand-mark sup {
       font-size: 0.38em;
       position: relative;
@@ -1003,63 +833,50 @@
 
     .footer-tagline {
       font-size: 14px;
-      color: rgba(245, 240, 232, 0.35);
+      color: rgba(245,240,232,0.35);
       margin-top: 16px;
       font-weight: 300;
       letter-spacing: 0.01em;
     }
 
-    /* Vertical column of links — used for both the nav links and social links groups */
     .footer-links-col { display: flex; flex-direction: column; gap: 12px; }
 
     .footer-links-col a {
       font-size: 13px;
-      color: rgba(245, 240, 232, 0.5);
+      color: rgba(245,240,232,0.5);
       transition: color 0.2s;
     }
 
     .footer-links-col a:hover { color: var(--clay-light); }
 
-    /* Bottom row: copyright on left, tagline on right */
     .footer-bottom {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding-top: 32px;
       font-size: 12px;
-      color: rgba(245, 240, 232, 0.25);
+      color: rgba(245,240,232,0.25);
       flex-wrap: wrap;
       gap: 16px;
     }
 
-    /* ================================================================
-       SELECTED WORK SHOWCASE
-       Full-bleed alternating dark/light panels. Each panel contains one
-       project with a giant ghost number as a background watermark.
+    /* === SELECTED WORK SHOWCASE === */
+    .showcase-section { padding: 0; }
 
-       The showcase section has padding: 0 because each individual
-       .showcase-project panel controls its own spacing.
-
-       Inner layout is a two-column grid (title on left, details on right).
-       z-index: 2 on .showcase-inner ensures it sits above the ghost number.
-    ================================================================ */
-    .showcase-section { padding: 0; } /* override default section padding */
-
-    /* Section heading area above the panels */
-    .showcase-header { padding: 120px 40px 80px; }
-
-    /* Individual full-bleed project panel */
-    .showcase-project {
-      position: relative;
-      overflow: hidden; /* clips the oversized ghost number at the edges */
-      padding: 120px 0;
-      border-top: 1px solid rgba(24, 21, 15, 0.08);
+    .showcase-header {
+      padding: 120px 40px 80px;
     }
 
-    .showcase-dark  { background: var(--ink); }
+    .showcase-project {
+      position: relative;
+      overflow: hidden;
+      padding: 120px 0;
+      border-top: 1px solid rgba(24,21,15,0.08);
+    }
+
+    .showcase-dark { background: var(--ink); }
     .showcase-light { background: var(--cream-2); }
 
-    /* Oversized ghost number watermark in the background of each panel */
     .showcase-bg-num {
       position: absolute;
       right: -20px;
@@ -1074,21 +891,19 @@
       letter-spacing: -0.05em;
     }
 
-    /* Different text-stroke opacity per panel theme */
-    .showcase-dark  .showcase-bg-num {
+    .showcase-dark .showcase-bg-num {
       color: transparent;
-      -webkit-text-stroke: 1px rgba(245, 240, 232, 0.04);
+      -webkit-text-stroke: 1px rgba(245,240,232,0.04);
     }
 
     .showcase-light .showcase-bg-num {
       color: transparent;
-      -webkit-text-stroke: 1px rgba(24, 21, 15, 0.05);
+      -webkit-text-stroke: 1px rgba(24,21,15,0.05);
     }
 
-    /* Two-column grid: title + badges on the left, all the details on the right */
     .showcase-inner {
       position: relative;
-      z-index: 2; /* sit above the ghost number watermark */
+      z-index: 2;
       display: grid;
       grid-template-columns: 1fr 1.4fr;
       gap: 80px;
@@ -1099,7 +914,6 @@
       .showcase-inner { grid-template-columns: 1fr; gap: 48px; }
     }
 
-    /* Row of status badges above the project title */
     .showcase-meta {
       display: flex;
       gap: 10px;
@@ -1107,7 +921,6 @@
       margin-bottom: 28px;
     }
 
-    /* Base badge style — specific colour variants defined below */
     .showcase-badge {
       font-size: 10px;
       letter-spacing: 0.2em;
@@ -1117,28 +930,24 @@
       border-radius: 999px;
     }
 
-    /* Clay-tinted badge for acquisition / enterprise context */
     .badge-acquisition {
-      background: rgba(184, 131, 90, 0.15);
+      background: rgba(184,131,90,0.15);
       color: var(--clay-light);
-      border: 1px solid rgba(184, 131, 90, 0.25);
+      border: 1px solid rgba(184,131,90,0.25);
     }
 
-    /* Green badge for "Live" deployment status */
     .badge-live {
-      background: rgba(92, 138, 71, 0.12);
+      background: rgba(92,138,71,0.12);
       color: #7ab85a;
-      border: 1px solid rgba(92, 138, 71, 0.2);
+      border: 1px solid rgba(92,138,71,0.2);
     }
 
-    /* Neutral badge for open-source / personal projects */
     .badge-oss {
-      background: rgba(245, 240, 232, 0.06);
-      color: rgba(245, 240, 232, 0.4);
-      border: 1px solid rgba(245, 240, 232, 0.1);
+      background: rgba(245,240,232,0.06);
+      color: rgba(245,240,232,0.4);
+      border: 1px solid rgba(245,240,232,0.1);
     }
 
-    /* Large project title on dark backgrounds */
     .showcase-title {
       font-family: 'Fraunces', serif;
       font-weight: 300;
@@ -1148,37 +957,40 @@
       color: var(--cream);
     }
 
-    .showcase-title em { font-style: italic; color: var(--clay-light); }
+    .showcase-title em {
+      font-style: italic;
+      color: var(--clay-light);
+    }
 
-    /* Modifier classes for the light-background panel */
-    .showcase-title-dark    { color: var(--ink); }
+    .showcase-title-dark { color: var(--ink); }
     .showcase-title-dark em { color: var(--clay-dark); }
 
-    /* Project description paragraph */
     .showcase-desc {
       font-size: 15px;
-      color: rgba(245, 240, 232, 0.55);
+      color: rgba(245,240,232,0.55);
       line-height: 1.8;
       margin-bottom: 48px;
       font-weight: 300;
     }
 
-    .showcase-desc-dark { color: var(--muted); } /* lighter background variant */
+    .showcase-desc-dark {
+      color: var(--muted);
+    }
 
-    /* Row of key stats e.g. "7+ Microservices", "$1B Acquisition" */
     .showcase-details {
       display: flex;
       gap: 48px;
       margin-bottom: 40px;
       padding-bottom: 40px;
-      border-bottom: 1px solid rgba(245, 240, 232, 0.08);
+      border-bottom: 1px solid rgba(245,240,232,0.08);
     }
 
-    .showcase-details-dark { border-bottom-color: rgba(24, 21, 15, 0.1); }
+    .showcase-details-dark {
+      border-bottom-color: rgba(24,21,15,0.1);
+    }
 
     .showcase-stat { display: flex; flex-direction: column; gap: 4px; }
 
-    /* The large number in each stat block */
     .showcase-stat-num {
       font-family: 'Fraunces', serif;
       font-size: 40px;
@@ -1188,55 +1000,45 @@
       color: var(--clay-light);
     }
 
-    /* The small label beneath the number */
     .showcase-stat-label {
       font-size: 11px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: rgba(245, 240, 232, 0.3);
+      color: rgba(245,240,232,0.3);
     }
 
-    /* Technology tags row at the bottom of each project panel */
-    .showcase-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .showcase-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
 
-    /* Tag for dark-background panels */
     .showcase-tag {
       font-size: 11px;
-      color: rgba(245, 240, 232, 0.4);
-      background: rgba(245, 240, 232, 0.05);
-      border: 1px solid rgba(245, 240, 232, 0.08);
+      color: rgba(245,240,232,0.4);
+      background: rgba(245,240,232,0.05);
+      border: 1px solid rgba(245,240,232,0.08);
       padding: 5px 13px;
       border-radius: 999px;
       letter-spacing: 0.04em;
     }
 
-    /* Tag for light-background panels */
+    .showcase-tags-dark { }
+
     .showcase-tag-dark {
       font-size: 11px;
       color: var(--muted);
-      background: rgba(24, 21, 15, 0.04);
-      border: 1px solid rgba(24, 21, 15, 0.1);
+      background: rgba(24,21,15,0.04);
+      border: 1px solid rgba(24,21,15,0.1);
       padding: 5px 13px;
       border-radius: 999px;
       letter-spacing: 0.04em;
     }
 
-    /* ================================================================
-       REVEAL ANIMATION
-       Elements with .reveal start invisible (opacity: 0, shifted 24px down)
-       and animate in on page load using a spring-like easing curve.
-
-       .reveal-d1 through .reveal-d4 add progressively longer delays so
-       hero elements stagger in one after another (eyebrow → h1 → sub → CTAs).
-
-       Note: these fire immediately on page load — they are NOT
-       scroll-triggered. For a scroll-triggered version, a JS
-       IntersectionObserver would be needed.
-    ================================================================ */
+    /* === UTILITIES === */
     .reveal {
       opacity: 0;
       transform: translateY(24px);
-      /* cubic-bezier(0.16, 1, 0.3, 1) = fast start, settles with spring-like overshoot */
       animation: reveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
@@ -1244,30 +1046,19 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Stagger delays for the sequenced hero entrance */
-    .reveal-d1 { animation-delay: 0.10s; }
+    .reveal-d1 { animation-delay: 0.1s; }
     .reveal-d2 { animation-delay: 0.22s; }
     .reveal-d3 { animation-delay: 0.36s; }
-    .reveal-d4 { animation-delay: 0.50s; }
-
+    .reveal-d4 { animation-delay: 0.5s; }
   </style>
 </head>
 
 <body>
 
-  <!-- ============================================================
-       NAV
-       Fixed top bar — always visible while scrolling.
-       Desktop: logo left, links + CTA pill right.
-       Mobile (≤768px): logo left, single "Contact" pill right.
-  ============================================================ -->
+  <!-- NAV -->
   <nav>
     <div class="container nav-inner">
-
-      <!-- Logo — links to the top of the page -->
       <a href="#" class="brand m3">M<sup>3</sup></a>
-
-      <!-- Desktop navigation links -->
       <div class="nav-links">
         <a href="#showcase">Work</a>
         <a href="#products">Products</a>
@@ -1275,44 +1066,25 @@
         <a href="#about">About</a>
         <a href="#contact" class="btn-nav">Get in touch</a>
       </div>
-
-      <!-- Mobile-only condensed contact link -->
       <a href="#contact" class="nav-mobile">Contact</a>
-
     </div>
   </nav>
 
-  <!-- ============================================================
-       HERO
-       Main headline, supporting subheadline, and two CTAs.
-       .reveal / .reveal-d* classes trigger staggered entrance animations.
-       The decorative "M³" behind the headline is purely visual.
-  ============================================================ -->
+  <!-- HERO -->
   <section class="hero">
-
-    <!-- Decorative oversized "M³" — not clickable, not selectable -->
     <div class="hero-bg-mark">M³</div>
-
     <div class="container">
-
-      <!-- Availability status badge -->
       <div class="hero-eyebrow reveal">
         <span class="status-dot"></span>
         Available for new projects &nbsp;·&nbsp; Atlanta, GA
       </div>
-
-      <!-- Primary headline — staggered entrance (delay 1) -->
       <h1 class="reveal reveal-d1">
         We build the systems<br>
         your business <em>runs on</em>.
       </h1>
-
-      <!-- Supporting subheadline — staggered entrance (delay 2) -->
       <p class="hero-sub reveal reveal-d2">
         From a $800 business website to a DevOps portal for a billion-dollar acquisition — one engineer, every scale.
       </p>
-
-      <!-- CTA buttons — staggered entrance (delay 3) -->
       <div class="hero-ctas reveal reveal-d3">
         <a href="#contact" class="btn-primary">
           Start a project
@@ -1327,20 +1099,12 @@
           </svg>
         </a>
       </div>
-
     </div>
   </section>
 
-  <!-- ============================================================
-       TICKER
-       Continuously scrolling capability marquee.
-       The items below are duplicated exactly once so the CSS loop
-       animation (translateX -50%) can seamlessly cycle back to the
-       start without any visible jump.
-  ============================================================ -->
+  <!-- TICKER -->
   <div class="ticker-wrap">
     <div class="ticker-track">
-      <!-- First copy of items -->
       <span>Engineered in <b>Atlanta</b></span>
       <span>·</span>
       <span>Delivered <b>Worldwide</b></span>
@@ -1351,7 +1115,6 @@
       <span>·</span>
       <span>Ships <b>Fast</b></span>
       <span>·</span>
-      <!-- Second copy — exact duplicate required for seamless loop -->
       <span>Engineered in <b>Atlanta</b></span>
       <span>·</span>
       <span>Delivered <b>Worldwide</b></span>
@@ -1365,40 +1128,26 @@
     </div>
   </div>
 
-  <!-- ============================================================
-       SELECTED WORK  (#showcase)
-       Full-bleed alternating dark/light panels, one per project.
-       Each panel has a large ghost number watermark in the background.
-       The showcase section has padding:0 — each panel controls spacing.
-  ============================================================ -->
+  <!-- SELECTED WORK -->
   <section class="showcase-section" id="showcase">
-
-    <!-- Section label + heading above the panels -->
     <div class="showcase-header container">
       <div class="section-label">Selected Work</div>
       <h2 class="section-title">Built things that<br><em>mattered.</em></h2>
     </div>
 
-    <!-- PROJECT 01 — AGS DevOps Portal (dark panel) -->
+    <!-- PROJECT 01 -->
     <div class="showcase-project showcase-dark">
       <div class="showcase-bg-num">01</div>
       <div class="container showcase-inner">
-
-        <!-- Left column: badges + project title -->
-        <div>
-          <div class="showcase-meta">
-            <span class="showcase-badge badge-acquisition">Acquired · $1B</span>
-            <span class="showcase-badge badge-live">Enterprise</span>
-          </div>
-          <h3 class="showcase-title">AGS DevOps<br><em>Portal</em></h3>
+        <div class="showcase-meta">
+          <span class="showcase-badge badge-acquisition">Acquired · $1B</span>
+          <span class="showcase-badge badge-live">Enterprise</span>
         </div>
-
-        <!-- Right column: description, key stats, tech tags -->
+        <h3 class="showcase-title">AGS DevOps<br><em>Portal</em></h3>
         <div class="showcase-body">
           <p class="showcase-desc">
             Built the entire DevOps portal from scratch for American Gaming Systems — a unified hub that centralized release management, branch automation, build validation, decryption pipelines, and compliance workflows across multiple gaming jurisdictions. Then took every fragmented legacy tool and ported them into a microservices architecture connected through a central hub. Used daily by engineering and QA. AGS was subsequently acquired for $1B.
           </p>
-
           <div class="showcase-details">
             <div class="showcase-stat">
               <span class="showcase-stat-num">7+</span>
@@ -1413,7 +1162,6 @@
               <span class="showcase-stat-label">Acquisition</span>
             </div>
           </div>
-
           <div class="showcase-tags">
             <span class="showcase-tag">C#</span>
             <span class="showcase-tag">.NET</span>
@@ -1427,47 +1175,37 @@
             <span class="showcase-tag">SQL</span>
           </div>
         </div>
-
       </div>
     </div>
 
-    <!-- PROJECT 02 — Personal Life OS Portal (light panel) -->
+    <!-- PROJECT 02 -->
     <div class="showcase-project showcase-light">
       <div class="showcase-bg-num">02</div>
       <div class="container showcase-inner">
-
-        <!-- Left column: badges + project title -->
-        <div>
-          <div class="showcase-meta">
-            <span class="showcase-badge badge-live">Live</span>
-            <span class="showcase-badge badge-oss">Personal Build</span>
-          </div>
-          <h3 class="showcase-title showcase-title-dark">Personal<br><em>Portal</em></h3>
+        <div class="showcase-meta">
+          <span class="showcase-badge badge-live">Live</span>
+          <span class="showcase-badge badge-oss">Personal Build</span>
         </div>
-
-        <!-- Right column: description, key stats, tech tags -->
+        <h3 class="showcase-title showcase-title-dark">Personal<br><em>Portal</em></h3>
         <div class="showcase-body">
           <p class="showcase-desc showcase-desc-dark">
             A personal life operating system built as a microservices architecture — 7 independent .NET 9 Blazor apps, each owning a domain (Fitness, Gaming, Work, Real Estate, Construction), unified by a central Auth hub with a shared design system. Every portal has its own theme color, its own data layer, and its own logic — connected through one coherent experience. Built to prove the architecture, not just describe it.
           </p>
-
-          <!-- style="" overrides on stats because this panel is light not dark -->
           <div class="showcase-details showcase-details-dark">
-            <div class="showcase-stat">
+            <div class="showcase-stat showcase-stat-dark">
               <span class="showcase-stat-num" style="color:var(--clay-dark)">7</span>
               <span class="showcase-stat-label" style="color:var(--muted)">Independent services</span>
             </div>
-            <div class="showcase-stat">
+            <div class="showcase-stat showcase-stat-dark">
               <span class="showcase-stat-num" style="color:var(--clay-dark)">1</span>
               <span class="showcase-stat-label" style="color:var(--muted)">Auth hub</span>
             </div>
-            <div class="showcase-stat">
+            <div class="showcase-stat showcase-stat-dark">
               <span class="showcase-stat-num" style="color:var(--clay-dark)">1131</span>
               <span class="showcase-stat-label" style="color:var(--muted)">Lines of design system CSS</span>
             </div>
           </div>
-
-          <div class="showcase-tags">
+          <div class="showcase-tags showcase-tags-dark">
             <span class="showcase-tag-dark">.NET 9</span>
             <span class="showcase-tag-dark">Blazor Server</span>
             <span class="showcase-tag-dark">ASP.NET Core</span>
@@ -1477,19 +1215,11 @@
             <span class="showcase-tag-dark">Microservices</span>
           </div>
         </div>
-
       </div>
     </div>
-
   </section>
 
-  <!-- ============================================================
-       SERVICES  (#work)
-       Four offerings in a 2×2 grid. Each card carries a data-num
-       attribute (e.g. data-num="01") that the CSS ::after pseudo-
-       element reads to render the ghost number watermark — no extra
-       markup needed.
-  ============================================================ -->
+  <!-- SERVICES -->
   <section id="work">
     <div class="container">
       <div class="section-label">The Work</div>
@@ -1499,8 +1229,6 @@
       </p>
 
       <div class="services-grid">
-
-        <!-- 01 — Websites -->
         <div class="service" data-num="01">
           <div class="service-num">01 — Websites</div>
           <h3>Clean sites.<br><em>Fast delivery.</em></h3>
@@ -1515,7 +1243,6 @@
           </div>
         </div>
 
-        <!-- 02 — Automation -->
         <div class="service" data-num="02">
           <div class="service-num">02 — Automation</div>
           <h3>Eliminate the<br><em>manual work.</em></h3>
@@ -1530,7 +1257,6 @@
           </div>
         </div>
 
-        <!-- 03 — Content Bots -->
         <div class="service" data-num="03">
           <div class="service-num">03 — Content Bots</div>
           <h3>Set it once.<br><em>Runs while you sleep.</em></h3>
@@ -1547,7 +1273,6 @@
           </div>
         </div>
 
-        <!-- 04 — Portals -->
         <div class="service" data-num="04">
           <div class="service-num">04 — Portals</div>
           <h3>Internal &amp; external<br><em>systems that work.</em></h3>
@@ -1563,16 +1288,11 @@
             <span class="service-tag">Reporting portals</span>
           </div>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       LIVE PRODUCTS  (#products)
-       Dark section. Two bots already built and actively running —
-       available to license or deploy for other channels.
-  ============================================================ -->
+  <!-- LIVE PRODUCTS -->
   <section class="products-section" id="products">
     <div class="container">
       <div class="section-label">Live Products</div>
@@ -1582,8 +1302,6 @@
       </p>
 
       <div class="products-grid">
-
-        <!-- Finance Reel Bot -->
         <div class="product-card">
           <div class="product-live">
             <span class="product-live-dot"></span>
@@ -1607,7 +1325,6 @@
           </a>
         </div>
 
-        <!-- Video Pipeline Bot -->
         <div class="product-card">
           <div class="product-live">
             <span class="product-live-dot"></span>
@@ -1631,15 +1348,11 @@
             </svg>
           </a>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       PROCESS  (#process)
-       Three numbered steps on a cream-2 background.
-  ============================================================ -->
+  <!-- PROCESS -->
   <section class="process-section" id="process">
     <div class="container">
       <div class="section-label">The Process</div>
@@ -1649,43 +1362,32 @@
       </p>
 
       <div class="process-grid">
-
         <div class="process-step">
           <div class="process-num">01</div>
           <h4>Scoping call</h4>
           <p>Thirty minutes. We identify what's consuming your time and whether it's worth building. If we can help, we'll show you how. If we can't, we'll say so.</p>
         </div>
-
         <div class="process-step">
           <div class="process-num">02</div>
           <h4>Fixed-scope proposal</h4>
           <p>A clear document — what we're building, when it ships, what it costs. No hourly surprises. No vague deliverables.</p>
         </div>
-
         <div class="process-step">
           <div class="process-num">03</div>
           <h4>Ship &amp; support</h4>
           <p>We build, deliver, and back the work. You own the code outright. Your systems keep running — with or without us.</p>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       ABOUT  (#about)
-       Two columns:
-         Left  — bio paragraphs (first paragraph styled as lede)
-         Right — sticky tech stack pill cloud (sticks while bio scrolls)
-  ============================================================ -->
+  <!-- ABOUT -->
   <section id="about">
     <div class="container">
       <div class="section-label">About</div>
       <h2 class="section-title">Engineered in Atlanta.<br>Built to <em>last.</em></h2>
 
       <div class="about-grid">
-
-        <!-- Bio text — first <p> gets the large Fraunces lede treatment via CSS :first-child -->
         <div class="about-content">
           <p>
             From small to big — one engineer who built it all.
@@ -1701,7 +1403,6 @@
           </p>
         </div>
 
-        <!-- Sticky tech stack — stays in view while the bio scrolls past it -->
         <div class="stack-box">
           <div class="stack-box-label">The Stack</div>
           <div class="stack-list">
@@ -1725,27 +1426,14 @@
             <span class="stack-tag">Bash</span>
           </div>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       CONTACT  (#contact)
-       Two columns: pitch copy + direct email on the left,
-       Formspree contact form on the right.
-
-       Formspree handles the POST — no server or backend needed.
-       Hidden fields:
-         _subject  — sets the email subject line Formspree sends
-         _replyto  — populated by the oninput handler on the email field
-                     so replies automatically go to the sender
-  ============================================================ -->
+  <!-- CONTACT -->
   <section class="contact-section" id="contact">
     <div class="container">
       <div class="contact-inner">
-
-        <!-- Left: pitch copy + direct email fallback -->
         <div class="contact-left">
           <div class="section-label">Get in touch</div>
           <h2 class="section-title">What's slowing<br>you <em>down?</em></h2>
@@ -1757,48 +1445,30 @@
           </p>
         </div>
 
-        <!-- Right: Formspree form -->
-        <form action="https://formspree.io/f/xlgkobvq" method="POST">
-          <!-- Hidden fields for Formspree configuration -->
-          <input type="hidden" name="_subject" value="New inquiry via M³">
-          <input type="hidden" name="_replyto" value="">
-
+        <form action="https://formspree.io/f/mreroovo" method="POST">
           <label for="name">Your name</label>
           <input type="text" id="name" name="name" required placeholder="Jane Smith">
 
           <label for="email">Email</label>
-          <!-- oninput keeps the hidden _replyto field in sync with what the user types -->
-          <input type="email" id="email" name="email" required placeholder="jane@company.com"
-            oninput="this.form.querySelector('[name=_replyto]').value = this.value">
+          <input type="email" id="email" name="email" required placeholder="jane@company.com">
 
           <label for="message">What's the problem?</label>
           <textarea id="message" name="message" required placeholder="We spend hours every week on..."></textarea>
 
           <button type="submit">Send it →</button>
         </form>
-
       </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       FOOTER
-       Dark ink background.
-       Top row: brand + tagline | nav links | social links
-       Bottom row: copyright | tagline text
-  ============================================================ -->
+  <!-- FOOTER -->
   <footer>
     <div class="container">
-
       <div class="footer-top">
-
-        <!-- Brand mark + tagline -->
         <div>
           <div class="footer-brand-mark m3">M<sup>3</sup></div>
           <p class="footer-tagline">Systems your business runs on.</p>
         </div>
-
-        <!-- Page navigation links -->
         <div class="footer-links-col">
           <a href="#work">Work</a>
           <a href="#products">Products</a>
@@ -1806,21 +1476,16 @@
           <a href="#about">About</a>
           <a href="#contact">Contact</a>
         </div>
-
-        <!-- Social and direct contact links -->
         <div class="footer-links-col">
           <a href="https://www.linkedin.com/in/michael-murillo-martinez-912168194/" target="_blank">LinkedIn</a>
           <a href="https://github.com/murillomartinezmichael" target="_blank">GitHub</a>
           <a href="mailto:murillomartinezmichael@gmail.com">Email</a>
         </div>
-
       </div>
-
       <div class="footer-bottom">
         <span>© 2026 M³ · Atlanta, GA</span>
         <span>Engineered from scratch. No templates.</span>
       </div>
-
     </div>
   </footer>
 
