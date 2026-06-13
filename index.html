@@ -1445,12 +1445,16 @@
           </p>
         </div>
 
-        <form action="https://formspree.io/f/mreroovo" method="POST">
+        <form action="https://formspree.io/f/xlgkobvq" method="POST">
+          <input type="hidden" name="_subject" value="New inquiry via M³">
+          <input type="hidden" name="_replyto" value="">
+
           <label for="name">Your name</label>
           <input type="text" id="name" name="name" required placeholder="Jane Smith">
 
           <label for="email">Email</label>
-          <input type="email" id="email" name="email" required placeholder="jane@company.com">
+          <input type="email" id="email" name="email" required placeholder="jane@company.com"
+            oninput="this.form.querySelector('[name=_replyto]').value = this.value">
 
           <label for="message">What's the problem?</label>
           <textarea id="message" name="message" required placeholder="We spend hours every week on..."></textarea>
