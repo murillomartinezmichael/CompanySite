@@ -1035,6 +1035,91 @@
       letter-spacing: 0.04em;
     }
 
+    /* === BUY BUTTONS === */
+    .btn-buy {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 18px;
+      background: var(--clay-dark);
+      color: var(--cream);
+      padding: 11px 24px;
+      border: none;
+      border-radius: 999px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .btn-buy:hover:not(:disabled) {
+      background: var(--clay);
+      transform: translateY(-1px);
+    }
+
+    .btn-buy:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-buy-contact {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 18px;
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(245,240,232,0.35);
+      border-bottom: 1px solid rgba(245,240,232,0.15);
+      padding-bottom: 2px;
+      text-decoration: none;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .btn-buy-contact:hover {
+      color: var(--clay-light);
+      border-color: var(--clay-light);
+    }
+
+    /* === TOAST === */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      padding: 15px 28px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 200;
+      white-space: nowrap;
+      max-width: 90vw;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .toast-visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast-success {
+      background: #1e3d12;
+      color: #8ecf68;
+      border: 1px solid rgba(92,138,71,0.3);
+    }
+
+    .toast-error {
+      background: #3a1515;
+      color: #e08a8a;
+      border: 1px solid rgba(200,80,80,0.25);
+    }
+
     /* === UTILITIES === */
     .reveal {
       opacity: 0;
@@ -1050,6 +1135,142 @@
     .reveal-d2 { animation-delay: 0.22s; }
     .reveal-d3 { animation-delay: 0.36s; }
     .reveal-d4 { animation-delay: 0.5s; }
+
+    /* === PRICING === */
+    .pricing-section {
+      background: var(--ink);
+      padding: 140px 0;
+    }
+
+    .pricing-section .section-label { color: var(--clay-light); }
+    .pricing-section .section-label::after { background: var(--clay); }
+    .pricing-section .section-title { color: var(--cream); }
+    .pricing-section .section-title em { color: var(--clay-light); }
+    .pricing-section .section-intro { color: rgba(245,240,232,0.5); }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: rgba(245,240,232,0.08);
+      border: 1px solid rgba(245,240,232,0.08);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .pricing-grid { grid-template-columns: 1fr; }
+    }
+
+    .pricing-card {
+      background: var(--ink);
+      padding: 48px 44px;
+      transition: background 0.3s;
+    }
+
+    .pricing-card:hover { background: #201D16; }
+
+    .pricing-category {
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--clay-light);
+      font-weight: 600;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(245,240,232,0.07);
+    }
+
+    .pricing-tiers {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .pricing-tier {
+      padding-bottom: 28px;
+      border-bottom: 1px solid rgba(245,240,232,0.06);
+    }
+
+    .pricing-tier:last-child {
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .tier-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 10px;
+      gap: 16px;
+    }
+
+    .tier-name {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.45);
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+
+    .tier-price {
+      font-family: 'Fraunces', serif;
+      font-size: 32px;
+      font-weight: 300;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: var(--cream);
+    }
+
+    .tier-price span {
+      font-size: 14px;
+      color: rgba(245,240,232,0.4);
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0;
+    }
+
+    .tier-desc {
+      font-size: 13px;
+      color: rgba(245,240,232,0.4);
+      line-height: 1.7;
+      font-weight: 300;
+      margin-top: 8px;
+    }
+
+    .tier-badge {
+      display: inline-block;
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--clay-light);
+      background: rgba(184,131,90,0.12);
+      border: 1px solid rgba(184,131,90,0.2);
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .pricing-note {
+      text-align: center;
+      font-size: 14px;
+      color: rgba(245,240,232,0.35);
+      line-height: 1.7;
+    }
+
+    .pricing-note a {
+      color: var(--clay-light);
+      border-bottom: 1px solid rgba(184,131,90,0.3);
+      padding-bottom: 1px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .pricing-note a:hover {
+      color: var(--clay);
+      border-color: var(--clay);
+    }
   </style>
 </head>
 
@@ -1061,8 +1282,9 @@
       <a href="#" class="brand m3">M<sup>3</sup></a>
       <div class="nav-links">
         <a href="#showcase">Work</a>
+        <a href="#work">Services</a>
+        <a href="#pricing">Pricing</a>
         <a href="#products">Products</a>
-        <a href="#process">Process</a>
         <a href="#about">About</a>
         <a href="#contact" class="btn-nav">Get in touch</a>
       </div>
@@ -1292,6 +1514,141 @@
     </div>
   </section>
 
+  <!-- PRICING -->
+  <section class="pricing-section" id="pricing">
+    <div class="container">
+      <div class="section-label">Pricing</div>
+      <h2 class="section-title">Clear scope.<br><em>No surprises.</em></h2>
+      <p class="section-intro">
+        Starting rates for every service. Complex builds are quoted after a 30-min call — but this is what most projects cost.
+      </p>
+
+      <div class="pricing-grid">
+
+        <!-- Websites -->
+        <div class="pricing-card">
+          <div class="pricing-category">Websites</div>
+          <div class="pricing-tiers">
+
+            <div class="pricing-tier">
+              <div class="tier-row">
+                <div class="tier-name">Starter</div>
+                <div class="tier-price">$350</div>
+              </div>
+              <p class="tier-desc">Single-page landing site. Mobile-ready, contact form, SEO basics. Live in 48–72 hours.</p>
+              <button class="btn-buy" onclick="buyPackage(this, 'website-starter')">Buy now →</button>
+            </div>
+
+            <div class="pricing-tier">
+              <div class="tier-row">
+                <div class="tier-name">Business</div>
+                <div class="tier-price">$750</div>
+              </div>
+              <p class="tier-desc">3–5 pages, Google Analytics, contact form, polished design. Delivered in under a week.</p>
+              <button class="btn-buy" onclick="buyPackage(this, 'website-business')">Buy now →</button>
+            </div>
+
+            <div class="pricing-tier">
+              <div class="tier-badge">Most requested</div>
+              <div class="tier-row">
+                <div class="tier-name">Custom</div>
+                <div class="tier-price">$1,500<span>+</span></div>
+              </div>
+              <p class="tier-desc">Full design system, animations, CMS, e-commerce, or anything that requires real engineering. Scoped after a call.</p>
+              <a href="#contact" class="btn-buy-contact">Schedule a call →</a>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Automation -->
+        <div class="pricing-card">
+          <div class="pricing-category">Automation</div>
+          <div class="pricing-tiers">
+
+            <div class="pricing-tier">
+              <div class="tier-row">
+                <div class="tier-name">Script / Integration</div>
+                <div class="tier-price">$500<span>+</span></div>
+              </div>
+              <p class="tier-desc">Data syncs, reporting pipelines, file processing, workflow automation. Scoped and quoted after a discovery call.</p>
+              <a href="#contact" class="btn-buy-contact">Schedule a call →</a>
+            </div>
+
+            <div class="pricing-tier">
+              <div class="tier-row">
+                <div class="tier-name">Ongoing Maintenance</div>
+                <div class="tier-price">$100<span> / mo</span></div>
+              </div>
+              <p class="tier-desc">Updates, monitoring, and fixes for existing automation. You focus on the business — I keep the systems running.</p>
+              <a href="#contact" class="btn-buy-contact">Schedule a call →</a>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Content Bots -->
+        <div class="pricing-card">
+          <div class="pricing-category">Content Bots</div>
+          <div class="pricing-tiers">
+
+            <div class="pricing-tier">
+              <div class="tier-badge">Fixed price</div>
+              <div class="tier-row">
+                <div class="tier-name">Bot Setup</div>
+                <div class="tier-price">$600</div>
+              </div>
+              <p class="tier-desc">Bot built, configured, documented, and handed off. You own it outright.</p>
+              <button class="btn-buy" onclick="buyPackage(this, 'bot-setup')">Buy now →</button>
+            </div>
+
+            <div class="pricing-tier">
+              <div class="tier-badge">Hands-off</div>
+              <div class="tier-row">
+                <div class="tier-name">Managed Bot</div>
+                <div class="tier-price">$150<span> / mo</span></div>
+              </div>
+              <p class="tier-desc">I run it, maintain it, and keep it posting. You focus on growth — the pipeline handles itself.</p>
+              <a href="#contact" class="btn-buy-contact">Schedule a call →</a>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Portals -->
+        <div class="pricing-card">
+          <div class="pricing-category">Portals &amp; Apps</div>
+          <div class="pricing-tiers">
+
+            <div class="pricing-tier">
+              <div class="tier-row">
+                <div class="tier-name">Internal Tool</div>
+                <div class="tier-price">$2,500<span>+</span></div>
+              </div>
+              <p class="tier-desc">Staff portals, admin dashboards, approval workflows. Built around how your business actually operates.</p>
+              <a href="#contact" class="btn-buy-contact">Schedule a call →</a>
+            </div>
+
+            <div class="pricing-tier">
+              <div class="tier-row">
+                <div class="tier-name">Client-Facing App</div>
+                <div class="tier-price">$4,000<span>+</span></div>
+              </div>
+              <p class="tier-desc">Customer dashboards, client portals, reporting tools. Auth, data layer, full UI — scoped to your use case.</p>
+              <a href="#contact" class="btn-buy-contact">Schedule a call →</a>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <p class="pricing-note">
+        Every project includes one revision round. You own the code outright. &nbsp;·&nbsp; <a href="#contact">Start with a free 30-min call →</a>
+      </p>
+    </div>
+  </section>
+
   <!-- LIVE PRODUCTS -->
   <section class="products-section" id="products">
     <div class="container">
@@ -1474,7 +1831,8 @@
           <p class="footer-tagline">Systems your business runs on.</p>
         </div>
         <div class="footer-links-col">
-          <a href="#work">Work</a>
+          <a href="#work">Services</a>
+          <a href="#pricing">Pricing</a>
           <a href="#products">Products</a>
           <a href="#process">Process</a>
           <a href="#about">About</a>
@@ -1492,6 +1850,59 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    // UPDATE this URL after you deploy PaymentBackend to Railway
+    const BACKEND_URL = 'https://m3-payments.up.railway.app';
+
+    async function buyPackage(btn, packageId) {
+      const originalText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Redirecting...';
+
+      try {
+        const res = await fetch(`${BACKEND_URL}/create-checkout-session`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            package: packageId,
+            success_url: window.location.origin + window.location.pathname,
+            cancel_url: window.location.href,
+          }),
+        });
+
+        if (!res.ok) throw new Error('Server error');
+        const { url } = await res.json();
+        window.location.href = url;
+      } catch {
+        btn.disabled = false;
+        btn.textContent = originalText;
+        showToast('Something went wrong. Email us directly to get started.', 'error');
+      }
+    }
+
+    function showToast(msg, type) {
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.textContent = msg;
+      document.body.appendChild(toast);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => toast.classList.add('toast-visible'));
+      });
+      setTimeout(() => {
+        toast.classList.remove('toast-visible');
+        setTimeout(() => toast.remove(), 400);
+      }, 5000);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('paid') === '1') {
+        showToast("Payment received — I'll be in touch within 24 hours.", 'success');
+        history.replaceState({}, '', window.location.pathname);
+      }
+    });
+  </script>
 
 </body>
 </html>
