@@ -14,17 +14,23 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <style>
+    /* Blade Runner palette — variable names retained for diff continuity.
+       --cream now = dark teal-black surface, --ink = warm cream text. */
     :root {
-      --cream: #F5F0E8;
-      --cream-2: #EDE5D4;
-      --cream-3: #E4D9C4;
-      --clay: #B8835A;
-      --clay-dark: #8B5E3C;
-      --clay-light: #D4A882;
-      --ink: #18150F;
-      --ink-soft: #3A3530;
-      --muted: #7A7168;
-      --accent: #C4956A;
+      --cream:      #0B1419;   /* deep teal-black base */
+      --cream-2:    #0F1B22;   /* surface 1 */
+      --cream-3:    #15252E;   /* surface 2 */
+      --clay:       #FF7E3D;   /* amber neon primary */
+      --clay-dark:  #FF9B5C;   /* amber light/hover */
+      --clay-light: #2EC4B6;   /* teal mid accent */
+      --ink:        #E8DCC4;   /* warm cream foreground */
+      --ink-soft:   #C9BDA5;   /* softer fg */
+      --muted:      #6B7A85;   /* steel gray */
+      --accent:     #FF2D7E;   /* magenta */
+      --line:       rgba(232,220,196,0.10);
+      --line-2:     rgba(232,220,196,0.18);
+      --line-3:     rgba(232,220,196,0.28);
+      --glow:       0 0 24px rgba(255,126,61,0.35);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -39,16 +45,27 @@
       overflow-x: hidden;
     }
 
-    /* Grain overlay */
+    /* Grain + scanline overlay — cyberpunk vibe over the dark base */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 100;
-      opacity: 0.35;
-      mix-blend-mode: multiply;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3CfeColorMatrix values='0 0 0 0 0.08 0 0 0 0 0.06 0 0 0 0 0.04 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.4;
+      mix-blend-mode: screen;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.55 0 0 0 0 0.50 0 0 0 0.10 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    body::after {
+      content: '';
+      position: fixed; inset: 0; pointer-events: none; z-index: 99;
+      background: repeating-linear-gradient(
+        180deg,
+        transparent 0,
+        transparent 3px,
+        rgba(46,196,182,0.025) 3px,
+        rgba(46,196,182,0.025) 4px
+      );
     }
 
     a { color: inherit; text-decoration: none; }
@@ -81,10 +98,10 @@
       top: 0; left: 0; right: 0;
       z-index: 50;
       padding: 18px 0;
-      background: rgba(245, 240, 232, 0.9);
+      background: rgba(11,20,25,0.82);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(24, 21, 15, 0.07);
+      border-bottom: 1px solid rgba(232,220,196,0.07);
     }
 
     .nav-inner {
@@ -114,19 +131,22 @@
     .nav-links a:hover { color: var(--clay-dark); }
 
     .btn-nav {
-      background: var(--ink);
-      color: var(--cream);
+      background: var(--clay);
+      color: var(--ink);
       padding: 9px 20px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: 0.02em;
-      transition: background 0.2s, transform 0.2s;
+      border-radius: 2px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: var(--glow);
     }
 
     .btn-nav:hover {
       background: var(--clay-dark);
       transform: translateY(-1px);
+      box-shadow: 0 0 40px rgba(255,126,61,0.6);
     }
 
     .nav-mobile { display: none; }
@@ -136,8 +156,8 @@
       .nav-mobile {
         display: block;
         font-size: 13px;
-        background: var(--ink);
-        color: var(--cream);
+        background: var(--cream);
+        color: var(--ink);
         padding: 8px 18px;
         border-radius: 999px;
       }
@@ -159,7 +179,7 @@
       font-size: clamp(280px, 30vw, 480px);
       font-weight: 300;
       color: transparent;
-      -webkit-text-stroke: 1px rgba(24, 21, 15, 0.06);
+      -webkit-text-stroke: 1px rgba(232,220,196,0.06);
       letter-spacing: -0.05em;
       line-height: 1;
       pointer-events: none;
@@ -171,14 +191,14 @@
       align-items: center;
       gap: 10px;
       font-size: 11px;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: var(--clay-light);
       margin-bottom: 52px;
       padding: 7px 16px;
-      border: 1px solid rgba(24, 21, 15, 0.12);
-      border-radius: 999px;
-      background: rgba(255,255,255,0.35);
+      border: 1px solid rgba(46,196,182,0.4);
+      border-radius: 2px;
+      background: rgba(46,196,182,0.06);
     }
 
     .status-dot {
@@ -230,22 +250,25 @@
     }
 
     .btn-primary {
-      background: var(--ink);
-      color: var(--cream);
+      background: var(--clay);
+      color: var(--ink);
       padding: 16px 30px;
-      border-radius: 999px;
-      font-weight: 500;
-      font-size: 14px;
-      letter-spacing: 0.02em;
+      border-radius: 2px;
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
       display: inline-flex;
       align-items: center;
       gap: 10px;
       transition: all 0.25s;
+      box-shadow: var(--glow);
     }
 
     .btn-primary:hover {
       background: var(--clay-dark);
       transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(255,126,61,0.55);
     }
 
     .btn-primary svg { transition: transform 0.2s; }
@@ -258,7 +281,7 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      border-bottom: 1px solid rgba(24,21,15,0.25);
+      border-bottom: 1px solid rgba(232,220,196,0.25);
       padding-bottom: 2px;
       transition: color 0.2s, border-color 0.2s;
     }
@@ -271,8 +294,8 @@
     /* === TICKER === */
     .ticker-wrap {
       overflow: hidden;
-      border-top: 1px solid rgba(24,21,15,0.1);
-      border-bottom: 1px solid rgba(24,21,15,0.1);
+      border-top: 1px solid rgba(232,220,196,0.1);
+      border-bottom: 1px solid rgba(232,220,196,0.1);
       padding: 14px 0;
       background: var(--cream-2);
     }
@@ -350,7 +373,7 @@
 
     /* === BUILD LIST === */
     .build-list {
-      border-top: 1px solid rgba(24,21,15,0.12);
+      border-top: 1px solid rgba(232,220,196,0.12);
       padding-top: 48px;
       max-width: 880px;
     }
@@ -374,7 +397,7 @@
       line-height: 1.25;
       letter-spacing: -0.015em;
       color: var(--ink);
-      border-bottom: 1px solid rgba(24,21,15,0.08);
+      border-bottom: 1px solid rgba(232,220,196,0.08);
     }
     .build-list li:last-child { border-bottom: none; }
     .build-num {
@@ -390,11 +413,87 @@
       .build-list li { gap: 18px; padding: 20px 0; }
     }
 
+    /* === FOUR OFFERINGS === */
+    .offer-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line-2);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    @media (max-width: 768px) {
+      .offer-grid { grid-template-columns: 1fr; }
+    }
+    .offer-card {
+      background: var(--cream);
+      padding: 56px 48px;
+      position: relative;
+      transition: background 0.3s;
+    }
+    .offer-card:hover { background: var(--cream-2); }
+    .offer-card::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--clay);
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.3s ease;
+    }
+    .offer-card:hover::before { transform: scaleY(1); }
+    .offer-num {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 28px;
+      font-weight: 600;
+    }
+    .offer-card h3 {
+      font-family: 'Fraunces', serif;
+      font-weight: 300;
+      font-size: clamp(28px, 2.6vw, 38px);
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      margin-bottom: 20px;
+    }
+    .offer-card h3 em {
+      font-style: italic;
+      color: var(--clay-light);
+    }
+    .offer-desc {
+      font-size: 14.5px;
+      line-height: 1.75;
+      color: var(--ink-soft);
+      margin-bottom: 24px;
+      font-weight: 300;
+    }
+    .offer-scope { list-style: none; padding: 0; margin: 0; }
+    .offer-scope li {
+      display: flex;
+      gap: 12px;
+      align-items: baseline;
+      font-size: 13px;
+      color: var(--muted);
+      padding: 8px 0;
+      border-top: 1px solid var(--line);
+    }
+    .offer-scope li::before {
+      content: '▸';
+      color: var(--clay);
+      font-size: 10px;
+      flex-shrink: 0;
+    }
+
     /* === SERVICES === */
     .services-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      border-top: 1px solid rgba(24,21,15,0.1);
+      border-top: 1px solid rgba(232,220,196,0.1);
     }
 
     @media (max-width: 768px) {
@@ -403,7 +502,7 @@
 
     .service {
       padding: 60px 44px;
-      border-bottom: 1px solid rgba(24,21,15,0.1);
+      border-bottom: 1px solid rgba(232,220,196,0.1);
       position: relative;
       transition: background 0.35s;
       cursor: default;
@@ -419,13 +518,13 @@
       font-size: 120px;
       font-weight: 300;
       color: transparent;
-      -webkit-text-stroke: 1px rgba(24,21,15,0.05);
+      -webkit-text-stroke: 1px rgba(232,220,196,0.05);
       line-height: 1;
       pointer-events: none;
       transition: opacity 0.3s;
     }
 
-    .service:nth-child(odd) { border-right: 1px solid rgba(24,21,15,0.1); }
+    .service:nth-child(odd) { border-right: 1px solid rgba(232,220,196,0.1); }
 
     @media (max-width: 768px) {
       .service:nth-child(odd) { border-right: none; }
@@ -472,39 +571,51 @@
       flex-wrap: wrap;
       gap: 8px;
       padding-top: 24px;
-      border-top: 1px solid rgba(24,21,15,0.08);
+      border-top: 1px solid rgba(232,220,196,0.08);
     }
 
     .service-tag {
       font-size: 11px;
       letter-spacing: 0.05em;
       color: var(--muted);
-      background: rgba(24,21,15,0.04);
+      background: rgba(232,220,196,0.04);
       padding: 5px 12px;
       border-radius: 999px;
-      border: 1px solid rgba(24,21,15,0.08);
+      border: 1px solid rgba(232,220,196,0.08);
     }
 
     /* === PRODUCTS === */
     .products-section {
-      background: var(--ink);
-      color: var(--cream);
+      background: var(--cream-2);
+      color: var(--ink);
       padding: 140px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
     }
 
     .products-section .section-label { color: var(--clay-light); }
     .products-section .section-label::after { background: var(--clay); }
-    .products-section .section-title { color: var(--cream); }
-    .products-section .section-title em { color: var(--clay-light); }
-    .products-section .section-intro { color: rgba(245,240,232,0.5); }
+    .products-section .section-title { color: var(--ink); }
+    .products-section .section-title em { color: var(--clay); }
+    .products-section .section-intro { color: var(--ink-soft); }
+
+    .products-subhead {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--clay);
+      font-weight: 600;
+      margin: 72px 0 22px;
+    }
+    .products-subhead:first-of-type { margin-top: 12px; }
 
     .products-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 1px;
-      background: rgba(245,240,232,0.08);
-      border: 1px solid rgba(245,240,232,0.08);
-      border-radius: 4px;
+      background: var(--line-2);
+      border: 1px solid var(--line-2);
+      border-radius: 2px;
       overflow: hidden;
     }
 
@@ -513,13 +624,13 @@
     }
 
     .product-card {
-      background: var(--ink);
+      background: var(--cream);
       padding: 52px 44px;
       position: relative;
       transition: background 0.3s;
     }
 
-    .product-card:hover { background: #201D16; }
+    .product-card:hover { background: var(--cream-3); }
 
     .product-live {
       display: inline-flex;
@@ -551,7 +662,7 @@
       line-height: 1.15;
       letter-spacing: -0.025em;
       margin-bottom: 16px;
-      color: var(--cream);
+      color: var(--ink);
     }
 
     .product-card h3 em {
@@ -596,7 +707,7 @@
       gap: 10px;
       font-size: 13px;
       font-weight: 500;
-      color: var(--cream);
+      color: var(--ink);
       letter-spacing: 0.03em;
       padding: 10px 20px;
       border: 1px solid rgba(245,240,232,0.2);
@@ -621,7 +732,7 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 0;
       margin-top: 64px;
-      border-top: 1px solid rgba(24,21,15,0.1);
+      border-top: 1px solid rgba(232,220,196,0.1);
     }
 
     @media (max-width: 768px) {
@@ -630,11 +741,11 @@
 
     .process-step {
       padding: 48px 40px 48px 0;
-      border-bottom: 1px solid rgba(24,21,15,0.1);
+      border-bottom: 1px solid rgba(232,220,196,0.1);
     }
 
     .process-step:not(:last-child) {
-      border-right: 1px solid rgba(24,21,15,0.1);
+      border-right: 1px solid rgba(232,220,196,0.1);
       margin-right: 0;
       padding-right: 40px;
     }
@@ -701,7 +812,7 @@
     }
 
     .stack-box {
-      background: var(--ink);
+      background: var(--cream);
       padding: 36px;
       border-radius: 4px;
       position: sticky;
@@ -736,7 +847,7 @@
 
     .stack-tag:hover {
       background: rgba(245,240,232,0.1);
-      color: var(--cream);
+      color: var(--ink);
     }
 
     /* === CONTACT === */
@@ -799,8 +910,8 @@
     input, textarea {
       width: 100%;
       padding: 14px 18px;
-      background: rgba(24,21,15,0.03);
-      border: 1px solid rgba(24,21,15,0.12);
+      background: rgba(232,220,196,0.03);
+      border: 1px solid rgba(232,220,196,0.12);
       border-radius: 4px;
       font-family: inherit;
       font-size: 15px;
@@ -819,8 +930,8 @@
     button[type="submit"] {
       width: 100%;
       margin-top: 28px;
-      background: var(--ink);
-      color: var(--cream);
+      background: var(--cream);
+      color: var(--ink);
       padding: 16px;
       border: none;
       border-radius: 999px;
@@ -839,8 +950,8 @@
 
     /* === FOOTER === */
     footer {
-      background: var(--ink);
-      color: var(--cream);
+      background: var(--cream);
+      color: var(--ink);
       padding: 80px 0 48px;
     }
 
@@ -860,7 +971,7 @@
       font-size: 80px;
       line-height: 0.9;
       letter-spacing: -0.04em;
-      color: var(--cream);
+      color: var(--ink);
     }
 
     .footer-brand-mark sup {
@@ -913,11 +1024,11 @@
       position: relative;
       overflow: hidden;
       padding: 120px 0;
-      border-top: 1px solid rgba(24,21,15,0.08);
+      border-top: 1px solid rgba(232,220,196,0.08);
     }
 
-    .showcase-dark { background: var(--ink); }
-    .showcase-light { background: var(--cream-2); }
+    .showcase-dark  { background: var(--cream); }
+    .showcase-light { background: var(--cream-3); }
 
     .showcase-bg-num {
       position: absolute;
@@ -940,7 +1051,7 @@
 
     .showcase-light .showcase-bg-num {
       color: transparent;
-      -webkit-text-stroke: 1px rgba(24,21,15,0.05);
+      -webkit-text-stroke: 1px rgba(232,220,196,0.05);
     }
 
     .showcase-inner {
@@ -972,22 +1083,25 @@
       border-radius: 999px;
     }
 
+    .showcase-badge {
+      border-radius: 2px !important;
+    }
     .badge-acquisition {
-      background: rgba(184,131,90,0.15);
-      color: var(--clay-light);
-      border: 1px solid rgba(184,131,90,0.25);
+      background: rgba(255,45,126,0.12);
+      color: var(--accent);
+      border: 1px solid rgba(255,45,126,0.4);
     }
 
     .badge-live {
-      background: rgba(92,138,71,0.12);
-      color: #7ab85a;
-      border: 1px solid rgba(92,138,71,0.2);
+      background: rgba(46,196,182,0.10);
+      color: var(--clay-light);
+      border: 1px solid rgba(46,196,182,0.40);
     }
 
     .badge-oss {
-      background: rgba(245,240,232,0.06);
-      color: rgba(245,240,232,0.4);
-      border: 1px solid rgba(245,240,232,0.1);
+      background: rgba(232,220,196,0.04);
+      color: rgba(232,220,196,0.55);
+      border: 1px solid rgba(232,220,196,0.14);
     }
 
     .showcase-title {
@@ -996,16 +1110,16 @@
       font-size: clamp(52px, 6vw, 88px);
       line-height: 0.95;
       letter-spacing: -0.04em;
-      color: var(--cream);
+      color: var(--ink);
     }
 
     .showcase-title em {
       font-style: italic;
-      color: var(--clay-light);
+      color: var(--clay);
     }
 
     .showcase-title-dark { color: var(--ink); }
-    .showcase-title-dark em { color: var(--clay-dark); }
+    .showcase-title-dark em { color: var(--clay-light); }
 
     .showcase-desc {
       font-size: 15px;
@@ -1028,7 +1142,7 @@
     }
 
     .showcase-details-dark {
-      border-bottom-color: rgba(24,21,15,0.1);
+      border-bottom-color: rgba(232,220,196,0.1);
     }
 
     .showcase-stat { display: flex; flex-direction: column; gap: 4px; }
@@ -1070,8 +1184,8 @@
     .showcase-tag-dark {
       font-size: 11px;
       color: var(--muted);
-      background: rgba(24,21,15,0.04);
-      border: 1px solid rgba(24,21,15,0.1);
+      background: rgba(232,220,196,0.04);
+      border: 1px solid rgba(232,220,196,0.1);
       padding: 5px 13px;
       border-radius: 999px;
       letter-spacing: 0.04em;
@@ -1084,7 +1198,7 @@
       gap: 8px;
       margin-top: 18px;
       background: var(--clay-dark);
-      color: var(--cream);
+      color: var(--ink);
       padding: 11px 24px;
       border: none;
       border-radius: 999px;
@@ -1180,13 +1294,13 @@
 
     /* === PRICING === */
     .pricing-section {
-      background: var(--ink);
+      background: var(--cream);
       padding: 140px 0;
     }
 
     .pricing-section .section-label { color: var(--clay-light); }
     .pricing-section .section-label::after { background: var(--clay); }
-    .pricing-section .section-title { color: var(--cream); }
+    .pricing-section .section-title { color: var(--ink); }
     .pricing-section .section-title em { color: var(--clay-light); }
     .pricing-section .section-intro { color: rgba(245,240,232,0.5); }
 
@@ -1206,7 +1320,7 @@
     }
 
     .pricing-card {
-      background: var(--ink);
+      background: var(--cream);
       padding: 48px 44px;
       transition: background 0.3s;
     }
@@ -1263,7 +1377,7 @@
       font-weight: 300;
       line-height: 1;
       letter-spacing: -0.03em;
-      color: var(--cream);
+      color: var(--ink);
     }
 
     .tier-price span {
@@ -1399,108 +1513,160 @@
       <h2 class="section-title">Built things that<br><em>mattered.</em></h2>
     </div>
 
-    <!-- PROJECT 01 -->
+    <!-- PROJECT 01 — CAREER (websites, hosting, social media) -->
     <div class="showcase-project showcase-dark">
       <div class="showcase-bg-num">01</div>
       <div class="container showcase-inner">
         <div class="showcase-meta">
-          <span class="showcase-badge badge-acquisition">Acquired · $1B</span>
-          <span class="showcase-badge badge-live">Enterprise</span>
+          <span class="showcase-badge badge-live">Active</span>
+          <span class="showcase-badge badge-oss">Solo Operator</span>
         </div>
-        <h3 class="showcase-title">AGS DevOps<br><em>Portal</em></h3>
+        <h3 class="showcase-title">Websites &amp; the<br><em>social engine.</em></h3>
         <div class="showcase-body">
           <p class="showcase-desc">
-            Built and maintained the AGS DevOps Dashboard/Portal for American Gaming Systems — centralizing access to Confluence documentation, internal tools, and supporting microservices. Developed internal tools including File Handler, a WPF decryption tool, and SVN Tools features (ChangeSet, Branch Creation, Build Validator, Jurisdiction Map, Branch Unlocker) to support file processing, release validation, branch automation, and compliance workflows. Also built shared libraries for SVN automation, OneMedia decryption, email notifications, and queue-based workflow processing. AGS was subsequently acquired for $1B.
+            The day-to-day of M³: building marketing sites for small and mid-size businesses, deploying them on infrastructure I own and manage end-to-end, and running the social media accounts that point traffic at them. Design, code, hosting, monitoring, content — one person, one accountable workflow, no agency layers. Aries Outdoor Living, Big7 Construction, and mm3m.net itself all live on this same operation.
           </p>
           <div class="showcase-details">
             <div class="showcase-stat">
-              <span class="showcase-stat-num">7+</span>
-              <span class="showcase-stat-label">Microservices built</span>
+              <span class="showcase-stat-num">3+</span>
+              <span class="showcase-stat-label">Production sites shipped</span>
             </div>
             <div class="showcase-stat">
-              <span class="showcase-stat-num">5–10</span>
-              <span class="showcase-stat-label">Engineers daily</span>
+              <span class="showcase-stat-num">100%</span>
+              <span class="showcase-stat-label">Self-hosted &amp; managed</span>
             </div>
             <div class="showcase-stat">
-              <span class="showcase-stat-num">$1B</span>
-              <span class="showcase-stat-label">Acquisition</span>
+              <span class="showcase-stat-num">∞</span>
+              <span class="showcase-stat-label">Posts scheduled to ship</span>
             </div>
           </div>
           <div class="showcase-tags">
-            <span class="showcase-tag">C#</span>
-            <span class="showcase-tag">.NET</span>
-            <span class="showcase-tag">ASP.NET</span>
-            <span class="showcase-tag">WPF</span>
-            <span class="showcase-tag">Microservices</span>
-            <span class="showcase-tag">SVN Automation</span>
-            <span class="showcase-tag">Azure DevOps</span>
-            <span class="showcase-tag">Octopus Deploy</span>
-            <span class="showcase-tag">C++</span>
-            <span class="showcase-tag">SQL</span>
+            <span class="showcase-tag">HTML / CSS</span>
+            <span class="showcase-tag">FastAPI</span>
+            <span class="showcase-tag">Azure</span>
+            <span class="showcase-tag">Render</span>
+            <span class="showcase-tag">Railway</span>
+            <span class="showcase-tag">Docker / nginx</span>
+            <span class="showcase-tag">GitHub Actions</span>
+            <span class="showcase-tag">Social Automation</span>
+            <span class="showcase-tag">SEO Basics</span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- PROJECT 02 -->
+    <!-- PROJECT 02 — MICROSERVICES + AGS DEVOPS LEAD -->
     <div class="showcase-project showcase-light">
       <div class="showcase-bg-num">02</div>
       <div class="container showcase-inner">
         <div class="showcase-meta">
-          <span class="showcase-badge badge-live">Live</span>
-          <span class="showcase-badge badge-oss">Personal Build</span>
+          <span class="showcase-badge badge-acquisition">Acquired · Brightstar $1B</span>
+          <span class="showcase-badge badge-live">Enterprise</span>
         </div>
-        <h3 class="showcase-title showcase-title-dark">Personal<br><em>Portal</em></h3>
+        <h3 class="showcase-title showcase-title-dark">Microservices, at<br><em>real scale.</em></h3>
         <div class="showcase-body">
           <p class="showcase-desc showcase-desc-dark">
-            A personal life operating system built as a microservices architecture — 7 independent .NET 9 Blazor apps, each owning a domain (Fitness, Gaming, Work, Real Estate, Construction), unified by a central Auth hub with a shared design system. Every portal has its own theme color, its own data layer, and its own logic — connected through one coherent experience. Built to prove the architecture, not just describe it.
+            Lead developer on the DevOps portal at American Gaming Systems — the internal hub release engineering, QA, and compliance ran on. Microservices for SVN automation, branch validation, jurisdictional release gating, file decryption, and queue-based workflow processing. A three-person team — Manager, Senior, me — owned the entire platform. AGS was acquired by Brightstar Capital Partners for $1B. The systems kept running through the transition.
+          </p>
+          <p class="showcase-desc showcase-desc-dark" style="margin-top:18px;">
+            That same architectural muscle is what I bring to every small-business build. The Personal Portal — 7 independent .NET 9 Blazor microservices unified by a central auth hub — is the proof-of-architecture I run in production for myself.
           </p>
           <div class="showcase-details showcase-details-dark">
             <div class="showcase-stat showcase-stat-dark">
-              <span class="showcase-stat-num" style="color:var(--clay-dark)">7</span>
-              <span class="showcase-stat-label" style="color:var(--muted)">Independent services</span>
+              <span class="showcase-stat-num" style="color:var(--clay)">3</span>
+              <span class="showcase-stat-label" style="color:var(--muted)">Engineers on the DevOps team</span>
             </div>
             <div class="showcase-stat showcase-stat-dark">
-              <span class="showcase-stat-num" style="color:var(--clay-dark)">1</span>
-              <span class="showcase-stat-label" style="color:var(--muted)">Auth hub</span>
+              <span class="showcase-stat-num" style="color:var(--clay)">7+</span>
+              <span class="showcase-stat-label" style="color:var(--muted)">Microservices in production</span>
             </div>
             <div class="showcase-stat showcase-stat-dark">
-              <span class="showcase-stat-num" style="color:var(--clay-dark)">1131</span>
-              <span class="showcase-stat-label" style="color:var(--muted)">Lines of design system CSS</span>
+              <span class="showcase-stat-num" style="color:var(--clay)">$1B</span>
+              <span class="showcase-stat-label" style="color:var(--muted)">Brightstar acquisition</span>
             </div>
           </div>
           <div class="showcase-tags showcase-tags-dark">
-            <span class="showcase-tag-dark">.NET 9</span>
-            <span class="showcase-tag-dark">Blazor Server</span>
+            <span class="showcase-tag-dark">C# / .NET</span>
             <span class="showcase-tag-dark">ASP.NET Core</span>
-            <span class="showcase-tag-dark">C#</span>
-            <span class="showcase-tag-dark">Auth / PBKDF2</span>
-            <span class="showcase-tag-dark">Custom Design System</span>
+            <span class="showcase-tag-dark">Blazor Server</span>
+            <span class="showcase-tag-dark">WPF</span>
             <span class="showcase-tag-dark">Microservices</span>
+            <span class="showcase-tag-dark">SVN Automation</span>
+            <span class="showcase-tag-dark">Azure DevOps</span>
+            <span class="showcase-tag-dark">Octopus Deploy</span>
+            <span class="showcase-tag-dark">Auth / PBKDF2</span>
+            <span class="showcase-tag-dark">SQL</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SERVICES -->
+  <!-- SERVICES — FOUR OFFERINGS -->
   <section id="work">
     <div class="container">
       <div class="section-label">The Work</div>
-      <h2 class="section-title">Your team wasn't hired<br><em>to copy-paste.</em></h2>
+      <h2 class="section-title">Four offerings.<br><em>Clear scope.</em></h2>
       <p class="section-intro">
-        We build automation, bots, and AI assistants for small and mid-size businesses. If it's repetitive, tedious, or eating up hours every week — we can probably automate it.
+        Your team wasn't hired to copy-paste. We build automation, bots, AI assistants, and the internal tools that move work off your people — for small and mid-size businesses.
       </p>
 
-      <div class="build-list">
-        <div class="build-list-label">What we build</div>
-        <ul>
-          <li><span class="build-num">01</span> Custom automation scripts and integrations</li>
-          <li><span class="build-num">02</span> Slack, Discord, and internal bots</li>
-          <li><span class="build-num">03</span> AI assistants trained on your manuals, SOPs, and company docs</li>
-          <li><span class="build-num">04</span> Internal tools for users and developers</li>
-          <li><span class="build-num">05</span> Microservice-based dashboards</li>
-        </ul>
+      <div class="offer-grid">
+        <div class="offer-card">
+          <div class="offer-num">01 — Websites</div>
+          <h3>Marketing sites<br><em>that ship.</em></h3>
+          <p class="offer-desc">
+            Hand-built sites for service businesses — design, content structure, hosting, and the social pipeline that points traffic at them. No templates, no agency markup.
+          </p>
+          <ul class="offer-scope">
+            <li>1–5 page marketing builds</li>
+            <li>Hosting + monitoring included</li>
+            <li>Contact + lead flows</li>
+            <li>Social-media post automation (optional)</li>
+          </ul>
+        </div>
+
+        <div class="offer-card">
+          <div class="offer-num">02 — Automation</div>
+          <h3>Scripts that kill<br><em>busywork.</em></h3>
+          <p class="offer-desc">
+            Custom scripts and integrations targeted at the work eating hours every week — data syncs, reporting, file processing, cross-system glue. Quoted per job after a discovery call.
+          </p>
+          <ul class="offer-scope">
+            <li>One-off scripts &amp; integrations</li>
+            <li>Reporting pipelines (CSV → DB → dashboard)</li>
+            <li>File processing &amp; document workflows</li>
+            <li>Optional monthly maintenance</li>
+          </ul>
+        </div>
+
+        <div class="offer-card">
+          <div class="offer-num">03 — Bots &amp; AI Assistants</div>
+          <h3>Always-on<br><em>operators.</em></h3>
+          <p class="offer-desc">
+            Slack / Discord / internal bots and AI assistants trained on your manuals, SOPs, and company docs. Buy a setup and own it, or pay monthly and we run it.
+          </p>
+          <ul class="offer-scope">
+            <li>Slack / Discord workflow bots</li>
+            <li>Content / posting bots (YouTube, TikTok, etc.)</li>
+            <li>RAG AI assistants trained on your docs</li>
+            <li>Fixed-price setup or fully managed</li>
+          </ul>
+        </div>
+
+        <div class="offer-card">
+          <div class="offer-num">04 — Tools &amp; Dashboards</div>
+          <h3>Internal tools<br><em>built around you.</em></h3>
+          <p class="offer-desc">
+            Microservice-based dashboards and internal portals scoped to how your business actually operates. Auth, data layer, real UI — not a no-code template.
+          </p>
+          <ul class="offer-scope">
+            <li>Staff / admin portals</li>
+            <li>Client-facing dashboards</li>
+            <li>Approval &amp; workflow tools</li>
+            <li>Microservice architecture, owned outright</li>
+          </ul>
+        </div>
       </div>
     </div>
   </section>
@@ -1524,7 +1690,7 @@
             <div class="pricing-tier">
               <div class="tier-row">
                 <div class="tier-name">Starter</div>
-                <div class="tier-price">$350</div>
+                <div class="tier-price">$500</div>
               </div>
               <p class="tier-desc">Single-page landing site. Mobile-ready, contact form, SEO basics. Live in 48–72 hours.</p>
               <button class="btn-buy" onclick="buyPackage(this, 'website-starter')">Buy now →</button>
@@ -1533,9 +1699,9 @@
             <div class="pricing-tier">
               <div class="tier-row">
                 <div class="tier-name">Business</div>
-                <div class="tier-price">$750</div>
+                <div class="tier-price">$1,200</div>
               </div>
-              <p class="tier-desc">3–5 pages, Google Analytics, contact form, polished design. Delivered in under a week.</p>
+              <p class="tier-desc">3–5 pages, Google Analytics, contact form, polished design. Delivered in under a week. Aries Outdoor Living lives at this tier.</p>
               <button class="btn-buy" onclick="buyPackage(this, 'website-business')">Buy now →</button>
             </div>
 
@@ -1543,7 +1709,7 @@
               <div class="tier-badge">Most requested</div>
               <div class="tier-row">
                 <div class="tier-name">Custom</div>
-                <div class="tier-price">$1,500<span>+</span></div>
+                <div class="tier-price">$2,000<span>+</span></div>
               </div>
               <p class="tier-desc">Full design system, animations, CMS, e-commerce, or anything that requires real engineering. Scoped after a call.</p>
               <a href="#contact" class="btn-buy-contact">Schedule a call →</a>
@@ -1560,7 +1726,7 @@
             <div class="pricing-tier">
               <div class="tier-row">
                 <div class="tier-name">Script / Integration</div>
-                <div class="tier-price">$500<span>+</span></div>
+                <div class="tier-price">$750<span>+</span></div>
               </div>
               <p class="tier-desc">Data syncs, reporting pipelines, file processing, workflow automation. Scoped and quoted after a discovery call.</p>
               <a href="#contact" class="btn-buy-contact">Schedule a call →</a>
@@ -1569,7 +1735,7 @@
             <div class="pricing-tier">
               <div class="tier-row">
                 <div class="tier-name">Ongoing Maintenance</div>
-                <div class="tier-price">$100<span> / mo</span></div>
+                <div class="tier-price">$150<span> / mo</span></div>
               </div>
               <p class="tier-desc">Updates, monitoring, and fixes for existing automation. You focus on the business — I keep the systems running.</p>
               <a href="#contact" class="btn-buy-contact">Schedule a call →</a>
@@ -1587,7 +1753,7 @@
               <div class="tier-badge">Fixed price</div>
               <div class="tier-row">
                 <div class="tier-name">Bot Setup</div>
-                <div class="tier-price">$600</div>
+                <div class="tier-price">$900</div>
               </div>
               <p class="tier-desc">Bot built, configured, documented, and handed off. You own it outright.</p>
               <button class="btn-buy" onclick="buyPackage(this, 'bot-setup')">Buy now →</button>
@@ -1597,7 +1763,7 @@
               <div class="tier-badge">Hands-off</div>
               <div class="tier-row">
                 <div class="tier-name">Managed Bot</div>
-                <div class="tier-price">$150<span> / mo</span></div>
+                <div class="tier-price">$200<span> / mo</span></div>
               </div>
               <p class="tier-desc">I run it, maintain it, and keep it posting. You focus on growth — the pipeline handles itself.</p>
               <a href="#contact" class="btn-buy-contact">Schedule a call →</a>
@@ -1614,7 +1780,7 @@
             <div class="pricing-tier">
               <div class="tier-row">
                 <div class="tier-name">Internal Tool</div>
-                <div class="tier-price">$2,500<span>+</span></div>
+                <div class="tier-price">$3,000<span>+</span></div>
               </div>
               <p class="tier-desc">Staff portals, admin dashboards, approval workflows. Built around how your business actually operates.</p>
               <a href="#contact" class="btn-buy-contact">Schedule a call →</a>
@@ -1623,7 +1789,7 @@
             <div class="pricing-tier">
               <div class="tier-row">
                 <div class="tier-name">Client-Facing App</div>
-                <div class="tier-price">$4,000<span>+</span></div>
+                <div class="tier-price">$6,000<span>+</span></div>
               </div>
               <p class="tier-desc">Customer dashboards, client portals, reporting tools. Auth, data layer, full UI — scoped to your use case.</p>
               <a href="#contact" class="btn-buy-contact">Schedule a call →</a>
@@ -1643,12 +1809,108 @@
   <!-- LIVE PRODUCTS -->
   <section class="products-section" id="products">
     <div class="container">
-      <div class="section-label">Live Products</div>
-      <h2 class="section-title">Already built.<br><em>Already running.</em></h2>
+      <div class="section-label">Already Built</div>
+      <h2 class="section-title">Sites that ship.<br><em>Bots that run.</em></h2>
       <p class="section-intro">
-        These aren't concepts. These bots are live, running on real accounts, posting real content every day. Want one pointed at your channel?
+        Live URLs and running pipelines. Every link below is something I designed, built, hosted, and still maintain.
       </p>
 
+      <div class="products-subhead">— Websites</div>
+      <div class="products-grid">
+        <div class="product-card">
+          <div class="product-live">
+            <span class="product-live-dot"></span>
+            Live
+          </div>
+          <h3>Aries <em>Outdoor Living</em></h3>
+          <p class="product-desc">
+            Marketing + portfolio site for a Metro Atlanta deck-and-pergola builder. Anonymized 12-project gallery with Before / During / After phase sorting, lightbox video, hand-coded HTML/CSS, FastAPI photo backend, Google Reviews integration.
+          </p>
+          <ul class="product-features">
+            <li>524 photos + 31 videos across 12 client projects</li>
+            <li>HEIC → web pipeline, manifest-driven gallery</li>
+            <li>Render-hosted, GitHub auto-deploy</li>
+            <li>Live: ariesoutdoorliving.onrender.com</li>
+          </ul>
+          <a href="https://ariesoutdoorliving.onrender.com" target="_blank" class="btn-product">
+            Visit live site
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 17L17 7M9 7h8v8"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="product-card">
+          <div class="product-live">
+            <span class="product-live-dot"></span>
+            Live
+          </div>
+          <h3>Big7 <em>Construction</em></h3>
+          <p class="product-desc">
+            Full-service construction site — home builds + home repair, Metro Atlanta. Hand-built static site shipped to Railway, nginx:alpine container, custom domain, contact flow piped to email.
+          </p>
+          <ul class="product-features">
+            <li>Custom-coded, no Wix / Squarespace under the hood</li>
+            <li>Railway-hosted, port 8080 nginx</li>
+            <li>Branded around the two service lines (build + repair)</li>
+            <li>Contact form wired to inbox</li>
+          </ul>
+          <a href="#contact" class="btn-product">
+            Want a site like this
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M13 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="product-card">
+          <div class="product-live">
+            <span class="product-live-dot"></span>
+            Live
+          </div>
+          <h3>M³ — <em>mm3m.net</em></h3>
+          <p class="product-desc">
+            The site you're on. Single-file HTML, embedded CSS, zero frameworks. Blade Runner-inspired palette, custom motion, hand-built ticker. Dockerized nginx on Railway, push-to-deploy on main.
+          </p>
+          <ul class="product-features">
+            <li>No build step, no SSG, no JS framework</li>
+            <li>Original design system &amp; type stack</li>
+            <li>Hand-coded grain + scanline overlay</li>
+            <li>Live: mm3m.net</li>
+          </ul>
+          <a href="https://mm3m.net" target="_blank" class="btn-product">
+            Visit mm3m.net
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 17L17 7M9 7h8v8"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="product-card">
+          <div class="product-live">
+            <span class="product-live-dot"></span>
+            Personal Build
+          </div>
+          <h3>Personal <em>Portal</em></h3>
+          <p class="product-desc">
+            A personal life operating system built as 7 independent .NET 9 Blazor microservices — Fitness, Gaming, Work, Real Estate, Construction — unified by a central Auth hub and a custom 1,100-line design system. Architecture proof, in production for myself.
+          </p>
+          <ul class="product-features">
+            <li>7 microservices, 1 auth hub</li>
+            <li>Custom design system, no Bootstrap</li>
+            <li>PBKDF2 auth, ASP.NET Core 9</li>
+            <li>The architecture I bring to client builds</li>
+          </ul>
+          <a href="#contact" class="btn-product">
+            Discuss a portal build
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M13 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="products-subhead">— Bots &amp; Pipelines</div>
       <div class="products-grid">
         <div class="product-card">
           <div class="product-live">
