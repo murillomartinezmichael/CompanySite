@@ -219,6 +219,89 @@
       overflow: hidden;
     }
 
+    /* === LUCY ZONE — Edgerunners-inspired accent === */
+    .lucy-zone {
+      position: absolute;
+      right: 5%;
+      top: 130px;
+      bottom: 60px;
+      width: clamp(160px, 18vw, 240px);
+      pointer-events: none;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: flex-end;
+      filter: drop-shadow(2px 0 0 rgba(255,0,60,0.18))
+              drop-shadow(-2px 0 0 rgba(0,240,255,0.18));
+    }
+    @media (max-width: 900px) {
+      .lucy-zone { display: none; }
+    }
+    .lucy-zone .smoke-wisp {
+      position: absolute;
+      right: 35%;
+      top: 0;
+      width: 60px;
+      height: 220px;
+      opacity: 0.6;
+    }
+    .hair-stripes {
+      display: flex;
+      gap: 4px;
+      height: 100%;
+      width: 100%;
+      justify-content: flex-end;
+    }
+    .hair-stripe {
+      flex: 1;
+      max-width: 32px;
+      border: 1.5px solid var(--ink);
+      transform: skewY(-2deg);
+      transition: transform 0.3s ease;
+      box-shadow: inset 0 -30px 60px rgba(10,10,15,0.18);
+    }
+    .hair-stripe.s-white { background: #FAFAFA; }
+    .hair-stripe.s-pink  { background: #FF7EC8; height: 88%; align-self: flex-end; }
+    .hair-stripe.s-cyan  { background: #34E5FF; height: 92%; align-self: flex-end; }
+    .hair-stripe.s-mint  { background: #A0F0CC; height: 78%; align-self: flex-end; }
+    .lucy-zone:hover .hair-stripe { transform: skewY(-4deg) translateY(-4px); }
+    .lucy-tag {
+      position: absolute;
+      bottom: -32px;
+      right: 0;
+      font-family: 'Inter', monospace;
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ink);
+      font-weight: 600;
+      background: var(--cream);
+      padding: 4px 8px;
+      border: 2px solid var(--ink);
+    }
+    .lucy-tag::before {
+      content: '';
+      display: inline-block;
+      width: 6px; height: 6px;
+      background: var(--clay);
+      border-radius: 50%;
+      margin-right: 8px;
+      vertical-align: middle;
+      box-shadow: 0 0 6px var(--clay);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    /* If you drop a real Lucy PNG into images/lucy.png and uncomment the
+       <img> in the markup, this rule sizes & blends her into the hero. */
+    .lucy-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: bottom right;
+      filter: drop-shadow(3px 0 0 var(--clay)) drop-shadow(-3px 0 0 var(--clay-light));
+      mix-blend-mode: multiply;
+    }
+
     .hero-bg-mark {
       position: absolute;
       right: -80px;
@@ -723,11 +806,21 @@
       color: var(--clay);
     }
 
+    .product-tagline {
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.4;
+      color: var(--clay-light);
+      margin-bottom: 18px;
+      letter-spacing: -0.01em;
+    }
     .product-desc {
       font-size: 14px;
       color: rgba(252,238,10,0.7);
       line-height: 1.7;
-      margin-bottom: 36px;
+      margin-bottom: 28px;
       font-weight: 300;
     }
 
@@ -1502,6 +1595,29 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-bg-mark">M³</div>
+
+    <!-- LUCY ACCENT — Edgerunners-inspired 4-color hair pillar + smoke wisp.
+         Swap in images/lucy.png + uncomment .lucy-photo to use the real character art. -->
+    <div class="lucy-zone" aria-hidden="true">
+      <svg class="smoke-wisp" viewBox="0 0 80 220" fill="none">
+        <path d="M40 220 C 30 180, 55 160, 38 130 C 22 100, 60 80, 36 50 C 18 28, 50 12, 34 0"
+              stroke="rgba(10,10,15,0.32)" stroke-width="2" stroke-linecap="round" fill="none">
+          <animate attributeName="d" dur="6s" repeatCount="indefinite"
+            values="M40 220 C 30 180, 55 160, 38 130 C 22 100, 60 80, 36 50 C 18 28, 50 12, 34 0;
+                    M40 220 C 50 180, 25 160, 42 130 C 58 100, 20 80, 44 50 C 62 28, 30 12, 46 0;
+                    M40 220 C 30 180, 55 160, 38 130 C 22 100, 60 80, 36 50 C 18 28, 50 12, 34 0"/>
+        </path>
+      </svg>
+      <div class="hair-stripes">
+        <span class="hair-stripe s-white"></span>
+        <span class="hair-stripe s-pink"></span>
+        <span class="hair-stripe s-cyan"></span>
+        <span class="hair-stripe s-mint"></span>
+      </div>
+      <div class="lucy-tag">// edgerunner online</div>
+      <!-- <img class="lucy-photo" src="images/lucy.png" alt=""> -->
+    </div>
+
     <div class="container">
       <div class="hero-eyebrow reveal">
         <span class="status-dot"></span>
@@ -1866,25 +1982,27 @@
         Live URLs and running pipelines. Every link below is something I designed, built, hosted, and still maintain.
       </p>
 
-      <div class="products-subhead">— Websites</div>
+      <div class="products-subhead">— Websites for hire</div>
       <div class="products-grid">
+
         <div class="product-card">
           <div class="product-live">
             <span class="product-live-dot"></span>
-            Live
+            Live · Case study
           </div>
           <h3>Aries <em>Outdoor Living</em></h3>
+          <p class="product-tagline">A premium deck builder, finally with a site that looks the part.</p>
           <p class="product-desc">
-            Marketing + portfolio site for a Metro Atlanta deck-and-pergola builder. Anonymized 12-project gallery with Before / During / After phase sorting, lightbox video, hand-coded HTML/CSS, FastAPI photo backend, Google Reviews integration.
+            Before: a phone number on a Facebook page. Now: a full gallery of finished decks, before/during/after walkthroughs, Google reviews on autoplay, and a one-tap "Free Estimate" button that drops straight in David's inbox.
           </p>
           <ul class="product-features">
-            <li>524 photos + 31 videos across 12 client projects</li>
-            <li>HEIC → web pipeline, manifest-driven gallery</li>
-            <li>Render-hosted, GitHub auto-deploy</li>
-            <li>Live: ariesoutdoorliving.onrender.com</li>
+            <li>Showcases his best 12 builds without overwhelming the visitor</li>
+            <li>Wins trust before he picks up the phone</li>
+            <li>Mobile-first — most homeowners click from a text</li>
+            <li>Live at ariesoutdoorliving.onrender.com</li>
           </ul>
           <a href="https://ariesoutdoorliving.onrender.com" target="_blank" class="btn-product">
-            Visit live site
+            See it live
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M7 17L17 7M9 7h8v8"/>
             </svg>
@@ -1894,20 +2012,21 @@
         <div class="product-card">
           <div class="product-live">
             <span class="product-live-dot"></span>
-            Live
+            Live · Case study
           </div>
           <h3>Big7 <em>Construction</em></h3>
+          <p class="product-tagline">Two service lines, one trusted brand — without two separate sites.</p>
           <p class="product-desc">
-            Full-service construction site — home builds + home repair, Metro Atlanta. Hand-built static site shipped to Railway, nginx:alpine container, custom domain, contact flow piped to email.
+            Custom homes and home repair under one roof. The site makes both legible to a homeowner who only knows they have a problem — and routes the right lead to the right inbox.
           </p>
           <ul class="product-features">
-            <li>Custom-coded, no Wix / Squarespace under the hood</li>
-            <li>Railway-hosted, port 8080 nginx</li>
-            <li>Branded around the two service lines (build + repair)</li>
-            <li>Contact form wired to inbox</li>
+            <li>Speaks to two buyer types without splitting brand equity</li>
+            <li>Trust signals up top: license, insurance, service area</li>
+            <li>Custom domain, fast load, mobile-first</li>
+            <li>Built once, runs forever</li>
           </ul>
           <a href="#contact" class="btn-product">
-            Want a site like this
+            Build mine like this
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M13 5l7 7-7 7"/>
             </svg>
@@ -1917,22 +2036,23 @@
         <div class="product-card">
           <div class="product-live">
             <span class="product-live-dot"></span>
-            Live
+            You're here
           </div>
           <h3>M³ — <em>mm3m.net</em></h3>
+          <p class="product-tagline">The site you're reading right now.</p>
           <p class="product-desc">
-            The site you're on. Single-file HTML, embedded CSS, zero frameworks. Blade Runner-inspired palette, custom motion, hand-built ticker. Dockerized nginx on Railway, push-to-deploy on main.
+            Distinctive enough that you remembered the name. That's the point. Every brand site we ship comes with its own visual identity — not a template the next ten clients also got.
           </p>
           <ul class="product-features">
-            <li>No build step, no SSG, no JS framework</li>
-            <li>Original design system &amp; type stack</li>
-            <li>Hand-coded grain + scanline overlay</li>
-            <li>Live: mm3m.net</li>
+            <li>Original design system, no off-the-shelf theme</li>
+            <li>Custom palette, custom type pairing</li>
+            <li>Performance-budgeted from the start</li>
+            <li>Yours to own outright after launch</li>
           </ul>
-          <a href="https://mm3m.net" target="_blank" class="btn-product">
-            Visit mm3m.net
+          <a href="#contact" class="btn-product">
+            Want one like this
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M7 17L17 7M9 7h8v8"/>
+              <path d="M5 12h14M13 5l7 7-7 7"/>
             </svg>
           </a>
         </div>
@@ -1940,20 +2060,69 @@
         <div class="product-card">
           <div class="product-live">
             <span class="product-live-dot"></span>
-            Personal Build
+            Available
           </div>
-          <h3>Personal <em>Portal</em></h3>
+          <h3>Restaurants &amp; <em>local food</em></h3>
+          <p class="product-tagline">Menu front-and-center, reservations one tap away.</p>
           <p class="product-desc">
-            A personal life operating system built as 7 independent .NET 9 Blazor microservices — Fitness, Gaming, Work, Real Estate, Construction — unified by a central Auth hub and a custom 1,100-line design system. Architecture proof, in production for myself.
+            Sites built for places people choose with their thumb at 6:45pm. Menu, hours, address, photos, reservation link — nothing in the way.
           </p>
           <ul class="product-features">
-            <li>7 microservices, 1 auth hub</li>
-            <li>Custom design system, no Bootstrap</li>
-            <li>PBKDF2 auth, ASP.NET Core 9</li>
-            <li>The architecture I bring to client builds</li>
+            <li>Mobile-first design, fast on slow connections</li>
+            <li>Live menu — update prices without a web dev</li>
+            <li>OpenTable / Resy / phone integration</li>
+            <li>Google Business + map embed wired in</li>
           </ul>
           <a href="#contact" class="btn-product">
-            Discuss a portal build
+            Get this for my place
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M13 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="product-card">
+          <div class="product-live">
+            <span class="product-live-dot"></span>
+            Available
+          </div>
+          <h3>Trades &amp; <em>home services</em></h3>
+          <p class="product-tagline">Plumbers, electricians, HVAC, landscapers. Look bookable.</p>
+          <p class="product-desc">
+            The kind of site that ends a homeowner's "should I call these guys?" hesitation in three seconds. License numbers, real photos, real reviews, and an obvious way to call you.
+          </p>
+          <ul class="product-features">
+            <li>Service area + emergency-call CTA always visible</li>
+            <li>Reviews and badges pulled in, not faked</li>
+            <li>Photo gallery of real jobs, not stock photos</li>
+            <li>Lead form goes to your phone, not a CRM black hole</li>
+          </ul>
+          <a href="#contact" class="btn-product">
+            Quote my site
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M13 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="product-card">
+          <div class="product-live">
+            <span class="product-live-dot"></span>
+            Available
+          </div>
+          <h3>Gyms, studios &amp; <em>coaches</em></h3>
+          <p class="product-tagline">Convert the curious into the booked.</p>
+          <p class="product-desc">
+            Class schedules, trainer bios, intro-offer landing pages, and the one button that matters: "Book a free session." Built for the moment a stranger decides today is the day.
+          </p>
+          <ul class="product-features">
+            <li>Class schedule + booking embed</li>
+            <li>Intro-offer landing page tuned to convert</li>
+            <li>Coach bios with the human touch</li>
+            <li>Instagram + reviews pulled in automatically</li>
+          </ul>
+          <a href="#contact" class="btn-product">
+            Build my gym site
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M13 5l7 7-7 7"/>
             </svg>
