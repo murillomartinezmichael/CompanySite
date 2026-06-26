@@ -348,6 +348,48 @@
       font-weight: 300;
     }
 
+    /* === BUILD LIST === */
+    .build-list {
+      border-top: 1px solid rgba(24,21,15,0.12);
+      padding-top: 48px;
+      max-width: 880px;
+    }
+    .build-list-label {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--clay);
+      font-weight: 600;
+      margin-bottom: 28px;
+    }
+    .build-list ul { list-style: none; margin: 0; padding: 0; }
+    .build-list li {
+      display: flex;
+      align-items: baseline;
+      gap: 28px;
+      padding: 26px 0;
+      font-family: 'Fraunces', serif;
+      font-weight: 300;
+      font-size: clamp(22px, 2.6vw, 32px);
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+      border-bottom: 1px solid rgba(24,21,15,0.08);
+    }
+    .build-list li:last-child { border-bottom: none; }
+    .build-num {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      color: var(--clay);
+      flex-shrink: 0;
+      min-width: 28px;
+    }
+    @media (max-width: 520px) {
+      .build-list li { gap: 18px; padding: 20px 0; }
+    }
+
     /* === SERVICES === */
     .services-grid {
       display: grid;
@@ -1368,7 +1410,7 @@
         <h3 class="showcase-title">AGS DevOps<br><em>Portal</em></h3>
         <div class="showcase-body">
           <p class="showcase-desc">
-            Built the entire DevOps portal from scratch for American Gaming Systems — a unified hub that centralized release management, branch automation, build validation, decryption pipelines, and compliance workflows across multiple gaming jurisdictions. Then took every fragmented legacy tool and ported them into a microservices architecture connected through a central hub. Used daily by engineering and QA. AGS was subsequently acquired for $1B.
+            Built and maintained the AGS DevOps Dashboard/Portal for American Gaming Systems — centralizing access to Confluence documentation, internal tools, and supporting microservices. Developed internal tools including File Handler, a WPF decryption tool, and SVN Tools features (ChangeSet, Branch Creation, Build Validator, Jurisdiction Map, Branch Unlocker) to support file processing, release validation, branch automation, and compliance workflows. Also built shared libraries for SVN automation, OneMedia decryption, email notifications, and queue-based workflow processing. AGS was subsequently acquired for $1B.
           </p>
           <div class="showcase-details">
             <div class="showcase-stat">
@@ -1445,71 +1487,20 @@
   <section id="work">
     <div class="container">
       <div class="section-label">The Work</div>
-      <h2 class="section-title">Four offerings.<br><em>Done right.</em></h2>
+      <h2 class="section-title">Your team wasn't hired<br><em>to copy-paste.</em></h2>
       <p class="section-intro">
-        Different expressions of the same idea — systems that do the work so you don't have to.
+        We build automation, bots, and AI assistants for small and mid-size businesses. If it's repetitive, tedious, or eating up hours every week — we can probably automate it.
       </p>
 
-      <div class="services-grid">
-        <div class="service" data-num="01">
-          <div class="service-num">01 — Websites</div>
-          <h3>Clean sites.<br><em>Fast delivery.</em></h3>
-          <p class="service-desc">
-            Business websites built to convert. No bloated templates, no agency markup. Your brand, your message, live in days — not months.
-          </p>
-          <div class="service-tags">
-            <span class="service-tag">Landing pages</span>
-            <span class="service-tag">Portfolio sites</span>
-            <span class="service-tag">Service pages</span>
-            <span class="service-tag">Contact flows</span>
-          </div>
-        </div>
-
-        <div class="service" data-num="02">
-          <div class="service-num">02 — Automation</div>
-          <h3>Eliminate the<br><em>manual work.</em></h3>
-          <p class="service-desc">
-            Custom scripts and integrations that cut out what your team does on repeat. If a human is doing it the same way every day, a machine can do it better.
-          </p>
-          <div class="service-tags">
-            <span class="service-tag">Data sync</span>
-            <span class="service-tag">Reporting pipelines</span>
-            <span class="service-tag">File processing</span>
-            <span class="service-tag">Workflow automation</span>
-          </div>
-        </div>
-
-        <div class="service" data-num="03">
-          <div class="service-num">03 — Content Bots</div>
-          <h3>Set it once.<br><em>Runs while you sleep.</em></h3>
-          <p class="service-desc">
-            Automated bots that handle uploading, scheduling, and distribution across platforms. Built for streamers, creators, and businesses that run on consistent output.
-          </p>
-          <div class="service-tags">
-            <span class="service-tag">YouTube Shorts upload bots</span>
-            <span class="service-tag">Video pipeline automation</span>
-            <span class="service-tag">Multi-account scheduling</span>
-            <span class="service-tag">Finance channel automation</span>
-            <span class="service-tag">Gaming niche automation</span>
-            <span class="service-tag">Custom upload pipelines</span>
-          </div>
-        </div>
-
-        <div class="service" data-num="04">
-          <div class="service-num">04 — Portals</div>
-          <h3>Internal &amp; external<br><em>systems that work.</em></h3>
-          <p class="service-desc">
-            Custom portals built around how your business actually operates — not how a SaaS template thinks it should. Staff-facing tools, client-facing dashboards, or both.
-          </p>
-          <div class="service-tags">
-            <span class="service-tag">Staff portals</span>
-            <span class="service-tag">Client dashboards</span>
-            <span class="service-tag">Admin tools</span>
-            <span class="service-tag">Approval workflows</span>
-            <span class="service-tag">Operations dashboards</span>
-            <span class="service-tag">Reporting portals</span>
-          </div>
-        </div>
+      <div class="build-list">
+        <div class="build-list-label">What we build</div>
+        <ul>
+          <li><span class="build-num">01</span> Custom automation scripts and integrations</li>
+          <li><span class="build-num">02</span> Slack, Discord, and internal bots</li>
+          <li><span class="build-num">03</span> AI assistants trained on your manuals, SOPs, and company docs</li>
+          <li><span class="build-num">04</span> Internal tools for users and developers</li>
+          <li><span class="build-num">05</span> Microservice-based dashboards</li>
+        </ul>
       </div>
     </div>
   </section>
