@@ -1829,10 +1829,492 @@
     @media (max-width: 700px) {
       .trust-strip .container { flex-direction: column; gap: 12px; }
     }
+
+    /* ===========================================================
+       CUSTOM CURSOR  (desktop only, magenta dot + ring)
+       =========================================================== */
+    @media (hover: hover) and (pointer: fine) {
+      html, body { cursor: none; }
+      a, button, summary, input, textarea, label, select { cursor: none; }
+      .sg-root, .sg-root * { cursor: auto !important; }    /* widget keeps system cursor */
+
+      .cur-dot, .cur-ring {
+        position: fixed;
+        top: 0; left: 0;
+        pointer-events: none;
+        z-index: 9999;
+        will-change: transform;
+        mix-blend-mode: difference;
+      }
+      .cur-dot {
+        width: 7px; height: 7px;
+        background: var(--clay);
+        border-radius: 50%;
+        box-shadow: 0 0 14px var(--clay), 0 0 28px rgba(255,0,60,.5);
+        transform: translate(-50%, -50%);
+        transition: transform 70ms ease-out;
+      }
+      .cur-ring {
+        width: 36px; height: 36px;
+        border: 1.5px solid var(--clay-light);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: transform 220ms cubic-bezier(.22,.61,.36,1), opacity 200ms, width 180ms, height 180ms, border-color 200ms;
+        opacity: .65;
+      }
+      .cur-ring.hover {
+        width: 56px; height: 56px;
+        border-color: var(--cream);
+        opacity: 1;
+      }
+      .cur-ring.click {
+        transform: translate(-50%, -50%) scale(.78);
+      }
+    }
+    @media (hover: none), (pointer: coarse) {
+      .cur-dot, .cur-ring { display: none !important; }
+    }
+
+    /* ===========================================================
+       ANIMATED BACKGROUND CANVAS (subtle particle field + scanlines)
+       =========================================================== */
+    #fx-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.22;
+    }
+    /* Scanlines overlay — horizontal CRT-style stripes */
+    body::after { z-index: 1; }     /* keep halftone dots above canvas */
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(10,10,15,0) 0px,
+        rgba(10,10,15,0) 2px,
+        rgba(10,10,15,0.045) 3px,
+        rgba(10,10,15,0) 4px
+      );
+      mix-blend-mode: multiply;
+      opacity: 0.55;
+    }
+    /* Make sure all real content sits ABOVE the canvas/scanlines */
+    nav, section, .ticker-wrap, .trust-strip, footer, .sticky-cta, .case-modal-backdrop { position: relative; z-index: 3; }
+
+    /* ===========================================================
+       HERO ROTATOR — cycle the hero h1 tail with glitch transition
+       =========================================================== */
+    .hero-rot {
+      position: relative;
+      display: inline-block;
+      min-width: 7ch;
+      vertical-align: baseline;
+    }
+    .hero-rot .word {
+      display: inline-block;
+      position: relative;
+      animation: rotIn 480ms cubic-bezier(.22,.61,.36,1);
+    }
+    .hero-rot .word.out {
+      animation: rotOut 280ms ease-in forwards;
+    }
+    @keyframes rotIn {
+      0%   { opacity: 0; transform: translateY(18px) skewX(-12deg); filter: blur(6px); }
+      60%  { opacity: 1; filter: blur(0); }
+      100% { transform: translateY(0) skewX(0); }
+    }
+    @keyframes rotOut {
+      0%   { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-14px) skewX(8deg); filter: blur(4px); }
+    }
+
+    /* ===========================================================
+       STATS — animated counters
+       =========================================================== */
+    .stats-section {
+      padding: 80px 0 70px;
+      background: var(--cream-2);
+      border-top: 2px solid var(--ink);
+      border-bottom: 2px solid var(--ink);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    @media (max-width: 880px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .stat {
+      text-align: center;
+      padding: 24px 18px;
+      border-right: 1px dashed rgba(10,10,15,0.28);
+    }
+    .stat:last-child { border-right: none; }
+    @media (max-width: 880px) {
+      .stat:nth-child(2n) { border-right: none; }
+      .stat:nth-child(-n+2) { border-bottom: 1px dashed rgba(10,10,15,0.28); padding-bottom: 28px; }
+    }
+    .stat-num {
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      font-size: clamp(40px, 6vw, 64px);
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      line-height: 1;
+      display: inline-block;
+    }
+    .stat-num .suffix { color: var(--clay); font-size: 0.6em; vertical-align: top; margin-left: 2px; }
+    .stat-label {
+      margin-top: 10px;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      font-weight: 600;
+    }
+
+    /* ===========================================================
+       PROJECT SCOPER — interactive wizard inside Pricing
+       =========================================================== */
+    .scoper {
+      max-width: 760px;
+      margin: 0 auto 64px;
+      background: var(--ink);
+      color: var(--cream);
+      border: 2px solid var(--ink);
+      box-shadow: 8px 8px 0 var(--clay);
+      padding: 32px 28px 28px;
+      position: relative;
+    }
+    .scoper-eyebrow {
+      font-family: 'Inter', monospace;
+      font-size: 11px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--clay-light);
+      margin-bottom: 6px;
+    }
+    .scoper-title {
+      font-family: 'Fraunces', serif;
+      font-size: 26px;
+      letter-spacing: -0.01em;
+      margin-bottom: 18px;
+    }
+    .scoper-title em { color: var(--clay); font-style: normal; }
+    .scoper-step {
+      display: none;
+      animation: scoperIn 320ms cubic-bezier(.22,.61,.36,1);
+    }
+    .scoper-step.active { display: block; }
+    @keyframes scoperIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    .scoper-question {
+      font-size: 16px;
+      color: rgba(252,238,10,0.85);
+      margin-bottom: 16px;
+    }
+    .scoper-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .scoper-opt {
+      background: transparent;
+      color: var(--cream);
+      border: 1.5px solid rgba(252,238,10,0.4);
+      padding: 14px 12px;
+      font-family: inherit;
+      font-size: 13.5px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, color 0.15s, transform 0.15s;
+      text-align: left;
+    }
+    .scoper-opt:hover {
+      border-color: var(--clay);
+      background: rgba(255,0,60,0.08);
+      color: var(--cream);
+      transform: translate(-1px, -1px);
+    }
+    .scoper-opt.selected {
+      background: var(--clay);
+      color: var(--ink);
+      border-color: var(--clay);
+    }
+    .scoper-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      font-size: 12px;
+      color: rgba(252,238,10,0.5);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .scoper-prev {
+      background: transparent;
+      border: 1px solid rgba(252,238,10,0.3);
+      color: rgba(252,238,10,0.6);
+      padding: 6px 12px;
+      font-family: inherit;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .scoper-prev:hover { color: var(--cream); border-color: var(--cream); }
+    .scoper-prev:disabled { opacity: 0.3; cursor: default; }
+    .scoper-result {
+      display: none;
+      animation: scoperIn 360ms cubic-bezier(.22,.61,.36,1);
+    }
+    .scoper-result.active { display: block; }
+    .scoper-result-band {
+      font-family: 'Fraunces', serif;
+      font-size: 44px;
+      letter-spacing: -0.02em;
+      color: var(--clay-light);
+      margin: 4px 0 10px;
+    }
+    .scoper-result-meta {
+      font-size: 14px;
+      color: rgba(252,238,10,0.85);
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+    .scoper-result-meta strong { color: var(--cream); }
+    .scoper-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--clay);
+      color: var(--ink);
+      padding: 12px 22px;
+      border: none;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: var(--glow);
+      transition: background 0.15s, transform 0.15s;
+    }
+    .scoper-cta:hover { background: var(--clay-dark); transform: translateY(-1px); }
+    .scoper-restart {
+      background: transparent;
+      color: rgba(252,238,10,0.6);
+      border: 1px solid rgba(252,238,10,0.3);
+      padding: 10px 16px;
+      font-family: inherit;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+    .scoper-restart:hover { color: var(--cream); border-color: var(--cream); }
+    .scoper-bar {
+      height: 3px;
+      background: rgba(252,238,10,0.12);
+      margin: 0 0 22px;
+      position: relative;
+      overflow: hidden;
+    }
+    .scoper-bar > span {
+      position: absolute;
+      inset: 0;
+      width: 25%;
+      background: linear-gradient(90deg, var(--clay), var(--clay-light));
+      transition: width 280ms cubic-bezier(.22,.61,.36,1);
+    }
+
+    /* ===========================================================
+       STICKY BOTTOM CTA  — appears after meaningful scroll
+       =========================================================== */
+    .sticky-cta {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%) translateY(140%);
+      background: var(--ink);
+      color: var(--cream);
+      padding: 12px 14px 12px 20px;
+      border: 1.5px solid var(--clay);
+      box-shadow: 0 14px 40px rgba(0,0,0,0.35), var(--glow);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      z-index: 60;
+      transition: transform 380ms cubic-bezier(.22,.61,.36,1);
+      max-width: calc(100vw - 24px);
+    }
+    .sticky-cta.show { transform: translateX(-50%) translateY(0); }
+    .sticky-cta .sc-text {
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      color: var(--cream);
+    }
+    .sticky-cta .sc-text strong { color: var(--clay-light); }
+    .sticky-cta .sc-btn {
+      background: var(--clay);
+      color: var(--ink);
+      padding: 9px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+    }
+    .sticky-cta .sc-btn:hover { background: var(--clay-dark); }
+    .sticky-cta .sc-close {
+      background: transparent;
+      border: none;
+      color: rgba(252,238,10,0.5);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 0 4px;
+      line-height: 1;
+    }
+    .sticky-cta .sc-close:hover { color: var(--cream); }
+    @media (max-width: 640px) {
+      .sticky-cta { left: 10px; right: 10px; transform: translateY(140%); width: auto; max-width: none; }
+      .sticky-cta.show { transform: translateY(0); }
+      .sticky-cta .sc-text { font-size: 12px; flex: 1; }
+    }
+
+    /* ===========================================================
+       CASE STUDY MODAL — clicking a showcase tile opens a deep dive
+       =========================================================== */
+    .case-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(10,10,15,0.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 100;
+      opacity: 0;
+      transition: opacity 200ms;
+    }
+    .case-modal-backdrop.show { display: flex; opacity: 1; }
+    .case-modal {
+      background: var(--cream);
+      color: var(--ink);
+      max-width: 760px;
+      width: 100%;
+      max-height: 88vh;
+      overflow-y: auto;
+      border: 2px solid var(--ink);
+      box-shadow: 14px 14px 0 var(--clay);
+      padding: 36px 40px 32px;
+      position: relative;
+      transform: translateY(20px) scale(.98);
+      transition: transform 280ms cubic-bezier(.22,.61,.36,1);
+    }
+    .case-modal-backdrop.show .case-modal { transform: translateY(0) scale(1); }
+    .case-modal h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 38px;
+      letter-spacing: -0.02em;
+      margin: 8px 0 4px;
+      line-height: 1.05;
+    }
+    .case-modal h3 em { color: var(--clay); font-style: normal; }
+    .case-modal .case-eyebrow {
+      font-family: 'Inter', monospace;
+      font-size: 11px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .case-modal .case-tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 18px 0 24px;
+    }
+    .case-modal .case-tag {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      background: var(--ink);
+      color: var(--cream);
+      padding: 5px 10px;
+    }
+    .case-modal .case-row {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 14px 18px;
+      padding: 14px 0;
+      border-top: 1px dashed rgba(10,10,15,0.22);
+    }
+    .case-modal .case-row:first-of-type { border-top: 1px solid var(--ink); }
+    .case-modal .case-label {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .case-modal .case-val {
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--ink-soft);
+    }
+    .case-modal-close {
+      position: absolute;
+      top: 12px; right: 16px;
+      background: transparent;
+      border: none;
+      font-size: 26px;
+      color: var(--ink-soft);
+      cursor: pointer;
+      line-height: 1;
+    }
+    .case-modal-close:hover { color: var(--clay); }
+    .case-trigger { cursor: pointer; }
+
+    /* ===========================================================
+       SCROLL REVEAL  — generic .sr utility
+       =========================================================== */
+    .sr {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 720ms cubic-bezier(.22,.61,.36,1), transform 720ms cubic-bezier(.22,.61,.36,1);
+    }
+    .sr.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .sr-d1 { transition-delay: 80ms; }
+    .sr-d2 { transition-delay: 160ms; }
+    .sr-d3 { transition-delay: 240ms; }
+    .sr-d4 { transition-delay: 320ms; }
   </style>
 </head>
 
 <body>
+
+  <!-- FX layers — animated background, scanlines, custom cursor. Pointer-none, harmless on Railway. -->
+  <canvas id="fx-canvas" aria-hidden="true"></canvas>
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="cur-ring" aria-hidden="true"></div>
+  <div class="cur-dot" aria-hidden="true"></div>
 
   <!-- NAV -->
   <nav>
@@ -1882,7 +2364,7 @@
         Available for new projects &nbsp;·&nbsp; Atlanta, GA
       </div>
       <h1 class="reveal reveal-d1">
-        We build the systems<br>
+        We build the <span class="hero-rot" id="heroRot" data-words="systems|automations|bots|portals|websites|tools"><span class="word">systems</span></span><br>
         your business <em>runs on</em>.
       </h1>
       <p class="hero-sub reveal reveal-d2">
@@ -1941,6 +2423,30 @@
       <span class="trust-item"><span class="dot"></span> Fintech ops</span>
     </div>
   </div>
+
+  <!-- STATS — animated counters; numbers conservative + verifiable, edit data-target to tune. -->
+  <section class="stats-section" aria-label="Track record">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat sr">
+          <div class="stat-num" data-target="42">0</div>
+          <div class="stat-label">Projects shipped</div>
+        </div>
+        <div class="stat sr sr-d1">
+          <div class="stat-num"><span data-target="1">0</span><span class="suffix">B</span></div>
+          <div class="stat-label">$ acquisition supported</div>
+        </div>
+        <div class="stat sr sr-d2">
+          <div class="stat-num"><span data-target="2400">0</span><span class="suffix">+</span></div>
+          <div class="stat-label">Hrs of busywork killed</div>
+        </div>
+        <div class="stat sr sr-d3">
+          <div class="stat-num"><span data-target="100">0</span><span class="suffix">%</span></div>
+          <div class="stat-label">Code you own</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- SELECTED WORK -->
   <section class="showcase-section" id="showcase">
@@ -2115,6 +2621,65 @@
       <p class="section-intro">
         Starting rates for every service. Complex builds are quoted after a 30-min call — but this is what most projects cost.
       </p>
+
+      <!-- PROJECT SCOPER — interactive 4-question wizard. No backend; pure DOM. -->
+      <div class="scoper sr" id="scoper" aria-label="Project cost estimator">
+        <div class="scoper-eyebrow">// Quick estimate</div>
+        <div class="scoper-title">Scope your project in <em>under a minute</em>.</div>
+        <div class="scoper-bar"><span id="scoperBar"></span></div>
+
+        <div class="scoper-step active" data-step="0" data-key="type">
+          <div class="scoper-question">What are you trying to build?</div>
+          <div class="scoper-options">
+            <button class="scoper-opt" data-val="site"     data-w="1">A website</button>
+            <button class="scoper-opt" data-val="script"   data-w="1">An automation / script</button>
+            <button class="scoper-opt" data-val="bot"      data-w="2">A bot / always-on operator</button>
+            <button class="scoper-opt" data-val="tool"     data-w="3">An internal tool / portal</button>
+          </div>
+        </div>
+
+        <div class="scoper-step" data-step="1" data-key="size">
+          <div class="scoper-question">How big, roughly?</div>
+          <div class="scoper-options">
+            <button class="scoper-opt" data-val="tiny"    data-w="0">One page / one workflow</button>
+            <button class="scoper-opt" data-val="small"   data-w="1">A handful of pages / a couple workflows</button>
+            <button class="scoper-opt" data-val="medium"  data-w="2">A full product or system</button>
+            <button class="scoper-opt" data-val="unsure"  data-w="1">Honestly, not sure yet</button>
+          </div>
+        </div>
+
+        <div class="scoper-step" data-step="2" data-key="urgency">
+          <div class="scoper-question">When do you need it?</div>
+          <div class="scoper-options">
+            <button class="scoper-opt" data-val="rush"   data-w="2">This week, ideally</button>
+            <button class="scoper-opt" data-val="month"  data-w="1">In the next 2–4 weeks</button>
+            <button class="scoper-opt" data-val="quarter" data-w="0">Within a quarter</button>
+            <button class="scoper-opt" data-val="flex"   data-w="0">No firm deadline</button>
+          </div>
+        </div>
+
+        <div class="scoper-step" data-step="3" data-key="ongoing">
+          <div class="scoper-question">Do you want me on call after launch?</div>
+          <div class="scoper-options">
+            <button class="scoper-opt" data-val="no"      data-w="0">Build, hand off, I'll own it</button>
+            <button class="scoper-opt" data-val="light"   data-w="1">Light monthly check-ins</button>
+            <button class="scoper-opt" data-val="full"    data-w="2">Run it as a service for me</button>
+          </div>
+        </div>
+
+        <div class="scoper-result" id="scoperResult">
+          <div class="scoper-eyebrow">// Estimate</div>
+          <div class="scoper-result-band" id="scoperBand">$—</div>
+          <div class="scoper-result-meta" id="scoperMeta"></div>
+          <a href="#contact" class="scoper-cta" id="scoperCta">Send the brief →</a>
+          <button class="scoper-restart" id="scoperRestart">Start over</button>
+        </div>
+
+        <div class="scoper-nav">
+          <button class="scoper-prev" id="scoperPrev" disabled>← Back</button>
+          <span id="scoperProgress">Step 1 of 4</span>
+        </div>
+      </div>
 
       <div class="pricing-grid">
 
@@ -2999,6 +3564,296 @@
       </div>
     </div>
   </footer>
+
+  <!-- Sticky bottom CTA — auto-appears after meaningful scroll, dismissable -->
+  <div class="sticky-cta" id="stickyCta" role="region" aria-label="Quick start">
+    <span class="sc-text"><strong>Have a project?</strong> Get a scope in 30 minutes.</span>
+    <a href="#contact" class="sc-btn">Start →</a>
+    <button class="sc-close" id="stickyClose" aria-label="Dismiss">×</button>
+  </div>
+
+  <script>
+    /* ===========================================================
+       ENHANCEMENT JS — cursor, canvas, hero rotator, scroll reveal,
+       counters, project scoper, sticky CTA. Self-contained, no deps.
+       =========================================================== */
+    (function () {
+      'use strict';
+      const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+
+      // ---------- Custom cursor ----------
+      if (!isTouch) {
+        const dot = document.querySelector('.cur-dot');
+        const ring = document.querySelector('.cur-ring');
+        if (dot && ring) {
+          let x = innerWidth / 2, y = innerHeight / 2, rx = x, ry = y;
+          window.addEventListener('pointermove', (e) => { x = e.clientX; y = e.clientY; });
+          window.addEventListener('pointerdown', () => ring.classList.add('click'));
+          window.addEventListener('pointerup',   () => ring.classList.remove('click'));
+          const hoverable = 'a, button, summary, input, textarea, label, select, .scoper-opt, .testimonial-card, .pricing-tier, .stat, .product-card, .offer-card, .process-step, .faq-item, .showcase-project';
+          document.addEventListener('pointerover', (e) => {
+            if (e.target.closest && e.target.closest(hoverable)) ring.classList.add('hover');
+          });
+          document.addEventListener('pointerout', (e) => {
+            if (e.target.closest && e.target.closest(hoverable)) ring.classList.remove('hover');
+          });
+          function tick() {
+            rx += (x - rx) * 0.22;
+            ry += (y - ry) * 0.22;
+            dot.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+            ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)${ring.classList.contains('click') ? ' scale(.78)' : ''}`;
+            requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+        }
+      }
+
+      // ---------- Background canvas: floating particles + soft connecting lines ----------
+      if (!prefersReduce) {
+        const c = document.getElementById('fx-canvas');
+        if (c) {
+          const ctx = c.getContext('2d');
+          let W = 0, H = 0, parts = [];
+          function resize() {
+            W = c.width = innerWidth * devicePixelRatio;
+            H = c.height = innerHeight * devicePixelRatio;
+            c.style.width = innerWidth + 'px';
+            c.style.height = innerHeight + 'px';
+            const target = Math.min(70, Math.floor((innerWidth * innerHeight) / 22000));
+            parts = Array.from({ length: target }, () => spawn());
+          }
+          function spawn() {
+            return {
+              x: Math.random() * W, y: Math.random() * H,
+              vx: (Math.random() - 0.5) * 0.4 * devicePixelRatio,
+              vy: (Math.random() - 0.5) * 0.4 * devicePixelRatio,
+              r: (Math.random() * 1.2 + 0.4) * devicePixelRatio,
+            };
+          }
+          window.addEventListener('resize', resize);
+          resize();
+          function step() {
+            ctx.clearRect(0, 0, W, H);
+            for (const p of parts) {
+              p.x += p.vx; p.y += p.vy;
+              if (p.x < 0 || p.x > W) p.vx *= -1;
+              if (p.y < 0 || p.y > H) p.vy *= -1;
+              ctx.beginPath();
+              ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+              ctx.fillStyle = '#0A0A0F';
+              ctx.fill();
+            }
+            // light connecting lines
+            for (let i = 0; i < parts.length; i++) {
+              for (let j = i + 1; j < parts.length; j++) {
+                const dx = parts[i].x - parts[j].x, dy = parts[i].y - parts[j].y;
+                const d2 = dx * dx + dy * dy;
+                const max = 120 * devicePixelRatio;
+                if (d2 < max * max) {
+                  const a = 1 - Math.sqrt(d2) / max;
+                  ctx.strokeStyle = `rgba(255,0,60,${a * 0.28})`;
+                  ctx.lineWidth = 0.6 * devicePixelRatio;
+                  ctx.beginPath();
+                  ctx.moveTo(parts[i].x, parts[i].y);
+                  ctx.lineTo(parts[j].x, parts[j].y);
+                  ctx.stroke();
+                }
+              }
+            }
+            requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+        }
+      }
+
+      // ---------- Hero rotator ----------
+      const rot = document.getElementById('heroRot');
+      if (rot && !prefersReduce) {
+        const words = (rot.dataset.words || '').split('|').filter(Boolean);
+        let i = 0;
+        setInterval(() => {
+          const cur = rot.querySelector('.word');
+          if (!cur) return;
+          cur.classList.add('out');
+          i = (i + 1) % words.length;
+          setTimeout(() => {
+            const next = document.createElement('span');
+            next.className = 'word';
+            next.textContent = words[i];
+            rot.innerHTML = '';
+            rot.appendChild(next);
+          }, 260);
+        }, 2600);
+      }
+
+      // ---------- Generic scroll-reveal (.sr) ----------
+      const srs = document.querySelectorAll('.sr');
+      if ('IntersectionObserver' in window && srs.length) {
+        const io = new IntersectionObserver((entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+          }
+        }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
+        srs.forEach(el => io.observe(el));
+      } else {
+        srs.forEach(el => el.classList.add('in'));
+      }
+
+      // ---------- Stat counters (animate on first reveal) ----------
+      const stats = document.querySelectorAll('.stat-num [data-target], .stat-num[data-target]');
+      if ('IntersectionObserver' in window && stats.length) {
+        const io2 = new IntersectionObserver((entries) => {
+          for (const e of entries) {
+            if (!e.isIntersecting) continue;
+            const el = e.target;
+            const target = parseInt(el.dataset.target, 10) || 0;
+            const dur = 1400;
+            const t0 = performance.now();
+            (function tick(now) {
+              const t = Math.min(1, (now - t0) / dur);
+              const eased = 1 - Math.pow(1 - t, 3);
+              el.textContent = Math.round(target * eased).toLocaleString();
+              if (t < 1) requestAnimationFrame(tick);
+            })(t0);
+            io2.unobserve(el);
+          }
+        }, { threshold: 0.4 });
+        stats.forEach(el => io2.observe(el));
+      } else {
+        stats.forEach(el => el.textContent = el.dataset.target);
+      }
+
+      // ---------- Project scoper ----------
+      (function scoperInit() {
+        const root = document.getElementById('scoper');
+        if (!root) return;
+        const stepsEls = Array.from(root.querySelectorAll('.scoper-step'));
+        const resultEl = root.querySelector('.scoper-result');
+        const bandEl = root.querySelector('#scoperBand');
+        const metaEl = root.querySelector('#scoperMeta');
+        const prevBtn = root.querySelector('#scoperPrev');
+        const progress = root.querySelector('#scoperProgress');
+        const bar = root.querySelector('#scoperBar');
+        const restart = root.querySelector('#scoperRestart');
+        const state = { idx: 0, answers: {} };
+        const total = stepsEls.length;
+
+        function render() {
+          stepsEls.forEach((s, i) => s.classList.toggle('active', i === state.idx && !resultEl.classList.contains('active')));
+          progress.textContent = `Step ${state.idx + 1} of ${total}`;
+          prevBtn.disabled = state.idx === 0 || resultEl.classList.contains('active');
+          const pct = ((state.idx + (resultEl.classList.contains('active') ? 1 : 0)) / total) * 100;
+          bar.style.width = pct + '%';
+        }
+
+        function compute() {
+          const a = state.answers;
+          // type → base band
+          const bases = {
+            site:   [500, 1500],
+            script: [400, 1800],
+            bot:    [800, 2500],
+            tool:   [2500, 8000],
+          };
+          let [lo, hi] = bases[a.type] || [600, 2000];
+
+          // size multiplier
+          const sizeMult = { tiny: 0.8, small: 1.0, medium: 1.8, unsure: 1.1 }[a.size] || 1;
+          lo *= sizeMult; hi *= sizeMult;
+          // urgency bump
+          if (a.urgency === 'rush') { lo *= 1.25; hi *= 1.25; }
+          // ongoing
+          let monthly = 0;
+          if (a.ongoing === 'light') monthly = 80;
+          if (a.ongoing === 'full')  monthly = 250;
+
+          lo = Math.round(lo / 50) * 50;
+          hi = Math.round(hi / 50) * 50;
+
+          // tone the result by type
+          const typeName = { site: 'website', script: 'automation', bot: 'always-on operator', tool: 'internal tool' }[a.type] || 'project';
+          const sizeName = { tiny: 'small', small: 'modest', medium: 'sizable', unsure: 'still-to-be-scoped' }[a.size] || '';
+          const urgencyName = a.urgency === 'rush' ? 'fast-turnaround' : a.urgency === 'month' ? 'standard-pace' : 'flexible-timeline';
+
+          bandEl.textContent = `$${lo.toLocaleString()} – $${hi.toLocaleString()}`;
+          metaEl.innerHTML = `<strong>${sizeName ? sizeName.charAt(0).toUpperCase() + sizeName.slice(1) + ', ' : ''}${urgencyName}</strong> ${typeName}.<br>` +
+            (monthly ? `Plus <strong>~$${monthly}/mo</strong> for ongoing care.<br>` : '') +
+            'This is a rough band — the actual number lands on a quick scoping call. No surprises after.';
+          // Pre-fill contact textarea if present
+          const ta = document.querySelector('form textarea[name="message"]');
+          if (ta && !ta.value) {
+            ta.value = `Project type: ${typeName}\nSize: ${sizeName}\nTimeline: ${urgencyName}\nOngoing: ${a.ongoing}\nEstimated band: $${lo.toLocaleString()} – $${hi.toLocaleString()}\n\nDetails: `;
+          }
+        }
+
+        function selectOpt(step, btn) {
+          step.querySelectorAll('.scoper-opt').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          state.answers[step.dataset.key] = btn.dataset.val;
+          setTimeout(() => {
+            if (state.idx < total - 1) {
+              state.idx++;
+              resultEl.classList.remove('active');
+              render();
+            } else {
+              compute();
+              stepsEls.forEach(s => s.classList.remove('active'));
+              resultEl.classList.add('active');
+              progress.textContent = 'Done';
+              prevBtn.disabled = true;
+              bar.style.width = '100%';
+            }
+          }, 180);
+        }
+
+        stepsEls.forEach(step => {
+          step.querySelectorAll('.scoper-opt').forEach(btn => {
+            btn.addEventListener('click', () => selectOpt(step, btn));
+          });
+        });
+        prevBtn.addEventListener('click', () => {
+          if (state.idx > 0) {
+            state.idx--;
+            resultEl.classList.remove('active');
+            render();
+          }
+        });
+        restart.addEventListener('click', () => {
+          state.idx = 0; state.answers = {};
+          stepsEls.forEach(s => s.querySelectorAll('.scoper-opt').forEach(b => b.classList.remove('selected')));
+          resultEl.classList.remove('active');
+          render();
+        });
+        render();
+      })();
+
+      // ---------- Sticky CTA — show after user has scrolled past hero + isn't in contact section ----------
+      (function stickyCtaInit() {
+        const cta = document.getElementById('stickyCta');
+        const closeBtn = document.getElementById('stickyClose');
+        if (!cta) return;
+        const KEY = 'm3_sticky_dismissed';
+        if (sessionStorage.getItem(KEY) === '1') return;
+        closeBtn.addEventListener('click', () => {
+          cta.classList.remove('show');
+          sessionStorage.setItem(KEY, '1');
+        });
+        const contact = document.getElementById('contact');
+        function check() {
+          const past = window.scrollY > innerHeight * 0.9;
+          const inContact = contact && contact.getBoundingClientRect().top < innerHeight * 0.6;
+          if (past && !inContact) cta.classList.add('show');
+          else cta.classList.remove('show');
+        }
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+          if (!ticking) { requestAnimationFrame(() => { check(); ticking = false; }); ticking = true; }
+        }, { passive: true });
+        check();
+      })();
+    })();
+  </script>
 
   <script>
     // UPDATE this URL after you deploy PaymentBackend to Railway
