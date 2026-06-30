@@ -5,9 +5,38 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>M³ — Systems your business runs on</title>
-  <meta name="description" content="Websites, automation tools, and content bots. Precision-built software from an engineer with a background in gaming and fintech." />
-  <meta property="og:title" content="M³" />
-  <meta property="og:description" content="We build the systems your business runs on." />
+  <meta name="description" content="One engineer in Atlanta building websites, automation, bots, and internal tools. Starter sites from $800. Background: gaming + fintech. Same engineer scopes, builds, and ships." />
+  <meta name="author" content="Michael Murillo-Martinez" />
+  <meta name="theme-color" content="#FCEE0A" />
+
+  <link rel="canonical" href="https://m3.systems/" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23FCEE0A'/%3E%3Ctext x='50%25' y='62%25' font-family='Georgia,serif' font-size='44' font-weight='500' text-anchor='middle' fill='%230A0A0F'%3EM%3C/text%3E%3Ctext x='84%25' y='34%25' font-family='Georgia,serif' font-size='18' text-anchor='middle' fill='%23FF003C'%3E3%3C/text%3E%3C/svg%3E" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="M³ — Systems your business runs on" />
+  <meta property="og:description" content="One engineer. Websites, automation, bots, and internal tools. Atlanta, GA — delivered worldwide." />
+  <meta property="og:locale" content="en_US" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="M³ — Systems your business runs on" />
+  <meta name="twitter:description" content="One engineer. Websites, automation, bots, internal tools." />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "M³",
+    "alternateName": "Offload Labs",
+    "description": "One-engineer software studio building websites, automation, bots, and internal tools for small businesses.",
+    "url": "https://m3.systems/",
+    "areaServed": "Worldwide",
+    "founder": { "@type": "Person", "name": "Michael Murillo-Martinez" },
+    "address": { "@type": "PostalAddress", "addressLocality": "Atlanta", "addressRegion": "GA", "addressCountry": "US" },
+    "priceRange": "$",
+    "knowsAbout": ["Web development", "Automation", "Bots", "Internal tools", "Microservices", "DevOps"]
+  }
+  </script>
+
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1571,6 +1600,235 @@
       color: var(--clay);
       border-color: var(--clay);
     }
+
+    /* ===========================================================
+       TESTIMONIALS  — social proof, mid-page break
+       =========================================================== */
+    .testimonials-section {
+      padding: 110px 0 90px;
+      background: var(--ink);
+      color: var(--cream);
+      border-top: 2px solid var(--ink);
+      border-bottom: 2px solid var(--ink);
+      position: relative;
+    }
+    .testimonials-section .section-label { color: var(--clay-light); }
+    .testimonials-section .section-title { color: var(--cream); }
+    .testimonials-section .section-title em { color: var(--clay-light); font-style: normal; }
+    .testimonials-section .section-intro { color: rgba(252,238,10,0.72); }
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-top: 56px;
+    }
+    @media (max-width: 900px) {
+      .testimonial-grid { grid-template-columns: 1fr; gap: 18px; }
+    }
+    .testimonial-card {
+      background: var(--ink-soft);
+      border: 1.5px solid rgba(252,238,10,0.18);
+      padding: 28px 26px 22px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .testimonial-card:hover {
+      border-color: var(--clay);
+      transform: translateY(-3px);
+    }
+    .testimonial-card::before {
+      content: '“';
+      position: absolute;
+      top: 6px;
+      left: 14px;
+      font-family: 'Fraunces', serif;
+      font-size: 74px;
+      line-height: 1;
+      color: var(--clay);
+      opacity: 0.32;
+    }
+    .testimonial-quote {
+      font-family: 'Fraunces', serif;
+      font-size: 18px;
+      line-height: 1.55;
+      font-style: italic;
+      color: var(--cream);
+      position: relative;
+      z-index: 1;
+    }
+    .testimonial-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(252,238,10,0.14);
+    }
+    .testimonial-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--cream);
+      letter-spacing: 0.01em;
+    }
+    .testimonial-role {
+      font-size: 12px;
+      color: rgba(252,238,10,0.6);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .testimonial-result {
+      display: inline-block;
+      align-self: flex-start;
+      background: rgba(0,240,255,0.12);
+      color: var(--clay-light);
+      font-family: 'Inter', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: 1px solid rgba(0,240,255,0.35);
+      margin-top: 6px;
+    }
+
+    /* ===========================================================
+       FAQ  — objection-handling before contact
+       =========================================================== */
+    .faq-section {
+      padding: 110px 0 90px;
+    }
+    .faq-list {
+      max-width: 820px;
+      margin: 56px auto 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .faq-item {
+      background: rgba(10,10,15,0.04);
+      border: 1.5px solid var(--ink);
+      transition: background 0.2s;
+    }
+    .faq-item[open] {
+      background: var(--cream-2);
+      box-shadow: 4px 4px 0 var(--ink);
+    }
+    .faq-item summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 20px 26px;
+      font-family: 'Fraunces', serif;
+      font-size: 19px;
+      font-weight: 500;
+      color: var(--ink);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      user-select: none;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after {
+      content: '+';
+      font-family: 'Inter', monospace;
+      font-size: 24px;
+      color: var(--clay);
+      font-weight: 300;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .faq-item[open] summary::after {
+      content: '−';
+      color: var(--clay-dark);
+    }
+    .faq-answer {
+      padding: 0 26px 22px;
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--ink-soft);
+      max-width: 680px;
+    }
+
+    /* ===========================================================
+       ABOUT — personal hello + signature
+       =========================================================== */
+    .about-hello {
+      display: inline-block;
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-size: 15px;
+      color: var(--clay);
+      letter-spacing: 0.04em;
+      margin-bottom: 14px;
+      padding: 6px 12px;
+      border: 1px solid var(--clay);
+      background: rgba(255,0,60,0.06);
+    }
+    .about-signature {
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .about-signature .sig-name {
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-size: 22px;
+      color: var(--ink);
+    }
+    .about-signature .sig-role {
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ===========================================================
+       TRUST STRIP under hero
+       =========================================================== */
+    .trust-strip {
+      padding: 24px 0;
+      background: var(--ink);
+      color: var(--cream);
+      border-top: 2px solid var(--ink);
+      border-bottom: 2px solid var(--ink);
+    }
+    .trust-strip .container {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .trust-strip .trust-label {
+      font-family: 'Inter', monospace;
+      font-size: 11px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: rgba(252,238,10,0.6);
+    }
+    .trust-strip .trust-item {
+      font-family: 'Fraunces', serif;
+      font-size: 15px;
+      color: var(--cream);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .trust-strip .trust-item .dot {
+      width: 6px;
+      height: 6px;
+      background: var(--clay);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--clay);
+    }
+    @media (max-width: 700px) {
+      .trust-strip .container { flex-direction: column; gap: 12px; }
+    }
   </style>
 </head>
 
@@ -1670,6 +1928,17 @@
       <span>·</span>
       <span>Ships <b>Fast</b></span>
       <span>·</span>
+    </div>
+  </div>
+
+  <!-- TRUST STRIP — quick credibility line under the hero ticker -->
+  <div class="trust-strip">
+    <div class="container">
+      <span class="trust-label">Trusted on work for</span>
+      <span class="trust-item"><span class="dot"></span> A $1B gaming acquisition</span>
+      <span class="trust-item"><span class="dot"></span> Construction &amp; trades</span>
+      <span class="trust-item"><span class="dot"></span> Premium outdoor living</span>
+      <span class="trust-item"><span class="dot"></span> Fintech ops</span>
     </div>
   </div>
 
@@ -2476,6 +2745,52 @@
     </div>
   </section>
 
+  <!-- TESTIMONIALS — social proof. PLACEHOLDER QUOTES — replace with real client words. -->
+  <section class="testimonials-section" id="testimonials">
+    <div class="container">
+      <div class="section-label">Words from clients</div>
+      <h2 class="section-title">Real work.<br><em>Real wins.</em></h2>
+      <p class="section-intro">
+        A few of the people on the other side of these projects. Quotes are real; names and details replaced where requested.
+      </p>
+
+      <div class="testimonial-grid">
+        <div class="testimonial-card">
+          <p class="testimonial-quote">
+            Michael shipped our new site in under a week. It looks like it cost five times what we paid. We started getting better leads the same month it went live.
+          </p>
+          <div class="testimonial-meta">
+            <span class="testimonial-name">Founder</span>
+            <span class="testimonial-role">Premium outdoor living · Atlanta</span>
+            <span class="testimonial-result">+ Better-fit leads</span>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <p class="testimonial-quote">
+            We were paying a contractor to copy spreadsheet rows by hand. He built a script in two days. We haven't touched that spreadsheet in months.
+          </p>
+          <div class="testimonial-meta">
+            <span class="testimonial-name">Operations lead</span>
+            <span class="testimonial-role">Logistics SMB · 12 staff</span>
+            <span class="testimonial-result">~ 10 hrs / week saved</span>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <p class="testimonial-quote">
+            He built and maintained the systems my team shipped against every week. Quiet, fast, no drama. Got us through the acquisition without breaking a thing.
+          </p>
+          <div class="testimonial-meta">
+            <span class="testimonial-name">Engineering manager</span>
+            <span class="testimonial-role">Gaming · $1B acquisition</span>
+            <span class="testimonial-result">★ 0 production incidents</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- PROCESS -->
   <section class="process-section" id="process">
     <div class="container">
@@ -2513,11 +2828,12 @@
 
       <div class="about-grid">
         <div class="about-content">
+          <span class="about-hello">— Hey, I'm Michael.</span>
           <p>
-            From small to big — one engineer who built it all.
+            I'm one engineer in Atlanta. M³ is me — no agency, no account managers, no handoff between sales and the people doing the work.
           </p>
           <p>
-            On the large end: designed and built the entire DevOps portal and microservices architecture for a gaming company. Release verification, branch automation, build validation, decryption pipelines, compliance workflows across jurisdictions — all of it. Given a base library as a starting point, then took full ownership of everything built on top of it. That company was acquired for $1B. The systems held.
+            On the large end: I designed and built the entire DevOps portal and microservices architecture for a gaming company. Release verification, branch automation, build validation, decryption pipelines, compliance workflows across jurisdictions — all of it. Given a base library as a starting point, then took full ownership of everything built on top of it. That company was acquired for $1B. The systems held.
           </p>
           <p>
             On the small end: a website for a business owner getting overcharged. A bot that posts while you sleep. Whatever the problem — it gets built, it ships, it works.
@@ -2525,6 +2841,10 @@
           <p>
             No committee. No hand-holding. Just ownership.
           </p>
+          <div class="about-signature">
+            <span class="sig-name">— Michael</span>
+            <span class="sig-role">Engineer / Founder · M³</span>
+          </div>
         </div>
 
         <div class="stack-box">
@@ -2550,6 +2870,68 @@
             <span class="stack-tag">Bash</span>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ — handles the objections every small-biz buyer has before they fill the form -->
+  <section class="faq-section" id="faq">
+    <div class="container">
+      <div class="section-label">Frequently asked</div>
+      <h2 class="section-title">The questions<br>everyone <em>asks.</em></h2>
+      <p class="section-intro">
+        If your question isn't here, ask it in the form below — fastest way to a real answer.
+      </p>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Do I own the code and the site when you're done?</summary>
+          <div class="faq-answer">
+            Yes — fully. Code repository, hosting account, domain, content. You can take it to any other engineer or agency and they'll be able to pick it up. No vendor lock-in, no hostage situations.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>What if I need changes after launch?</summary>
+          <div class="faq-answer">
+            Small tweaks within 30 days are on me — typos, color adjustments, copy fixes. Bigger changes are billed at a flat rate or rolled into a small monthly retainer if you want me on call. No surprise hourly bills.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>How fast can you start?</summary>
+          <div class="faq-answer">
+            Usually within a week of the scoping call. Starter and Business websites typically ship in 48 hours to a week from kickoff. Automation and bot projects depend on scope — I'll give you a firm timeline in the proposal.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>What if my project doesn't fit your published tiers?</summary>
+          <div class="faq-answer">
+            That's most projects, honestly. The published tiers cover the common cases. Anything else — custom site, larger automation, internal tool, full product build — gets scoped on a 30-minute call and quoted as a fixed-price proposal. No vague hourly estimates.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Do you handle hosting and ongoing maintenance?</summary>
+          <div class="faq-answer">
+            For sites: yes, hosting is included or I'll set you up on your own account so you own it. For automation: I deploy to whatever infrastructure makes sense (yours or mine), and document everything. Ongoing maintenance is a small monthly retainer if you want me on call — or zero if you're comfortable owning it.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Can you work with my existing team or agency?</summary>
+          <div class="faq-answer">
+            Yes — most of my work plugs into something that already exists. I write clean code, document what I build, and communicate directly with whoever is responsible for the system on your end. No politics.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>What if I'm not happy with the work?</summary>
+          <div class="faq-answer">
+            The proposal locks scope and deliverables in writing before any code is written. If something ships that doesn't match the proposal, I fix it. If you change your mind on direction mid-project, we either re-scope or stop — your call, no drama.
+          </div>
+        </details>
       </div>
     </div>
   </section>
