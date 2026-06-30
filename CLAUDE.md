@@ -4,10 +4,12 @@
 Static marketing website for Offload Labs — a software studio that builds automation, bots, and AI assistants for small businesses. Single-file HTML site with embedded CSS.
 
 ## Stack
-Single-file HTML5 + embedded CSS — no build step, no JS framework → nginx:alpine Docker container on Railway
+Single-file HTML5 + embedded CSS + small amount of inline JS (Stripe checkout toast, scroll reveals, contact form) → nginx:alpine Docker container on Railway. **No JS framework, no build step.**
+
+Embeds the SiteGuide widget (sibling project at `../SiteGuide/`) via a single `<script>` tag at the end of `<body>`. The widget is loaded from a separately-deployed SiteGuide instance; if it's unreachable the rest of the page is unaffected.
 
 ## Key Files
-- `index.html` — entire site (~1000+ lines): HTML structure + all CSS in a `<style>` block
+- `index.html` — entire site (~2700 lines): HTML structure + all CSS in a `<style>` block + small inline JS
 - `Dockerfile` — `FROM nginx:alpine`, copies `index.html`
 - `SPEC.md` — full design spec: layout, typography, color system, sections, deploy guide
 
@@ -30,8 +32,8 @@ None — fully static site, no server-side logic.
 - Bot/AI assistant setup: $600
 
 ## Rules
-- No JavaScript — pure HTML + CSS only
+- **No JS framework, no build step.** Inline `<script>` is fine for small concerns (form submit, scroll reveals). Anything bigger goes in a sibling project that this site loads via `<script src>` (see SiteGuide embed).
 - All styles live in the `<style>` block inside `index.html` — no external CSS files
 - Google Fonts: Fraunces (serif headings) + Inter (body)
-- Color palette: cream, clay, stone, ink — defined as CSS custom properties
-- YAGNI — no JS frameworks, no build tools, no preprocessors
+- Color palette: Cyberpunk 2077 / Edgerunners — neon yellow `--cream`, magenta `--clay`, cyan `--clay-light`, black `--ink` — defined as CSS custom properties
+- YAGNI — no JS frameworks, no preprocessors

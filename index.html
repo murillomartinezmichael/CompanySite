@@ -2671,5 +2671,26 @@
     });
   </script>
 
+  <!-- ============================================================
+       SiteGuide — embedded AI guide widget
+       Backend lives in sibling project: ../SiteGuide/  (Python/FastAPI).
+       Hosted on Railway separately from this nginx site — embedding it
+       here is purely an additional script tag; if SiteGuide is down or
+       unreachable the rest of the page is unaffected.
+
+       LOCAL DEV    : run SiteGuide via run.bat → serves on :8000
+                      (the localhost URLs below will work as-is)
+       RAILWAY PROD : once SiteGuide is deployed, swap both URLs below
+                      to the deployed origin, e.g.
+                      src="https://siteguide.up.railway.app/widget.js"
+                      data-api="https://siteguide.up.railway.app"
+       ============================================================ -->
+  <script
+    src="http://localhost:8000/widget.js"
+    data-site="companysite"
+    data-api="http://localhost:8000"
+    data-title="Ask M³"
+    defer></script>
+
 </body>
 </html>
