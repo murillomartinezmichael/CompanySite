@@ -3916,16 +3916,12 @@
        unreachable the rest of the page is unaffected.
 
        LOCAL DEV    : run SiteGuide via run.bat → serves on :8000
-                      (the localhost URLs below will work as-is)
-       RAILWAY PROD : once SiteGuide is deployed, swap both URLs below
-                      to the deployed origin, e.g.
-                      src="https://siteguide.up.railway.app/widget.js"
-                      data-api="https://siteguide.up.railway.app"
+                      then swap both URLs below to http://localhost:8000
        ============================================================ -->
   <script
-    src="http://localhost:8000/widget.js"
+    src="https://siteguide-production.up.railway.app/widget.js"
     data-site="companysite"
-    data-api="http://localhost:8000"
+    data-api="https://siteguide-production.up.railway.app"
     data-title="Ask M³"
     defer></script>
 
