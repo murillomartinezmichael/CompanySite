@@ -1520,6 +1520,836 @@
       border-color: var(--clay);
     }
 
+    /* === TIER PRICE — dollar amount shown next to tier name === */
+    .tier-price {
+      font-family: 'Fraunces', serif;
+      font-size: 22px;
+      color: var(--ink);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .tier-price small {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(10,10,15,0.35);
+      font-weight: 500;
+      margin-right: 6px;
+    }
+    .tier-price em {
+      font-style: normal;
+      color: var(--clay-light);
+      font-weight: 500;
+    }
+    .pricing-card:hover .tier-price { color: var(--cream); }
+    .pricing-card:hover .tier-price small { color: rgba(250,247,242,0.5); }
+
+    /* === SITE EXTRAS — add-ons + monthly care sitting under the pricing grid === */
+    .site-extras {
+      margin-top: 56px;
+      padding: 64px 56px;
+      background: var(--ink);
+      color: var(--cream);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+    .site-extras::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(0deg,  rgba(252,238,10,0.035) 0 1px, transparent 1px 60px),
+        repeating-linear-gradient(90deg, rgba(252,238,10,0.035) 0 1px, transparent 1px 60px);
+      pointer-events: none;
+    }
+    .site-extras-head {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 52px;
+      position: relative;
+    }
+    .site-extras-head .section-label {
+      color: var(--clay-light);
+    }
+    .site-extras-head .section-label::after { background: var(--clay); }
+    .site-extras-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(28px, 3.6vw, 44px);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-top: 18px;
+      color: var(--cream);
+    }
+    .site-extras-title em {
+      font-style: italic;
+      color: var(--clay-light);
+      font-weight: 400;
+    }
+    .site-extras-intro {
+      margin-top: 20px;
+      color: rgba(250,247,242,0.6);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    .site-extras-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 56px;
+      position: relative;
+    }
+    @media (max-width: 900px) {
+      .site-extras-grid { grid-template-columns: 1fr; gap: 44px; }
+      .site-extras { padding: 48px 28px; }
+    }
+    .site-extras-block-label {
+      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: var(--clay-light);
+      margin-bottom: 24px;
+      opacity: 0.9;
+    }
+    .site-addons {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      columns: 2;
+      column-gap: 28px;
+    }
+    .site-addons li {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 14px;
+      padding: 11px 0;
+      border-bottom: 1px solid rgba(250,247,242,0.06);
+      font-size: 13px;
+      color: rgba(250,247,242,0.72);
+      break-inside: avoid;
+    }
+    .site-addons li:last-child { border-bottom: none; }
+    .site-addons .addon-price {
+      color: var(--clay-light);
+      font-variant-numeric: tabular-nums;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+    @media (max-width: 640px) {
+      .site-addons { columns: 1; }
+    }
+    .care-plans {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    .care-plan {
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(250,247,242,0.08);
+    }
+    .care-plan:last-of-type {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .care-plan-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+    }
+    .care-plan-name {
+      font-family: 'Fraunces', serif;
+      font-size: 17px;
+      color: var(--cream);
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+    .care-plan-price {
+      font-family: 'Fraunces', serif;
+      font-size: 16px;
+      color: rgba(250,247,242,0.55);
+      font-weight: 400;
+      white-space: nowrap;
+    }
+    .care-plan-price em {
+      font-style: normal;
+      color: var(--clay-light);
+      font-size: 22px;
+      font-weight: 500;
+    }
+    .care-plan-desc {
+      font-size: 13px;
+      color: rgba(250,247,242,0.55);
+      line-height: 1.7;
+      margin-top: 8px;
+    }
+    .care-plan-desc b {
+      color: var(--cream);
+      font-weight: 500;
+    }
+    .care-note {
+      margin-top: 26px;
+      padding-top: 20px;
+      border-top: 1px dashed rgba(250,247,242,0.1);
+      font-size: 12px;
+      color: rgba(250,247,242,0.4);
+      line-height: 1.7;
+    }
+
+    /* ===========================================================
+       QUOTE BUILDER — interactive live-pricing widget
+       =========================================================== */
+    .quote-builder {
+      margin-top: 56px;
+      background: var(--cream);
+      border: 2px solid var(--ink);
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+    }
+    .quote-builder::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 6px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--clay-light) 0%, var(--clay) 100%);
+      pointer-events: none;
+    }
+    .quote-builder-header {
+      padding: 44px 48px 32px;
+      border-bottom: 1px solid rgba(10,10,15,0.08);
+      padding-left: 60px;
+    }
+    .quote-builder-eyebrow {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: var(--clay-light);
+      margin-bottom: 14px;
+    }
+    .quote-builder-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(28px, 3.6vw, 44px);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      color: var(--ink);
+    }
+    .quote-builder-title em {
+      color: var(--clay-light);
+      font-style: italic;
+      font-weight: 400;
+    }
+    .quote-builder-lede {
+      margin-top: 14px;
+      font-size: 14px;
+      color: rgba(10,10,15,0.55);
+      line-height: 1.6;
+      max-width: 640px;
+    }
+    .quote-builder-body {
+      padding: 44px 48px 48px;
+      padding-left: 60px;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 48px;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .quote-builder-header { padding: 36px 24px 28px; }
+      .quote-builder-body { grid-template-columns: 1fr; gap: 32px; padding: 36px 24px; }
+      .quote-builder::after { width: 4px; }
+    }
+
+    .qb-section {
+      margin-bottom: 36px;
+    }
+    .qb-section:last-child { margin-bottom: 0; }
+    .qb-section-label {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: rgba(10,10,15,0.5);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .qb-section-label::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--clay-light);
+      display: inline-block;
+    }
+    .qb-section-label span {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      color: rgba(10,10,15,0.35);
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      margin-left: auto;
+      text-transform: none;
+    }
+
+    .qb-tier-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .qb-tier-option {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 22px;
+      border: 1.5px solid rgba(10,10,15,0.12);
+      background: transparent;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+      text-align: left;
+      font-family: inherit;
+      color: inherit;
+      width: 100%;
+    }
+    .qb-tier-option:hover { border-color: var(--ink); transform: translateX(2px); }
+    .qb-tier-option[data-active="true"] {
+      border-color: var(--ink);
+      background: var(--ink);
+      color: var(--cream);
+    }
+    .qb-tier-name {
+      font-family: 'Fraunces', serif;
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      display: flex;
+      flex-direction: column;
+    }
+    .qb-tier-name-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      color: rgba(10,10,15,0.5);
+      font-weight: 400;
+      margin-top: 3px;
+      letter-spacing: 0.02em;
+    }
+    .qb-tier-option[data-active="true"] .qb-tier-name-sub {
+      color: rgba(250,247,242,0.6);
+    }
+    .qb-tier-price {
+      font-family: 'Fraunces', serif;
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--clay-light);
+      letter-spacing: -0.01em;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .qb-addon-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 24px;
+    }
+    @media (max-width: 640px) {
+      .qb-addon-list { grid-template-columns: 1fr; }
+    }
+    .qb-addon {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 4px;
+      border-bottom: 1px solid rgba(10,10,15,0.06);
+      cursor: pointer;
+      font-family: inherit;
+      color: inherit;
+      background: transparent;
+      border-left: none;
+      border-right: none;
+      border-top: none;
+      text-align: left;
+      transition: padding-left 0.15s;
+      width: 100%;
+    }
+    .qb-addon:hover { padding-left: 8px; }
+    .qb-addon-check {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .qb-addon-box {
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid rgba(10,10,15,0.25);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+    .qb-addon[data-active="true"] .qb-addon-box {
+      background: var(--ink);
+      border-color: var(--ink);
+    }
+    .qb-addon[data-active="true"] .qb-addon-box::after {
+      content: '';
+      width: 7px;
+      height: 7px;
+      background: var(--clay-light);
+    }
+    .qb-addon-label {
+      font-size: 13px;
+      color: rgba(10,10,15,0.65);
+      line-height: 1.4;
+    }
+    .qb-addon[data-active="true"] .qb-addon-label {
+      color: var(--ink);
+      font-weight: 500;
+    }
+    .qb-addon-price {
+      font-family: 'Fraunces', serif;
+      font-size: 15px;
+      color: rgba(10,10,15,0.4);
+      font-variant-numeric: tabular-nums;
+      font-weight: 400;
+      flex-shrink: 0;
+      margin-left: 12px;
+    }
+    .qb-addon[data-active="true"] .qb-addon-price {
+      color: var(--clay-light);
+    }
+
+    .qb-care-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .qb-care-option {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 18px;
+      border: 1.5px solid rgba(10,10,15,0.12);
+      cursor: pointer;
+      font-family: inherit;
+      color: inherit;
+      background: transparent;
+      text-align: left;
+      transition: all 0.15s;
+      width: 100%;
+    }
+    .qb-care-option:hover { border-color: var(--ink); }
+    .qb-care-option[data-active="true"] {
+      border-color: var(--ink);
+      background: var(--ink);
+      color: var(--cream);
+    }
+    .qb-care-option[data-active="true"] .qb-care-sub {
+      color: rgba(250,247,242,0.55);
+    }
+    .qb-care-name {
+      font-family: 'Fraunces', serif;
+      font-size: 15px;
+      font-weight: 500;
+      display: flex;
+      flex-direction: column;
+    }
+    .qb-care-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      color: rgba(10,10,15,0.45);
+      font-weight: 400;
+      margin-top: 2px;
+      letter-spacing: 0.02em;
+    }
+    .qb-care-price {
+      font-family: 'Fraunces', serif;
+      font-size: 18px;
+      color: var(--clay-light);
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    /* Live total panel — sticky on desktop */
+    .quote-total {
+      background: var(--ink);
+      color: var(--cream);
+      border-radius: 4px;
+      padding: 30px 28px;
+      position: sticky;
+      top: 100px;
+      align-self: start;
+      position: relative;
+      overflow: hidden;
+    }
+    .quote-total::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(0deg,  rgba(252,238,10,0.035) 0 1px, transparent 1px 40px),
+        repeating-linear-gradient(90deg, rgba(252,238,10,0.035) 0 1px, transparent 1px 40px);
+      pointer-events: none;
+    }
+    @media (min-width: 901px) {
+      .quote-total { position: sticky; }
+    }
+    .quote-total-label {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      color: var(--clay-light);
+      margin-bottom: 22px;
+      position: relative;
+    }
+    .quote-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(250,247,242,0.08);
+      font-size: 13px;
+      color: rgba(250,247,242,0.7);
+      position: relative;
+      gap: 12px;
+    }
+    .quote-total-row .qt-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .quote-total-row:last-of-type { border-bottom: none; }
+    .quote-total-amount {
+      font-variant-numeric: tabular-nums;
+      color: var(--cream);
+      font-weight: 500;
+      flex-shrink: 0;
+      font-family: 'Fraunces', serif;
+      font-size: 14px;
+    }
+    .quote-total-grand {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding-top: 20px;
+      margin-top: 10px;
+      border-top: 1px dashed rgba(250,247,242,0.25);
+      position: relative;
+    }
+    .quote-total-grand-label {
+      font-family: 'Fraunces', serif;
+      font-size: 14px;
+      color: var(--cream);
+      font-weight: 500;
+    }
+    .quote-total-grand-value {
+      font-family: 'Fraunces', serif;
+      font-size: 34px;
+      color: var(--clay-light);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    .quote-total-monthly {
+      margin-top: 22px;
+      padding-top: 20px;
+      border-top: 1px dashed rgba(250,247,242,0.15);
+      position: relative;
+    }
+    .quote-total-monthly-label {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      color: rgba(250,247,242,0.5);
+      margin-bottom: 12px;
+    }
+    .quote-total-monthly-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-family: 'Fraunces', serif;
+      font-size: 14px;
+      color: var(--cream);
+      font-weight: 500;
+    }
+    .quote-total-monthly-row .qt-name {
+      color: rgba(250,247,242,0.7);
+    }
+    .quote-total-monthly-amount {
+      font-size: 24px;
+      color: var(--clay-light);
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    .quote-total-cta {
+      display: block;
+      margin-top: 26px;
+      padding: 15px 20px;
+      background: var(--clay-light);
+      color: var(--ink);
+      text-align: center;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.2s;
+      cursor: pointer;
+      border: none;
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+      position: relative;
+    }
+    .quote-total-cta:hover {
+      background: var(--cream);
+      transform: translateY(-1px);
+    }
+    .quote-total-fine {
+      margin-top: 14px;
+      font-size: 10px;
+      color: rgba(250,247,242,0.4);
+      text-align: center;
+      letter-spacing: 0.08em;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    /* ===========================================================
+       WORKED EXAMPLE — real client receipt
+       =========================================================== */
+    .worked-example {
+      margin-top: 56px;
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 0;
+      border: 1px solid rgba(10,10,15,0.1);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    @media (max-width: 900px) {
+      .worked-example { grid-template-columns: 1fr; }
+    }
+    .worked-example-side {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 40px 36px;
+      position: relative;
+      overflow: hidden;
+    }
+    .worked-example-side::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(0deg,  rgba(252,238,10,0.035) 0 1px, transparent 1px 50px),
+        repeating-linear-gradient(90deg, rgba(252,238,10,0.035) 0 1px, transparent 1px 50px);
+      pointer-events: none;
+    }
+    .worked-example-eyebrow {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: var(--clay-light);
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .worked-example-title {
+      font-family: 'Fraunces', serif;
+      font-size: 32px;
+      color: var(--cream);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      position: relative;
+    }
+    .worked-example-title em {
+      color: var(--clay-light);
+      font-style: italic;
+      font-weight: 400;
+    }
+    .worked-example-quote {
+      margin-top: 20px;
+      font-size: 14px;
+      color: rgba(250,247,242,0.65);
+      line-height: 1.65;
+      position: relative;
+    }
+    .worked-example-stat {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px dashed rgba(250,247,242,0.15);
+      font-family: 'Fraunces', serif;
+      color: var(--clay-light);
+      font-size: 17px;
+      line-height: 1.4;
+      position: relative;
+    }
+    .worked-example-stat strong {
+      font-family: 'Fraunces', serif;
+      font-size: 30px;
+      color: var(--cream);
+      font-weight: 500;
+      display: block;
+      margin-top: 4px;
+      letter-spacing: -0.02em;
+    }
+    .worked-example-receipt {
+      background: var(--cream);
+      padding: 40px 40px 34px;
+    }
+    .worked-example-receipt-label {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: rgba(10,10,15,0.4);
+      margin-bottom: 22px;
+    }
+    .receipt-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .receipt-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(10,10,15,0.06);
+      font-size: 14px;
+      color: rgba(10,10,15,0.75);
+      gap: 20px;
+    }
+    .receipt-list li.is-base {
+      font-family: 'Fraunces', serif;
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--ink);
+    }
+    .receipt-list li.is-total {
+      border-top: 2px solid var(--ink);
+      border-bottom: none;
+      margin-top: 12px;
+      padding-top: 18px;
+      font-family: 'Fraunces', serif;
+      font-size: 18px;
+      color: var(--ink);
+      font-weight: 500;
+    }
+    .receipt-list .re-price {
+      font-variant-numeric: tabular-nums;
+      color: var(--clay);
+      font-weight: 500;
+      font-family: 'Fraunces', serif;
+      flex-shrink: 0;
+    }
+    .receipt-list li.is-total .re-price {
+      font-size: 28px;
+      color: var(--clay-light);
+    }
+    .receipt-list li.is-base .re-price {
+      color: var(--clay-light);
+      font-size: 19px;
+    }
+    .receipt-list li.is-monthly {
+      border-top: 1px dashed rgba(10,10,15,0.2);
+      border-bottom: none;
+      margin-top: 6px;
+      padding-top: 14px;
+      font-family: 'Fraunces', serif;
+      font-size: 14px;
+      color: rgba(10,10,15,0.6);
+    }
+    .receipt-list li.is-monthly .re-price {
+      color: rgba(10,10,15,0.7);
+      font-size: 16px;
+    }
+
+    /* ===========================================================
+       PRICING FAQ
+       =========================================================== */
+    .pricing-faq {
+      margin-top: 64px;
+    }
+    .pricing-faq-header {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 36px;
+    }
+    .pricing-faq-eyebrow {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: var(--clay-light);
+      margin-bottom: 12px;
+    }
+    .pricing-faq-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(28px, 3.4vw, 40px);
+      color: var(--ink);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+    }
+    .pricing-faq-title em {
+      color: var(--clay-light);
+      font-style: italic;
+      font-weight: 400;
+    }
+    .pricing-faq-list {
+      max-width: 780px;
+      margin: 0 auto;
+      border-top: 1px solid rgba(10,10,15,0.1);
+    }
+    .pricing-faq-item {
+      border-bottom: 1px solid rgba(10,10,15,0.1);
+    }
+    .pricing-faq-item summary {
+      padding: 24px 4px;
+      cursor: pointer;
+      font-family: 'Fraunces', serif;
+      font-size: 19px;
+      color: var(--ink);
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      transition: color 0.15s;
+    }
+    .pricing-faq-item summary::-webkit-details-marker { display: none; }
+    .pricing-faq-item summary:hover { color: var(--clay-light); }
+    .pricing-faq-item summary::after {
+      content: '+';
+      font-family: 'Inter', sans-serif;
+      font-size: 24px;
+      font-weight: 300;
+      color: var(--clay-light);
+      transition: transform 0.25s;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .pricing-faq-item[open] summary::after {
+      transform: rotate(45deg);
+    }
+    .pricing-faq-answer {
+      padding: 0 4px 26px;
+      color: rgba(10,10,15,0.65);
+      line-height: 1.75;
+      font-size: 14px;
+    }
+    .pricing-faq-answer strong {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
     /* ===========================================================
        TESTIMONIALS  — social proof, mid-page break
        =========================================================== */
@@ -2602,33 +3432,36 @@
 
       <div class="pricing-grid">
 
-        <!-- Websites -->
+        <!-- Websites — three tiers, real prices, base + add-ons + care -->
         <div class="pricing-card">
           <div class="pricing-category">Websites</div>
           <div class="pricing-tiers">
 
             <div class="pricing-tier">
               <div class="tier-row">
-                <div class="tier-name">Starter</div>
+                <div class="tier-name">Basic</div>
+                <div class="tier-price"><small>from</small><em>$800</em></div>
               </div>
-              <p class="tier-desc">Single-page landing site. Mobile-ready, contact form, SEO basics. Live in 48–72 hours.</p>
+              <p class="tier-desc">Up to 5 pages, custom design (not a template), mobile-responsive, contact form, hosted &amp; launched. ~10-day turnaround. Big7 Construction lives here.</p>
               <a href="#product-big7" class="btn-buy-contact">See Big7 Construction →</a>
-            </div>
-
-            <div class="pricing-tier">
-              <div class="tier-row">
-                <div class="tier-name">Business</div>
-              </div>
-              <p class="tier-desc">3–5 pages, Google Analytics, contact form, polished design. Delivered in under a week. Aries Outdoor Living lives at this tier.</p>
-              <a href="#product-aries" class="btn-buy-contact">See Aries Outdoor Living →</a>
             </div>
 
             <div class="pricing-tier">
               <div class="tier-badge">Most requested</div>
               <div class="tier-row">
-                <div class="tier-name">Custom</div>
+                <div class="tier-name">Signature</div>
+                <div class="tier-price"><small>from</small><em>$2,500</em></div>
               </div>
-              <p class="tier-desc">Full design system, animations, CMS, e-commerce, or anything that requires real engineering. Scoped after a call.</p>
+              <p class="tier-desc">Up to 10 pages, editorial design system, content collection / CMS, one live integration, forms with automation, full SEO wired. 3–4 week turnaround. Aries Outdoor Living lives here.</p>
+              <a href="#product-aries" class="btn-buy-contact">See Aries Outdoor Living →</a>
+            </div>
+
+            <div class="pricing-tier">
+              <div class="tier-row">
+                <div class="tier-name">Flagship</div>
+                <div class="tier-price"><small>from</small><em>$6,500</em></div>
+              </div>
+              <p class="tier-desc">15+ pages, interactive features (scopers, calculators, embeds), custom animations, 2–3 integrations, analytics, launch coaching. 6–8 week turnaround. This site (M³) lives here.</p>
               <a href="#product-m3" class="btn-buy-contact">See M³ (this site) →</a>
             </div>
 
@@ -2709,6 +3542,350 @@
           </div>
         </div>
 
+      </div>
+
+      <!-- WEBSITE ADD-ONS + MONTHLY CARE — expands what the base site tiers get you -->
+      <div class="site-extras">
+        <div class="site-extras-head">
+          <div class="section-label">Website add-ons &amp; monthly care</div>
+          <h3 class="site-extras-title">Base gets you the site. <em>Everything else stacks on top.</em></h3>
+          <p class="site-extras-intro">
+            Pick what you actually need — you're not paying for someone else's feature list. Add-ons roll into the build quote. Monthly care keeps the site running after launch.
+          </p>
+        </div>
+
+        <div class="site-extras-grid">
+
+          <!-- Add-ons list -->
+          <div class="site-extras-block">
+            <div class="site-extras-block-label">// Optional add-ons — added to the build quote</div>
+            <ul class="site-addons">
+              <li><span>Extra page (Basic / Signature)</span><span class="addon-price">+$200</span></li>
+              <li><span>Extra page (Flagship)</span><span class="addon-price">+$350</span></li>
+              <li><span>Custom logo / brand mark</span><span class="addon-price">+$400</span></li>
+              <li><span>Copywriting (per page)</span><span class="addon-price">+$150</span></li>
+              <li><span>Google Reviews / Places integration</span><span class="addon-price">+$400</span></li>
+              <li><span>Blog / CMS setup</span><span class="addon-price">+$600</span></li>
+              <li><span>Form → email automation</span><span class="addon-price">+$200</span></li>
+              <li><span>Form → CRM sync (HubSpot etc.)</span><span class="addon-price">+$500</span></li>
+              <li><span>Stripe checkout (one product)</span><span class="addon-price">+$800</span></li>
+              <li><span>Stripe subscriptions</span><span class="addon-price">+$1,500</span></li>
+              <li><span>Booking / calendar embed</span><span class="addon-price">+$150</span></li>
+              <li><span>AI chat widget (SiteGuide-style)</span><span class="addon-price">+$1,200</span></li>
+              <li><span>Interactive quote calculator</span><span class="addon-price">+$1,500</span></li>
+              <li><span>Photo gallery + lightbox</span><span class="addon-price">+$400</span></li>
+              <li><span>Custom animations pass</span><span class="addon-price">+$600</span></li>
+              <li><span>Newsletter signup + ESP</span><span class="addon-price">+$250</span></li>
+              <li><span>E-commerce (10–30 products)</span><span class="addon-price">+$2,500</span></li>
+              <li><span>DNS / migration from another host</span><span class="addon-price">+$150</span></li>
+              <li><span>Rush delivery (½ normal timeline)</span><span class="addon-price">+35%</span></li>
+            </ul>
+          </div>
+
+          <!-- Monthly care -->
+          <div class="site-extras-block">
+            <div class="site-extras-block-label">// Monthly care — after launch</div>
+
+            <div class="care-plans">
+              <div class="care-plan">
+                <div class="care-plan-row">
+                  <div class="care-plan-name">Hosting <small style="opacity:0.5;font-weight:400;letter-spacing:0.14em;text-transform:uppercase;font-size:9px;">· Required</small></div>
+                  <div class="care-plan-price"><em>$50</em>/mo</div>
+                </div>
+                <p class="care-plan-desc">SSL, uptime monitoring, weekly backups, DNS, deploy pipeline, domain-renewal reminders. Site stays online — that's the whole job.</p>
+              </div>
+
+              <div class="care-plan">
+                <div class="care-plan-row">
+                  <div class="care-plan-name">+ Care · 4 hrs / mo</div>
+                  <div class="care-plan-price"><em>$100</em>/mo</div>
+                </div>
+                <p class="care-plan-desc">Copy tweaks, photo swaps, bug fixes, small content updates. Fits Basic-tier sites. <b>Total with hosting: $150/mo.</b></p>
+              </div>
+
+              <div class="care-plan">
+                <div class="care-plan-row">
+                  <div class="care-plan-name">+ Care · 8 hrs / mo</div>
+                  <div class="care-plan-price"><em>$200</em>/mo</div>
+                </div>
+                <p class="care-plan-desc">Above at 2× monthly volume. Fits Signature-tier sites with active content or seasonal campaigns. <b>Total: $250/mo.</b></p>
+              </div>
+
+              <div class="care-plan">
+                <div class="care-plan-row">
+                  <div class="care-plan-name">+ Care · custom block</div>
+                  <div class="care-plan-price">quoted</div>
+                </div>
+                <p class="care-plan-desc">12+ hrs / mo, or full active-partner arrangements — quoted per site after a scoping call.</p>
+              </div>
+            </div>
+
+            <p class="care-note">
+              <b>Upgrades, new features, redesigns</b> — new pages, new integrations, new forms — are quoted separately, not covered by care hours. If your site breaks because of code I wrote, the fix is free.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- LIVE QUOTE BUILDER — pick a tier, toggle add-ons, watch the total tick up -->
+      <div class="quote-builder" id="quoteBuilder">
+        <div class="quote-builder-header">
+          <div class="quote-builder-eyebrow">// Build the quote yourself</div>
+          <h3 class="quote-builder-title">Your build, <em>priced live.</em></h3>
+          <p class="quote-builder-lede">
+            Pick a tier, tap the add-ons you actually need, choose a care plan. The total on the right updates as you go — then send yourself the exact quote in one click.
+          </p>
+        </div>
+
+        <div class="quote-builder-body">
+
+          <div>
+            <!-- STEP 1 — TIER -->
+            <div class="qb-section">
+              <div class="qb-section-label">01 · Pick your tier <span>Base build price</span></div>
+              <div class="qb-tier-list">
+                <button type="button" class="qb-tier-option" data-tier="basic" data-price="800">
+                  <span class="qb-tier-name">Basic<span class="qb-tier-name-sub">Up to 5 pages · ~10-day turnaround</span></span>
+                  <span class="qb-tier-price">$800</span>
+                </button>
+                <button type="button" class="qb-tier-option" data-tier="signature" data-price="2500" data-active="true">
+                  <span class="qb-tier-name">Signature<span class="qb-tier-name-sub">Up to 10 pages · editorial design system · CMS · 3–4 weeks</span></span>
+                  <span class="qb-tier-price">$2,500</span>
+                </button>
+                <button type="button" class="qb-tier-option" data-tier="flagship" data-price="6500">
+                  <span class="qb-tier-name">Flagship<span class="qb-tier-name-sub">15+ pages · interactive · animations · 6–8 weeks</span></span>
+                  <span class="qb-tier-price">$6,500</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- STEP 2 — ADD-ONS -->
+            <div class="qb-section">
+              <div class="qb-section-label">02 · Add what you need <span>Tap to toggle</span></div>
+              <div class="qb-addon-list">
+                <button type="button" class="qb-addon" data-addon="extra-page" data-price="200" data-label="Extra page (Basic/Signature)">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Extra page (Basic/Signature)</span></span>
+                  <span class="qb-addon-price">+$200</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="logo" data-price="400" data-label="Custom logo / brand mark">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Custom logo / brand mark</span></span>
+                  <span class="qb-addon-price">+$400</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="copywriting" data-price="150" data-label="Copywriting (per page)">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Copywriting (per page)</span></span>
+                  <span class="qb-addon-price">+$150</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="google-reviews" data-price="400" data-label="Google Reviews integration">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Google Reviews integration</span></span>
+                  <span class="qb-addon-price">+$400</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="blog-cms" data-price="600" data-label="Blog / CMS setup">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Blog / CMS setup</span></span>
+                  <span class="qb-addon-price">+$600</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="form-automation" data-price="200" data-label="Form → email automation">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Form → email automation</span></span>
+                  <span class="qb-addon-price">+$200</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="crm-sync" data-price="500" data-label="Form → CRM sync">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Form → CRM sync</span></span>
+                  <span class="qb-addon-price">+$500</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="booking" data-price="150" data-label="Booking / calendar embed">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Booking / calendar embed</span></span>
+                  <span class="qb-addon-price">+$150</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="gallery" data-price="400" data-label="Photo gallery + lightbox">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Photo gallery + lightbox</span></span>
+                  <span class="qb-addon-price">+$400</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="animations" data-price="600" data-label="Custom animations pass">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Custom animations pass</span></span>
+                  <span class="qb-addon-price">+$600</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="newsletter" data-price="250" data-label="Newsletter signup + ESP">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Newsletter signup + ESP</span></span>
+                  <span class="qb-addon-price">+$250</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="stripe-one" data-price="800" data-label="Stripe checkout (one product)">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Stripe checkout (one product)</span></span>
+                  <span class="qb-addon-price">+$800</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="stripe-sub" data-price="1500" data-label="Stripe subscriptions">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Stripe subscriptions</span></span>
+                  <span class="qb-addon-price">+$1,500</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="ai-chat" data-price="1200" data-label="AI chat widget (SiteGuide-style)">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">AI chat widget (SiteGuide)</span></span>
+                  <span class="qb-addon-price">+$1,200</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="scoper" data-price="1500" data-label="Interactive quote calculator">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Interactive quote calculator</span></span>
+                  <span class="qb-addon-price">+$1,500</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="ecommerce" data-price="2500" data-label="E-commerce (10–30 products)">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">E-commerce (10–30 products)</span></span>
+                  <span class="qb-addon-price">+$2,500</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="dns" data-price="150" data-label="DNS / host migration">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">DNS / host migration</span></span>
+                  <span class="qb-addon-price">+$150</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="rush" data-price="0" data-percent="35" data-label="Rush delivery (½ timeline)">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Rush delivery (½ timeline)</span></span>
+                  <span class="qb-addon-price">+35%</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- STEP 3 — CARE -->
+            <div class="qb-section">
+              <div class="qb-section-label">03 · Monthly care <span>Ongoing after launch</span></div>
+              <div class="qb-care-list">
+                <button type="button" class="qb-care-option" data-care="hosting" data-price="50" data-name="Hosting only" data-active="true">
+                  <span class="qb-care-name">Hosting only<span class="qb-care-sub">SSL, backups, uptime, DNS, deploys</span></span>
+                  <span class="qb-care-price">$50/mo</span>
+                </button>
+                <button type="button" class="qb-care-option" data-care="plus4" data-price="150" data-name="Hosting + 4 hrs care">
+                  <span class="qb-care-name">+ 4 hrs care<span class="qb-care-sub">Above + 4 hrs of edits &amp; fixes per month</span></span>
+                  <span class="qb-care-price">$150/mo</span>
+                </button>
+                <button type="button" class="qb-care-option" data-care="plus8" data-price="250" data-name="Hosting + 8 hrs care">
+                  <span class="qb-care-name">+ 8 hrs care<span class="qb-care-sub">Above + 8 hrs — active content sites</span></span>
+                  <span class="qb-care-price">$250/mo</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LIVE TOTAL PANEL -->
+          <div class="quote-total" id="quoteTotal">
+            <div class="quote-total-label">// Your quote</div>
+
+            <div class="quote-total-row">
+              <span class="qt-name" id="qbOutTier">Signature base</span>
+              <span class="quote-total-amount" id="qbOutTierAmt">$2,500</span>
+            </div>
+            <div class="quote-total-row">
+              <span class="qt-name" id="qbOutAddons">No add-ons</span>
+              <span class="quote-total-amount" id="qbOutAddonsAmt">$0</span>
+            </div>
+
+            <div class="quote-total-grand">
+              <span class="quote-total-grand-label">Build total</span>
+              <span class="quote-total-grand-value" id="qbOutTotal">$2,500</span>
+            </div>
+
+            <div class="quote-total-monthly">
+              <div class="quote-total-monthly-label">// Then monthly</div>
+              <div class="quote-total-monthly-row">
+                <span class="qt-name" id="qbOutMonthlyName">Hosting only</span>
+                <span class="quote-total-monthly-amount" id="qbOutMonthlyAmt">$50/mo</span>
+              </div>
+            </div>
+
+            <button type="button" class="quote-total-cta" id="qbSend">Send this quote →</button>
+            <p class="quote-total-fine">Prefills your brief and jumps to the contact form. No obligation.</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- WORKED EXAMPLE — real client receipt -->
+      <div class="worked-example">
+        <div class="worked-example-side">
+          <div class="worked-example-eyebrow">// Real client receipt</div>
+          <h3 class="worked-example-title">How <em>Aries Outdoor Living</em> priced out.</h3>
+          <p class="worked-example-quote">
+            David needed a real portfolio site — photo galleries by build, live Google reviews, a proper case study per project. He picked the Signature tier and layered in the features that mattered.
+          </p>
+          <div class="worked-example-stat">
+            Result inside 30 days:
+            <strong>4 new leads</strong>
+            from the contact form alone.
+          </div>
+        </div>
+        <div class="worked-example-receipt">
+          <div class="worked-example-receipt-label">// Invoice · Aries Outdoor Living</div>
+          <ul class="receipt-list">
+            <li class="is-base"><span>Signature tier (base build)</span><span class="re-price">$2,500</span></li>
+            <li><span>Google Reviews integration</span><span class="re-price">+$400</span></li>
+            <li><span>Photo gallery + lightbox</span><span class="re-price">+$400</span></li>
+            <li><span>Blog / CMS setup (case studies)</span><span class="re-price">+$600</span></li>
+            <li><span>Custom animations pass</span><span class="re-price">+$600</span></li>
+            <li class="is-total"><span>Build total</span><span class="re-price">$4,500</span></li>
+            <li class="is-monthly"><span>Ongoing · hosting only</span><span class="re-price">$50/mo</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- PRICING FAQ -->
+      <div class="pricing-faq">
+        <div class="pricing-faq-header">
+          <div class="pricing-faq-eyebrow">// The straight answers</div>
+          <h3 class="pricing-faq-title">Everything people <em>actually ask</em> about the price.</h3>
+        </div>
+
+        <div class="pricing-faq-list">
+
+          <details class="pricing-faq-item">
+            <summary>Why are the prices posted publicly?</summary>
+            <div class="pricing-faq-answer">
+              Because you shouldn't have to book a call to find out if you can afford someone. Every tier is a real base price with real add-ons. When you send a brief, you already know the ballpark — the call is about scope, not sticker shock.
+            </div>
+          </details>
+
+          <details class="pricing-faq-item">
+            <summary>Do I actually own the code?</summary>
+            <div class="pricing-faq-answer">
+              Yes — full ownership transfers at final payment. You get the repo, the domain access, the deploy pipeline, and every credential. If we part ways down the road, another developer can pick up right where I left off. That's non-negotiable.
+            </div>
+          </details>
+
+          <details class="pricing-faq-item">
+            <summary>What if I need something that isn't in the add-on list?</summary>
+            <div class="pricing-faq-answer">
+              Ask. The add-on list covers 90% of what site owners need — anything outside gets a clean line-item quote on the same call. If it's small (under an hour), it usually gets folded into the build for free. If it's big, you'll see the number before I write a line of code.
+            </div>
+          </details>
+
+          <details class="pricing-faq-item">
+            <summary>Can I upgrade my care plan later?</summary>
+            <div class="pricing-faq-answer">
+              Anytime, both directions. Start on Hosting Only at $50/mo, upgrade to +4 hrs the month you launch a marketing push, drop back down when you're done. Care plans are month-to-month — no annual lock-in.
+            </div>
+          </details>
+
+          <details class="pricing-faq-item">
+            <summary>What if my site breaks?</summary>
+            <div class="pricing-faq-answer">
+              <strong>If it broke because of code I wrote, the fix is free — full stop.</strong> Same-day response on Signature and Flagship tiers, next-business-day on Basic. If it broke because a third party (your DNS host, a plugin, an API you're using) changed something, the fix comes out of your care hours or gets quoted separately.
+            </div>
+          </details>
+
+          <details class="pricing-faq-item">
+            <summary>Do you require a contract?</summary>
+            <div class="pricing-faq-answer">
+              For builds under $1,500, a one-page email quote is enough. Everything above gets a proper SOW — scope, deliverables, timeline, payment schedule, revision cap. 50% deposit to start, 50% at launch (three-way split for Flagship). It protects both of us.
+            </div>
+          </details>
+
+          <details class="pricing-faq-item">
+            <summary>Can I pay in installments?</summary>
+            <div class="pricing-faq-answer">
+              Payment is milestone-based, not time-based: 50% deposit, 50% at launch on Basic and Signature. Flagship splits into three: 40% deposit, 20% at design approval, 40% at launch. That way you're never paying for work that hasn't been done yet.
+            </div>
+          </details>
+
+          <details class="pricing-faq-item">
+            <summary>What's the deal with the rush fee?</summary>
+            <div class="pricing-faq-answer">
+              +35% if you need the site in half the normal timeline. That's what covers the nights and weekends I'd be putting in to hit it. Basic delivered in 5 days instead of 10, Signature in 2 weeks instead of 4. Not always possible on Flagship — some builds just take the time they take.
+            </div>
+          </details>
+
+        </div>
       </div>
 
       <p class="pricing-note">
@@ -3689,6 +4866,140 @@
           resultEl.classList.remove('active');
           render();
         });
+        render();
+      })();
+
+      // ---------- Live quote builder — pick tier, toggle add-ons, watch total tick up ----------
+      (function quoteBuilderInit() {
+        const root = document.getElementById('quoteBuilder');
+        if (!root) return;
+
+        const tierEls  = root.querySelectorAll('.qb-tier-option');
+        const addonEls = root.querySelectorAll('.qb-addon');
+        const careEls  = root.querySelectorAll('.qb-care-option');
+
+        const outTier       = document.getElementById('qbOutTier');
+        const outTierAmt    = document.getElementById('qbOutTierAmt');
+        const outAddons     = document.getElementById('qbOutAddons');
+        const outAddonsAmt  = document.getElementById('qbOutAddonsAmt');
+        const outTotal      = document.getElementById('qbOutTotal');
+        const outMonthlyN   = document.getElementById('qbOutMonthlyName');
+        const outMonthlyAmt = document.getElementById('qbOutMonthlyAmt');
+        const sendBtn       = document.getElementById('qbSend');
+
+        const fmt = (n) => '$' + Math.round(n).toLocaleString('en-US');
+
+        function activeTier() {
+          const el = Array.from(tierEls).find(e => e.dataset.active === 'true') || tierEls[0];
+          return { name: el.querySelector('.qb-tier-name').firstChild.textContent.trim(), price: parseInt(el.dataset.price, 10) };
+        }
+        function activeCare() {
+          const el = Array.from(careEls).find(e => e.dataset.active === 'true') || careEls[0];
+          return { name: el.dataset.name, price: parseInt(el.dataset.price, 10) };
+        }
+        function activeAddons() {
+          const list = [];
+          addonEls.forEach(el => {
+            if (el.dataset.active === 'true') {
+              list.push({ label: el.dataset.label, price: parseInt(el.dataset.price, 10), percent: parseInt(el.dataset.percent || '0', 10) });
+            }
+          });
+          return list;
+        }
+
+        function render() {
+          const tier = activeTier();
+          const care = activeCare();
+          const addons = activeAddons();
+
+          let addonSubtotal = 0;
+          let percentSum = 0;
+          addons.forEach(a => {
+            addonSubtotal += a.price;
+            percentSum += a.percent;
+          });
+          const rushSurcharge = Math.round((tier.price + addonSubtotal) * percentSum / 100);
+          const buildTotal = tier.price + addonSubtotal + rushSurcharge;
+
+          outTier.textContent = tier.name + ' base';
+          outTierAmt.textContent = fmt(tier.price);
+
+          if (addons.length === 0) {
+            outAddons.textContent = 'No add-ons';
+            outAddonsAmt.textContent = '$0';
+          } else {
+            outAddons.textContent = addons.length + ' add-on' + (addons.length === 1 ? '' : 's') +
+              (percentSum > 0 ? ' (incl. rush)' : '');
+            outAddonsAmt.textContent = '+' + fmt(addonSubtotal + rushSurcharge);
+          }
+
+          outTotal.textContent = fmt(buildTotal);
+          outMonthlyN.textContent = care.name;
+          outMonthlyAmt.textContent = fmt(care.price) + '/mo';
+        }
+
+        tierEls.forEach(el => el.addEventListener('click', () => {
+          tierEls.forEach(e => e.dataset.active = 'false');
+          el.dataset.active = 'true';
+          render();
+        }));
+        addonEls.forEach(el => el.addEventListener('click', () => {
+          el.dataset.active = el.dataset.active === 'true' ? 'false' : 'true';
+          render();
+        }));
+        careEls.forEach(el => el.addEventListener('click', () => {
+          careEls.forEach(e => e.dataset.active = 'false');
+          el.dataset.active = 'true';
+          render();
+        }));
+
+        sendBtn.addEventListener('click', () => {
+          const tier = activeTier();
+          const care = activeCare();
+          const addons = activeAddons();
+          let addonSubtotal = 0;
+          let percentSum = 0;
+          const lines = [];
+          addons.forEach(a => {
+            addonSubtotal += a.price;
+            percentSum += a.percent;
+            if (a.percent > 0) {
+              lines.push('  • ' + a.label + ' (+' + a.percent + '%)');
+            } else {
+              lines.push('  • ' + a.label + ' (+$' + a.price.toLocaleString() + ')');
+            }
+          });
+          const rushSurcharge = Math.round((tier.price + addonSubtotal) * percentSum / 100);
+          const buildTotal = tier.price + addonSubtotal + rushSurcharge;
+
+          const summary = [
+            'WEBSITE QUOTE — built via the live quote builder',
+            '=' .repeat(50),
+            '',
+            'Tier:        ' + tier.name + '  ($' + tier.price.toLocaleString() + ')',
+            '',
+            addons.length === 0 ? 'Add-ons:     none' : 'Add-ons:',
+            ...(addons.length === 0 ? [] : lines),
+            '',
+            percentSum > 0 ? 'Rush surcharge: +$' + rushSurcharge.toLocaleString() + ' (' + percentSum + '%)' : null,
+            '',
+            'BUILD TOTAL: $' + buildTotal.toLocaleString(),
+            'Monthly:     ' + care.name + ' — $' + care.price + '/mo',
+            '',
+            '=' .repeat(50),
+            'A little about the project:',
+            ''
+          ].filter(l => l !== null).join('\n');
+
+          const ta = document.querySelector('form textarea[name="message"]');
+          if (ta) {
+            ta.value = summary;
+            ta.dispatchEvent(new Event('input'));
+          }
+          const contact = document.getElementById('contact');
+          if (contact) contact.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+
         render();
       })();
 
