@@ -2226,6 +2226,125 @@
     .bp-fine b { color: var(--clay-light); font-weight: 500; }
 
     /* ===========================================================
+       BRIGHT-COLOR HEALTH WARNING — first-visit popup
+       =========================================================== */
+    .bright-warning {
+      position: fixed; inset: 0; z-index: 9999;
+      display: none; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .bright-warning.is-open { display: flex; }
+    .bright-warning-scrim {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.88);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+    }
+    .bright-warning-panel {
+      position: relative;
+      max-width: 480px; width: 100%;
+      background: var(--ink);
+      border: 1.5px solid var(--clay-light);
+      border-radius: 4px;
+      padding: 40px 36px;
+      color: var(--bone);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(252,238,10,0.12);
+      animation: bwFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes bwFade {
+      from { opacity: 0; transform: translateY(16px) scale(0.98); }
+      to   { opacity: 1; transform: none; }
+    }
+    .bright-warning-eyebrow {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 11px; letter-spacing: 0.22em;
+      color: var(--clay-light); margin-bottom: 14px;
+    }
+    .bright-warning-title {
+      font-family: 'Fraunces', serif;
+      font-size: 32px; font-weight: 500;
+      letter-spacing: -0.02em; line-height: 1.05;
+      color: var(--cream); margin: 0 0 16px;
+    }
+    .bright-warning-body {
+      color: rgba(250,247,242,0.78);
+      font-size: 15px; line-height: 1.65;
+      margin: 0 0 26px;
+    }
+    .bright-warning-actions {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    @media (min-width: 480px) {
+      .bright-warning-actions { flex-direction: row; }
+    }
+    .bright-warning-btn {
+      flex: 1;
+      padding: 14px 20px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700; font-size: 12px;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      border: 1.5px solid; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .bright-warning-btn-dim {
+      background: transparent; color: var(--bone);
+      border-color: rgba(250,247,242,0.35);
+    }
+    .bright-warning-btn-dim:hover {
+      background: rgba(250,247,242,0.08); border-color: var(--bone);
+    }
+    .bright-warning-btn-on {
+      background: var(--clay-light); color: var(--ink); border-color: var(--clay-light);
+    }
+    .bright-warning-btn-on:hover {
+      background: var(--cream); border-color: var(--cream);
+    }
+    .bright-warning-fine {
+      margin-top: 20px; padding-top: 18px;
+      border-top: 1px dashed rgba(250,247,242,0.15);
+      font-size: 11px; color: rgba(250,247,242,0.4);
+      line-height: 1.6;
+    }
+    .bright-warning-toggle {
+      position: fixed; bottom: 18px; left: 18px;
+      z-index: 40;
+      background: rgba(9,8,7,0.85);
+      color: var(--bone);
+      border: 1px solid rgba(250,247,242,0.15);
+      padding: 8px 12px;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      cursor: pointer; transition: all 0.2s;
+      backdrop-filter: blur(6px);
+    }
+    .bright-warning-toggle:hover {
+      border-color: var(--clay-light); color: var(--clay-light);
+    }
+
+    /* ===========================================================
+       DIM MODE — muted colors, no cursor FX, no animation intensity.
+       Applied to <body> when user chose "Off" in the health warning.
+       =========================================================== */
+    body.dim-mode {
+      --cream:      #d4c832;  /* muted from neon #FCEE0A */
+      --clay:       #b95563;  /* muted from hot magenta #FF003C */
+      --clay-light: #d4a350;  /* muted amber */
+      cursor: auto !important;
+    }
+    body.dim-mode * { cursor: inherit !important; }
+    body.dim-mode #fx-canvas,
+    body.dim-mode .scanlines,
+    body.dim-mode .cur-ring,
+    body.dim-mode .cur-dot { display: none !important; }
+    body.dim-mode *,
+    body.dim-mode *::before,
+    body.dim-mode *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 100ms !important;
+    }
+
+    /* ===========================================================
        BUILD YOUR OWN — tabbed pricing consolidation
        =========================================================== */
     .byo-shell { margin-top: 32px; }
@@ -3782,9 +3901,40 @@
     .sr-d3 { transition-delay: 240ms; }
     .sr-d4 { transition-delay: 320ms; }
   </style>
+  <!-- Bright-warning: apply saved dim-mode BEFORE body paints (avoids color flash). -->
+  <script>
+    try {
+      if (localStorage.getItem('m3-mode') === 'dim') {
+        document.documentElement.classList.add('_pending-dim');
+      }
+    } catch (_) {}
+  </script>
+  <style>html._pending-dim { visibility: hidden; }</style>
 </head>
 
 <body>
+
+  <!-- HEALTH WARNING — first-visit brightness disclosure. -->
+  <div id="brightWarning" class="bright-warning" role="dialog" aria-modal="true" aria-labelledby="brightWarningTitle">
+    <div class="bright-warning-scrim"></div>
+    <div class="bright-warning-panel">
+      <div class="bright-warning-eyebrow">// Heads up</div>
+      <h2 id="brightWarningTitle" class="bright-warning-title">Bright colors ahead.</h2>
+      <p class="bright-warning-body">
+        This site uses high-contrast neon accents and light motion. If you're prone to migraines, photosensitivity, or other health conditions triggered by bright visuals, dim it before continuing.
+      </p>
+      <div class="bright-warning-actions">
+        <button type="button" class="bright-warning-btn bright-warning-btn-dim" data-choice="dim">Off — dim it</button>
+        <button type="button" class="bright-warning-btn bright-warning-btn-on" data-choice="on">Keep it on — I know it's bright</button>
+      </div>
+      <p class="bright-warning-fine">
+        Your choice is saved for this browser. You can flip it from the bottom-left toggle anytime.
+      </p>
+    </div>
+  </div>
+
+  <!-- Bottom-left toggle so a visitor can change their mind later. -->
+  <button type="button" id="brightWarningToggle" class="bright-warning-toggle" hidden aria-label="Toggle bright colors">◐ Bright mode</button>
 
   <!-- FX layers — animated background, scanlines, custom cursor. Pointer-none, harmless on Railway. -->
   <canvas id="fx-canvas" aria-hidden="true"></canvas>
@@ -5696,6 +5846,57 @@
         });
 
         render();
+      })();
+
+      // ---------- Bright-color health warning + dim-mode toggle ----------
+      (function brightWarningInit() {
+        const KEY = 'm3-mode';
+        const modal  = document.getElementById('brightWarning');
+        const toggle = document.getElementById('brightWarningToggle');
+        if (!modal || !toggle) return;
+
+        let saved;
+        try { saved = localStorage.getItem(KEY); } catch (_) { saved = null; }
+
+        const applyMode = (mode) => {
+          if (mode === 'dim') {
+            document.body.classList.add('dim-mode');
+            toggle.textContent = '◑ Turn bright on';
+          } else {
+            document.body.classList.remove('dim-mode');
+            toggle.textContent = '◐ Dim bright colors';
+          }
+          toggle.hidden = false;
+          // The pre-paint guard from <head> is now safe to release.
+          document.documentElement.classList.remove('_pending-dim');
+        };
+
+        if (saved === 'dim' || saved === 'on') {
+          applyMode(saved);
+        } else {
+          modal.classList.add('is-open');
+          document.body.style.overflow = 'hidden';
+        }
+
+        modal.addEventListener('click', (e) => {
+          const btn = e.target.closest('[data-choice]');
+          if (!btn) return;
+          const choice = btn.dataset.choice;
+          try { localStorage.setItem(KEY, choice); } catch (_) {}
+          applyMode(choice);
+          modal.classList.remove('is-open');
+          document.body.style.overflow = '';
+        });
+
+        toggle.addEventListener('click', () => {
+          const next = document.body.classList.contains('dim-mode') ? 'on' : 'dim';
+          try { localStorage.setItem(KEY, next); } catch (_) {}
+          applyMode(next);
+        });
+
+        // Failsafe: if JS somehow hasn't run within 250ms, un-hide the pre-paint guard
+        // so users on ancient browsers still see the page.
+        setTimeout(() => document.documentElement.classList.remove('_pending-dim'), 250);
       })();
 
       // ---------- Build Your Own — tab switching ----------
