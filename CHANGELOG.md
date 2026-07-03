@@ -1,36 +1,25 @@
 # Changelog
 
-All notable changes to this project are documented in this file.
+All notable changes to this project.
 
-Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
-Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+Adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-### Added
-- Things that didn't exist before
+## [0.1.0] - 2026-07-03
 
-### Changed
-- Behavior that's different but compatible
-
-### Deprecated
-- Things slated for removal — warn now
-
-### Removed
-- Things gone — was deprecated in a prior version
-
-### Fixed
-- Bug fixes
-
-### Security
-- Vulnerabilities patched
-
----
-
-## [1.0.0] — YYYY-MM-DD
+Initial documented release. Prior work committed since 2026-04-22 is being
+captured retroactively; see `git log` for the full history.
 
 ### Added
-- Initial release
-
-[Unreleased]: https://github.com/MichaelMartinez/CompanySite/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/MichaelMartinez/CompanySite/releases/tag/v1.0.0
+- README: replace hardcoded 'C:\Users\Michael\Documents\GitHub\' path with relative reference
+- feat: first-visit brightness health warning + dim-mode toggle
+- feat: consolidate pricing into tabbed Build-Your-Own section
+- price: correct Basic tier scope + real Aries V1 receipt + entry-level rates
+- feat: custom hours care option in quote builder
+- price: Basic website tier starting price 800 to 1000
+- work: remove mock products, show only live work with inline pricing
+- Replace 'jane@company.com' placeholder with generic 'you@example.com'
+- work: universal intent-CTA prefill — every tier CTA feeds intake with context
+- work: bot playbook — niche picker + pipeline flow + real bot pricing
