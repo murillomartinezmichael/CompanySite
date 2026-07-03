@@ -2226,6 +2226,153 @@
     .bp-fine b { color: var(--clay-light); font-weight: 500; }
 
     /* ===========================================================
+       BUILD YOUR OWN — tabbed pricing consolidation
+       =========================================================== */
+    .byo-shell { margin-top: 32px; }
+    .byo-nav-wrap {
+      position: sticky; top: 0; background: var(--cream); z-index: 5;
+      padding: 16px 0 14px; margin-bottom: 20px;
+      border-bottom: 1px solid rgba(10,10,15,0.08);
+    }
+    .byo-nav-label {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 11px; letter-spacing: 0.22em;
+      color: var(--clay-light); margin-bottom: 12px;
+    }
+    .byo-nav { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid rgba(10,10,15,0.1); }
+    .byo-tab {
+      background: transparent; border: none;
+      padding: 12px 22px;
+      font-family: 'Inter', sans-serif; font-weight: 500; font-size: 13px;
+      letter-spacing: 0.06em; color: rgba(10,10,15,0.45);
+      cursor: pointer; position: relative; transition: color 0.2s;
+      border-bottom: 2px solid transparent; margin-bottom: -1px;
+    }
+    .byo-tab:hover { color: var(--ink); }
+    .byo-tab[data-active="true"] {
+      color: var(--ink); font-weight: 700; border-bottom-color: var(--clay);
+    }
+    .byo-panel { display: none; animation: byoFade 0.3s ease-out; }
+    .byo-panel[data-active="true"] { display: block; }
+    @keyframes byoFade {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .byo-simple {
+      margin-top: 24px;
+      display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px;
+      background: var(--cream);
+      border: 1px solid rgba(10,10,15,0.08); border-radius: 4px;
+      padding: 44px; position: relative;
+    }
+    @media (max-width: 900px) {
+      .byo-simple { grid-template-columns: 1fr; padding: 28px; gap: 32px; }
+    }
+    .byo-simple-eyebrow {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 11px; letter-spacing: 0.18em;
+      color: var(--clay-light); margin-bottom: 14px;
+    }
+    .byo-simple-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(28px, 3.4vw, 42px); font-weight: 500;
+      letter-spacing: -0.03em; line-height: 1.02;
+      color: var(--ink); margin: 0 0 18px;
+    }
+    .byo-simple-title em { color: var(--clay-light); font-style: italic; font-weight: 400; }
+    .byo-simple-lede {
+      color: rgba(10,10,15,0.6); font-size: 15px; line-height: 1.65; margin-bottom: 22px;
+    }
+    .byo-simple-list { list-style: none; padding: 0; margin: 0; }
+    .byo-simple-list li {
+      padding: 10px 0 10px 20px;
+      border-bottom: 1px solid rgba(10,10,15,0.05);
+      font-size: 13px; color: rgba(10,10,15,0.75); line-height: 1.55;
+      position: relative;
+    }
+    .byo-simple-list li:last-child { border-bottom: none; }
+    .byo-simple-list li::before {
+      content: ''; position: absolute; left: 0; top: 17px;
+      width: 8px; height: 2px; background: var(--clay);
+    }
+    .byo-simple-list li b { color: var(--ink); font-weight: 600; }
+
+    .byo-simple-right {
+      background: var(--ink); color: var(--cream);
+      padding: 32px 28px; border-radius: 4px;
+      position: relative; overflow: hidden;
+    }
+    .byo-simple-right::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        repeating-linear-gradient(0deg,  rgba(252,238,10,0.035) 0 1px, transparent 1px 40px),
+        repeating-linear-gradient(90deg, rgba(252,238,10,0.035) 0 1px, transparent 1px 40px);
+      pointer-events: none;
+    }
+    .byo-tier-label {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 11px; letter-spacing: 0.22em;
+      color: var(--clay-light); margin-bottom: 20px; position: relative;
+    }
+    .byo-tier-list { display: flex; flex-direction: column; gap: 12px; position: relative; }
+    .byo-tier {
+      padding: 20px; border: 1.5px solid rgba(252,238,10,0.15);
+      background: rgba(9,8,7,0.5); transition: all 0.2s;
+    }
+    .byo-tier:hover { border-color: var(--clay-light); transform: translateY(-1px); }
+    .byo-tier.is-featured {
+      border-color: var(--clay-light);
+      background: rgba(252,238,10,0.04);
+      box-shadow: 0 0 30px rgba(252,238,10,0.06);
+    }
+    .byo-tier-badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 9px; letter-spacing: 0.22em;
+      color: var(--clay-light); background: transparent;
+      border: 1px solid rgba(252,238,10,0.3);
+      padding: 3px 8px; margin-bottom: 12px;
+      font-weight: 700; text-transform: uppercase;
+    }
+    .byo-tier.is-featured .byo-tier-badge {
+      background: var(--clay-light); border-color: var(--clay-light); color: var(--ink);
+    }
+    .byo-tier-name {
+      font-family: 'Fraunces', serif; font-size: 20px; font-weight: 500;
+      letter-spacing: -0.01em; color: var(--cream); margin-bottom: 4px;
+    }
+    .byo-tier-price {
+      font-family: 'Fraunces', serif; font-size: 28px; color: var(--clay-light);
+      font-weight: 500; letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
+      line-height: 1; margin-bottom: 8px;
+    }
+    .byo-tier-sub {
+      font-size: 12px; color: rgba(250,247,242,0.6); line-height: 1.5; margin-bottom: 16px;
+    }
+    .byo-tier-cta {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 14px; background: transparent; color: var(--clay-light);
+      border: 1.5px solid var(--clay-light);
+      font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none;
+      transition: all 0.2s;
+    }
+    .byo-tier.is-featured .byo-tier-cta { background: var(--clay-light); color: var(--ink); }
+    .byo-tier-cta:hover { background: var(--cream); color: var(--ink); border-color: var(--cream); }
+    .byo-simple-note {
+      margin-top: 22px; padding-top: 18px;
+      border-top: 1px dashed rgba(250,247,242,0.15);
+      font-size: 12px; color: rgba(250,247,242,0.5); line-height: 1.65; position: relative;
+    }
+    .byo-panel > .site-extras,
+    .byo-panel > .quote-builder,
+    .byo-panel > .bot-playbook,
+    .byo-panel > .worked-example { margin-top: 0; }
+    .byo-panel > .site-extras + .quote-builder,
+    .byo-panel > .quote-builder + .worked-example { margin-top: 40px; }
+
+    /* ===========================================================
        QUOTE BUILDER — interactive live-pricing widget
        =========================================================== */
     .quote-builder {
@@ -4010,139 +4157,21 @@
         </div>
       </div>
 
-      <div class="pricing-grid">
-
-        <!-- Websites — three tiers, real prices, base + add-ons + care -->
-        <div class="pricing-card">
-          <div class="pricing-category">Websites</div>
-          <div class="pricing-tiers">
-
-            <div class="pricing-tier">
-              <div class="tier-row">
-                <div class="tier-name">Basic</div>
-                <div class="tier-price"><small>from</small><em>$1,000</em></div>
-              </div>
-              <p class="tier-desc">3 sections, custom design (not a template), mobile-responsive, contact form, hosted &amp; launched. ~10-day turnaround. Big7 Construction lives here. Extra sections: +$200 each.</p>
-              <a href="#contact" class="tier-cta" data-intent="tier:website:basic">Start this build →</a>
-              <a href="#product-big7" class="tier-cta-see">or see it live: Big7 Construction ↓</a>
-            </div>
-
-            <div class="pricing-tier">
-              <div class="tier-badge">Most requested</div>
-              <div class="tier-row">
-                <div class="tier-name">Signature</div>
-                <div class="tier-price"><small>from</small><em>$2,500</em></div>
-              </div>
-              <p class="tier-desc">Up to 10 pages, editorial design system, content collection / CMS, one live integration, forms with automation, full SEO wired. 3–4 week turnaround.</p>
-              <a href="#contact" class="tier-cta" data-intent="tier:website:signature">Start this build →</a>
-            </div>
-
-            <div class="pricing-tier">
-              <div class="tier-row">
-                <div class="tier-name">Flagship</div>
-                <div class="tier-price"><small>from</small><em>$6,500</em></div>
-              </div>
-              <p class="tier-desc">15+ pages, interactive features (scopers, calculators, embeds), custom animations, 2–3 integrations, analytics, launch coaching. 6–8 week turnaround. This site (M³) lives here.</p>
-              <a href="#contact" class="tier-cta" data-intent="tier:website:flagship">Start this build →</a>
-              <a href="#product-m3" class="tier-cta-see">or see it live: M³ (this site) ↓</a>
-            </div>
-
+      <div class="byo-shell">
+        <div class="byo-nav-wrap">
+          <div class="byo-nav-label">// Build your own</div>
+          <div class="byo-nav" role="tablist" aria-label="Package categories">
+            <button class="byo-tab" data-tab="websites" data-active="true" role="tab" aria-selected="true">Websites</button>
+            <button class="byo-tab" data-tab="bots" role="tab" aria-selected="false">Bots</button>
+            <button class="byo-tab" data-tab="scripts" role="tab" aria-selected="false">Scripts</button>
+            <button class="byo-tab" data-tab="apps" role="tab" aria-selected="false">Apps</button>
+            <button class="byo-tab" data-tab="plugins" role="tab" aria-selected="false">Plugins</button>
+            <button class="byo-tab" data-tab="portals" role="tab" aria-selected="false">Portals</button>
           </div>
         </div>
 
-        <!-- Automation -->
-        <div class="pricing-card">
-          <div class="pricing-category">Automation</div>
-          <div class="pricing-tiers">
-
-            <div class="pricing-tier">
-              <div class="tier-row">
-                <div class="tier-name">Script / Integration</div>
-              </div>
-              <p class="tier-desc">Data syncs, reporting pipelines, file processing, workflow automation. Scoped and quoted after a discovery call.</p>
-              <a href="#contact" class="tier-cta" data-intent="tier:auto:script">Start this script →</a>
-            </div>
-
-            <div class="pricing-tier">
-              <div class="tier-row">
-                <div class="tier-name">Ongoing Maintenance</div>
-              </div>
-              <p class="tier-desc">Updates, monitoring, and fixes for existing automation. You focus on the business — I keep the systems running.</p>
-              <a href="#contact" class="tier-cta" data-intent="tier:auto:maint">Get on the calendar →</a>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- Content Bots — pick your niche, set it forever -->
-        <div class="pricing-card">
-          <div class="pricing-category">Content Bots</div>
-          <div class="pricing-tiers">
-
-            <div class="pricing-tier">
-              <div class="tier-badge">Own it outright</div>
-              <div class="tier-row">
-                <div class="tier-name">DIY Setup</div>
-                <div class="tier-price"><small>from</small><em>$1,500</em></div>
-              </div>
-              <p class="tier-desc">Bot built, configured, deployed to your accounts, handed off. Full source on your GitHub. You run it forever — no monthly fee.</p>
-              <a href="#contact" class="tier-cta" data-intent="tier:bot:diy">Launch this bot →</a>
-              <a href="#bot-playbook" class="tier-cta-see">or see the playbook ↓</a>
-            </div>
-
-            <div class="pricing-tier">
-              <div class="tier-badge">Most requested</div>
-              <div class="tier-row">
-                <div class="tier-name">Managed Bot</div>
-                <div class="tier-price"><small>$800 + </small><em>$400/mo</em></div>
-              </div>
-              <p class="tier-desc">Set up on my infra, I keep it posting, monitor uptime, send monthly performance emails. Free niche tweaks up to 2/quarter. Cancel anytime.</p>
-              <a href="#contact" class="tier-cta" data-intent="tier:bot:managed">Launch this bot →</a>
-              <a href="#bot-playbook" class="tier-cta-see">or see the playbook ↓</a>
-            </div>
-
-            <div class="pricing-tier">
-              <div class="tier-badge">Full send</div>
-              <div class="tier-row">
-                <div class="tier-name">Full Channel</div>
-                <div class="tier-price"><small>$2,500 + </small><em>$800/mo</em></div>
-              </div>
-              <p class="tier-desc">Multi-platform posting (YouTube + TikTok + Reels + X), weekly perf reports, thumbnail templates, monthly strategy call. The whole operation on rails.</p>
-              <a href="#contact" class="tier-cta" data-intent="tier:bot:full">Launch this bot →</a>
-              <a href="#bot-playbook" class="tier-cta-see">or see the playbook ↓</a>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- Portals -->
-        <div class="pricing-card">
-          <div class="pricing-category">Portals &amp; Apps</div>
-          <div class="pricing-tiers">
-
-            <div class="pricing-tier">
-              <div class="tier-row">
-                <div class="tier-name">Internal Tool</div>
-              </div>
-              <p class="tier-desc">Staff portals, admin dashboards, approval workflows. Built around how your business actually operates.</p>
-              <a href="#contact" class="tier-cta" data-intent="tier:portal:internal">Scope my tool →</a>
-            </div>
-
-            <div class="pricing-tier">
-              <div class="tier-row">
-                <div class="tier-name">Client-Facing App</div>
-              </div>
-              <p class="tier-desc">Customer dashboards, client portals, reporting tools. Auth, data layer, full UI — scoped to your use case.</p>
-              <a href="#contact" class="tier-cta" data-intent="tier:portal:client">Scope my app →</a>
-            </div>
-
-          </div>
-        </div>
-
-      </div>
-
-      <!-- WEBSITE ADD-ONS + MONTHLY CARE — expands what the base site tiers get you -->
-      <div class="site-extras">
+        <div class="byo-panel" data-tab="websites" data-active="true" role="tabpanel">
+<div class="site-extras">
         <div class="site-extras-head">
           <div class="section-label">Website add-ons &amp; monthly care</div>
           <h3 class="site-extras-title">Base gets you the site. <em>Everything else stacks on top.</em></h3>
@@ -4226,8 +4255,212 @@
         </div>
       </div>
 
-      <!-- ============ BOT PLAYBOOK — the sick "pick your niche" moment ============ -->
-      <div class="bot-playbook" id="bot-playbook">
+<div class="quote-builder" id="quoteBuilder">
+        <div class="quote-builder-header">
+          <div class="quote-builder-eyebrow">// Build the quote yourself</div>
+          <h3 class="quote-builder-title">Your build, <em>priced live.</em></h3>
+          <p class="quote-builder-lede">
+            Pick a tier, tap the add-ons you actually need, choose a care plan. The total on the right updates as you go — then send yourself the exact quote in one click.
+          </p>
+        </div>
+
+        <div class="quote-builder-body">
+
+          <div>
+            <!-- STEP 1 — TIER -->
+            <div class="qb-section">
+              <div class="qb-section-label">01 · Pick your tier <span>Base build price</span></div>
+              <div class="qb-tier-list">
+                <button type="button" class="qb-tier-option" data-tier="basic" data-price="1000">
+                  <span class="qb-tier-name">Basic<span class="qb-tier-name-sub">3 sections · custom design · ~10-day turnaround</span></span>
+                  <span class="qb-tier-price">$1,000</span>
+                </button>
+                <button type="button" class="qb-tier-option" data-tier="signature" data-price="2500" data-active="true">
+                  <span class="qb-tier-name">Signature<span class="qb-tier-name-sub">Up to 10 pages · editorial design system · CMS · 3–4 weeks</span></span>
+                  <span class="qb-tier-price">$2,500</span>
+                </button>
+                <button type="button" class="qb-tier-option" data-tier="flagship" data-price="6500">
+                  <span class="qb-tier-name">Flagship<span class="qb-tier-name-sub">15+ pages · interactive · animations · 6–8 weeks</span></span>
+                  <span class="qb-tier-price">$6,500</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- STEP 2 — ADD-ONS -->
+            <div class="qb-section">
+              <div class="qb-section-label">02 · Add what you need <span>Tap to toggle</span></div>
+              <div class="qb-addon-list">
+                <button type="button" class="qb-addon" data-addon="extra-page" data-price="200" data-label="Extra page (Basic/Signature)">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Extra page (Basic/Signature)</span></span>
+                  <span class="qb-addon-price">+$200</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="logo" data-price="400" data-label="Custom logo (design or enhance existing)">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Custom logo (design or enhance)</span></span>
+                  <span class="qb-addon-price">+$400</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="copywriting" data-price="150" data-label="Copywriting (per page)">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Copywriting (per page)</span></span>
+                  <span class="qb-addon-price">+$150</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="photo-curation" data-price="250" data-label="Photo curation & selection (we pick your strongest shots)">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Photo curation &amp; selection</span></span>
+                  <span class="qb-addon-price">+$250</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="google-reviews" data-price="400" data-label="Google integration (Reviews + Maps + Places)">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Google (Reviews + Maps + Places)</span></span>
+                  <span class="qb-addon-price">+$400</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="blog-cms" data-price="600" data-label="Blog / CMS setup">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Blog / CMS setup</span></span>
+                  <span class="qb-addon-price">+$600</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="form-automation" data-price="200" data-label="Form → email automation">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Form → email automation</span></span>
+                  <span class="qb-addon-price">+$200</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="crm-sync" data-price="500" data-label="Form → CRM sync">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Form → CRM sync</span></span>
+                  <span class="qb-addon-price">+$500</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="booking" data-price="150" data-label="Booking / calendar embed">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Booking / calendar embed</span></span>
+                  <span class="qb-addon-price">+$150</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="gallery" data-price="400" data-label="Photo gallery + lightbox">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Photo gallery + lightbox</span></span>
+                  <span class="qb-addon-price">+$400</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="animations" data-price="500" data-label="Custom animations pass">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Custom animations pass</span></span>
+                  <span class="qb-addon-price">+$500</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="newsletter" data-price="200" data-label="Email signup / newsletter">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Email signup / newsletter</span></span>
+                  <span class="qb-addon-price">+$200</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="stripe-one" data-price="800" data-label="Stripe checkout (one product)">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Stripe checkout (one product)</span></span>
+                  <span class="qb-addon-price">+$800</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="stripe-sub" data-price="1500" data-label="Stripe subscriptions">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Stripe subscriptions</span></span>
+                  <span class="qb-addon-price">+$1,500</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="ai-chat" data-price="1200" data-label="AI chat widget (SiteGuide-style)">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">AI chat widget (SiteGuide)</span></span>
+                  <span class="qb-addon-price">+$1,200</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="scoper" data-price="1500" data-label="Interactive quote calculator">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Interactive quote calculator</span></span>
+                  <span class="qb-addon-price">+$1,500</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="ecommerce" data-price="2500" data-label="E-commerce (10–30 products)">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">E-commerce (10–30 products)</span></span>
+                  <span class="qb-addon-price">+$2,500</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="dns" data-price="150" data-label="DNS / host migration">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">DNS / host migration</span></span>
+                  <span class="qb-addon-price">+$150</span>
+                </button>
+                <button type="button" class="qb-addon" data-addon="rush" data-price="0" data-percent="35" data-label="Rush delivery (½ timeline)">
+                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Rush delivery (½ timeline)</span></span>
+                  <span class="qb-addon-price">+35%</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- STEP 3 — CARE -->
+            <div class="qb-section">
+              <div class="qb-section-label">03 · Monthly care <span>Ongoing after launch</span></div>
+              <div class="qb-care-list">
+                <button type="button" class="qb-care-option" data-care="hosting" data-price="50" data-name="Hosting only" data-active="true">
+                  <span class="qb-care-name">Hosting only<span class="qb-care-sub">SSL, backups, uptime, DNS, deploys</span></span>
+                  <span class="qb-care-price">$50/mo</span>
+                </button>
+                <button type="button" class="qb-care-option" data-care="plus4" data-price="150" data-name="Hosting + 4 hrs care">
+                  <span class="qb-care-name">+ 4 hrs care<span class="qb-care-sub">Above + 4 hrs of edits &amp; fixes per month</span></span>
+                  <span class="qb-care-price">$150/mo</span>
+                </button>
+                <button type="button" class="qb-care-option" data-care="plus8" data-price="250" data-name="Hosting + 8 hrs care">
+                  <span class="qb-care-name">+ 8 hrs care<span class="qb-care-sub">Above + 8 hrs — active content sites</span></span>
+                  <span class="qb-care-price">$250/mo</span>
+                </button>
+                <div class="qb-care-option qb-care-custom" data-care="custom" data-rate="25" role="button" tabindex="0">
+                  <span class="qb-care-name">+ Custom hours<span class="qb-care-sub">Set your own · $50 hosting + $25/hr</span></span>
+                  <span class="qb-care-input-wrap">
+                    <input type="number" class="qb-care-input" min="1" max="40" step="1" value="12" aria-label="Custom care hours per month" />
+                    <span class="qb-care-input-hint">hrs<br/><span class="qb-care-input-total" id="qbCustomTotal">$350/mo</span></span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- LIVE TOTAL PANEL -->
+          <div class="quote-total" id="quoteTotal">
+            <div class="quote-total-label">// Your quote</div>
+
+            <div class="quote-total-row">
+              <span class="qt-name" id="qbOutTier">Signature base</span>
+              <span class="quote-total-amount" id="qbOutTierAmt">$2,500</span>
+            </div>
+            <div class="quote-total-row">
+              <span class="qt-name" id="qbOutAddons">No add-ons</span>
+              <span class="quote-total-amount" id="qbOutAddonsAmt">$0</span>
+            </div>
+
+            <div class="quote-total-grand">
+              <span class="quote-total-grand-label">Build total</span>
+              <span class="quote-total-grand-value" id="qbOutTotal">$2,500</span>
+            </div>
+
+            <div class="quote-total-monthly">
+              <div class="quote-total-monthly-label">// Then monthly</div>
+              <div class="quote-total-monthly-row">
+                <span class="qt-name" id="qbOutMonthlyName">Hosting only</span>
+                <span class="quote-total-monthly-amount" id="qbOutMonthlyAmt">$50/mo</span>
+              </div>
+            </div>
+
+            <button type="button" class="quote-total-cta" id="qbSend">Send this quote →</button>
+            <p class="quote-total-fine">Prefills your brief and jumps to the contact form. No obligation.</p>
+          </div>
+
+        </div>
+      </div>
+
+<div class="worked-example">
+        <div class="worked-example-side">
+          <div class="worked-example-eyebrow">// Real client receipt</div>
+          <h3 class="worked-example-title">How <em>Aries Outdoor Living</em> priced out.</h3>
+          <p class="worked-example-quote">
+            David wanted a real deck-builder portfolio — clean design, big photo gallery, Google Reviews + Maps on the homepage, and one-tap lead capture. Basic tier fit the shape (3 sections + 1 extra), and the add-ons made it feel premium: proper logo pass, curated photos, custom animations.
+          </p>
+          <div class="worked-example-stat">
+            Result inside 30 days:
+            <strong>4 new leads</strong>
+            from the contact form alone.
+          </div>
+        </div>
+        <div class="worked-example-receipt">
+          <div class="worked-example-receipt-label">// Invoice · Aries Outdoor Living</div>
+          <ul class="receipt-list">
+            <li class="is-base"><span>Basic tier (3 sections, custom design)</span><span class="re-price">$1,000</span></li>
+            <li><span>+1 extra section (4 total)</span><span class="re-price">+$200</span></li>
+            <li><span>Custom logo (design + enhance)</span><span class="re-price">+$400</span></li>
+            <li><span>Photo curation &amp; selection</span><span class="re-price">+$250</span></li>
+            <li><span>Google (Reviews + Maps + Places)</span><span class="re-price">+$400</span></li>
+            <li><span>Email signup / newsletter</span><span class="re-price">+$200</span></li>
+            <li><span>Custom animations pass</span><span class="re-price">+$500</span></li>
+            <li class="is-total"><span>Build total</span><span class="re-price">$2,950</span></li>
+            <li class="is-monthly"><span>Ongoing · Hosting + 4 hrs care</span><span class="re-price">$150/mo</span></li>
+          </ul>
+        </div>
+      </div>
+        </div>
+
+        <div class="byo-panel" data-tab="bots" role="tabpanel">
+<div class="bot-playbook" id="bot-playbook">
 
         <div class="bp-header">
           <div class="bp-eyebrow">// Content bots — set it. forget it. watch it grow.</div>
@@ -4415,211 +4648,192 @@
         </div>
 
       </div>
+        </div>
+
+        <div class="byo-panel" data-tab="scripts" role="tabpanel">
+          <div class="byo-simple">
+            <div class="byo-simple-left">
+              <div class="byo-simple-eyebrow">// Scripts &amp; integrations</div>
+              <h3 class="byo-simple-title">If a human does it every day, <em>a script can do it tonight.</em></h3>
+              <p class="byo-simple-lede">Data syncs, file processing, workflow automation, web scrapers, scheduled reports — even low-level firmware communication (serial, MQTT, embedded protocols). If it can be scripted, we script it.</p>
+              <ul class="byo-simple-list">
+              <li><b>Data syncs</b> — CRM ↔ warehouse, Airtable ↔ Postgres, Sheets ↔ anything</li>
+              <li><b>File processing</b> — batch PDF / CSV / image workflows on schedule</li>
+              <li><b>Web scrapers</b> — lead lists, competitor prices, uptime + change monitors</li>
+              <li><b>Reports &amp; dashboards</b> — scheduled runs, auto-emailed, on-demand refresh</li>
+              <li><b>Firmware / low-level</b> — serial, MQTT, embedded protocols, vendor SDKs</li>
+              </ul>
+            </div>
+            <div class="byo-simple-right">
+              <div class="byo-tier-label">// Pick a shape</div>
+              <div class="byo-tier-list">
+            <div class="byo-tier">
+              <div class="byo-tier-badge">Own it outright</div>
+              <div class="byo-tier-name">Small</div>
+              <div class="byo-tier-price">$400</div>
+              <div class="byo-tier-sub">One-off script · 2–3 days · hand-off</div>
+              <a href="#contact" class="byo-tier-cta" data-intent="tier:script:small">Start this →</a>
+            </div>
+            <div class="byo-tier is-featured">
+              <div class="byo-tier-badge">Most requested</div>
+              <div class="byo-tier-name">Standard</div>
+              <div class="byo-tier-price">$1,200</div>
+              <div class="byo-tier-sub">Multi-step workflow · retries + error handling</div>
+              <a href="#contact" class="byo-tier-cta" data-intent="tier:script:standard">Start this →</a>
+            </div>
+            <div class="byo-tier">
+              <div class="byo-tier-badge">Full send</div>
+              <div class="byo-tier-name">Complex</div>
+              <div class="byo-tier-price">$3,000</div>
+              <div class="byo-tier-sub">Production pipeline · monitoring + docs</div>
+              <a href="#contact" class="byo-tier-cta" data-intent="tier:script:complex">Start this →</a>
+            </div>
+              </div>
+              <p class="byo-simple-note">Every project starts with a free 30-min scoping call. Exact quote in your inbox within 24h.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="byo-panel" data-tab="apps" role="tabpanel">
+          <div class="byo-simple">
+            <div class="byo-simple-left">
+              <div class="byo-simple-eyebrow">// Apps</div>
+              <h3 class="byo-simple-title">Web apps, PWAs, admin dashboards — <em>with real state, real auth, real data.</em></h3>
+              <p class="byo-simple-lede">Not a marketing site with a form. A real application: users log in, data lives somewhere, workflows have state. Web-first (works on phone), no native app store friction.</p>
+              <ul class="byo-simple-list">
+              <li><b>Customer dashboards</b> — let your users see their own data</li>
+              <li><b>Staff / admin apps</b> — the tools your team actually uses every day</li>
+              <li><b>PWAs</b> — installable, offline-ready, no app store review</li>
+              <li><b>Real-time apps</b> — live updates, chat, presence, dashboards</li>
+              </ul>
+            </div>
+            <div class="byo-simple-right">
+              <div class="byo-tier-label">// Pick a shape</div>
+              <div class="byo-tier-list">
+            <div class="byo-tier">
+              <div class="byo-tier-badge">Own it outright</div>
+              <div class="byo-tier-name">Basic App</div>
+              <div class="byo-tier-price">$3,500</div>
+              <div class="byo-tier-sub">MVP · auth + 3–5 screens · 3-week build</div>
+              <a href="#contact" class="byo-tier-cta" data-intent="tier:app:basic-app">Start this →</a>
+            </div>
+            <div class="byo-tier is-featured">
+              <div class="byo-tier-badge">Most requested</div>
+              <div class="byo-tier-name">Standard</div>
+              <div class="byo-tier-price">$8,000</div>
+              <div class="byo-tier-sub">10+ screens · integrations + roles · 6 wk</div>
+              <a href="#contact" class="byo-tier-cta" data-intent="tier:app:standard">Start this →</a>
+            </div>
+            <div class="byo-tier">
+              <div class="byo-tier-badge">Full send</div>
+              <div class="byo-tier-name">Complex</div>
+              <div class="byo-tier-price">$18,000</div>
+              <div class="byo-tier-sub">Multi-user · real-time · production-ready</div>
+              <a href="#contact" class="byo-tier-cta" data-intent="tier:app:complex">Start this →</a>
+            </div>
+              </div>
+              <p class="byo-simple-note">Every project starts with a free 30-min scoping call. Exact quote in your inbox within 24h.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="byo-panel" data-tab="plugins" role="tabpanel">
+          <div class="byo-simple">
+            <div class="byo-simple-left">
+              <div class="byo-simple-eyebrow">// Plugins &amp; extensions</div>
+              <h3 class="byo-simple-title">Extend the tools you already use — <em>or the hardware you already own.</em></h3>
+              <p class="byo-simple-lede">WordPress, Shopify, Chrome, VS Code — plus low-level plugin work for firmware/embedded systems. If the platform has an SDK, we can extend it.</p>
+              <ul class="byo-simple-list">
+              <li><b>WordPress plugins</b> — blocks, shortcodes, admin panels, WooCommerce hooks</li>
+              <li><b>Shopify apps</b> — checkout extensions, admin dashboards, embed apps</li>
+              <li><b>Browser extensions</b> — Chrome / Firefox / VS Code / JetBrains</li>
+              <li><b>Zapier / Make</b> — private + public integrations</li>
+              <li><b>Firmware &amp; embedded</b> — low-level SDK plugins, driver work, serial protocols</li>
+              </ul>
+            </div>
+            <div class="byo-simple-right">
+              <div class="byo-tier-label">// Pick a shape</div>
+              <div class="byo-tier-list">
+            <div class="byo-tier">
+              <div class="byo-tier-badge">Own it outright</div>
+              <div class="byo-tier-name">Simple</div>
+              <div class="byo-tier-price">$600</div>
+              <div class="byo-tier-sub">Single hook or feature · 1-week turnaround</div>
+              <a href="#contact" class="byo-tier-cta" data-intent="tier:plugin:simple">Start this →</a>
+            </div>
+            <div class="byo-tier is-featured">
+              <div class="byo-tier-badge">Most requested</div>
+              <div class="byo-tier-name">Standard</div>
+              <div class="byo-tier-price">$1,800</div>
+              <div class="byo-tier-sub">Multi-hook · settings UI · versioned + docs</div>
+              <a href="#contact" class="byo-tier-cta" data-intent="tier:plugin:standard">Start this →</a>
+            </div>
+            <div class="byo-tier">
+              <div class="byo-tier-badge">Full send</div>
+              <div class="byo-tier-name">Complex</div>
+              <div class="byo-tier-price">$4,500</div>
+              <div class="byo-tier-sub">Marketplace-ready · docs + support portal</div>
+              <a href="#contact" class="byo-tier-cta" data-intent="tier:plugin:complex">Start this →</a>
+            </div>
+              </div>
+              <p class="byo-simple-note">Every project starts with a free 30-min scoping call. Exact quote in your inbox within 24h.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="byo-panel" data-tab="portals" role="tabpanel">
+          <div class="byo-simple">
+            <div class="byo-simple-left">
+              <div class="byo-simple-eyebrow">// Portals &amp; internal tools</div>
+              <h3 class="byo-simple-title">The system your business <em>actually runs on.</em></h3>
+              <p class="byo-simple-lede">Staff portals, admin dashboards, client portals, approval workflows, multi-tenant SaaS platforms. Auth, roles, integrations, real work getting done.</p>
+              <ul class="byo-simple-list">
+              <li><b>Staff portals</b> — payroll, PTO, docs, onboarding — the stuff HR pretends is a spreadsheet</li>
+              <li><b>Admin dashboards</b> — customers, orders, reports, one-click actions</li>
+              <li><b>Client portals</b> — invoices, deliverables, chat, downloads</li>
+              <li><b>Approval workflows</b> — PO, contract, expense, hiring — routed and audited</li>
+              <li><b>Multi-tenant SaaS</b> — org isolation, roles, billing, seat management</li>
+              </ul>
+            </div>
+            <div class="byo-simple-right">
+              <div class="byo-tier-label">// Pick a shape</div>
+              <div class="byo-tier-list">
+            <div class="byo-tier">
+              <div class="byo-tier-badge">Own it outright</div>
+              <div class="byo-tier-name">Basic Portal</div>
+              <div class="byo-tier-price">$4,000</div>
+              <div class="byo-tier-sub">Auth + 5 screens + admin panel</div>
+              <a href="#contact" class="byo-tier-cta" data-intent="tier:portal:basic-portal">Start this →</a>
+            </div>
+            <div class="byo-tier is-featured">
+              <div class="byo-tier-badge">Most requested</div>
+              <div class="byo-tier-name">Standard</div>
+              <div class="byo-tier-price">$10,000</div>
+              <div class="byo-tier-sub">Roles · integrations · dashboards</div>
+              <a href="#contact" class="byo-tier-cta" data-intent="tier:portal:standard">Start this →</a>
+            </div>
+            <div class="byo-tier">
+              <div class="byo-tier-badge">Full send</div>
+              <div class="byo-tier-name">Complex</div>
+              <div class="byo-tier-price">$25,000</div>
+              <div class="byo-tier-sub">Multi-tenant · custom workflows · production</div>
+              <a href="#contact" class="byo-tier-cta" data-intent="tier:portal:complex">Start this →</a>
+            </div>
+              </div>
+              <p class="byo-simple-note">Every project starts with a free 30-min scoping call. Exact quote in your inbox within 24h.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- WEBSITE ADD-ONS + MONTHLY CARE — expands what the base site tiers get you -->
+
+      <!-- ============ BOT PLAYBOOK — the sick "pick your niche" moment ============ -->
 
       <!-- LIVE QUOTE BUILDER — pick a tier, toggle add-ons, watch the total tick up -->
-      <div class="quote-builder" id="quoteBuilder">
-        <div class="quote-builder-header">
-          <div class="quote-builder-eyebrow">// Build the quote yourself</div>
-          <h3 class="quote-builder-title">Your build, <em>priced live.</em></h3>
-          <p class="quote-builder-lede">
-            Pick a tier, tap the add-ons you actually need, choose a care plan. The total on the right updates as you go — then send yourself the exact quote in one click.
-          </p>
-        </div>
-
-        <div class="quote-builder-body">
-
-          <div>
-            <!-- STEP 1 — TIER -->
-            <div class="qb-section">
-              <div class="qb-section-label">01 · Pick your tier <span>Base build price</span></div>
-              <div class="qb-tier-list">
-                <button type="button" class="qb-tier-option" data-tier="basic" data-price="1000">
-                  <span class="qb-tier-name">Basic<span class="qb-tier-name-sub">3 sections · custom design · ~10-day turnaround</span></span>
-                  <span class="qb-tier-price">$1,000</span>
-                </button>
-                <button type="button" class="qb-tier-option" data-tier="signature" data-price="2500" data-active="true">
-                  <span class="qb-tier-name">Signature<span class="qb-tier-name-sub">Up to 10 pages · editorial design system · CMS · 3–4 weeks</span></span>
-                  <span class="qb-tier-price">$2,500</span>
-                </button>
-                <button type="button" class="qb-tier-option" data-tier="flagship" data-price="6500">
-                  <span class="qb-tier-name">Flagship<span class="qb-tier-name-sub">15+ pages · interactive · animations · 6–8 weeks</span></span>
-                  <span class="qb-tier-price">$6,500</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- STEP 2 — ADD-ONS -->
-            <div class="qb-section">
-              <div class="qb-section-label">02 · Add what you need <span>Tap to toggle</span></div>
-              <div class="qb-addon-list">
-                <button type="button" class="qb-addon" data-addon="extra-page" data-price="200" data-label="Extra page (Basic/Signature)">
-                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Extra page (Basic/Signature)</span></span>
-                  <span class="qb-addon-price">+$200</span>
-                </button>
-                <button type="button" class="qb-addon" data-addon="logo" data-price="400" data-label="Custom logo (design or enhance existing)">
-                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Custom logo (design or enhance)</span></span>
-                  <span class="qb-addon-price">+$400</span>
-                </button>
-                <button type="button" class="qb-addon" data-addon="copywriting" data-price="150" data-label="Copywriting (per page)">
-                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Copywriting (per page)</span></span>
-                  <span class="qb-addon-price">+$150</span>
-                </button>
-                <button type="button" class="qb-addon" data-addon="photo-curation" data-price="250" data-label="Photo curation & selection (we pick your strongest shots)">
-                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Photo curation &amp; selection</span></span>
-                  <span class="qb-addon-price">+$250</span>
-                </button>
-                <button type="button" class="qb-addon" data-addon="google-reviews" data-price="400" data-label="Google integration (Reviews + Maps + Places)">
-                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Google (Reviews + Maps + Places)</span></span>
-                  <span class="qb-addon-price">+$400</span>
-                </button>
-                <button type="button" class="qb-addon" data-addon="blog-cms" data-price="600" data-label="Blog / CMS setup">
-                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Blog / CMS setup</span></span>
-                  <span class="qb-addon-price">+$600</span>
-                </button>
-                <button type="button" class="qb-addon" data-addon="form-automation" data-price="200" data-label="Form → email automation">
-                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Form → email automation</span></span>
-                  <span class="qb-addon-price">+$200</span>
-                </button>
-                <button type="button" class="qb-addon" data-addon="crm-sync" data-price="500" data-label="Form → CRM sync">
-                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Form → CRM sync</span></span>
-                  <span class="qb-addon-price">+$500</span>
-                </button>
-                <button type="button" class="qb-addon" data-addon="booking" data-price="150" data-label="Booking / calendar embed">
-                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Booking / calendar embed</span></span>
-                  <span class="qb-addon-price">+$150</span>
-                </button>
-                <button type="button" class="qb-addon" data-addon="gallery" data-price="400" data-label="Photo gallery + lightbox">
-                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Photo gallery + lightbox</span></span>
-                  <span class="qb-addon-price">+$400</span>
-                </button>
-                <button type="button" class="qb-addon" data-addon="animations" data-price="500" data-label="Custom animations pass">
-                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Custom animations pass</span></span>
-                  <span class="qb-addon-price">+$500</span>
-                </button>
-                <button type="button" class="qb-addon" data-addon="newsletter" data-price="200" data-label="Email signup / newsletter">
-                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Email signup / newsletter</span></span>
-                  <span class="qb-addon-price">+$200</span>
-                </button>
-                <button type="button" class="qb-addon" data-addon="stripe-one" data-price="800" data-label="Stripe checkout (one product)">
-                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Stripe checkout (one product)</span></span>
-                  <span class="qb-addon-price">+$800</span>
-                </button>
-                <button type="button" class="qb-addon" data-addon="stripe-sub" data-price="1500" data-label="Stripe subscriptions">
-                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Stripe subscriptions</span></span>
-                  <span class="qb-addon-price">+$1,500</span>
-                </button>
-                <button type="button" class="qb-addon" data-addon="ai-chat" data-price="1200" data-label="AI chat widget (SiteGuide-style)">
-                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">AI chat widget (SiteGuide)</span></span>
-                  <span class="qb-addon-price">+$1,200</span>
-                </button>
-                <button type="button" class="qb-addon" data-addon="scoper" data-price="1500" data-label="Interactive quote calculator">
-                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Interactive quote calculator</span></span>
-                  <span class="qb-addon-price">+$1,500</span>
-                </button>
-                <button type="button" class="qb-addon" data-addon="ecommerce" data-price="2500" data-label="E-commerce (10–30 products)">
-                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">E-commerce (10–30 products)</span></span>
-                  <span class="qb-addon-price">+$2,500</span>
-                </button>
-                <button type="button" class="qb-addon" data-addon="dns" data-price="150" data-label="DNS / host migration">
-                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">DNS / host migration</span></span>
-                  <span class="qb-addon-price">+$150</span>
-                </button>
-                <button type="button" class="qb-addon" data-addon="rush" data-price="0" data-percent="35" data-label="Rush delivery (½ timeline)">
-                  <span class="qb-addon-check"><span class="qb-addon-box"></span><span class="qb-addon-label">Rush delivery (½ timeline)</span></span>
-                  <span class="qb-addon-price">+35%</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- STEP 3 — CARE -->
-            <div class="qb-section">
-              <div class="qb-section-label">03 · Monthly care <span>Ongoing after launch</span></div>
-              <div class="qb-care-list">
-                <button type="button" class="qb-care-option" data-care="hosting" data-price="50" data-name="Hosting only" data-active="true">
-                  <span class="qb-care-name">Hosting only<span class="qb-care-sub">SSL, backups, uptime, DNS, deploys</span></span>
-                  <span class="qb-care-price">$50/mo</span>
-                </button>
-                <button type="button" class="qb-care-option" data-care="plus4" data-price="150" data-name="Hosting + 4 hrs care">
-                  <span class="qb-care-name">+ 4 hrs care<span class="qb-care-sub">Above + 4 hrs of edits &amp; fixes per month</span></span>
-                  <span class="qb-care-price">$150/mo</span>
-                </button>
-                <button type="button" class="qb-care-option" data-care="plus8" data-price="250" data-name="Hosting + 8 hrs care">
-                  <span class="qb-care-name">+ 8 hrs care<span class="qb-care-sub">Above + 8 hrs — active content sites</span></span>
-                  <span class="qb-care-price">$250/mo</span>
-                </button>
-                <div class="qb-care-option qb-care-custom" data-care="custom" data-rate="25" role="button" tabindex="0">
-                  <span class="qb-care-name">+ Custom hours<span class="qb-care-sub">Set your own · $50 hosting + $25/hr</span></span>
-                  <span class="qb-care-input-wrap">
-                    <input type="number" class="qb-care-input" min="1" max="40" step="1" value="12" aria-label="Custom care hours per month" />
-                    <span class="qb-care-input-hint">hrs<br/><span class="qb-care-input-total" id="qbCustomTotal">$350/mo</span></span>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- LIVE TOTAL PANEL -->
-          <div class="quote-total" id="quoteTotal">
-            <div class="quote-total-label">// Your quote</div>
-
-            <div class="quote-total-row">
-              <span class="qt-name" id="qbOutTier">Signature base</span>
-              <span class="quote-total-amount" id="qbOutTierAmt">$2,500</span>
-            </div>
-            <div class="quote-total-row">
-              <span class="qt-name" id="qbOutAddons">No add-ons</span>
-              <span class="quote-total-amount" id="qbOutAddonsAmt">$0</span>
-            </div>
-
-            <div class="quote-total-grand">
-              <span class="quote-total-grand-label">Build total</span>
-              <span class="quote-total-grand-value" id="qbOutTotal">$2,500</span>
-            </div>
-
-            <div class="quote-total-monthly">
-              <div class="quote-total-monthly-label">// Then monthly</div>
-              <div class="quote-total-monthly-row">
-                <span class="qt-name" id="qbOutMonthlyName">Hosting only</span>
-                <span class="quote-total-monthly-amount" id="qbOutMonthlyAmt">$50/mo</span>
-              </div>
-            </div>
-
-            <button type="button" class="quote-total-cta" id="qbSend">Send this quote →</button>
-            <p class="quote-total-fine">Prefills your brief and jumps to the contact form. No obligation.</p>
-          </div>
-
-        </div>
-      </div>
 
       <!-- WORKED EXAMPLE — real client receipt -->
-      <div class="worked-example">
-        <div class="worked-example-side">
-          <div class="worked-example-eyebrow">// Real client receipt</div>
-          <h3 class="worked-example-title">How <em>Aries Outdoor Living</em> priced out.</h3>
-          <p class="worked-example-quote">
-            David wanted a real deck-builder portfolio — clean design, big photo gallery, Google Reviews + Maps on the homepage, and one-tap lead capture. Basic tier fit the shape (3 sections + 1 extra), and the add-ons made it feel premium: proper logo pass, curated photos, custom animations.
-          </p>
-          <div class="worked-example-stat">
-            Result inside 30 days:
-            <strong>4 new leads</strong>
-            from the contact form alone.
-          </div>
-        </div>
-        <div class="worked-example-receipt">
-          <div class="worked-example-receipt-label">// Invoice · Aries Outdoor Living</div>
-          <ul class="receipt-list">
-            <li class="is-base"><span>Basic tier (3 sections, custom design)</span><span class="re-price">$1,000</span></li>
-            <li><span>+1 extra section (4 total)</span><span class="re-price">+$200</span></li>
-            <li><span>Custom logo (design + enhance)</span><span class="re-price">+$400</span></li>
-            <li><span>Photo curation &amp; selection</span><span class="re-price">+$250</span></li>
-            <li><span>Google (Reviews + Maps + Places)</span><span class="re-price">+$400</span></li>
-            <li><span>Email signup / newsletter</span><span class="re-price">+$200</span></li>
-            <li><span>Custom animations pass</span><span class="re-price">+$500</span></li>
-            <li class="is-total"><span>Build total</span><span class="re-price">$2,950</span></li>
-            <li class="is-monthly"><span>Ongoing · Hosting + 4 hrs care</span><span class="re-price">$150/mo</span></li>
-          </ul>
-        </div>
-      </div>
 
       <!-- PRICING FAQ -->
       <div class="pricing-faq">
@@ -5484,6 +5698,26 @@
         render();
       })();
 
+      // ---------- Build Your Own — tab switching ----------
+      (function byoTabsInit() {
+        const tabs   = document.querySelectorAll('.byo-tab');
+        const panels = document.querySelectorAll('.byo-panel');
+        if (!tabs.length) return;
+        tabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const target = tab.dataset.tab;
+            tabs.forEach(t => {
+              const on = t.dataset.tab === target;
+              t.dataset.active = String(on);
+              t.setAttribute('aria-selected', String(on));
+            });
+            panels.forEach(p => {
+              p.dataset.active = String(p.dataset.tab === target);
+            });
+          });
+        });
+      })();
+
       // ---------- Universal intent-CTA prefill — every "start" button feeds intake ----------
       // Rule: any element with data-intent, on click, seeds the contact textarea with
       // a formatted brief describing what the visitor picked. Existing user text is
@@ -5500,6 +5734,18 @@
           'tier:bot:full':          { title: 'CONTENT BOT — Full Channel',   detail: '$2,500 setup + $800/mo. Multi-platform (YouTube + TikTok + Reels + X), weekly reports, thumbnail templates, monthly strategy call.' },
           'tier:portal:internal':   { title: 'PORTAL — Internal Tool',       detail: 'Staff portal, admin dashboard, or approval workflow. Scoped and quoted after discovery.' },
           'tier:portal:client':     { title: 'PORTAL — Client-Facing App',   detail: 'Customer dashboard, client portal, or reporting tool. Auth + data layer + full UI. Scoped to my use case.' },
+          'tier:script:small':      { title: 'SCRIPT — Small',      detail: '$400 · one-off script, 2–3 days, hand-off. Anything a human is doing the same way every day.' },
+          'tier:script:standard':   { title: 'SCRIPT — Standard',   detail: '$1,200 · multi-step workflow with retries + error handling. Data syncs, file processing, integrations.' },
+          'tier:script:complex':    { title: 'SCRIPT — Complex',    detail: '$3,000 · production pipeline with monitoring + docs. Includes firmware / low-level protocol work.' },
+          'tier:app:basic-app':     { title: 'APP — Basic',         detail: '$3,500 · MVP with auth + 3–5 screens · ~3-week build. Web-first, works on phone.' },
+          'tier:app:standard':      { title: 'APP — Standard',      detail: '$8,000 · 10+ screens, integrations, roles · ~6-week build. Real product shape.' },
+          'tier:app:complex':       { title: 'APP — Complex',       detail: '$18,000 · multi-user, real-time, production-ready. Full application.' },
+          'tier:plugin:simple':     { title: 'PLUGIN — Simple',     detail: '$600 · single hook or feature, ~1-week turnaround. WordPress, Shopify, Chrome, VS Code.' },
+          'tier:plugin:standard':   { title: 'PLUGIN — Standard',   detail: '$1,800 · multi-hook, settings UI, versioned + docs.' },
+          'tier:plugin:complex':    { title: 'PLUGIN — Complex',    detail: '$4,500 · marketplace-ready with docs and support portal. Includes firmware/embedded plugin work.' },
+          'tier:portal:basic-portal': { title: 'PORTAL — Basic', detail: '$4,000 · auth + 5 screens + admin panel. Small team, single tenant.' },
+          'tier:portal:standard':   { title: 'PORTAL — Standard',   detail: '$10,000 · roles, integrations, dashboards. Real internal operations shape.' },
+          'tier:portal:complex':    { title: 'PORTAL — Complex',    detail: '$25,000 · multi-tenant, custom workflows, production. SaaS-shaped.' },
           'product:aries':          { title: 'INTEREST — Aries Outdoor Living style build', detail: 'Editorial portfolio site like Aries. Case studies per project, live Google reviews, contact form → real leads.' },
           'product:big7':           { title: 'INTEREST — Big7 Construction style build',    detail: 'Clean small-business landing site like Big7 — mobile-first, contact form, live in under two weeks.' },
           'product:m3':             { title: 'INTEREST — M³ style build',                   detail: 'Interactive marketing site like m3.systems. Animations, live quote builder, cursor + particles, the whole show.' },
