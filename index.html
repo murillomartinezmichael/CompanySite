@@ -894,6 +894,71 @@
       background: var(--clay-dark);
       border-color: var(--clay-dark);
       transform: translateY(-1px);
+      color: var(--cream);
+    }
+
+    /* === PRODUCT TIER — inline pricing on each live product card === */
+    .product-tier-card {
+      margin: 18px 0 20px;
+      padding: 14px 16px;
+      background: rgba(252,238,10,0.06);
+      border: 1px solid rgba(252,238,10,0.2);
+      border-left: 3px solid var(--clay);
+      transition: all 0.25s;
+    }
+    .product-tier-name {
+      font-family: 'Fraunces', serif;
+      font-size: 15px;
+      color: var(--ink);
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+    .product-tier-name span {
+      color: var(--clay);
+      font-weight: 500;
+    }
+    .product-tier-note {
+      margin-top: 6px;
+      font-size: 12px;
+      color: rgba(10,10,15,0.6);
+      line-height: 1.55;
+    }
+    .product-card:hover .product-tier-card {
+      background: rgba(252,238,10,0.11);
+      border-color: rgba(252,238,10,0.35);
+    }
+
+    /* === PRODUCT CTA ROW — dual button layout === */
+    .product-ctas {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .btn-product.btn-product-start {
+      background: var(--ink);
+      color: var(--cream);
+      border-color: var(--ink);
+      flex: 1;
+      min-width: 160px;
+      justify-content: center;
+    }
+    .btn-product.btn-product-start:hover {
+      background: var(--clay-dark);
+      border-color: var(--clay-dark);
+      color: var(--cream);
+    }
+    .btn-product.btn-product-see {
+      background: transparent;
+      color: var(--ink);
+      flex: 1;
+      min-width: 130px;
+      justify-content: center;
+    }
+    .btn-product.btn-product-see:hover {
+      background: transparent;
+      color: var(--clay-dark);
+      border-color: var(--clay-dark);
     }
 
     /* === PROCESS === */
@@ -3942,7 +4007,6 @@
               </div>
               <p class="tier-desc">Data syncs, reporting pipelines, file processing, workflow automation. Scoped and quoted after a discovery call.</p>
               <a href="#contact" class="tier-cta" data-intent="tier:auto:script">Start this script →</a>
-              <a href="#product-reporting" class="tier-cta-see">or see it live: reporting pipelines ↓</a>
             </div>
 
             <div class="pricing-tier">
@@ -3980,7 +4044,7 @@
               </div>
               <p class="tier-desc">Set up on my infra, I keep it posting, monitor uptime, send monthly performance emails. Free niche tweaks up to 2/quarter. Cancel anytime.</p>
               <a href="#contact" class="tier-cta" data-intent="tier:bot:managed">Launch this bot →</a>
-              <a href="#product-finance-reel" class="tier-cta-see">or see it live: Finance Reel Bot ↓</a>
+              <a href="#bot-playbook" class="tier-cta-see">or see the playbook ↓</a>
             </div>
 
             <div class="pricing-tier">
@@ -4008,7 +4072,6 @@
               </div>
               <p class="tier-desc">Staff portals, admin dashboards, approval workflows. Built around how your business actually operates.</p>
               <a href="#contact" class="tier-cta" data-intent="tier:portal:internal">Scope my tool →</a>
-              <a href="#product-microservices" class="tier-cta-see">or see it live: microservices platform ↓</a>
             </div>
 
             <div class="pricing-tier">
@@ -4017,7 +4080,6 @@
               </div>
               <p class="tier-desc">Customer dashboards, client portals, reporting tools. Auth, data layer, full UI — scoped to your use case.</p>
               <a href="#contact" class="tier-cta" data-intent="tier:portal:client">Scope my app →</a>
-              <a href="#product-ai-doc" class="tier-cta-see">or see it live: AI Doc Assistant ↓</a>
             </div>
 
           </div>
@@ -4574,40 +4636,50 @@
         Live URLs and running pipelines. Every link below is something I designed, built, hosted, and still maintain.
       </p>
 
-      <div class="products-subhead">— Websites for hire</div>
       <div class="products-grid">
 
+        <!-- 1) ARIES — Signature-tier live site -->
         <div class="product-card" id="product-aries">
           <div class="product-live">
             <span class="product-live-dot"></span>
-            Live · Case study
+            Live · ariesoutdoorliving.onrender.com
           </div>
           <h3>Aries <em>Outdoor Living</em></h3>
           <p class="product-tagline">A premium deck builder, finally with a site that looks the part.</p>
+          <div class="product-tier-card">
+            <div class="product-tier-name">Signature tier · <span>from $2,500</span></div>
+            <div class="product-tier-note">Up to 10 pages · editorial design system · CMS · live integrations · SEO wired · 3–4 week turnaround.</div>
+          </div>
           <p class="product-desc">
-            Before: a phone number on a Facebook page. Now: a full gallery of finished decks, before/during/after walkthroughs, Google reviews on autoplay, and a one-tap "Free Estimate" button that drops straight in David's inbox.
+            Before: a phone number on a Facebook page. Now: a full gallery of finished decks, before/during/after walkthroughs, Google reviews on autoplay, and a one-tap "Free Estimate" button that drops straight in David&#39;s inbox.
           </p>
           <ul class="product-features">
             <li>Showcases his best 12 builds without overwhelming the visitor</li>
             <li>Wins trust before he picks up the phone</li>
             <li>Mobile-first — most homeowners click from a text</li>
-            <li>Live at ariesoutdoorliving.onrender.com</li>
           </ul>
-          <a href="https://ariesoutdoorliving.onrender.com" target="_blank" class="btn-product">
-            See it live
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M7 17L17 7M9 7h8v8"/>
-            </svg>
-          </a>
+          <div class="product-ctas">
+            <a href="https://ariesoutdoorliving.onrender.com" target="_blank" rel="noreferrer" class="btn-product btn-product-see">
+              See it live ↗
+            </a>
+            <a href="#contact" class="btn-product btn-product-start" data-intent="tier:website:signature">
+              Start a build like this →
+            </a>
+          </div>
         </div>
 
+        <!-- 2) BIG7 — Basic-tier live site -->
         <div class="product-card" id="product-big7">
           <div class="product-live">
             <span class="product-live-dot"></span>
-            Live · Case study
+            Live · Railway (static nginx)
           </div>
           <h3>Big7 <em>Construction</em></h3>
           <p class="product-tagline">Two service lines, one trusted brand — without two separate sites.</p>
+          <div class="product-tier-card">
+            <div class="product-tier-name">Basic tier · <span>from $800</span></div>
+            <div class="product-tier-note">Up to 5 pages · custom design (not a template) · mobile-responsive · contact form · ~10-day turnaround.</div>
+          </div>
           <p class="product-desc">
             Custom homes and home repair under one roof. The site makes both legible to a homeowner who only knows they have a problem — and routes the right lead to the right inbox.
           </p>
@@ -4617,50 +4689,53 @@
             <li>Custom domain, fast load, mobile-first</li>
             <li>Built once, runs forever</li>
           </ul>
-          <a href="#contact" class="btn-product" data-intent="product:big7">
-            Build mine like this
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
-          </a>
+          <div class="product-ctas">
+            <a href="#contact" class="btn-product btn-product-start" data-intent="tier:website:basic">
+              Start a build like this →
+            </a>
+          </div>
         </div>
 
+        <!-- 3) M³ — Flagship-tier live site (this site) -->
         <div class="product-card" id="product-m3">
           <div class="product-live">
             <span class="product-live-dot"></span>
-            You're here
+            Live · you&#39;re on it right now
           </div>
           <h3>M³ — <em>mm3m.net</em></h3>
-          <p class="product-tagline">The site you're reading right now.</p>
+          <p class="product-tagline">The site you&#39;re reading right now.</p>
+          <div class="product-tier-card">
+            <div class="product-tier-name">Flagship tier · <span>from $6,500</span></div>
+            <div class="product-tier-note">15+ pages · interactive features (quote builder + scoper + FAQ) · custom animations · 2–3 integrations · analytics · 6–8 week turnaround.</div>
+          </div>
           <p class="product-desc">
-            Distinctive enough that you remembered the name. That's the point. Every brand site we ship comes with its own visual identity — not a template the next ten clients also got.
+            Distinctive enough that you remembered the name. That&#39;s the point. Every brand site we ship comes with its own visual identity — not a template the next ten clients also got.
           </p>
           <ul class="product-features">
             <li>Original design system, no off-the-shelf theme</li>
-            <li>Custom palette, custom type pairing</li>
+            <li>Live quote builder + scoping wizard baked in</li>
             <li>Performance-budgeted from the start</li>
             <li>Yours to own outright after launch</li>
           </ul>
-          <a href="#contact" class="btn-product" data-intent="product:m3">
-            Want one like this
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
-          </a>
+          <div class="product-ctas">
+            <a href="#contact" class="btn-product btn-product-start" data-intent="tier:website:flagship">
+              Start a build like this →
+            </a>
+          </div>
         </div>
 
-      </div>
-
-      <div class="products-subhead">— Bots &amp; Pipelines</div>
-      <div class="products-grid">
-
+        <!-- 4) SITEGUIDE — embeddable widget product -->
         <div class="product-card" id="product-siteguide">
           <div class="product-live">
             <span class="product-live-dot"></span>
-            Live · Powering this page
+            Live · siteguide-production.up.railway.app
           </div>
-          <h3>SiteGuide <em>AI widget</em></h3>
-          <p class="product-tagline">The little chat bubble at the bottom-right? That's ours. One script tag, per-site JSON config.</p>
+          <h3>SiteGuide <em>AI chat widget</em></h3>
+          <p class="product-tagline">The little chat bubble at the bottom-right? That&#39;s ours. One script tag, per-site JSON config.</p>
+          <div class="product-tier-card">
+            <div class="product-tier-name">Add-on · <span>$1,200 setup</span></div>
+            <div class="product-tier-note">Drops onto any site (one you already have or one we&#39;re building) · per-site knowledge JSON · Anthropic-powered · runs on our infra.</div>
+          </div>
           <p class="product-desc">
             An embeddable Claude-powered assistant that drops into any site with a single <code>&lt;script&gt;</code> tag. Every tenant gets its own knowledge (services, pricing, tone) in a JSON file — no code changes to onboard the next site. Deployed once, serves everyone.
           </p>
@@ -4668,379 +4743,17 @@
             <li>One <code>&lt;script&gt;</code> tag, zero build step on the host</li>
             <li>Per-site config: services, prices, personality, quick actions</li>
             <li>Streaming responses (SSE) with prompt caching under the hood</li>
-            <li>Live at siteguide-production.up.railway.app</li>
           </ul>
-          <a href="https://siteguide-production.up.railway.app/" target="_blank" rel="noreferrer" class="btn-product">
-            See it live
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M7 17L17 7M9 7h8v8"/>
-            </svg>
-          </a>
-        </div>
-
-        <div class="product-card" id="product-microservices">
-          <div class="product-live">
-            <span class="product-live-dot"></span>
-            Case study
+          <div class="product-ctas">
+            <a href="https://siteguide-production.up.railway.app/" target="_blank" rel="noreferrer" class="btn-product btn-product-see">
+              See it live ↗
+            </a>
+            <a href="#contact" class="btn-product btn-product-start" data-intent="product:siteguide">
+              Add it to my site →
+            </a>
           </div>
-          <h3>Microservices <em>platform</em></h3>
-          <p class="product-tagline">Not every problem is a marketing site. Some are the systems that keep a business running.</p>
-          <p class="product-desc">
-            When you need the hard stuff: three .NET services owning their own data, talking through a message bus, retrying on failure, observable end-to-end. A live event pipeline visualizer shows every request and every bus message as it moves. This is the same shape as what runs behind Amazon, Netflix, and every serious SaaS.
-          </p>
-          <ul class="product-features">
-            <li>3 .NET services · RabbitMQ · Postgres-per-service</li>
-            <li>OpenTelemetry → Jaeger distributed traces</li>
-            <li>MediatR + FluentValidation, MassTransit retry + DLQ</li>
-            <li>Live React pipeline visualizer with animated event flow</li>
-          </ul>
-          <a href="#contact" class="btn-product" data-intent="product:microservices">
-            Build this for us
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
-          </a>
         </div>
 
-        <div class="product-card" id="product-finance-reel">
-          <div class="product-live">
-            <span class="product-live-dot"></span>
-            Live &amp; running
-          </div>
-          <h3>Finance <em>Reel Bot</em></h3>
-          <p class="product-tagline">A finance channel that posts every day. You touch nothing.</p>
-          <p class="product-desc">
-            Pulls finance content, formats it for short-form video, and uploads to YouTube on schedule. Finance is one of the highest-CPM niches on the platform — let the bot stack the deposits.
-          </p>
-          <ul class="product-features">
-            <li>Sources, scripts, and renders short-form videos</li>
-            <li>Schedules and uploads to YouTube Shorts + long-form</li>
-            <li>Runs 24/7 — no editor, no posting calendar</li>
-            <li>Stripped-down dashboard to swap voice or niche</li>
-          </ul>
-          <a href="#contact" class="btn-product" data-intent="product:finance-reel">
-            Launch this for me
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
-          </a>
-        </div>
-
-        <div class="product-card">
-          <div class="product-live">
-            <span class="product-live-dot"></span>
-            Live &amp; running
-          </div>
-          <h3>Video <em>Pipeline Bot</em></h3>
-          <p class="product-tagline">Raw footage in. Published shorts out.</p>
-          <p class="product-desc">
-            We pull clips from any source, trim them, compile them, and post them. Stay in the loop with light-assist drafts, or hand the whole pipeline over and just watch the channel grow.
-          </p>
-          <ul class="product-features">
-            <li>Twitch, YouTube, local recordings — any source</li>
-            <li>Auto clip-discovery, trim, and compile</li>
-            <li>Light-assist drafts OR full autopilot</li>
-            <li>Multi-account publishing across platforms</li>
-          </ul>
-          <a href="#contact" class="btn-product" data-intent="product:video">
-            Launch this for me
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
-          </a>
-        </div>
-
-        <div class="product-card">
-          <div class="product-live">
-            <span class="product-live-dot"></span>
-            Available
-          </div>
-          <h3>Anime <em>Shorts Bot</em></h3>
-          <p class="product-tagline">The current top-100 anime, sliced into shorts every day.</p>
-          <p class="product-desc">
-            Watches the trending board, builds a daily shortlist, edits the highlight, and posts it across YouTube Shorts, Reels, and TikTok. The anime audience is hungry — feed it on schedule.
-          </p>
-          <ul class="product-features">
-            <li>Trend-aware: posts what's actually moving</li>
-            <li>Auto subtitle / caption rendering</li>
-            <li>Hashtag + title generation tuned per platform</li>
-            <li>Self-improving — analytics feed the next pick</li>
-          </ul>
-          <a href="#contact" class="btn-product" data-intent="product:anime">
-            Launch my channel
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
-          </a>
-        </div>
-
-        <div class="product-card">
-          <div class="product-live">
-            <span class="product-live-dot"></span>
-            Available
-          </div>
-          <h3>Twitch <em>Clip Compiler</em></h3>
-          <p class="product-tagline">Trending game → top clips → compilation → upload. Hands-off.</p>
-          <p class="product-desc">
-            Finds the game blowing up today, pulls the highest-engagement clips, stitches them with intros + transitions, and ships the upload to YouTube. The "Top 10 Twitch clips" format on rails.
-          </p>
-          <ul class="product-features">
-            <li>Auto-detects trending games &amp; streamers</li>
-            <li>Filters by views, watch-time, chat density</li>
-            <li>Built-in intro / outro / transition templates</li>
-            <li>One-button approval OR fully managed</li>
-          </ul>
-          <a href="#contact" class="btn-product" data-intent="product:twitch">
-            Launch my channel
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
-          </a>
-        </div>
-
-        <div class="product-card">
-          <div class="product-live">
-            <span class="product-live-dot"></span>
-            Available
-          </div>
-          <h3>Discord <em>Community Bot</em></h3>
-          <p class="product-tagline">Onboard, moderate, reward — without a 3am mod shift.</p>
-          <p class="product-desc">
-            Welcome flows, role assignments, automod with custom rules, scheduled announcements, and reward tiers for active members. The bot your community deserves before it gets toxic.
-          </p>
-          <ul class="product-features">
-            <li>Custom welcome &amp; onboarding flows</li>
-            <li>Automod with allow/block rules + report queue</li>
-            <li>Role + reward tiers tied to activity</li>
-            <li>Scheduled announcements, polls, giveaways</li>
-          </ul>
-          <a href="#contact" class="btn-product" data-intent="product:discord">
-            Build my bot
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
-          </a>
-        </div>
-
-        <div class="product-card">
-          <div class="product-live">
-            <span class="product-live-dot"></span>
-            Available
-          </div>
-          <h3>Slack <em>Workflow Bot</em></h3>
-          <p class="product-tagline">The teammate that pings the right person at the right time.</p>
-          <p class="product-desc">
-            Approval flows, daily standups, on-call rotation, lead notifications from your CRM, and the report your boss asks for every Monday at 9. Built around your team's actual rituals.
-          </p>
-          <ul class="product-features">
-            <li>Approval &amp; sign-off routing</li>
-            <li>Daily standup + EOD rollup</li>
-            <li>CRM / form / inbox event handlers</li>
-            <li>Scheduled recurring messages &amp; reports</li>
-          </ul>
-          <a href="#contact" class="btn-product" data-intent="product:slack">
-            Build my bot
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
-          </a>
-        </div>
-
-        <div class="product-card" id="product-ai-doc">
-          <div class="product-live">
-            <span class="product-live-dot"></span>
-            Available
-          </div>
-          <h3>AI <em>Doc Assistant</em></h3>
-          <p class="product-tagline">Your manuals, SOPs, and policies — finally searchable.</p>
-          <p class="product-desc">
-            RAG-powered assistant trained on your company docs. Staff asks a question in plain English, gets a cited answer with page references. No more "where is that in the binder."
-          </p>
-          <ul class="product-features">
-            <li>Trained on your PDFs, wikis, drive folders</li>
-            <li>Cited answers with page links — no hallucinations</li>
-            <li>Slack / Teams / web embed</li>
-            <li>Auth-gated to your team only</li>
-          </ul>
-          <a href="#contact" class="btn-product" data-intent="product:ai-doc">
-            Train mine on my docs
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
-          </a>
-        </div>
-
-        <div class="product-card">
-          <div class="product-live">
-            <span class="product-live-dot"></span>
-            Available
-          </div>
-          <h3>Niche <em>Content Bot</em></h3>
-          <p class="product-tagline">True crime, sports, gaming, recipes — pick a niche, get a pipeline.</p>
-          <p class="product-desc">
-            Same architecture as Finance Reel + Video Pipeline, retargeted at your niche. Source feed, render template, posting cadence — all swapped to fit the audience.
-          </p>
-          <ul class="product-features">
-            <li>Pick the niche &amp; format, we tune the pipeline</li>
-            <li>True crime, sports highlights, recipes, gaming clips, more</li>
-            <li>Built on the same proven Finance + Video Pipeline core</li>
-            <li>Fixed-price setup or fully managed</li>
-          </ul>
-          <a href="#contact" class="btn-product" data-intent="product:niche">
-            Pitch my niche
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
-          </a>
-        </div>
-      </div>
-
-      <div class="products-subhead">— Automation &amp; Scripting</div>
-      <div class="products-grid">
-
-        <div class="product-card" id="product-reporting">
-          <div class="product-live">
-            <span class="product-live-dot"></span>
-            Available
-          </div>
-          <h3>Reporting <em>Pipelines</em></h3>
-          <p class="product-tagline">The report your boss asks for, in their inbox, on Monday at 9.</p>
-          <p class="product-desc">
-            Pull data from anywhere, format it the way you want it, deliver it where it gets read. Weekly PDFs, daily Slack digests, monthly board decks — automated end-to-end.
-          </p>
-          <ul class="product-features">
-            <li>Pulls from databases, APIs, spreadsheets, even web pages</li>
-            <li>Charts, tables, narrative summaries — your template</li>
-            <li>Delivered via email, Slack, Drive, or all three</li>
-            <li>Run on schedule or on-demand</li>
-          </ul>
-          <a href="#contact" class="btn-product" data-intent="product:reporting">
-            Automate my reports
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
-          </a>
-        </div>
-
-        <div class="product-card">
-          <div class="product-live">
-            <span class="product-live-dot"></span>
-            Available
-          </div>
-          <h3>Data <em>Sync &amp; ETL</em></h3>
-          <p class="product-tagline">System A and System B should talk. Now they will.</p>
-          <p class="product-desc">
-            We connect the tools your team already uses — CRM, accounting, e-commerce, POS, ad platforms — so the same record doesn't get typed three times. One source of truth, no copy-paste tax.
-          </p>
-          <ul class="product-features">
-            <li>Bi-directional sync between any two systems</li>
-            <li>Error handling, retries, alerting included</li>
-            <li>Run on a schedule or trigger on events</li>
-            <li>Audit log so you can prove every change</li>
-          </ul>
-          <a href="#contact" class="btn-product" data-intent="product:etl">
-            Wire mine together
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
-          </a>
-        </div>
-
-        <div class="product-card">
-          <div class="product-live">
-            <span class="product-live-dot"></span>
-            Available
-          </div>
-          <h3>Spreadsheet <em>Automation</em></h3>
-          <p class="product-tagline">Stop opening Excel just to update three cells.</p>
-          <p class="product-desc">
-            Sheets and Excel files that fill themselves — from APIs, databases, inboxes, or other spreadsheets. Add the formulas you actually need; we wire the inputs.
-          </p>
-          <ul class="product-features">
-            <li>Google Sheets &amp; Excel (desktop + 365)</li>
-            <li>Auto-refresh on schedule or trigger</li>
-            <li>Email digests when key cells change</li>
-            <li>Plays nicely with QuickBooks, Stripe, Square, HubSpot</li>
-          </ul>
-          <a href="#contact" class="btn-product" data-intent="product:spreadsheet">
-            Take this off my plate
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
-          </a>
-        </div>
-
-        <div class="product-card">
-          <div class="product-live">
-            <span class="product-live-dot"></span>
-            Available
-          </div>
-          <h3>File &amp; Document <em>Processing</em></h3>
-          <p class="product-tagline">Turn the folder full of PDFs into something useful.</p>
-          <p class="product-desc">
-            Bulk renaming, OCR + extraction, format conversion, watermarking, redaction. The scripts that take a Friday afternoon, run in 12 seconds, and never miss a row.
-          </p>
-          <ul class="product-features">
-            <li>PDF, image, video, audio — anything that's a file</li>
-            <li>OCR + structured extraction (invoices, forms, receipts)</li>
-            <li>Bulk rename, split, merge, convert</li>
-            <li>One-click run or fully scheduled</li>
-          </ul>
-          <a href="#contact" class="btn-product" data-intent="product:file-proc">
-            Build mine
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
-          </a>
-        </div>
-
-        <div class="product-card">
-          <div class="product-live">
-            <span class="product-live-dot"></span>
-            Available
-          </div>
-          <h3>Lead-Gen <em>Scrapers</em></h3>
-          <p class="product-tagline">Targeted lead lists, fresh, deduped, in your inbox.</p>
-          <p class="product-desc">
-            Tell me the niche, the geography, and the source. I'll deliver a clean CSV of qualified prospects — phone, email, social, the works — refreshed on whatever cadence your funnel needs.
-          </p>
-          <ul class="product-features">
-            <li>Custom-tuned to your buyer profile</li>
-            <li>Deduped, validated, source-tracked</li>
-            <li>Weekly, monthly, or on-demand drops</li>
-            <li>Compliant collection, transparent sourcing</li>
-          </ul>
-          <a href="#contact" class="btn-product" data-intent="product:leadgen">
-            Build my list
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
-          </a>
-        </div>
-
-        <div class="product-card">
-          <div class="product-live">
-            <span class="product-live-dot"></span>
-            Available
-          </div>
-          <h3>Custom <em>One-Off Script</em></h3>
-          <p class="product-tagline">If a human is doing it the same way every day — a script can do it tonight.</p>
-          <p class="product-desc">
-            The catch-all. Some piece of work your team does every week that nobody's automated because nobody had time. Bring the workflow, leave with the script.
-          </p>
-          <ul class="product-features">
-            <li>Discovery call → scoped quote → fixed price</li>
-            <li>Source code handed over, you own it outright</li>
-            <li>Documentation + run instructions included</li>
-            <li>Optional monthly maintenance retainer</li>
-          </ul>
-          <a href="#contact" class="btn-product" data-intent="product:oneoff">
-            Tell me what's slow
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
-          </a>
-        </div>
       </div>
     </div>
   </section>
