@@ -1384,6 +1384,54 @@
       border-color: var(--clay-light);
     }
 
+    /* === TIER PRIMARY CTA — real "start" button on each pricing tier === */
+    .tier-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+      padding: 12px 18px;
+      background: var(--ink);
+      color: var(--cream);
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+      cursor: pointer;
+      border: 1.5px solid var(--ink);
+    }
+    .tier-cta:hover {
+      background: var(--clay-light);
+      color: var(--ink);
+      transform: translateY(-1px);
+      border-color: var(--clay-light);
+    }
+    .pricing-card:hover .tier-cta {
+      background: transparent;
+      color: var(--cream);
+      border-color: rgba(252,238,10,0.4);
+    }
+    .pricing-card:hover .tier-cta:hover {
+      background: var(--clay-light);
+      color: var(--ink);
+      border-color: var(--clay-light);
+    }
+    .tier-cta-see {
+      display: block;
+      margin-top: 10px;
+      font-size: 11px;
+      color: rgba(10,10,15,0.4);
+      text-decoration: none;
+      transition: color 0.15s;
+      letter-spacing: 0.02em;
+    }
+    .tier-cta-see:hover { color: var(--clay-light); }
+    .pricing-card:hover .tier-cta-see { color: rgba(250,247,242,0.4); }
+    .pricing-card:hover .tier-cta-see:hover { color: var(--clay-light); }
+
     /* === UTILITIES === */
     .reveal {
       opacity: 0;
@@ -3855,7 +3903,8 @@
                 <div class="tier-price"><small>from</small><em>$800</em></div>
               </div>
               <p class="tier-desc">Up to 5 pages, custom design (not a template), mobile-responsive, contact form, hosted &amp; launched. ~10-day turnaround. Big7 Construction lives here.</p>
-              <a href="#product-big7" class="btn-buy-contact">See Big7 Construction →</a>
+              <a href="#contact" class="tier-cta" data-intent="tier:website:basic">Start this build →</a>
+              <a href="#product-big7" class="tier-cta-see">or see it live: Big7 Construction ↓</a>
             </div>
 
             <div class="pricing-tier">
@@ -3865,7 +3914,8 @@
                 <div class="tier-price"><small>from</small><em>$2,500</em></div>
               </div>
               <p class="tier-desc">Up to 10 pages, editorial design system, content collection / CMS, one live integration, forms with automation, full SEO wired. 3–4 week turnaround. Aries Outdoor Living lives here.</p>
-              <a href="#product-aries" class="btn-buy-contact">See Aries Outdoor Living →</a>
+              <a href="#contact" class="tier-cta" data-intent="tier:website:signature">Start this build →</a>
+              <a href="#product-aries" class="tier-cta-see">or see it live: Aries Outdoor Living ↓</a>
             </div>
 
             <div class="pricing-tier">
@@ -3874,7 +3924,8 @@
                 <div class="tier-price"><small>from</small><em>$6,500</em></div>
               </div>
               <p class="tier-desc">15+ pages, interactive features (scopers, calculators, embeds), custom animations, 2–3 integrations, analytics, launch coaching. 6–8 week turnaround. This site (M³) lives here.</p>
-              <a href="#product-m3" class="btn-buy-contact">See M³ (this site) →</a>
+              <a href="#contact" class="tier-cta" data-intent="tier:website:flagship">Start this build →</a>
+              <a href="#product-m3" class="tier-cta-see">or see it live: M³ (this site) ↓</a>
             </div>
 
           </div>
@@ -3890,7 +3941,8 @@
                 <div class="tier-name">Script / Integration</div>
               </div>
               <p class="tier-desc">Data syncs, reporting pipelines, file processing, workflow automation. Scoped and quoted after a discovery call.</p>
-              <a href="#product-reporting" class="btn-buy-contact">See reporting pipelines →</a>
+              <a href="#contact" class="tier-cta" data-intent="tier:auto:script">Start this script →</a>
+              <a href="#product-reporting" class="tier-cta-see">or see it live: reporting pipelines ↓</a>
             </div>
 
             <div class="pricing-tier">
@@ -3898,7 +3950,7 @@
                 <div class="tier-name">Ongoing Maintenance</div>
               </div>
               <p class="tier-desc">Updates, monitoring, and fixes for existing automation. You focus on the business — I keep the systems running.</p>
-              <a href="#contact" class="btn-buy-contact">Schedule a call →</a>
+              <a href="#contact" class="tier-cta" data-intent="tier:auto:maint">Get on the calendar →</a>
             </div>
 
           </div>
@@ -3916,7 +3968,8 @@
                 <div class="tier-price"><small>from</small><em>$1,500</em></div>
               </div>
               <p class="tier-desc">Bot built, configured, deployed to your accounts, handed off. Full source on your GitHub. You run it forever — no monthly fee.</p>
-              <a href="#bot-playbook" class="btn-buy-contact">See the playbook →</a>
+              <a href="#contact" class="tier-cta" data-intent="tier:bot:diy">Launch this bot →</a>
+              <a href="#bot-playbook" class="tier-cta-see">or see the playbook ↓</a>
             </div>
 
             <div class="pricing-tier">
@@ -3926,7 +3979,8 @@
                 <div class="tier-price"><small>$800 + </small><em>$400/mo</em></div>
               </div>
               <p class="tier-desc">Set up on my infra, I keep it posting, monitor uptime, send monthly performance emails. Free niche tweaks up to 2/quarter. Cancel anytime.</p>
-              <a href="#product-finance-reel" class="btn-buy-contact">See Finance Reel Bot →</a>
+              <a href="#contact" class="tier-cta" data-intent="tier:bot:managed">Launch this bot →</a>
+              <a href="#product-finance-reel" class="tier-cta-see">or see it live: Finance Reel Bot ↓</a>
             </div>
 
             <div class="pricing-tier">
@@ -3936,7 +3990,8 @@
                 <div class="tier-price"><small>$2,500 + </small><em>$800/mo</em></div>
               </div>
               <p class="tier-desc">Multi-platform posting (YouTube + TikTok + Reels + X), weekly perf reports, thumbnail templates, monthly strategy call. The whole operation on rails.</p>
-              <a href="#bot-playbook" class="btn-buy-contact">See the playbook →</a>
+              <a href="#contact" class="tier-cta" data-intent="tier:bot:full">Launch this bot →</a>
+              <a href="#bot-playbook" class="tier-cta-see">or see the playbook ↓</a>
             </div>
 
           </div>
@@ -3952,7 +4007,8 @@
                 <div class="tier-name">Internal Tool</div>
               </div>
               <p class="tier-desc">Staff portals, admin dashboards, approval workflows. Built around how your business actually operates.</p>
-              <a href="#product-microservices" class="btn-buy-contact">See the microservices platform →</a>
+              <a href="#contact" class="tier-cta" data-intent="tier:portal:internal">Scope my tool →</a>
+              <a href="#product-microservices" class="tier-cta-see">or see it live: microservices platform ↓</a>
             </div>
 
             <div class="pricing-tier">
@@ -3960,7 +4016,8 @@
                 <div class="tier-name">Client-Facing App</div>
               </div>
               <p class="tier-desc">Customer dashboards, client portals, reporting tools. Auth, data layer, full UI — scoped to your use case.</p>
-              <a href="#product-ai-doc" class="btn-buy-contact">See the AI Doc Assistant →</a>
+              <a href="#contact" class="tier-cta" data-intent="tier:portal:client">Scope my app →</a>
+              <a href="#product-ai-doc" class="tier-cta-see">or see it live: AI Doc Assistant ↓</a>
             </div>
 
           </div>
@@ -4199,7 +4256,7 @@
                 <li>Runs on your own hosting bill (~$5–$20/mo)</li>
                 <li>No monthly fee to me — ever</li>
               </ul>
-              <a href="#contact" class="bp-tier-cta">Build my bot →</a>
+              <a href="#contact" class="bp-tier-cta" data-intent="tier:bot:diy">Build my bot →</a>
             </div>
 
             <div class="bp-tier is-featured">
@@ -4215,7 +4272,7 @@
                 <li>Cancel anytime — you get the export</li>
                 <li>Analytics dashboard access</li>
               </ul>
-              <a href="#contact" class="bp-tier-cta">Launch this for me →</a>
+              <a href="#contact" class="bp-tier-cta" data-intent="tier:bot:managed">Launch this for me →</a>
             </div>
 
             <div class="bp-tier">
@@ -4231,7 +4288,7 @@
                 <li>Monthly strategy call with me</li>
                 <li>Direct Slack channel for real-time asks</li>
               </ul>
-              <a href="#contact" class="bp-tier-cta">Full send this →</a>
+              <a href="#contact" class="bp-tier-cta" data-intent="tier:bot:full">Full send this →</a>
             </div>
 
           </div>
@@ -4560,7 +4617,7 @@
             <li>Custom domain, fast load, mobile-first</li>
             <li>Built once, runs forever</li>
           </ul>
-          <a href="#contact" class="btn-product">
+          <a href="#contact" class="btn-product" data-intent="product:big7">
             Build mine like this
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M13 5l7 7-7 7"/>
@@ -4584,7 +4641,7 @@
             <li>Performance-budgeted from the start</li>
             <li>Yours to own outright after launch</li>
           </ul>
-          <a href="#contact" class="btn-product">
+          <a href="#contact" class="btn-product" data-intent="product:m3">
             Want one like this
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M13 5l7 7-7 7"/>
@@ -4637,7 +4694,7 @@
             <li>MediatR + FluentValidation, MassTransit retry + DLQ</li>
             <li>Live React pipeline visualizer with animated event flow</li>
           </ul>
-          <a href="#contact" class="btn-product">
+          <a href="#contact" class="btn-product" data-intent="product:microservices">
             Build this for us
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M13 5l7 7-7 7"/>
@@ -4661,7 +4718,7 @@
             <li>Runs 24/7 — no editor, no posting calendar</li>
             <li>Stripped-down dashboard to swap voice or niche</li>
           </ul>
-          <a href="#contact" class="btn-product">
+          <a href="#contact" class="btn-product" data-intent="product:finance-reel">
             Launch this for me
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M13 5l7 7-7 7"/>
@@ -4685,7 +4742,7 @@
             <li>Light-assist drafts OR full autopilot</li>
             <li>Multi-account publishing across platforms</li>
           </ul>
-          <a href="#contact" class="btn-product">
+          <a href="#contact" class="btn-product" data-intent="product:video">
             Launch this for me
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M13 5l7 7-7 7"/>
@@ -4709,7 +4766,7 @@
             <li>Hashtag + title generation tuned per platform</li>
             <li>Self-improving — analytics feed the next pick</li>
           </ul>
-          <a href="#contact" class="btn-product">
+          <a href="#contact" class="btn-product" data-intent="product:anime">
             Launch my channel
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M13 5l7 7-7 7"/>
@@ -4733,7 +4790,7 @@
             <li>Built-in intro / outro / transition templates</li>
             <li>One-button approval OR fully managed</li>
           </ul>
-          <a href="#contact" class="btn-product">
+          <a href="#contact" class="btn-product" data-intent="product:twitch">
             Launch my channel
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M13 5l7 7-7 7"/>
@@ -4757,7 +4814,7 @@
             <li>Role + reward tiers tied to activity</li>
             <li>Scheduled announcements, polls, giveaways</li>
           </ul>
-          <a href="#contact" class="btn-product">
+          <a href="#contact" class="btn-product" data-intent="product:discord">
             Build my bot
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M13 5l7 7-7 7"/>
@@ -4781,7 +4838,7 @@
             <li>CRM / form / inbox event handlers</li>
             <li>Scheduled recurring messages &amp; reports</li>
           </ul>
-          <a href="#contact" class="btn-product">
+          <a href="#contact" class="btn-product" data-intent="product:slack">
             Build my bot
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M13 5l7 7-7 7"/>
@@ -4805,7 +4862,7 @@
             <li>Slack / Teams / web embed</li>
             <li>Auth-gated to your team only</li>
           </ul>
-          <a href="#contact" class="btn-product">
+          <a href="#contact" class="btn-product" data-intent="product:ai-doc">
             Train mine on my docs
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M13 5l7 7-7 7"/>
@@ -4829,7 +4886,7 @@
             <li>Built on the same proven Finance + Video Pipeline core</li>
             <li>Fixed-price setup or fully managed</li>
           </ul>
-          <a href="#contact" class="btn-product">
+          <a href="#contact" class="btn-product" data-intent="product:niche">
             Pitch my niche
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M13 5l7 7-7 7"/>
@@ -4857,7 +4914,7 @@
             <li>Delivered via email, Slack, Drive, or all three</li>
             <li>Run on schedule or on-demand</li>
           </ul>
-          <a href="#contact" class="btn-product">
+          <a href="#contact" class="btn-product" data-intent="product:reporting">
             Automate my reports
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M13 5l7 7-7 7"/>
@@ -4881,7 +4938,7 @@
             <li>Run on a schedule or trigger on events</li>
             <li>Audit log so you can prove every change</li>
           </ul>
-          <a href="#contact" class="btn-product">
+          <a href="#contact" class="btn-product" data-intent="product:etl">
             Wire mine together
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M13 5l7 7-7 7"/>
@@ -4905,7 +4962,7 @@
             <li>Email digests when key cells change</li>
             <li>Plays nicely with QuickBooks, Stripe, Square, HubSpot</li>
           </ul>
-          <a href="#contact" class="btn-product">
+          <a href="#contact" class="btn-product" data-intent="product:spreadsheet">
             Take this off my plate
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M13 5l7 7-7 7"/>
@@ -4929,7 +4986,7 @@
             <li>Bulk rename, split, merge, convert</li>
             <li>One-click run or fully scheduled</li>
           </ul>
-          <a href="#contact" class="btn-product">
+          <a href="#contact" class="btn-product" data-intent="product:file-proc">
             Build mine
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M13 5l7 7-7 7"/>
@@ -4953,7 +5010,7 @@
             <li>Weekly, monthly, or on-demand drops</li>
             <li>Compliant collection, transparent sourcing</li>
           </ul>
-          <a href="#contact" class="btn-product">
+          <a href="#contact" class="btn-product" data-intent="product:leadgen">
             Build my list
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M13 5l7 7-7 7"/>
@@ -4977,7 +5034,7 @@
             <li>Documentation + run instructions included</li>
             <li>Optional monthly maintenance retainer</li>
           </ul>
-          <a href="#contact" class="btn-product">
+          <a href="#contact" class="btn-product" data-intent="product:oneoff">
             Tell me what's slow
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M13 5l7 7-7 7"/>
@@ -5615,6 +5672,76 @@
         });
 
         render();
+      })();
+
+      // ---------- Universal intent-CTA prefill — every "start" button feeds intake ----------
+      // Rule: any element with data-intent, on click, seeds the contact textarea with
+      // a formatted brief describing what the visitor picked. Existing user text is
+      // preserved; a prior CTA prefill (detected by the SEPARATOR line) is replaced.
+      (function convertCtaInit() {
+        const CATALOG = {
+          'tier:website:basic':     { title: 'WEBSITE — Basic tier',     detail: 'Starting at $800 · up to 5 pages · custom design · hosted & launched · ~10-day turnaround.' },
+          'tier:website:signature': { title: 'WEBSITE — Signature tier', detail: 'Starting at $2,500 · up to 10 pages · editorial design system · CMS · one integration · SEO wired · 3–4 week turnaround.' },
+          'tier:website:flagship':  { title: 'WEBSITE — Flagship tier',  detail: 'Starting at $6,500 · 15+ pages · interactive features · custom animations · 2–3 integrations · analytics · 6–8 week turnaround.' },
+          'tier:auto:script':       { title: 'AUTOMATION — Script / Integration', detail: 'Data syncs, reporting pipelines, file processing, or workflow automation. Quoted after a 30-min discovery call.' },
+          'tier:auto:maint':        { title: 'AUTOMATION — Ongoing Maintenance',  detail: 'Updates + monitoring + fixes on my existing automation. Let\'s get on the calendar to talk scope.' },
+          'tier:bot:diy':           { title: 'CONTENT BOT — DIY Setup',      detail: '$1,500 one-time. Bot built for my niche, deployed to my accounts, full source on my GitHub. I run it forever, no monthly fee.' },
+          'tier:bot:managed':       { title: 'CONTENT BOT — Managed Bot',    detail: '$800 setup + $400/mo. You run it on your infra, monitor uptime, send monthly performance emails. Cancel anytime.' },
+          'tier:bot:full':          { title: 'CONTENT BOT — Full Channel',   detail: '$2,500 setup + $800/mo. Multi-platform (YouTube + TikTok + Reels + X), weekly reports, thumbnail templates, monthly strategy call.' },
+          'tier:portal:internal':   { title: 'PORTAL — Internal Tool',       detail: 'Staff portal, admin dashboard, or approval workflow. Scoped and quoted after discovery.' },
+          'tier:portal:client':     { title: 'PORTAL — Client-Facing App',   detail: 'Customer dashboard, client portal, or reporting tool. Auth + data layer + full UI. Scoped to my use case.' },
+          'product:aries':          { title: 'INTEREST — Aries Outdoor Living style build', detail: 'Editorial portfolio site like Aries. Case studies per project, live Google reviews, contact form → real leads.' },
+          'product:big7':           { title: 'INTEREST — Big7 Construction style build',    detail: 'Clean small-business landing site like Big7 — mobile-first, contact form, live in under two weeks.' },
+          'product:m3':             { title: 'INTEREST — M³ style build',                   detail: 'Interactive marketing site like m3.systems. Animations, live quote builder, cursor + particles, the whole show.' },
+          'product:siteguide':      { title: 'INTEREST — SiteGuide (AI chat widget)',       detail: 'Embeddable Claude-powered chat assistant. One <script> tag, tenant JSON config, drops onto any site.' },
+          'product:microservices':  { title: 'INTEREST — Microservices platform',           detail: 'Multi-service internal tooling platform (portals, admin dashboards, workflows). Trunk-style.' },
+          'product:finance-reel':   { title: 'INTEREST — Finance Reel Bot',                 detail: 'Automated finance YouTube Shorts channel. Sources → scripts → renders → uploads on schedule.' },
+          'product:video':          { title: 'INTEREST — Video Pipeline Bot',               detail: 'Raw footage → trimmed → compiled → published shorts. Any source, any niche, hands-off.' },
+          'product:anime':          { title: 'INTEREST — Anime Shorts Bot',                 detail: 'Trending anime → daily shorts across YouTube + TikTok + Reels. Analytics feed the next pick.' },
+          'product:twitch':         { title: 'INTEREST — Twitch Clip Compiler',             detail: 'Trending game → top clips → compilation → auto-upload. "Top 10 Twitch clips" format on rails.' },
+          'product:discord':        { title: 'INTEREST — Discord Community Bot',            detail: 'Welcome flows, automod, roles, rewards, announcements. Community operator you shouldn\'t hire humans for.' },
+          'product:slack':          { title: 'INTEREST — Slack Workflow Bot',               detail: 'Approvals, standups, on-call, CRM notifications, recurring reports. The teammate that never sleeps.' },
+          'product:ai-doc':         { title: 'INTEREST — AI Doc Assistant',                 detail: 'RAG assistant trained on my manuals + SOPs. Cited answers with page references. Slack / Teams / web embed.' },
+          'product:niche':          { title: 'INTEREST — Custom Niche Content Bot',         detail: 'My niche + source feed + posting cadence. Same core pipeline as Finance Reel + Video Pipeline, retargeted at me.' },
+          'product:reporting':      { title: 'INTEREST — Reporting Pipelines',              detail: 'Automated dashboards + scheduled reports pulled from my systems. Delivered on cadence, no manual pulls.' },
+          'product:etl':            { title: 'INTEREST — Data Sync / ETL',                  detail: 'Move data between systems (CRM ↔ warehouse, Airtable ↔ Postgres, etc.). Retries, deduping, alerting.' },
+          'product:spreadsheet':    { title: 'INTEREST — Spreadsheet Automation',           detail: 'Kill the manual copy-paste from Excel / Google Sheets. Scheduled pulls, formulas, exports.' },
+          'product:file-proc':      { title: 'INTEREST — File & Document Processing',       detail: 'Batch PDF / CSV / image processing. Rename, extract, classify, upload, notify — pick your workflow.' },
+          'product:leadgen':        { title: 'INTEREST — Lead-Gen Scrapers',                detail: 'Structured lead lists pulled from public sources on schedule. CSV or straight into my CRM.' },
+          'product:oneoff':         { title: 'INTEREST — Custom One-Off Script',            detail: 'A one-time job — data migration, bulk edit, one-time report. I\'ll tell you what it is and we go from there.' }
+        };
+
+        const SEPARATOR = '='.repeat(40);
+
+        function buildBrief(item) {
+          return [
+            item.title,
+            SEPARATOR,
+            '',
+            item.detail,
+            '',
+            'A little about the project / business:',
+            ''
+          ].join('\n');
+        }
+
+        function isPriorPrefill(text) {
+          return typeof text === 'string' && text.indexOf(SEPARATOR) !== -1;
+        }
+
+        document.addEventListener('click', function (e) {
+          const el = e.target.closest('[data-intent]');
+          if (!el) return;
+          const item = CATALOG[el.dataset.intent];
+          if (!item) return;
+          const ta = document.querySelector('form textarea[name="message"]');
+          if (ta) {
+            if (!ta.value.trim() || isPriorPrefill(ta.value)) {
+              ta.value = buildBrief(item);
+              ta.dispatchEvent(new Event('input'));
+            }
+          }
+        });
       })();
 
       // ---------- Sticky CTA — show after user has scrolled past hero + isn't in contact section ----------
