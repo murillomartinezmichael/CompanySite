@@ -1364,36 +1364,7 @@
       font-weight: 600;
     }
 
-    /* === BUY BUTTONS === */
-    .btn-buy {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 18px;
-      background: var(--clay-dark);
-      color: var(--ink);
-      padding: 11px 24px;
-      border: none;
-      border-radius: 999px;
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: 0.02em;
-      cursor: pointer;
-      transition: all 0.25s;
-    }
-
-    .btn-buy:hover:not(:disabled) {
-      background: var(--clay);
-      transform: translateY(-1px);
-    }
-
-    .btn-buy:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-      transform: none;
-    }
-
+    /* === PACKAGE TIER CTA === */
     .btn-buy-contact {
       display: inline-flex;
       align-items: center;
@@ -1411,42 +1382,6 @@
     .btn-buy-contact:hover {
       color: var(--clay-light);
       border-color: var(--clay-light);
-    }
-
-    /* === TOAST === */
-    .toast {
-      position: fixed;
-      bottom: 32px;
-      left: 50%;
-      transform: translateX(-50%) translateY(16px);
-      padding: 15px 28px;
-      border-radius: 999px;
-      font-size: 14px;
-      font-weight: 500;
-      opacity: 0;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 200;
-      white-space: nowrap;
-      max-width: 90vw;
-      text-align: center;
-      pointer-events: none;
-    }
-
-    .toast-visible {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    .toast-success {
-      background: #1e3d12;
-      color: #8ecf68;
-      border: 1px solid rgba(92,138,71,0.3);
-    }
-
-    .toast-error {
-      background: #3a1515;
-      color: #e08a8a;
-      border: 1px solid rgba(200,80,80,0.25);
     }
 
     /* === UTILITIES === */
@@ -1542,22 +1477,6 @@
       color: rgba(10,10,15,0.45);
       font-weight: 500;
       flex-shrink: 0;
-    }
-
-    .tier-price {
-      font-family: 'Fraunces', serif;
-      font-size: 32px;
-      font-weight: 300;
-      line-height: 1;
-      letter-spacing: -0.03em;
-      color: var(--ink);
-    }
-
-    .tier-price span {
-      font-size: 14px;
-      color: rgba(10,10,15,0.4);
-      font-family: 'Inter', sans-serif;
-      letter-spacing: 0;
     }
 
     .tier-desc {
@@ -2323,7 +2242,7 @@
       <div class="nav-links">
         <a href="#showcase">Work</a>
         <a href="#work">Services</a>
-        <a href="#pricing">Pricing</a>
+        <a href="#pricing">Packages</a>
         <a href="#products">Products</a>
         <a href="#about">About</a>
         <a href="#contact" class="btn-nav">Get in touch</a>
@@ -2613,19 +2532,19 @@
     </div>
   </section>
 
-  <!-- PRICING -->
+  <!-- PACKAGES — shapes projects tend to take. Every build is quoted per-project after a 30-min call. -->
   <section class="pricing-section" id="pricing">
     <div class="container">
-      <div class="section-label">Pricing</div>
-      <h2 class="section-title">Clear scope.<br><em>No surprises.</em></h2>
+      <div class="section-label">Packages</div>
+      <h2 class="section-title">Clear scope.<br><em>Quoted per project.</em></h2>
       <p class="section-intro">
-        Starting rates for every service. Complex builds are quoted after a 30-min call — but this is what most projects cost.
+        No fixed rates — every build is different. These are the shapes work usually takes, each with a live example under it. Book a free 30-minute call and leave with a fixed quote.
       </p>
 
-      <!-- PROJECT SCOPER — interactive 4-question wizard. No backend; pure DOM. -->
-      <div class="scoper sr" id="scoper" aria-label="Project cost estimator">
-        <div class="scoper-eyebrow">// Quick estimate</div>
-        <div class="scoper-title">Scope your project in <em>under a minute</em>.</div>
+      <!-- PROJECT SCOPER — interactive 4-question wizard. No backend; pure DOM. Outputs a scope brief (not a price). -->
+      <div class="scoper sr" id="scoper" aria-label="Project brief builder">
+        <div class="scoper-eyebrow">// Quick brief</div>
+        <div class="scoper-title">Draft your brief in <em>under a minute</em>.</div>
         <div class="scoper-bar"><span id="scoperBar"></span></div>
 
         <div class="scoper-step active" data-step="0" data-key="type">
@@ -2668,8 +2587,8 @@
         </div>
 
         <div class="scoper-result" id="scoperResult">
-          <div class="scoper-eyebrow">// Estimate</div>
-          <div class="scoper-result-band" id="scoperBand">$—</div>
+          <div class="scoper-eyebrow">// Your brief</div>
+          <div class="scoper-result-band" id="scoperBand">—</div>
           <div class="scoper-result-meta" id="scoperMeta"></div>
           <a href="#contact" class="scoper-cta" id="scoperCta">Send the brief →</a>
           <button class="scoper-restart" id="scoperRestart">Start over</button>
@@ -2691,29 +2610,26 @@
             <div class="pricing-tier">
               <div class="tier-row">
                 <div class="tier-name">Starter</div>
-                <div class="tier-price">$500</div>
               </div>
               <p class="tier-desc">Single-page landing site. Mobile-ready, contact form, SEO basics. Live in 48–72 hours.</p>
-              <button class="btn-buy" onclick="buyPackage(this, 'website-starter')">Buy now →</button>
+              <a href="#product-big7" class="btn-buy-contact">See Big7 Construction →</a>
             </div>
 
             <div class="pricing-tier">
               <div class="tier-row">
                 <div class="tier-name">Business</div>
-                <div class="tier-price">$1,200</div>
               </div>
               <p class="tier-desc">3–5 pages, Google Analytics, contact form, polished design. Delivered in under a week. Aries Outdoor Living lives at this tier.</p>
-              <button class="btn-buy" onclick="buyPackage(this, 'website-business')">Buy now →</button>
+              <a href="#product-aries" class="btn-buy-contact">See Aries Outdoor Living →</a>
             </div>
 
             <div class="pricing-tier">
               <div class="tier-badge">Most requested</div>
               <div class="tier-row">
                 <div class="tier-name">Custom</div>
-                <div class="tier-price">$2,000<span>+</span></div>
               </div>
               <p class="tier-desc">Full design system, animations, CMS, e-commerce, or anything that requires real engineering. Scoped after a call.</p>
-              <a href="#contact" class="btn-buy-contact">Schedule a call →</a>
+              <a href="#product-m3" class="btn-buy-contact">See M³ (this site) →</a>
             </div>
 
           </div>
@@ -2727,16 +2643,14 @@
             <div class="pricing-tier">
               <div class="tier-row">
                 <div class="tier-name">Script / Integration</div>
-                <div class="tier-price">$750<span>+</span></div>
               </div>
               <p class="tier-desc">Data syncs, reporting pipelines, file processing, workflow automation. Scoped and quoted after a discovery call.</p>
-              <a href="#contact" class="btn-buy-contact">Schedule a call →</a>
+              <a href="#product-reporting" class="btn-buy-contact">See reporting pipelines →</a>
             </div>
 
             <div class="pricing-tier">
               <div class="tier-row">
                 <div class="tier-name">Ongoing Maintenance</div>
-                <div class="tier-price">$150<span> / mo</span></div>
               </div>
               <p class="tier-desc">Updates, monitoring, and fixes for existing automation. You focus on the business — I keep the systems running.</p>
               <a href="#contact" class="btn-buy-contact">Schedule a call →</a>
@@ -2751,23 +2665,21 @@
           <div class="pricing-tiers">
 
             <div class="pricing-tier">
-              <div class="tier-badge">Fixed price</div>
+              <div class="tier-badge">Own it outright</div>
               <div class="tier-row">
                 <div class="tier-name">Bot Setup</div>
-                <div class="tier-price">$900</div>
               </div>
               <p class="tier-desc">Bot built, configured, documented, and handed off. You own it outright.</p>
-              <button class="btn-buy" onclick="buyPackage(this, 'bot-setup')">Buy now →</button>
+              <a href="#product-siteguide" class="btn-buy-contact">See SiteGuide →</a>
             </div>
 
             <div class="pricing-tier">
               <div class="tier-badge">Hands-off</div>
               <div class="tier-row">
                 <div class="tier-name">Managed Bot</div>
-                <div class="tier-price">$200<span> / mo</span></div>
               </div>
               <p class="tier-desc">I run it, maintain it, and keep it posting. You focus on growth — the pipeline handles itself.</p>
-              <a href="#contact" class="btn-buy-contact">Schedule a call →</a>
+              <a href="#product-finance-reel" class="btn-buy-contact">See Finance Reel Bot →</a>
             </div>
 
           </div>
@@ -2781,19 +2693,17 @@
             <div class="pricing-tier">
               <div class="tier-row">
                 <div class="tier-name">Internal Tool</div>
-                <div class="tier-price">$3,000<span>+</span></div>
               </div>
               <p class="tier-desc">Staff portals, admin dashboards, approval workflows. Built around how your business actually operates.</p>
-              <a href="#contact" class="btn-buy-contact">Schedule a call →</a>
+              <a href="#product-microservices" class="btn-buy-contact">See the microservices platform →</a>
             </div>
 
             <div class="pricing-tier">
               <div class="tier-row">
                 <div class="tier-name">Client-Facing App</div>
-                <div class="tier-price">$6,000<span>+</span></div>
               </div>
               <p class="tier-desc">Customer dashboards, client portals, reporting tools. Auth, data layer, full UI — scoped to your use case.</p>
-              <a href="#contact" class="btn-buy-contact">Schedule a call →</a>
+              <a href="#product-ai-doc" class="btn-buy-contact">See the AI Doc Assistant →</a>
             </div>
 
           </div>
@@ -2802,7 +2712,7 @@
       </div>
 
       <p class="pricing-note">
-        Every project includes one revision round. You own the code outright. &nbsp;·&nbsp; <a href="#contact">Start with a free 30-min call →</a>
+        Every project includes one revision round. You own the code outright. &nbsp;·&nbsp; <a href="#contact">Start with a free 30-min scoping call →</a>
       </p>
     </div>
   </section>
@@ -2819,7 +2729,7 @@
       <div class="products-subhead">— Websites for hire</div>
       <div class="products-grid">
 
-        <div class="product-card">
+        <div class="product-card" id="product-aries">
           <div class="product-live">
             <span class="product-live-dot"></span>
             Live · Case study
@@ -2843,7 +2753,7 @@
           </a>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" id="product-big7">
           <div class="product-live">
             <span class="product-live-dot"></span>
             Live · Case study
@@ -2867,7 +2777,7 @@
           </a>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" id="product-m3">
           <div class="product-live">
             <span class="product-live-dot"></span>
             You're here
@@ -2891,83 +2801,12 @@
           </a>
         </div>
 
-        <div class="product-card">
-          <div class="product-live">
-            <span class="product-live-dot"></span>
-            Available
-          </div>
-          <h3>Restaurants &amp; <em>local food</em></h3>
-          <p class="product-tagline">Menu front-and-center, reservations one tap away.</p>
-          <p class="product-desc">
-            Sites built for places people choose with their thumb at 6:45pm. Menu, hours, address, photos, reservation link — nothing in the way.
-          </p>
-          <ul class="product-features">
-            <li>Mobile-first design, fast on slow connections</li>
-            <li>Live menu — update prices without a web dev</li>
-            <li>OpenTable / Resy / phone integration</li>
-            <li>Google Business + map embed wired in</li>
-          </ul>
-          <a href="#contact" class="btn-product">
-            Get this for my place
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
-          </a>
-        </div>
-
-        <div class="product-card">
-          <div class="product-live">
-            <span class="product-live-dot"></span>
-            Available
-          </div>
-          <h3>Trades &amp; <em>home services</em></h3>
-          <p class="product-tagline">Plumbers, electricians, HVAC, landscapers. Look bookable.</p>
-          <p class="product-desc">
-            The kind of site that ends a homeowner's "should I call these guys?" hesitation in three seconds. License numbers, real photos, real reviews, and an obvious way to call you.
-          </p>
-          <ul class="product-features">
-            <li>Service area + emergency-call CTA always visible</li>
-            <li>Reviews and badges pulled in, not faked</li>
-            <li>Photo gallery of real jobs, not stock photos</li>
-            <li>Lead form goes to your phone, not a CRM black hole</li>
-          </ul>
-          <a href="#contact" class="btn-product">
-            Quote my site
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
-          </a>
-        </div>
-
-        <div class="product-card">
-          <div class="product-live">
-            <span class="product-live-dot"></span>
-            Available
-          </div>
-          <h3>Gyms, studios &amp; <em>coaches</em></h3>
-          <p class="product-tagline">Convert the curious into the booked.</p>
-          <p class="product-desc">
-            Class schedules, trainer bios, intro-offer landing pages, and the one button that matters: "Book a free session." Built for the moment a stranger decides today is the day.
-          </p>
-          <ul class="product-features">
-            <li>Class schedule + booking embed</li>
-            <li>Intro-offer landing page tuned to convert</li>
-            <li>Coach bios with the human touch</li>
-            <li>Instagram + reviews pulled in automatically</li>
-          </ul>
-          <a href="#contact" class="btn-product">
-            Build my gym site
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
-          </a>
-        </div>
       </div>
 
       <div class="products-subhead">— Bots &amp; Pipelines</div>
       <div class="products-grid">
 
-        <div class="product-card">
+        <div class="product-card" id="product-siteguide">
           <div class="product-live">
             <span class="product-live-dot"></span>
             Live · Powering this page
@@ -2991,7 +2830,7 @@
           </a>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" id="product-microservices">
           <div class="product-live">
             <span class="product-live-dot"></span>
             Case study
@@ -3015,7 +2854,7 @@
           </a>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" id="product-finance-reel">
           <div class="product-live">
             <span class="product-live-dot"></span>
             Live &amp; running
@@ -3159,7 +2998,7 @@
           </a>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" id="product-ai-doc">
           <div class="product-live">
             <span class="product-live-dot"></span>
             Available
@@ -3211,7 +3050,7 @@
       <div class="products-subhead">— Automation &amp; Scripting</div>
       <div class="products-grid">
 
-        <div class="product-card">
+        <div class="product-card" id="product-reporting">
           <div class="product-live">
             <span class="product-live-dot"></span>
             Available
@@ -3594,7 +3433,7 @@
         </div>
         <div class="footer-links-col">
           <a href="#work">Services</a>
-          <a href="#pricing">Pricing</a>
+          <a href="#pricing">Packages</a>
           <a href="#products">Products</a>
           <a href="#process">Process</a>
           <a href="#about">About</a>
@@ -3797,41 +3636,18 @@
 
         function compute() {
           const a = state.answers;
-          // type → base band
-          const bases = {
-            site:   [500, 1500],
-            script: [400, 1800],
-            bot:    [800, 2500],
-            tool:   [2500, 8000],
-          };
-          let [lo, hi] = bases[a.type] || [600, 2000];
+          const typeName = { site: 'Website', script: 'Automation', bot: 'Always-on operator', tool: 'Internal tool' }[a.type] || 'Project';
+          const sizeName = { tiny: 'Small', small: 'Modest', medium: 'Sizable', unsure: 'Scope TBD' }[a.size] || '';
+          const urgencyName = a.urgency === 'rush' ? 'Rush' : a.urgency === 'month' ? 'Standard' : a.urgency === 'quarter' ? 'Flexible' : 'Flexible';
+          const ongoingName = { no: 'Hand-off, no retainer', light: 'Light monthly check-ins', full: 'Fully managed' }[a.ongoing] || '';
 
-          // size multiplier
-          const sizeMult = { tiny: 0.8, small: 1.0, medium: 1.8, unsure: 1.1 }[a.size] || 1;
-          lo *= sizeMult; hi *= sizeMult;
-          // urgency bump
-          if (a.urgency === 'rush') { lo *= 1.25; hi *= 1.25; }
-          // ongoing
-          let monthly = 0;
-          if (a.ongoing === 'light') monthly = 80;
-          if (a.ongoing === 'full')  monthly = 250;
-
-          lo = Math.round(lo / 50) * 50;
-          hi = Math.round(hi / 50) * 50;
-
-          // tone the result by type
-          const typeName = { site: 'website', script: 'automation', bot: 'always-on operator', tool: 'internal tool' }[a.type] || 'project';
-          const sizeName = { tiny: 'small', small: 'modest', medium: 'sizable', unsure: 'still-to-be-scoped' }[a.size] || '';
-          const urgencyName = a.urgency === 'rush' ? 'fast-turnaround' : a.urgency === 'month' ? 'standard-pace' : 'flexible-timeline';
-
-          bandEl.textContent = `$${lo.toLocaleString()} – $${hi.toLocaleString()}`;
-          metaEl.innerHTML = `<strong>${sizeName ? sizeName.charAt(0).toUpperCase() + sizeName.slice(1) + ', ' : ''}${urgencyName}</strong> ${typeName}.<br>` +
-            (monthly ? `Plus <strong>~$${monthly}/mo</strong> for ongoing care.<br>` : '') +
-            'This is a rough band — the actual number lands on a quick scoping call. No surprises after.';
+          bandEl.textContent = [typeName, sizeName, urgencyName].filter(Boolean).join(' · ');
+          metaEl.innerHTML = (ongoingName ? `<strong>After launch:</strong> ${ongoingName}.<br>` : '') +
+            'Send the brief and I\'ll come back within a day with a fixed quote — no vague hourly estimates.';
           // Pre-fill contact textarea if present
           const ta = document.querySelector('form textarea[name="message"]');
           if (ta && !ta.value) {
-            ta.value = `Project type: ${typeName}\nSize: ${sizeName}\nTimeline: ${urgencyName}\nOngoing: ${a.ongoing}\nEstimated band: $${lo.toLocaleString()} – $${hi.toLocaleString()}\n\nDetails: `;
+            ta.value = `Project type: ${typeName}\nSize: ${sizeName}\nTimeline: ${urgencyName}\nAfter launch: ${ongoingName}\n\nDetails: `;
           }
         }
 
@@ -3903,58 +3719,6 @@
     })();
   </script>
 
-  <script>
-    // UPDATE this URL after you deploy PaymentBackend to Railway
-    const BACKEND_URL = 'https://m3-payments.up.railway.app';
-
-    async function buyPackage(btn, packageId) {
-      const originalText = btn.textContent;
-      btn.disabled = true;
-      btn.textContent = 'Redirecting...';
-
-      try {
-        const res = await fetch(`${BACKEND_URL}/create-checkout-session`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            package: packageId,
-            success_url: window.location.origin + window.location.pathname,
-            cancel_url: window.location.href,
-          }),
-        });
-
-        if (!res.ok) throw new Error('Server error');
-        const { url } = await res.json();
-        window.location.href = url;
-      } catch {
-        btn.disabled = false;
-        btn.textContent = originalText;
-        showToast('Something went wrong. Email us directly to get started.', 'error');
-      }
-    }
-
-    function showToast(msg, type) {
-      const toast = document.createElement('div');
-      toast.className = `toast toast-${type}`;
-      toast.textContent = msg;
-      document.body.appendChild(toast);
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => toast.classList.add('toast-visible'));
-      });
-      setTimeout(() => {
-        toast.classList.remove('toast-visible');
-        setTimeout(() => toast.remove(), 400);
-      }, 5000);
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('paid') === '1') {
-        showToast("Payment received — I'll be in touch within 24 hours.", 'success');
-        history.replaceState({}, '', window.location.pathname);
-      }
-    });
-  </script>
 
   <!-- ============================================================
        SiteGuide — embedded AI guide widget

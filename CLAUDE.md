@@ -26,10 +26,8 @@ Railway — push to main triggers auto-deploy via Dockerfile. nginx serves on `$
 ## Env Vars
 None — fully static site, no server-side logic.
 
-## Pricing (reference)
-- Starter website: $350
-- Business website: $750
-- Bot/AI assistant setup: $600
+## Pricing
+Quote-based only. The site does not publish fixed rates — every project is scoped and quoted on a free 30-min call. If you're tempted to add a `$` back into the pricing section, don't: 2026-07-03 rework was intentional.
 
 ## Rules
 - **No JS framework, no build step.** Inline `<script>` is fine for small concerns (form submit, scroll reveals). Anything bigger goes in a sibling project that this site loads via `<script src>` (see SiteGuide embed).
