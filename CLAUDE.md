@@ -40,7 +40,7 @@ Quote-based only. The site does not publish fixed rates — every project is sco
 ## Standards & docs
 
 This project follows the cross-repo engineering standards:
-- `../ENGINEERING_STANDARDS.md` — principles + code quality + Definition of Done
+- `../docs/ENGINEERING_STANDARDS.md` — principles + code quality + Definition of Done
 - `../docs/*_STANDARDS.md` — API, testing, observability, security, database, hosting, microservices, accessibility, performance, release
 - Local doc-tier: `BRD.md` · `TRD.md` · `RUNBOOK.md` · `ONBOARDING.md` · `CHANGELOG.md` · `CONTRIBUTING.md` · `SECURITY.md`
 - ADRs in `docs/adr/`, postmortems in `docs/postmortems/`
