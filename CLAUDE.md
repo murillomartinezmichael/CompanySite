@@ -1,7 +1,7 @@
 # CLAUDE.md
 
 ## What This Is
-Static marketing website for Offload Labs — a software studio that builds automation, bots, and AI assistants for small businesses. Single-file HTML site with embedded CSS.
+Static marketing website for M³ — a software studio that builds automation, bots, and AI assistants for small businesses. Single-file HTML site with embedded CSS.
 
 ## Stack
 Single-file HTML5 + embedded CSS + small amount of inline JS (Stripe checkout toast, scroll reveals, contact form) → nginx:alpine Docker container on Railway. **No JS framework, no build step.**

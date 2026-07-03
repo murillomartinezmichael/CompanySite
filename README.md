@@ -1,5 +1,5 @@
 # CompanySite
-Offload Labs marketing website — automation, bots, and AI assistants for small business. Single-file static HTML site.
+M³ marketing website — automation, bots, and AI assistants for small business. Single-file static HTML site.
 
 ## Stack
 - HTML5 + embedded CSS (no build step, no JS framework)
