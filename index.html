@@ -2492,6 +2492,61 @@
       margin-top: 2px;
       letter-spacing: 0.02em;
     }
+    /* Custom-hours input inside the 4th care option */
+    .qb-care-custom .qb-care-input-wrap {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .qb-care-input {
+      width: 56px;
+      background: transparent;
+      border: none;
+      border-bottom: 1.5px solid rgba(10,10,15,0.3);
+      color: var(--clay);
+      font-family: 'Fraunces', serif;
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      text-align: right;
+      padding: 2px 4px;
+      outline: none;
+      font-variant-numeric: tabular-nums;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .qb-care-input:focus { border-bottom-color: var(--clay); }
+    .qb-care-input::-webkit-outer-spin-button,
+    .qb-care-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .qb-care-input[type=number] { -moz-appearance: textfield; }
+    .qb-care-input-hint {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      color: rgba(10,10,15,0.5);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .qb-care-input-total {
+      display: block;
+      margin-top: 2px;
+      font-family: 'Fraunces', serif;
+      font-size: 12px;
+      color: rgba(10,10,15,0.55);
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+    .qb-care-option[data-active="true"] .qb-care-input {
+      color: var(--clay-light);
+      border-bottom-color: var(--clay-light);
+    }
+    .qb-care-option[data-active="true"] .qb-care-input-hint {
+      color: rgba(250,247,242,0.55);
+    }
+    .qb-care-option[data-active="true"] .qb-care-input-total {
+      color: rgba(250,247,242,0.65);
+    }
+
     .qb-care-price {
       font-family: 'Fraunces', serif;
       font-size: 18px;
@@ -4488,6 +4543,13 @@
                   <span class="qb-care-name">+ 8 hrs care<span class="qb-care-sub">Above + 8 hrs — active content sites</span></span>
                   <span class="qb-care-price">$250/mo</span>
                 </button>
+                <div class="qb-care-option qb-care-custom" data-care="custom" data-rate="25" role="button" tabindex="0">
+                  <span class="qb-care-name">+ Custom hours<span class="qb-care-sub">Set your own · $50 hosting + $25/hr</span></span>
+                  <span class="qb-care-input-wrap">
+                    <input type="number" class="qb-care-input" min="1" max="40" step="1" value="12" aria-label="Custom care hours per month" />
+                    <span class="qb-care-input-hint">hrs<br/><span class="qb-care-input-total" id="qbCustomTotal">$350/mo</span></span>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -5279,6 +5341,18 @@
         }
         function activeCare() {
           const el = Array.from(careEls).find(e => e.dataset.active === 'true') || careEls[0];
+          if (el.dataset.care === 'custom') {
+            const input = el.querySelector('.qb-care-input');
+            let hrs = parseInt(input.value, 10);
+            if (isNaN(hrs) || hrs < 1) hrs = 1;
+            if (hrs > 40) hrs = 40;
+            if (String(hrs) !== input.value) input.value = hrs;
+            const rate = parseInt(el.dataset.rate, 10);
+            const price = 50 + hrs * rate;
+            const totalEl = document.getElementById('qbCustomTotal');
+            if (totalEl) totalEl.textContent = '$' + price.toLocaleString('en-US') + '/mo';
+            return { name: 'Hosting + ' + hrs + ' hrs care (custom)', price: price };
+          }
           return { name: el.dataset.name, price: parseInt(el.dataset.price, 10) };
         }
         function activeAddons() {
@@ -5336,6 +5410,23 @@
           el.dataset.active = 'true';
           render();
         }));
+
+        // Custom hours input: typing/scrubbing updates the total live AND
+        // auto-selects the Custom card. Focusing also auto-selects. Clicks
+        // inside the input don't bubble up as a card-select (we handle that
+        // ourselves — otherwise the click would flip active on/off oddly).
+        const customCard = root.querySelector('.qb-care-custom');
+        const customInput = root.querySelector('.qb-care-input');
+        if (customCard && customInput) {
+          const activateCustom = () => {
+            careEls.forEach(e => e.dataset.active = 'false');
+            customCard.dataset.active = 'true';
+            render();
+          };
+          customInput.addEventListener('click', (e) => e.stopPropagation());
+          customInput.addEventListener('focus', activateCustom);
+          customInput.addEventListener('input', activateCustom);
+        }
 
         sendBtn.addEventListener('click', () => {
           const tier = activeTier();
