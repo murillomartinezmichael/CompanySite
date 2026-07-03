@@ -1701,6 +1701,418 @@
     }
 
     /* ===========================================================
+       BOT PLAYBOOK — makes content bots feel accessible + exciting
+       =========================================================== */
+    .bot-playbook {
+      margin-top: 56px;
+      padding: 56px 52px;
+      background: var(--ink);
+      color: var(--cream);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+    .bot-playbook::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(0deg,  rgba(252,238,10,0.045) 0 1px, transparent 1px 60px),
+        repeating-linear-gradient(90deg, rgba(252,238,10,0.045) 0 1px, transparent 1px 60px);
+      pointer-events: none;
+    }
+    .bot-playbook > * { position: relative; z-index: 1; }
+    @media (max-width: 900px) { .bot-playbook { padding: 44px 24px; } }
+
+    /* Scanline accent bar */
+    .bot-playbook::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent 0%, var(--clay-light) 20%, var(--clay) 50%, var(--clay-light) 80%, transparent 100%);
+      opacity: 0.9;
+      z-index: 2;
+    }
+
+    .bp-header {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto 44px;
+    }
+    .bp-eyebrow {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      color: var(--clay-light);
+      margin-bottom: 14px;
+    }
+    .bp-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(32px, 4.2vw, 56px);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      line-height: 1.02;
+      color: var(--cream);
+    }
+    .bp-title em {
+      color: var(--clay-light);
+      font-style: italic;
+      font-weight: 400;
+    }
+    .bp-lede {
+      margin-top: 18px;
+      color: rgba(250,247,242,0.7);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* Stat strip */
+    .bp-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border: 1px solid rgba(252,238,10,0.15);
+      background: rgba(252,238,10,0.02);
+      margin-bottom: 52px;
+      overflow: hidden;
+    }
+    @media (max-width: 720px) {
+      .bp-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+    .bp-stat {
+      padding: 22px 20px;
+      text-align: center;
+      border-right: 1px solid rgba(252,238,10,0.15);
+      border-bottom: 1px solid rgba(252,238,10,0.15);
+      position: relative;
+    }
+    .bp-stat:last-child { border-right: none; }
+    @media (max-width: 720px) {
+      .bp-stat:nth-child(2n) { border-right: none; }
+    }
+    .bp-stat-num {
+      font-family: 'Fraunces', serif;
+      font-size: 34px;
+      color: var(--clay-light);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    .bp-stat-label {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(250,247,242,0.5);
+      margin-top: 8px;
+    }
+
+    /* Pipeline flow */
+    .bp-pipeline {
+      margin-bottom: 52px;
+      padding: 32px;
+      background: rgba(252,238,10,0.02);
+      border: 1px solid rgba(252,238,10,0.1);
+    }
+    .bp-pipeline-label {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: var(--clay-light);
+      margin-bottom: 24px;
+      opacity: 0.9;
+    }
+    .bp-pipeline-flow {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+    @media (max-width: 900px) {
+      .bp-pipeline-flow { grid-template-columns: 1fr; gap: 20px; }
+      .bp-pipeline-flow .bp-arrow { transform: rotate(90deg); justify-self: center; }
+    }
+    .bp-step {
+      position: relative;
+      padding: 20px 18px;
+      border: 1px solid rgba(252,238,10,0.15);
+      background: rgba(9,8,7,0.6);
+      transition: all 0.25s;
+    }
+    .bp-step:hover {
+      border-color: var(--clay-light);
+      background: rgba(252,238,10,0.04);
+      transform: translateY(-2px);
+    }
+    .bp-step-num {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--clay);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .bp-step-name {
+      font-family: 'Fraunces', serif;
+      font-size: 22px;
+      color: var(--cream);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .bp-step-desc {
+      font-size: 12px;
+      color: rgba(250,247,242,0.55);
+      line-height: 1.55;
+    }
+    .bp-arrow {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 20px;
+      color: var(--clay-light);
+      opacity: 0.6;
+      text-align: center;
+      user-select: none;
+    }
+
+    /* Niche picker */
+    .bp-niches {
+      margin-bottom: 52px;
+    }
+    .bp-niches-label {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: var(--clay-light);
+      margin-bottom: 22px;
+      opacity: 0.9;
+    }
+    .bp-niche-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 900px) { .bp-niche-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 640px) { .bp-niche-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .bp-niche {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 18px 16px;
+      border: 1px solid rgba(252,238,10,0.12);
+      background: rgba(9,8,7,0.4);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      color: inherit;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+    }
+    .bp-niche::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--clay-light);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s;
+    }
+    .bp-niche:hover {
+      border-color: var(--clay-light);
+      background: rgba(252,238,10,0.06);
+      transform: translateY(-2px);
+    }
+    .bp-niche:hover::before { transform: scaleX(1); }
+    .bp-niche-icon {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 22px;
+      color: var(--clay-light);
+      line-height: 1;
+    }
+    .bp-niche-name {
+      font-family: 'Fraunces', serif;
+      font-size: 17px;
+      color: var(--cream);
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      line-height: 1.15;
+    }
+    .bp-niche-src {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      color: rgba(250,247,242,0.45);
+      text-transform: uppercase;
+    }
+    .bp-niche-note {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 13px;
+      color: rgba(250,247,242,0.5);
+    }
+    .bp-niche-note a {
+      color: var(--clay-light);
+      border-bottom: 1px solid rgba(252,238,10,0.3);
+      padding-bottom: 1px;
+      transition: color 0.15s;
+    }
+    .bp-niche-note a:hover { color: var(--cream); }
+
+    /* Pricing tiers — glow-heavy */
+    .bp-pricing-label {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: var(--clay-light);
+      margin-bottom: 22px;
+      opacity: 0.9;
+      text-align: center;
+    }
+    .bp-tier-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 900px) { .bp-tier-grid { grid-template-columns: 1fr; } }
+
+    .bp-tier {
+      padding: 32px 26px;
+      border: 1.5px solid rgba(252,238,10,0.15);
+      background: rgba(9,8,7,0.6);
+      position: relative;
+      transition: all 0.25s;
+      display: flex;
+      flex-direction: column;
+    }
+    .bp-tier:hover {
+      border-color: var(--clay-light);
+      transform: translateY(-3px);
+    }
+    .bp-tier.is-featured {
+      border-color: var(--clay-light);
+      background: rgba(252,238,10,0.03);
+      box-shadow: 0 0 40px rgba(252,238,10,0.08), inset 0 0 40px rgba(252,238,10,0.02);
+    }
+    .bp-tier-badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      color: var(--ink);
+      background: var(--clay-light);
+      padding: 4px 10px;
+      align-self: flex-start;
+      margin-bottom: 22px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .bp-tier:not(.is-featured) .bp-tier-badge {
+      background: transparent;
+      color: var(--clay-light);
+      border: 1px solid rgba(252,238,10,0.3);
+    }
+    .bp-tier-name {
+      font-family: 'Fraunces', serif;
+      font-size: 26px;
+      color: var(--cream);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .bp-tier-price {
+      font-family: 'Fraunces', serif;
+      font-size: 36px;
+      color: var(--clay-light);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .bp-tier-price small {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      color: rgba(250,247,242,0.5);
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-left: 6px;
+    }
+    .bp-tier-monthly {
+      font-family: 'Fraunces', serif;
+      font-size: 18px;
+      color: rgba(250,247,242,0.75);
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 22px;
+      padding-bottom: 20px;
+      border-bottom: 1px dashed rgba(250,247,242,0.15);
+    }
+    .bp-tier:not(.is-featured) .bp-tier-monthly {
+      color: rgba(250,247,242,0.4);
+    }
+    .bp-tier ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 24px;
+      flex: 1;
+    }
+    .bp-tier ul li {
+      position: relative;
+      padding: 8px 0 8px 20px;
+      font-size: 13px;
+      color: rgba(250,247,242,0.72);
+      line-height: 1.55;
+      border-bottom: 1px solid rgba(250,247,242,0.05);
+    }
+    .bp-tier ul li:last-child { border-bottom: none; }
+    .bp-tier ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 15px;
+      width: 8px;
+      height: 2px;
+      background: var(--clay-light);
+    }
+    .bp-tier-cta {
+      display: block;
+      padding: 14px 20px;
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1.5px solid var(--clay-light);
+      color: var(--clay-light);
+    }
+    .bp-tier.is-featured .bp-tier-cta {
+      background: var(--clay-light);
+      color: var(--ink);
+    }
+    .bp-tier-cta:hover {
+      background: var(--cream);
+      color: var(--ink);
+      border-color: var(--cream);
+    }
+    .bp-fine {
+      margin-top: 22px;
+      font-size: 12px;
+      color: rgba(250,247,242,0.5);
+      text-align: center;
+      line-height: 1.65;
+    }
+    .bp-fine b { color: var(--clay-light); font-weight: 500; }
+
+    /* ===========================================================
        QUOTE BUILDER — interactive live-pricing widget
        =========================================================== */
     .quote-builder {
@@ -3492,7 +3904,7 @@
           </div>
         </div>
 
-        <!-- Content Bots -->
+        <!-- Content Bots — pick your niche, set it forever -->
         <div class="pricing-card">
           <div class="pricing-category">Content Bots</div>
           <div class="pricing-tiers">
@@ -3500,19 +3912,31 @@
             <div class="pricing-tier">
               <div class="tier-badge">Own it outright</div>
               <div class="tier-row">
-                <div class="tier-name">Bot Setup</div>
+                <div class="tier-name">DIY Setup</div>
+                <div class="tier-price"><small>from</small><em>$1,500</em></div>
               </div>
-              <p class="tier-desc">Bot built, configured, documented, and handed off. You own it outright.</p>
-              <a href="#product-siteguide" class="btn-buy-contact">See SiteGuide →</a>
+              <p class="tier-desc">Bot built, configured, deployed to your accounts, handed off. Full source on your GitHub. You run it forever — no monthly fee.</p>
+              <a href="#bot-playbook" class="btn-buy-contact">See the playbook →</a>
             </div>
 
             <div class="pricing-tier">
-              <div class="tier-badge">Hands-off</div>
+              <div class="tier-badge">Most requested</div>
               <div class="tier-row">
                 <div class="tier-name">Managed Bot</div>
+                <div class="tier-price"><small>$800 + </small><em>$400/mo</em></div>
               </div>
-              <p class="tier-desc">I run it, maintain it, and keep it posting. You focus on growth — the pipeline handles itself.</p>
+              <p class="tier-desc">Set up on my infra, I keep it posting, monitor uptime, send monthly performance emails. Free niche tweaks up to 2/quarter. Cancel anytime.</p>
               <a href="#product-finance-reel" class="btn-buy-contact">See Finance Reel Bot →</a>
+            </div>
+
+            <div class="pricing-tier">
+              <div class="tier-badge">Full send</div>
+              <div class="tier-row">
+                <div class="tier-name">Full Channel</div>
+                <div class="tier-price"><small>$2,500 + </small><em>$800/mo</em></div>
+              </div>
+              <p class="tier-desc">Multi-platform posting (YouTube + TikTok + Reels + X), weekly perf reports, thumbnail templates, monthly strategy call. The whole operation on rails.</p>
+              <a href="#bot-playbook" class="btn-buy-contact">See the playbook →</a>
             </div>
 
           </div>
@@ -3626,6 +4050,196 @@
           </div>
 
         </div>
+      </div>
+
+      <!-- ============ BOT PLAYBOOK — the sick "pick your niche" moment ============ -->
+      <div class="bot-playbook" id="bot-playbook">
+
+        <div class="bp-header">
+          <div class="bp-eyebrow">// Content bots — set it. forget it. watch it grow.</div>
+          <h3 class="bp-title">Pick a niche. <em>The bot posts forever.</em></h3>
+          <p class="bp-lede">
+            One-time setup, then it runs 24/7 across YouTube Shorts, TikTok, Reels, and X. Anime, true crime, finance, gaming — whatever the audience is hungry for. Same battle-tested pipeline, retuned per niche. No editors. No posting calendar. No 3am uploads.
+          </p>
+        </div>
+
+        <!-- STAT STRIP -->
+        <div class="bp-stats">
+          <div class="bp-stat">
+            <div class="bp-stat-num">24/7</div>
+            <div class="bp-stat-label">Posting cadence</div>
+          </div>
+          <div class="bp-stat">
+            <div class="bp-stat-num">4</div>
+            <div class="bp-stat-label">Platforms per post</div>
+          </div>
+          <div class="bp-stat">
+            <div class="bp-stat-num">12+</div>
+            <div class="bp-stat-label">Niches proven</div>
+          </div>
+          <div class="bp-stat">
+            <div class="bp-stat-num">$0</div>
+            <div class="bp-stat-label">Editors to hire</div>
+          </div>
+        </div>
+
+        <!-- PIPELINE FLOW -->
+        <div class="bp-pipeline">
+          <div class="bp-pipeline-label">// Under the hood — 4 steps, fully automated</div>
+          <div class="bp-pipeline-flow">
+            <div class="bp-step">
+              <div class="bp-step-num">01 · Source</div>
+              <div class="bp-step-name">Feed detection</div>
+              <div class="bp-step-desc">Jikan · Twitch · RSS · newsroom feeds · trend APIs · your own uploads — whatever the niche needs.</div>
+            </div>
+            <div class="bp-arrow">→</div>
+            <div class="bp-step">
+              <div class="bp-step-num">02 · Script</div>
+              <div class="bp-step-name">Claude writes hooks</div>
+              <div class="bp-step-desc">Every post gets a title, caption, and hashtag pack tuned to the platform. Voice-matched to your brand.</div>
+            </div>
+            <div class="bp-arrow">→</div>
+            <div class="bp-step">
+              <div class="bp-step-num">03 · Render</div>
+              <div class="bp-step-name">Auto-edit</div>
+              <div class="bp-step-desc">Cuts, captions, music beds, branded intro/outro. MoviePy pipeline running headless — 60 videos in an hour.</div>
+            </div>
+            <div class="bp-arrow">→</div>
+            <div class="bp-step">
+              <div class="bp-step-num">04 · Post</div>
+              <div class="bp-step-name">Cross-platform push</div>
+              <div class="bp-step-desc">YouTube Shorts + TikTok + Reels + X on schedule. Analytics feed loops back into step 01 for the next pick.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- NICHE GRID -->
+        <div class="bp-niches">
+          <div class="bp-niches-label">// Niches we've shipped or built for · pick yours or invent a new one</div>
+          <div class="bp-niche-grid">
+            <div class="bp-niche">
+              <div class="bp-niche-icon">▲</div>
+              <div class="bp-niche-name">Anime shorts</div>
+              <div class="bp-niche-src">Jikan · MyAnimeList</div>
+            </div>
+            <div class="bp-niche">
+              <div class="bp-niche-icon">◆</div>
+              <div class="bp-niche-name">True crime</div>
+              <div class="bp-niche-src">Public records · newsroom feeds</div>
+            </div>
+            <div class="bp-niche">
+              <div class="bp-niche-icon">$</div>
+              <div class="bp-niche-name">Finance / crypto</div>
+              <div class="bp-niche-src">CoinGecko · SEC · Yahoo Finance</div>
+            </div>
+            <div class="bp-niche">
+              <div class="bp-niche-icon">►</div>
+              <div class="bp-niche-name">Twitch clips</div>
+              <div class="bp-niche-src">Trending games · top streamers</div>
+            </div>
+            <div class="bp-niche">
+              <div class="bp-niche-icon">♦</div>
+              <div class="bp-niche-name">Sports highlights</div>
+              <div class="bp-niche-src">Live scores · ESPN feeds</div>
+            </div>
+            <div class="bp-niche">
+              <div class="bp-niche-icon">▶</div>
+              <div class="bp-niche-name">Gaming compilations</div>
+              <div class="bp-niche-src">YouTube · Twitch · captured runs</div>
+            </div>
+            <div class="bp-niche">
+              <div class="bp-niche-icon">▼</div>
+              <div class="bp-niche-name">TikTok trends</div>
+              <div class="bp-niche-src">Sound feeds · trending hashtags</div>
+            </div>
+            <div class="bp-niche">
+              <div class="bp-niche-icon">✱</div>
+              <div class="bp-niche-name">Motivation / discipline</div>
+              <div class="bp-niche-src">Quotes DB · voiceover-ready</div>
+            </div>
+            <div class="bp-niche">
+              <div class="bp-niche-icon">◐</div>
+              <div class="bp-niche-name">Comedy clips</div>
+              <div class="bp-niche-src">Podcast episodes · streamer VODs</div>
+            </div>
+            <div class="bp-niche">
+              <div class="bp-niche-icon">■</div>
+              <div class="bp-niche-name">Recipes / food</div>
+              <div class="bp-niche-src">Recipe APIs · your creator library</div>
+            </div>
+            <div class="bp-niche">
+              <div class="bp-niche-icon">◇</div>
+              <div class="bp-niche-name">History / facts</div>
+              <div class="bp-niche-src">Wikipedia · public archives</div>
+            </div>
+            <div class="bp-niche">
+              <div class="bp-niche-icon">+</div>
+              <div class="bp-niche-name">Custom niche</div>
+              <div class="bp-niche-src">Bring the source · we build it</div>
+            </div>
+          </div>
+          <p class="bp-niche-note">Don't see yours? <a href="#contact">Pitch it →</a> &nbsp; If the audience has a heartbeat, the bot can chase it.</p>
+        </div>
+
+        <!-- PRICING TIERS — glowy card grid -->
+        <div class="bp-pricing">
+          <div class="bp-pricing-label">// Own it or hand it off — you pick</div>
+          <div class="bp-tier-grid">
+
+            <div class="bp-tier">
+              <div class="bp-tier-badge">Own it outright</div>
+              <div class="bp-tier-name">DIY Setup</div>
+              <div class="bp-tier-price">$1,500<small>one-time</small></div>
+              <div class="bp-tier-monthly">You run it · $0/mo</div>
+              <ul>
+                <li>Bot built + configured for your niche</li>
+                <li>Full source code on your GitHub</li>
+                <li>Deployed to your accounts</li>
+                <li>1-hour handover walkthrough on Zoom</li>
+                <li>Runs on your own hosting bill (~$5–$20/mo)</li>
+                <li>No monthly fee to me — ever</li>
+              </ul>
+              <a href="#contact" class="bp-tier-cta">Build my bot →</a>
+            </div>
+
+            <div class="bp-tier is-featured">
+              <div class="bp-tier-badge">Most requested</div>
+              <div class="bp-tier-name">Managed Bot</div>
+              <div class="bp-tier-price">$800<small>setup</small></div>
+              <div class="bp-tier-monthly">+ $400/mo · I run it</div>
+              <ul>
+                <li>Full setup on my infrastructure</li>
+                <li>I monitor uptime + keep it posting</li>
+                <li>Monthly performance email</li>
+                <li>Free niche tweaks · up to 2/quarter</li>
+                <li>Cancel anytime — you get the export</li>
+                <li>Analytics dashboard access</li>
+              </ul>
+              <a href="#contact" class="bp-tier-cta">Launch this for me →</a>
+            </div>
+
+            <div class="bp-tier">
+              <div class="bp-tier-badge">Full send</div>
+              <div class="bp-tier-name">Full Channel</div>
+              <div class="bp-tier-price">$2,500<small>setup</small></div>
+              <div class="bp-tier-monthly">+ $800/mo · full operation</div>
+              <ul>
+                <li>Multi-platform: YouTube + TikTok + Reels + X</li>
+                <li>Weekly performance report + iteration pass</li>
+                <li>Custom thumbnail + hook templates</li>
+                <li>Priority scheduling on trend windows</li>
+                <li>Monthly strategy call with me</li>
+                <li>Direct Slack channel for real-time asks</li>
+              </ul>
+              <a href="#contact" class="bp-tier-cta">Full send this →</a>
+            </div>
+
+          </div>
+          <p class="bp-fine">
+            Setup covers <b>one niche · one channel.</b> Adding a second niche or second channel: +$500 build, +$200/mo on Managed, +$400/mo on Full Channel. &nbsp;·&nbsp; Same "if my code breaks, free fix" rule applies.
+          </p>
+        </div>
+
       </div>
 
       <!-- LIVE QUOTE BUILDER — pick a tier, toggle add-ons, watch the total tick up -->
