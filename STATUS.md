@@ -9,12 +9,12 @@
 
 ## Evolution ladder
 
-Current rung: **RUNG 1 — HARDEN** (started 2026-07-05).
+Current rung: **RUNG 2 — TEST** (queued; RUNG 1 completed 2026-07-05).
 
 | Rung | Focus | Status |
 |---|---|---|
-| 1. HARDEN | Failure paths, validation, retries, idempotency on `/api/lead` + `/api/track` | 🔨 in progress 2026-07-05 |
-| 2. TEST | Coverage on money paths — form validation, honeypot, rate limit, email dispatch | ⏳ pending |
+| 1. HARDEN | Failure paths, validation, retries, idempotency on `/api/lead` + `/api/track` | ✅ 2026-07-05 (9-check smoke matrix green — body cap 16KB, Origin allowlist, Content-Type gate, Resend timeout 6s, structured `errors[]`, Retry-After 429, `_lib/{validate,rate}` split for future testability) |
+| 2. TEST | Coverage on money paths — form validation, honeypot, rate limit, email dispatch | 🎯 next |
 | 3. CLEAN | Dead code, honest names, one-screen functions | ⏳ pending |
 | 4. SPEED | Real Lighthouse in Chrome, fix the top bottleneck only | ⏳ pending |
 | 5. DOCUMENT | Stranger runs it in 5 minutes from README | ⏳ pending (README already close) |

@@ -6,9 +6,20 @@
 
 ## NEXT ACTION
 
-Deploy to Cloudflare Pages: connect repo → root dir `CompanySite` → build `npm run build` → output `dist` → set `RESEND_API_KEY` env var → attach `m3mm.net`. This is the single blocker between "committed" and "money path working in production."
+Two open lanes — pick one:
+
+**A. Deploy (money-path opens).** Cloudflare Pages: connect repo → root dir `CompanySite` → build `npm run build` → output `dist` → set `RESEND_API_KEY` env var → attach `m3mm.net`. Blocker between hardened code and a working intake in production.
+
+**B. Ladder RUNG 2 — TEST.** Unit tests on `functions/_lib/validate.ts` + `functions/_lib/rate.ts` (already extracted for this reason). Add vitest to devDeps, one spec per exported function, run in CI. Should be ~1 hour of work; unlocks confident refactors.
+
+Recommended: A. Money path first, tests second — the site does zero business sitting on my laptop.
 
 ---
+
+## SHIPPED (2026-07-05, session 2 continuation)
+
+- **Ladder Rung 1 (HARDEN) complete.** Rewrote `functions/api/lead.ts` with body cap, Content-Type gate, Origin allowlist, per-IP rate limit with `Retry-After`, Resend fetch timeout, structured `errors[]`, URL protocol allowlist. Same treatment on `/api/track` (4 KB cap, 60/min rate, silent 204 on junk). Extracted pure helpers to `functions/_lib/validate.ts` + `functions/_lib/rate.ts` so Rung 2 (TEST) can unit-test without a CF runtime. Verified via 9-check wrangler smoke matrix. Commit `4293feb`.
+- Committed the whole 2026-07-05 rebuild in 4 clean chunks: `7b2704a` build scaffold · `328f1f1` Astro source · `4afe796` functions · `0f41776` docs + Dockerfile + legacy move + per-project meta files.
 
 ## SHIPPED (2026-07-05)
 
