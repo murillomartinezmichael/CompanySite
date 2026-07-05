@@ -1,21 +1,20 @@
-# Multi-stage: swap nginx's default confdir for our own, then run as non-root.
-# nginx:alpine ships an `nginx` user (uid 101); we chown the served content
-# and switch to it so a container escape doesn't land on root.
-FROM nginx:alpine
+# Multi-stage build: compile Astro static output, then serve with nginx.
+# Cloudflare Pages is the primary deploy target — this Dockerfile is the
+# Railway/self-host fallback. Both stay in sync because both build from
+# `npm run build`.
 
-# Config in place before we drop privileges
+FROM node:20-alpine AS build
+WORKDIR /app
+COPY package.json package-lock.json* ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
 RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Content owned by the nginx user
-COPY --chown=nginx:nginx index.html /usr/share/nginx/html/index.html
-
-# The stock main config writes pid to /var/run/nginx.pid and logs to
-# /var/log/nginx/ — both root-owned by default. Loosen so the nginx user
-# can boot without needing root.
+COPY --from=build --chown=nginx:nginx /app/dist /usr/share/nginx/html
 RUN touch /var/run/nginx.pid \
     && chown -R nginx:nginx /var/run/nginx.pid /var/cache/nginx /var/log/nginx /etc/nginx/conf.d
-
 USER nginx
-
 CMD ["sh", "-c", "sed -i s/NGINX_PORT/${PORT:-8080}/g /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"]
