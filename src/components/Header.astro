@@ -1,0 +1,36 @@
+---
+interface Props {
+  minimal?: boolean;
+}
+const { minimal = false } = Astro.props;
+---
+
+<header class="relative z-30">
+  <div class="container-page flex items-center justify-between py-6">
+    <a href="/" class="group flex items-center gap-2.5" aria-label="M³ home" data-cta="logo" data-section="header">
+      <span class="grid h-9 w-9 place-items-center rounded-lg bg-ink-panel ring-1 ring-ink-line transition-all group-hover:ring-clay/60">
+        <span class="font-display text-lg font-medium leading-none">
+          M<sup class="ml-[1px] text-[10px] text-clay">3</sup>
+        </span>
+      </span>
+      <span class="hidden text-sm text-bone-dim sm:inline">Websites that book jobs</span>
+    </a>
+
+    {!minimal && (
+      <nav class="hidden items-center gap-8 text-sm text-bone-dim md:flex" aria-label="Primary">
+        <a href="#proof" class="transition-colors hover:text-bone" data-cta="nav-proof" data-section="header">Work</a>
+        <a href="#services" class="transition-colors hover:text-bone" data-cta="nav-services" data-section="header">Services</a>
+        <a href="#intake" class="transition-colors hover:text-bone" data-cta="nav-intake" data-section="header">Contact</a>
+      </nav>
+    )}
+
+    <a
+      href="#intake"
+      class="rounded-full bg-clay px-4 py-2 text-sm font-medium text-ink transition-all hover:bg-clay-glow hover:shadow-glow-clay"
+      data-cta="header-review"
+      data-section="header"
+    >
+      Free review
+    </a>
+  </div>
+</header>

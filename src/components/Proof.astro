@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import CaseStudy from './CaseStudy.astro';
+
+const studies = (await getCollection('caseStudies')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+---
+
+<section id="proof" class="relative py-24 sm:py-32">
+  <div class="container-page">
+    <div class="max-w-2xl">
+      <div class="mb-6 flex items-center gap-3">
+        <span class="hairline"></span>
+        <p class="kicker">Recent work</p>
+      </div>
+      <h2 class="text-display-lg">
+        Real businesses. <span class="text-bone-dim">Real builds.</span>
+      </h2>
+      <p class="mt-5 text-lg text-bone-dim">
+        Every project is scoped, built, and shipped by the same engineer. No handoffs, no offshore team, no "creative director" in the middle.
+      </p>
+    </div>
+
+    <div class="mt-14 space-y-10 lg:space-y-16">
+      {studies.map((entry, i) => (
+        <CaseStudy entry={entry} index={i} />
+      ))}
+    </div>
+  </div>
+</section>

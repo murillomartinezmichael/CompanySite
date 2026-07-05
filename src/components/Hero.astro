@@ -1,0 +1,140 @@
+---
+interface Props {
+  eyebrow?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  source?: string;
+}
+const {
+  eyebrow = 'M³ · Atlanta, GA · est. 2023',
+  ctaLabel = 'Get a free site review',
+  ctaHref = '#intake',
+  source = 'hero',
+} = Astro.props;
+---
+
+<section class="relative isolate overflow-hidden">
+  <!-- Ambient glow behind hero -->
+  <div class="pointer-events-none absolute inset-x-0 -top-16 h-[720px] -z-10">
+    <div class="absolute inset-x-0 top-0 h-full bg-gradient-to-b from-clay/[0.14] via-transparent to-transparent"></div>
+    <div class="absolute left-1/2 top-40 h-[400px] w-[720px] -translate-x-1/2 rounded-full bg-clay/[0.09] blur-3xl"></div>
+    <div class="absolute right-0 top-24 h-[280px] w-[280px] rounded-full bg-neon/[0.05] blur-3xl"></div>
+  </div>
+
+  <!-- Fine grid overlay -->
+  <div class="pointer-events-none absolute inset-0 -z-10 opacity-[0.09]"
+       style="background-image:linear-gradient(to right,#ffffff 1px,transparent 1px),linear-gradient(to bottom,#ffffff 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse at top,black 20%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at top,black 20%,transparent 70%);"></div>
+
+  <div class="container-page relative pb-20 pt-14 sm:pt-20 lg:pb-28 lg:pt-24">
+    <!-- Eyebrow row -->
+    <div class="mb-10 flex flex-wrap items-center gap-x-4 gap-y-2 reveal">
+      <span class="hairline-neon"></span>
+      <p class="kicker mono">{eyebrow}</p>
+      <span class="ml-auto hidden items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-bone-muted sm:inline-flex">
+        <span class="relative flex h-2 w-2">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-400"></span>
+        </span>
+        <span class="mono">Booking · 24h reply</span>
+      </span>
+    </div>
+
+    <!-- Editorial headline -->
+    <h1 class="reveal reveal-delay-1 text-display-2xl">
+      <span class="block text-bone">Websites that</span>
+      <span class="relative inline-block">
+        <span class="relative z-10 text-clay">get you customers.</span>
+        <!-- Hand-drawn underline stroke, drawn on load -->
+        <svg
+          class="absolute -bottom-2 left-0 h-[0.22em] w-full text-neon/60 sm:-bottom-3"
+          viewBox="0 0 400 12"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M2 8 Q90 1 200 6 T398 5"
+            stroke="currentColor"
+            stroke-width="3"
+            stroke-linecap="round"
+            fill="none"
+            stroke-dasharray="500"
+            style="animation: drawLine 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both;"
+          />
+        </svg>
+      </span>
+    </h1>
+
+    <!-- Sub + CTA row: subhead on left, big authority stat on right (desktop) -->
+    <div class="mt-12 grid gap-10 lg:grid-cols-[1.35fr,1fr] lg:items-end lg:gap-16">
+      <div class="reveal reveal-delay-2">
+        <p class="max-w-2xl text-lg leading-relaxed text-bone-dim sm:text-xl">
+          One engineer. Five years shipping to regulated casino platforms by day. I build
+          small-business sites that actually book jobs — and the automations behind them —
+          without agency middlemen or monthly fluff.
+        </p>
+
+        <div class="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+          <a href={ctaHref} class="btn-primary" data-cta="hero-review" data-section={source}>
+            <span class="relative z-10 flex items-center gap-2.5">
+              {ctaLabel}
+              <svg class="h-4 w-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </a>
+          <p class="mono text-xs uppercase tracking-[0.2em] text-bone-muted">
+            2 min · No sales call
+          </p>
+        </div>
+      </div>
+
+      <!-- Editorial stat block (right column on desktop) -->
+      <div class="reveal reveal-delay-3 border-l border-ink-line pl-6 sm:pl-8 lg:border-l lg:pl-10">
+        <div class="mono text-[11px] uppercase tracking-[0.22em] text-neon/70">
+          Since 2023
+        </div>
+        <div class="mt-3 font-display text-display-lg leading-none text-bone">
+          12<span class="text-clay">.</span>
+        </div>
+        <p class="mt-3 text-sm text-bone-dim">
+          Client sites shipped. Every one live, every one still up, every one delivered by
+          the same engineer who quoted it.
+        </p>
+      </div>
+    </div>
+
+    <!-- Trust marquee -->
+    <div class="relative mt-24 border-y border-ink-line/60 py-6 sm:mt-32">
+      <div class="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-ink to-transparent"></div>
+      <div class="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-ink to-transparent"></div>
+      <div class="flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+        <div class="flex shrink-0 animate-marquee items-center gap-x-14 pr-14 motion-reduce:animate-none">
+          <span class="font-display text-2xl text-bone-dim">Aries Outdoor Living</span>
+          <span class="text-clay">·</span>
+          <span class="font-display text-2xl text-bone-dim">Big 7 Construction</span>
+          <span class="text-clay">·</span>
+          <span class="font-display text-2xl text-bone-dim">SiteGuide</span>
+          <span class="text-clay">·</span>
+          <span class="font-display text-2xl text-bone-dim">AI Manual Assistant</span>
+          <span class="text-clay">·</span>
+          <span class="font-display text-2xl text-bone-dim">CockpitCloud</span>
+          <span class="text-clay">·</span>
+          <span class="font-display text-2xl text-bone-dim">PhotoPicker</span>
+          <span class="text-clay">·</span>
+        </div>
+        <div aria-hidden="true" class="flex shrink-0 animate-marquee items-center gap-x-14 pr-14 motion-reduce:animate-none">
+          <span class="font-display text-2xl text-bone-dim">Aries Outdoor Living</span>
+          <span class="text-clay">·</span>
+          <span class="font-display text-2xl text-bone-dim">Big 7 Construction</span>
+          <span class="text-clay">·</span>
+          <span class="font-display text-2xl text-bone-dim">SiteGuide</span>
+          <span class="text-clay">·</span>
+          <span class="font-display text-2xl text-bone-dim">AI Manual Assistant</span>
+          <span class="text-clay">·</span>
+          <span class="font-display text-2xl text-bone-dim">CockpitCloud</span>
+          <span class="text-clay">·</span>
+          <span class="font-display text-2xl text-bone-dim">PhotoPicker</span>
+          <span class="text-clay">·</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

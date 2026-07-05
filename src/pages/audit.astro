@@ -1,0 +1,51 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import Intake from '@/components/Intake.astro';
+---
+
+<Layout
+  title="Free site review — M³"
+  description="Two-minute intake. Free review of your business site — I look at it personally and reply within 24 hours."
+  path="/audit"
+>
+  <Header slot="header" minimal={true} />
+
+  <section class="relative isolate overflow-hidden">
+    <div class="pointer-events-none absolute inset-x-0 top-0 h-[600px] bg-gradient-to-b from-clay/[0.10] via-transparent to-transparent"></div>
+
+    <div class="container-page relative pb-4 pt-14 sm:pt-20">
+      <div class="max-w-3xl">
+        <div class="mb-6 flex items-center gap-3">
+          <span class="hairline"></span>
+          <p class="kicker">You clicked the link. Now the actual value.</p>
+        </div>
+
+        <h1 class="text-display-lg">
+          Free site review. <span class="text-bone-dim">Two minutes.</span>
+        </h1>
+
+        <p class="mt-6 max-w-2xl text-lg text-bone-dim">
+          I'll actually pull up your site — Lighthouse, mobile, the funnel, the copy — and reply within 24 hours with what's costing you customers and what to do about it. If nothing needs fixing, I'll tell you that too.
+        </p>
+
+        <ul class="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-sm text-bone-muted">
+          <li>✓ No sales call</li>
+          <li>✓ Written review, not a template</li>
+          <li>✓ 24h reply, personally</li>
+          <li>✓ Free — actually free</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <Intake
+    eyebrow="Step 1 · Tell me what to look at"
+    headline="What's on your site and what's frustrating you about it?"
+    sub="The more specific you are, the more useful the review. If you don't have a site yet, say that — I'll review the funnel you have (Instagram, phone-only, etc.) and tell you what a site would change."
+    source="audit-page"
+  />
+
+  <Footer slot="footer" />
+</Layout>

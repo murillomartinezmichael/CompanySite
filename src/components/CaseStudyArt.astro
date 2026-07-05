@@ -1,0 +1,124 @@
+---
+interface Props {
+  slug: string;
+  client: string;
+}
+const { slug, client } = Astro.props;
+---
+
+<div class="relative flex h-full w-full overflow-hidden bg-gradient-to-br from-ink-panel via-ink-soft to-ink">
+  <!-- Ambient grain -->
+  <div class="absolute inset-0 bg-grain opacity-40 mix-blend-overlay"></div>
+
+  <!-- Subtle grid backdrop -->
+  <div class="absolute inset-0 opacity-[0.06]"
+       style="background-image:linear-gradient(to right,#F4EFE6 1px,transparent 1px),linear-gradient(to bottom,#F4EFE6 1px,transparent 1px);background-size:40px 40px;"></div>
+
+  {slug === 'aries' && (
+    <!-- ARIES — deck + pergola isometric geometry -->
+    <svg class="absolute inset-0 h-full w-full" viewBox="0 0 640 400" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <defs>
+        <linearGradient id="ariesBoard" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#FF3B5C" stop-opacity="0.7"/>
+          <stop offset="1" stop-color="#FF3B5C" stop-opacity="0.05"/>
+        </linearGradient>
+        <linearGradient id="ariesWood" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#F4EFE6" stop-opacity="0.35"/>
+          <stop offset="1" stop-color="#F4EFE6" stop-opacity="0.05"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Isometric deck footprint -->
+      <g transform="translate(320 220)">
+        <!-- Deck top surface -->
+        <polygon points="-180,0 0,-90 180,0 0,90" fill="none" stroke="#F4EFE6" stroke-opacity="0.4" stroke-width="1.2"/>
+        <!-- Deck boards (parallel lines) -->
+        {[-140, -100, -60, -20, 20, 60, 100, 140].map((x) => (
+          <line x1={x} y1={-90 + Math.abs(x) * 0.5} x2={x} y2={90 - Math.abs(x) * 0.5} stroke="#F4EFE6" stroke-opacity="0.16" stroke-width="0.8"/>
+        ))}
+        <!-- Pergola posts (4 corners) -->
+        <line x1="-180" y1="0" x2="-180" y2="-110" stroke="#FF3B5C" stroke-opacity="0.75" stroke-width="1.4"/>
+        <line x1="0" y1="-90" x2="0" y2="-200" stroke="#FF3B5C" stroke-opacity="0.75" stroke-width="1.4"/>
+        <line x1="180" y1="0" x2="180" y2="-110" stroke="#FF3B5C" stroke-opacity="0.75" stroke-width="1.4"/>
+        <!-- Pergola beams -->
+        <polygon points="-180,-110 0,-200 180,-110 0,-20" fill="none" stroke="#FF3B5C" stroke-opacity="0.55" stroke-width="1.2"/>
+        <!-- Slats across pergola -->
+        {[-140, -100, -60, -20, 20, 60, 100, 140].map((x) => (
+          <line x1={x} y1={-110 + Math.abs(x) * 0.5} x2={x} y2={-200 + Math.abs(x) * 0.5} stroke="#FCEE0A" stroke-opacity="0.28" stroke-width="0.7"/>
+        ))}
+        <!-- Highlight board -->
+        <polygon points="-100,55 -60,35 60,-25 100,-5 60,15 -60,75" fill="url(#ariesBoard)" opacity="0.9"/>
+      </g>
+
+      <!-- Dimension marks -->
+      <g stroke="#F4EFE6" stroke-opacity="0.35" stroke-width="0.75" fill="none">
+        <line x1="90" y1="360" x2="550" y2="360"/>
+        <line x1="90" y1="356" x2="90" y2="364"/>
+        <line x1="550" y1="356" x2="550" y2="364"/>
+      </g>
+    </svg>
+  )}
+
+  {slug === 'big7' && (
+    <!-- BIG 7 — architectural elevation + repair-track split -->
+    <svg class="absolute inset-0 h-full w-full" viewBox="0 0 640 400" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <defs>
+        <linearGradient id="big7Sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#FCEE0A" stop-opacity="0.10"/>
+          <stop offset="1" stop-color="#FCEE0A" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="640" height="220" fill="url(#big7Sky)"/>
+
+      <!-- Ground line -->
+      <line x1="40" y1="320" x2="600" y2="320" stroke="#F4EFE6" stroke-opacity="0.35" stroke-width="1"/>
+
+      <!-- Left house (BUILD lane) -->
+      <g transform="translate(140 320)" stroke="#F4EFE6" stroke-opacity="0.55" stroke-width="1.2" fill="none">
+        <!-- Roof -->
+        <polyline points="-90,-120 0,-190 90,-120"/>
+        <!-- Body -->
+        <rect x="-90" y="-120" width="180" height="120"/>
+        <!-- Door -->
+        <rect x="-20" y="-60" width="40" height="60"/>
+        <!-- Windows -->
+        <rect x="-70" y="-100" width="30" height="30"/>
+        <rect x="40" y="-100" width="30" height="30"/>
+        <!-- Detail highlight lines -->
+        <line x1="-90" y1="-115" x2="90" y2="-115" stroke="#FF3B5C" stroke-opacity="0.8"/>
+      </g>
+      <text x="140" y="360" text-anchor="middle" fill="#FCEE0A" fill-opacity="0.7" font-family="Georgia,serif" font-size="14" letter-spacing="6">BUILD</text>
+
+      <!-- Right house (FIX lane) -->
+      <g transform="translate(500 320)" stroke="#F4EFE6" stroke-opacity="0.55" stroke-width="1.2" fill="none">
+        <polyline points="-70,-90 0,-140 70,-90"/>
+        <rect x="-70" y="-90" width="140" height="90"/>
+        <rect x="-15" y="-45" width="30" height="45"/>
+        <rect x="-55" y="-75" width="22" height="22"/>
+        <rect x="33" y="-75" width="22" height="22"/>
+        <!-- Wrench-arc "fix" motif over the roof -->
+        <path d="M-30 -155 A 50 50 0 0 1 30 -155" stroke="#FF3B5C" stroke-opacity="0.8" stroke-width="1.6"/>
+        <circle cx="0" cy="-160" r="4" fill="#FF3B5C" fill-opacity="0.8" stroke="none"/>
+      </g>
+      <text x="500" y="360" text-anchor="middle" fill="#FCEE0A" fill-opacity="0.7" font-family="Georgia,serif" font-size="14" letter-spacing="8">FIX</text>
+
+      <!-- Split line between lanes -->
+      <line x1="320" y1="80" x2="320" y2="360" stroke="#F4EFE6" stroke-opacity="0.14" stroke-width="0.75" stroke-dasharray="4 6"/>
+    </svg>
+  )}
+
+  <!-- Bottom-left metadata plate (over the art) -->
+  <div class="absolute bottom-4 left-4 flex items-center gap-3 rounded-full border border-ink-line bg-ink/70 px-3.5 py-1.5 backdrop-blur">
+    <span class="relative flex h-2 w-2">
+      <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-clay opacity-70"></span>
+      <span class="relative inline-flex h-2 w-2 rounded-full bg-clay"></span>
+    </span>
+    <span class="mono text-[10px] uppercase tracking-[0.2em] text-bone-dim">Scroll reel · dropping soon</span>
+  </div>
+
+  <!-- Top-right client mark -->
+  <div class="absolute right-4 top-4 flex items-center gap-2 text-right">
+    <span class="mono text-[10px] uppercase tracking-[0.24em] text-bone-muted">Ref</span>
+    <span class="font-display text-sm text-bone">{client}</span>
+  </div>
+</div>

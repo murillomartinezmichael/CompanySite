@@ -1,0 +1,142 @@
+---
+const services = [
+  {
+    key: 'site-that-books',
+    number: '01',
+    title: 'A site that books jobs',
+    for: 'Contractors · home services · local pros',
+    from: '$2,400',
+    body: 'A fast, mobile-first site with a real intake form, gallery, and reviews wired in. Deployed on my dime for the first year. You keep the domain, the code, the leads — all of it.',
+    bullets: [
+      'Mobile-first (95%+ of your traffic)',
+      'Contact form that emails you the second someone submits',
+      'Google reviews + gallery + services pages',
+      'SEO basics done right — no monthly upsell',
+    ],
+    accent: 'clay',
+  },
+  {
+    key: 'automations',
+    number: '02',
+    title: 'Automations that save you hours',
+    for: 'Anyone doing the same task twice a week',
+    from: '$1,200',
+    body: 'Quoting, invoicing, follow-ups, review requests, calendar wrangling. If you\'re doing it manually, it can probably run itself. Bridges into Offload Labs for bigger workflows.',
+    bullets: [
+      'Auto-reply + qualify leads while you sleep',
+      'Quote → invoice pipeline in one tool',
+      'Review request drip after job completion',
+      'Zapier, n8n, or custom — whichever fits',
+    ],
+    accent: 'neon',
+  },
+  {
+    key: 'ai-assistant',
+    number: '03',
+    title: 'A guide that answers your customers',
+    for: 'Businesses whose site gets the same 20 questions',
+    from: '$800',
+    body: 'Drop-in AI chat, trained on your services and pricing. Same tech I use on my own sites and Big 7. Deflects the after-hours questions so you\'re not answering DMs at 11pm.',
+    bullets: [
+      'One <script> tag, works on any site',
+      'Answers in your voice, from your knowledge',
+      'Escalates to you when it doesn\'t know',
+      'Runs on M³ infra — no ChatGPT subscription needed',
+    ],
+    accent: 'cyber',
+  },
+] as const;
+
+const accentClasses: Record<string, { line: string; text: string; hover: string }> = {
+  clay:  { line: 'via-clay/70',  text: 'text-clay',  hover: 'group-hover:text-clay-glow' },
+  neon:  { line: 'via-neon/60',  text: 'text-neon',  hover: 'group-hover:text-neon' },
+  cyber: { line: 'via-cyber/60', text: 'text-cyber', hover: 'group-hover:text-cyber' },
+};
+---
+
+<section id="services" class="relative py-24 sm:py-32">
+  <div class="pointer-events-none absolute inset-0 -z-10">
+    <div class="absolute inset-x-0 top-1/3 mx-auto h-64 max-w-4xl bg-cyber/[0.03] blur-3xl"></div>
+  </div>
+
+  <div class="container-page">
+    <div class="reveal max-w-2xl">
+      <div class="mb-6 flex items-center gap-3">
+        <span class="hairline"></span>
+        <p class="kicker mono">Services</p>
+      </div>
+      <h2 class="text-display-lg">
+        Three things I do. <span class="text-bone-dim">Priced flat.</span>
+      </h2>
+      <p class="mt-6 text-lg text-bone-dim">
+        No monthly retainers. No hourly ambiguity. You get a quote, we agree, I build. If
+        you outgrow the scope, we scope again — same rate card.
+      </p>
+    </div>
+
+    <!-- Editorial rows -->
+    <div class="mt-16 divide-y divide-ink-line/70 border-y border-ink-line/70">
+      {services.map((s) => {
+        const a = accentClasses[s.accent];
+        return (
+          <a
+            href="#intake"
+            class="group relative block py-10 transition-colors duration-500 hover:bg-ink-soft/40 sm:py-14"
+            data-cta={`service-${s.key}`}
+            data-section="services"
+          >
+            <!-- Accent stripe on left, appears on hover -->
+            <span class={`pointer-events-none absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent ${a.line} to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100`}></span>
+
+            <div class="grid gap-8 lg:grid-cols-[auto,1fr,auto] lg:items-start lg:gap-12">
+              <!-- Big number -->
+              <div class={`mono text-sm ${a.text} transition-transform duration-500 group-hover:translate-x-1 sm:text-base`}>
+                <span class="opacity-60">{s.number}</span>
+                <span class="ml-2 opacity-40">/</span>
+                <span class="ml-2 opacity-60">{services.length.toString().padStart(2, '0')}</span>
+              </div>
+
+              <!-- Content -->
+              <div>
+                <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                  <h3 class="font-display text-3xl font-medium leading-tight text-bone sm:text-4xl lg:text-5xl">
+                    {s.title}
+                  </h3>
+                  <span class={`mono text-xs uppercase tracking-[0.2em] ${a.text} opacity-70`}>
+                    from {s.from}
+                  </span>
+                </div>
+                <p class="mt-3 text-sm text-bone-muted">{s.for}</p>
+                <p class="mt-5 max-w-2xl text-bone-dim">{s.body}</p>
+
+                <ul class="mt-5 grid gap-2 text-sm text-bone-dim sm:grid-cols-2">
+                  {s.bullets.map((b) => (
+                    <li class="flex gap-2.5">
+                      <span class={`mt-1 h-1.5 w-1.5 flex-none rounded-full ${a.text} bg-current opacity-60`}></span>
+                      <span>{b}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <!-- CTA arrow -->
+              <div class="hidden items-center lg:flex">
+                <span class={`mono text-xs uppercase tracking-[0.2em] ${a.text} ${a.hover} transition-all duration-500 group-hover:translate-x-1`}>
+                  Get a quote
+                </span>
+                <svg class={`ml-2 h-4 w-4 ${a.text} ${a.hover} transition-transform duration-500 group-hover:translate-x-1`} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+
+    <p class="mt-10 max-w-2xl text-sm text-bone-muted">
+      Not sure which fits? The free review below sorts it. If none of them fit,
+      I'll tell you that too.
+    </p>
+  </div>
+</section>

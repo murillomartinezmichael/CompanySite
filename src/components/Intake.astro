@@ -1,0 +1,240 @@
+---
+interface Props {
+  eyebrow?: string;
+  headline?: string;
+  sub?: string;
+  source?: string;
+}
+const {
+  eyebrow = 'Free site review',
+  headline = 'Tell me what\'s broken. I\'ll tell you what to fix.',
+  sub = 'Two minutes. No sales call. I reply within 24 hours with a plain-English write-up: what\'s working, what\'s costing you customers, and whether it needs a rebuild or just a fix.',
+  source = 'homepage',
+} = Astro.props;
+---
+
+<section id="intake" class="relative py-24 sm:py-32">
+  <!-- Ambient glow -->
+  <div class="pointer-events-none absolute inset-x-0 top-16 -z-10 h-[400px]">
+    <div class="absolute left-1/4 top-0 h-[300px] w-[300px] rounded-full bg-clay/[0.06] blur-3xl"></div>
+    <div class="absolute right-1/4 top-32 h-[280px] w-[280px] rounded-full bg-neon/[0.04] blur-3xl"></div>
+  </div>
+
+  <div class="container-page grid gap-14 lg:grid-cols-[1fr,1.15fr] lg:gap-20">
+    <!-- Left rail -->
+    <div class="reveal lg:sticky lg:top-24 lg:h-fit">
+      <div class="mb-6 flex items-center gap-3">
+        <span class="hairline-neon"></span>
+        <p class="kicker mono">{eyebrow}</p>
+      </div>
+      <h2 class="text-display-lg">{headline}</h2>
+      <p class="mt-6 text-lg text-bone-dim">{sub}</p>
+
+      <ol class="mt-10 space-y-5">
+        <li class="flex gap-4">
+          <span class="mono flex h-9 w-9 flex-none items-center justify-center rounded-full border border-clay/40 bg-clay/10 text-xs text-clay">01</span>
+          <div>
+            <p class="font-medium text-bone">Fill it out</p>
+            <p class="mt-1 text-sm text-bone-dim">Under 2 minutes. Skip fields you don't have.</p>
+          </div>
+        </li>
+        <li class="flex gap-4">
+          <span class="mono flex h-9 w-9 flex-none items-center justify-center rounded-full border border-neon/40 bg-neon/[0.08] text-xs text-neon">02</span>
+          <div>
+            <p class="font-medium text-bone">I actually look</p>
+            <p class="mt-1 text-sm text-bone-dim">Lighthouse, mobile, funnel, copy — all of it.</p>
+          </div>
+        </li>
+        <li class="flex gap-4">
+          <span class="mono flex h-9 w-9 flex-none items-center justify-center rounded-full border border-cyber/40 bg-cyber/[0.08] text-xs text-cyber">03</span>
+          <div>
+            <p class="font-medium text-bone">Written review + rough scope</p>
+            <p class="mt-1 text-sm text-bone-dim">Emailed within 24 hours. Plain English, no jargon.</p>
+          </div>
+        </li>
+      </ol>
+
+      <!-- Signature card -->
+      <div class="mt-10 flex items-center gap-4 rounded-2xl border border-ink-line bg-ink-soft/60 p-5 backdrop-blur-sm">
+        <div class="grid h-11 w-11 flex-none place-items-center rounded-full bg-gradient-to-br from-clay to-clay-deep">
+          <span class="font-display text-lg font-medium text-ink">M<sup class="text-[9px]">3</sup></span>
+        </div>
+        <div class="text-sm">
+          <p class="font-medium text-bone">Michael Murillo-Martinez</p>
+          <p class="mt-0.5 text-xs text-bone-muted mono">One engineer · reviewing personally</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form panel -->
+    <form
+      id="intake-form"
+      class="reveal reveal-delay-1 panel relative flex flex-col gap-6 p-6 sm:p-9"
+      method="POST"
+      action="/api/lead"
+      data-source={source}
+      novalidate
+    >
+      <!-- Corner marks — editorial polish -->
+      <span class="pointer-events-none absolute left-4 top-4 h-3 w-3 border-l border-t border-clay/50"></span>
+      <span class="pointer-events-none absolute right-4 top-4 h-3 w-3 border-r border-t border-clay/50"></span>
+      <span class="pointer-events-none absolute bottom-4 left-4 h-3 w-3 border-b border-l border-clay/50"></span>
+      <span class="pointer-events-none absolute bottom-4 right-4 h-3 w-3 border-b border-r border-clay/50"></span>
+
+      <input type="hidden" name="source" value={source} />
+
+      <div class="grid gap-6 sm:grid-cols-2">
+        <label class="flex flex-col gap-2">
+          <span class="field-label"><span>Your name</span><span class="text-clay/60 mono">01</span></span>
+          <input
+            name="name"
+            type="text"
+            required
+            autocomplete="name"
+            class="field-input"
+            placeholder="David Serrano"
+          />
+        </label>
+
+        <label class="flex flex-col gap-2">
+          <span class="field-label"><span>Email</span><span class="text-clay/60 mono">02</span></span>
+          <input
+            name="email"
+            type="email"
+            required
+            autocomplete="email"
+            inputmode="email"
+            class="field-input"
+            placeholder="you@business.com"
+          />
+        </label>
+      </div>
+
+      <div class="grid gap-6 sm:grid-cols-2">
+        <label class="flex flex-col gap-2">
+          <span class="field-label"><span>Business type</span><span class="text-clay/60 mono">03</span></span>
+          <input
+            name="businessType"
+            type="text"
+            required
+            class="field-input"
+            placeholder="Contractor · gym · dentist"
+          />
+        </label>
+
+        <label class="flex flex-col gap-2">
+          <span class="field-label"><span>Current site URL</span><span class="text-bone-muted mono">optional</span></span>
+          <input
+            name="currentUrl"
+            type="url"
+            autocomplete="url"
+            class="field-input"
+            placeholder="https://"
+          />
+        </label>
+      </div>
+
+      <label class="flex flex-col gap-2">
+        <span class="field-label"><span>Biggest frustration</span><span class="text-clay/60 mono">04</span></span>
+        <textarea
+          name="frustration"
+          rows="5"
+          required
+          class="field-input resize-none"
+          placeholder="Site looks dated · doesn't rank · no one submits the form · phone doesn't ring after visits..."
+        ></textarea>
+        <span class="mono text-[10px] uppercase tracking-[0.18em] text-bone-muted">
+          The more specific, the more useful the review.
+        </span>
+      </label>
+
+      <!-- honeypot — bots will fill it, humans can't see it -->
+      <label class="hidden" aria-hidden="true">
+        <span>Company website (leave blank)</span>
+        <input type="text" name="company_website" tabindex="-1" autocomplete="off" />
+      </label>
+
+      <div class="flex flex-col gap-4 pt-2 sm:flex-row sm:items-center sm:justify-between">
+        <p class="mono text-[11px] uppercase tracking-[0.18em] text-bone-muted">
+          <span class="text-clay/80">●</span> Encrypted in transit · Never sold
+        </p>
+        <button
+          type="submit"
+          class="btn-primary w-full sm:w-auto"
+          data-cta="intake-submit"
+          data-section="intake"
+        >
+          <span class="relative z-10 flex items-center gap-2.5">
+            Send my free review
+            <svg class="h-4 w-4 transition-transform" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </button>
+      </div>
+
+      <div
+        id="intake-status"
+        class="hidden rounded-lg border border-clay/40 bg-clay/10 px-4 py-3 text-sm text-bone"
+        role="status"
+        aria-live="polite"
+      ></div>
+    </form>
+  </div>
+</section>
+
+<script>
+  import { track } from '@/lib/track';
+
+  const form = document.getElementById('intake-form') as HTMLFormElement | null;
+  const status = document.getElementById('intake-status') as HTMLDivElement | null;
+
+  if (form && status) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = form.querySelector<HTMLButtonElement>('button[type=submit]');
+      const btnSpan = submitBtn?.querySelector<HTMLSpanElement>('span.relative');
+      const originalBtnHTML = btnSpan?.innerHTML;
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      // honeypot check
+      if (data.company_website) {
+        status.textContent = 'Sent — check your inbox.';
+        status.classList.remove('hidden');
+        return;
+      }
+
+      if (submitBtn && btnSpan) {
+        submitBtn.disabled = true;
+        btnSpan.innerHTML = '<span>Sending…</span>';
+      }
+      status.classList.remove('hidden', 'border-emerald-400/40', 'bg-emerald-500/10', 'border-red-400/40', 'bg-red-500/10');
+      status.classList.add('border-clay/40', 'bg-clay/10');
+      status.textContent = 'Sending…';
+
+      try {
+        const res = await fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        track({ name: 'intake-success', section: 'intake', meta: { source: String(data.source || 'unknown') } });
+        status.textContent = 'Got it. I\'ll reply within 24 hours to ' + (data.email || 'your email') + '.';
+        status.classList.remove('border-clay/40', 'bg-clay/10');
+        status.classList.add('border-emerald-400/40', 'bg-emerald-500/10');
+        form.reset();
+      } catch {
+        track({ name: 'intake-error', section: 'intake' });
+        status.textContent = 'Something broke on send. Email murillomartinezmichael@gmail.com and I\'ll pick it up manually.';
+        status.classList.remove('border-clay/40', 'bg-clay/10');
+        status.classList.add('border-red-400/40', 'bg-red-500/10');
+      } finally {
+        if (submitBtn && btnSpan && originalBtnHTML) {
+          submitBtn.disabled = false;
+          btnSpan.innerHTML = originalBtnHTML;
+        }
+      }
+    });
+  }
+</script>

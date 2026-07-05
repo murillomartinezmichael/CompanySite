@@ -1,0 +1,18 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-24 border-t border-ink-line/60">
+  <div class="container-page flex flex-col gap-6 py-10 text-sm text-bone-muted sm:flex-row sm:items-center sm:justify-between">
+    <div class="flex items-center gap-3">
+      <span class="grid h-7 w-7 place-items-center rounded-md bg-ink-panel ring-1 ring-ink-line">
+        <span class="font-display text-sm">M<sup class="text-[9px] text-clay">3</sup></span>
+      </span>
+      <span>© {year} M³ · Atlanta, GA</span>
+    </div>
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+      <a href="mailto:murillomartinezmichael@gmail.com" class="transition-colors hover:text-bone" data-cta="footer-email" data-section="footer">murillomartinezmichael@gmail.com</a>
+      <a href="#intake" class="transition-colors hover:text-bone" data-cta="footer-intake" data-section="footer">Free site review →</a>
+    </div>
+  </div>
+</footer>

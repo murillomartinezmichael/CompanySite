@@ -1,0 +1,83 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import CaseStudyArt from './CaseStudyArt.astro';
+
+interface Props {
+  entry: CollectionEntry<'caseStudies'>;
+  index: number;
+}
+
+const { entry, index } = Astro.props;
+const d = entry.data;
+const flip = index % 2 === 1;
+---
+
+<article class={`panel group relative overflow-hidden p-6 sm:p-10 ${flip ? 'lg:flex-row-reverse' : ''} lg:flex lg:items-center lg:gap-14`}>
+  <!-- Media -->
+  <div class="relative isolate mb-8 aspect-[16/10] w-full overflow-hidden rounded-xl bg-ink-panel ring-1 ring-ink-line lg:mb-0 lg:w-1/2">
+    {d.video ? (
+      <video
+        class="h-full w-full object-cover"
+        preload="metadata"
+        playsinline
+        muted
+        loop
+        autoplay
+        poster={d.poster}
+      >
+        <source src={d.video} type="video/mp4" />
+      </video>
+    ) : (
+      <CaseStudyArt slug={entry.slug} client={d.client} />
+    )}
+    <!-- Vignette so text overlays read clean if we ever add one -->
+    <div class="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/5"></div>
+  </div>
+
+  <!-- Copy -->
+  <div class="lg:w-1/2">
+    <div class="mb-4 flex flex-wrap items-baseline gap-3">
+      <span class="kicker">{String(index + 1).padStart(2, '0')} · {d.year}</span>
+      {d.location && <span class="text-xs text-bone-muted">{d.location}</span>}
+    </div>
+
+    <h3 class="font-display text-3xl font-medium sm:text-4xl">{d.client}</h3>
+    <p class="mt-1 text-sm text-bone-muted">{d.kind}</p>
+
+    <div class="mt-6 space-y-4">
+      <div>
+        <p class="kicker mb-1.5">The problem</p>
+        <p class="text-bone-dim">{d.problem}</p>
+      </div>
+      <div>
+        <p class="kicker mb-1.5">What we shipped</p>
+        <p class="text-bone">{d.outcome}</p>
+      </div>
+    </div>
+
+    {d.metrics.length > 0 && (
+      <dl class="mt-6 grid grid-cols-1 gap-3 border-t border-ink-line pt-6 sm:grid-cols-3">
+        {d.metrics.map((m) => (
+          <div>
+            <dt class="text-xs uppercase tracking-wider text-bone-muted">{m.label}</dt>
+            <dd class="mt-1 font-display text-lg text-bone">{m.value}</dd>
+          </div>
+        ))}
+      </dl>
+    )}
+
+    {d.liveUrl && (
+      <a
+        href={d.liveUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-6 inline-flex items-center gap-1.5 text-sm text-clay transition-colors hover:text-clay-glow"
+        data-cta={`casestudy-${entry.slug}-visit`}
+        data-section="proof"
+      >
+        Visit the live site
+        <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3h7v7m0-7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </a>
+    )}
+  </div>
+</article>

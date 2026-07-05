@@ -1,0 +1,12 @@
+Drop the scroll MP4s here:
+
+- aries-scroll.mp4    (Aries Outdoor Living case study loop)
+- aries-poster.jpg    (first-frame poster for above)
+- big7-scroll.mp4     (Big 7 Construction case study loop)
+- big7-poster.jpg     (first-frame poster for above)
+
+Rendered by src/components/CaseStudy.astro from the frontmatter in
+src/content/caseStudies/*.md. Missing files fall back to a "coming soon"
+tile so the site never breaks — you can ship without them.
+
+Target: ~5MB each, H.264, no audio, 1280x720, muted+autoplay+loop friendly.

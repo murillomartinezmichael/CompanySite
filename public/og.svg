@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#08080B"/>
+      <stop offset="1" stop-color="#141420"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="0%" r="60%">
+      <stop offset="0" stop-color="#FF3B5C" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#FF3B5C" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <g font-family="Georgia, serif" fill="#F4EFE6">
+    <text x="80" y="240" font-size="140" font-weight="500">M<tspan font-size="60" dy="-60" fill="#FF3B5C">3</tspan></text>
+    <text x="80" y="380" font-size="72" font-weight="500">Websites that</text>
+    <text x="80" y="470" font-size="72" font-weight="500" fill="#FF3B5C">get you customers.</text>
+    <text x="80" y="560" font-size="26" font-family="Inter, system-ui, sans-serif" fill="#B8B2A6">One engineer · Atlanta, GA · m3mm.net</text>
+  </g>
+</svg>
