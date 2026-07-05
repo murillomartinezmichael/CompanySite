@@ -59,6 +59,7 @@
       --line-2:     rgba(10,10,15,0.32);
       --line-3:     rgba(10,10,15,0.55);
       --glow:       0 0 24px rgba(255,0,60,0.45);
+      --bone:       #FAF7F2;   /* warm off-white — text color on dark surfaces (bright-warning panel, toggle) */
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -926,6 +927,14 @@
       background: rgba(252,238,10,0.11);
       border-color: rgba(252,238,10,0.35);
     }
+    /* Hover-legibility: product-card flips to a dark bg (#14141E), so the
+       inline tier text + "see" CTA text (both `var(--ink)` = black) become
+       invisible without an inverse. */
+    .product-card:hover .product-tier-name { color: var(--cream); }
+    .product-card:hover .product-tier-name span { color: var(--clay-light); }
+    .product-card:hover .product-tier-note { color: rgba(252,238,10,0.7); }
+    .product-card:hover .btn-product.btn-product-see { color: var(--cream); border-color: rgba(250,247,242,0.35); }
+    .product-card:hover .btn-product.btn-product-see:hover { color: var(--clay-light); border-color: var(--clay-light); }
 
     /* === PRODUCT CTA ROW — dual button layout === */
     .product-ctas {
@@ -1658,6 +1667,15 @@
     }
     .pricing-card:hover .tier-price { color: var(--cream); }
     .pricing-card:hover .tier-price small { color: rgba(250,247,242,0.5); }
+    /* Hover-legibility: pricing-card flips to a dark bg (#201D16), so every
+       text token that was designed for a light bg needs a lift-up. Without
+       this, tier-name / tier-desc / category / badge / border-lines all
+       collapse into near-black on near-black. */
+    .pricing-card:hover .pricing-category { color: var(--clay-light); border-bottom-color: rgba(250,247,242,0.12); }
+    .pricing-card:hover .pricing-tier { border-bottom-color: rgba(250,247,242,0.08); }
+    .pricing-card:hover .tier-name { color: rgba(250,247,242,0.7); }
+    .pricing-card:hover .tier-desc { color: rgba(250,247,242,0.55); }
+    .pricing-card:hover .tier-badge { color: var(--clay-light); background: rgba(184,131,90,0.18); border-color: rgba(184,131,90,0.35); }
 
     /* === SITE EXTRAS — add-ons + monthly care sitting under the pricing grid === */
     .site-extras {
