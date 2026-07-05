@@ -1,3 +1,22 @@
+# build output
+dist/
+.astro/
+.vercel/
+.netlify/
+.wrangler/
+
+# deps
+node_modules/
+
+# env
 .env
+.env.production
+
+# system
 .DS_Store
 Thumbs.db
+
+# editors
+.vscode/
+.idea/
+*.log

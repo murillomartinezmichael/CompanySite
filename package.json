@@ -1,0 +1,24 @@
+{
+  "name": "m3-companysite",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "M³ marketing site — Astro + Tailwind on Cloudflare Pages",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/tailwind": "^5.1.2",
+    "astro": "^4.16.18",
+    "tailwindcss": "^3.4.15",
+    "typescript": "^5.6.3"
+  },
+  "devDependencies": {
+    "wrangler": "^3.114.17"
+  }
+}

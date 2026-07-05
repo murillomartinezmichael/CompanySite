@@ -1,3 +1,12 @@
+# Astro / node build artifacts — the build stage rebuilds from source
+node_modules/
+dist/
+.astro/
+.wrangler/
+
+# Preserved single-file legacy site
+legacy/
+
 # Version control + tooling
 .git/
 .github/
