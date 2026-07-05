@@ -1,6 +1,35 @@
 name: CI
-on: { push: { branches: [main] }, pull_request: { branches: [main] } }
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
 jobs:
+  test:
+    name: Test + build (Node)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install
+        run: npm ci
+      - name: Unit tests
+        run: npm test
+        env:
+          CI: 'true'
+      - name: Build
+        run: npm run build
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 7
+
   links:
     runs-on: ubuntu-latest
     steps:
@@ -9,6 +38,7 @@ jobs:
         uses: lycheeverse/lychee-action@v1
         with: { args: "--no-progress --max-concurrency 4 ./**/*.html ./**/*.md" }
         continue-on-error: true
+
   secrets:
     runs-on: ubuntu-latest
     steps:

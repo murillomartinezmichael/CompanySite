@@ -9,13 +9,13 @@
 
 ## Evolution ladder
 
-Current rung: **RUNG 2 — TEST** (queued; RUNG 1 completed 2026-07-05).
+Current rung: **RUNG 3 — CLEAN** (queued; RUNGS 1 + 2 completed 2026-07-05).
 
 | Rung | Focus | Status |
 |---|---|---|
 | 1. HARDEN | Failure paths, validation, retries, idempotency on `/api/lead` + `/api/track` | ✅ 2026-07-05 (9-check smoke matrix green — body cap 16KB, Origin allowlist, Content-Type gate, Resend timeout 6s, structured `errors[]`, Retry-After 429, `_lib/{validate,rate}` split for future testability) |
-| 2. TEST | Coverage on money paths — form validation, honeypot, rate limit, email dispatch | 🎯 next |
-| 3. CLEAN | Dead code, honest names, one-screen functions | ⏳ pending |
+| 2. TEST | Coverage on money paths — form validation, honeypot, rate limit, email dispatch | ✅ 2026-07-05 (vitest wired · 44/44 green across 3 files · `validate.test.ts` 18 · `rate.test.ts` 7 · `validate.supplemental.test.ts` 19 covering `esc`, `clean` non-strings, honeypot silent-swallow, multi-error capture, over-cap truncation) |
+| 3. CLEAN | Dead code, honest names, one-screen functions | 🎯 next |
 | 4. SPEED | Real Lighthouse in Chrome, fix the top bottleneck only | ⏳ pending |
 | 5. DOCUMENT | Stranger runs it in 5 minutes from README | ⏳ pending (README already close) |
 | 6. UPGRADE | One money-impacting capability from the brief that isn't built | ⏳ pending (candidates: SiteGuide embed on m3mm.net itself; real testimonials wall; ClipForge-driven case-study MP4 landing) |

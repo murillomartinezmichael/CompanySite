@@ -94,7 +94,10 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return jsonResponse(403, { ok: false, error: 'origin_not_allowed' });
   }
 
-  if (!contentType.toLowerCase().includes('application/json')) {
+  const ct = contentType.toLowerCase();
+  const isJson = ct.includes('application/json');
+  const isForm = ct.includes('application/x-www-form-urlencoded') || ct.includes('multipart/form-data');
+  if (!isJson && !isForm) {
     return jsonResponse(415, { ok: false, error: 'unsupported_media_type' });
   }
 
@@ -126,10 +129,25 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   }
 
   let body: Lead;
-  try {
-    body = raw ? JSON.parse(raw) : {};
-  } catch {
-    return jsonResponse(400, { ok: false, error: 'invalid_json' });
+  if (isJson) {
+    try {
+      body = raw ? JSON.parse(raw) : {};
+    } catch {
+      return jsonResponse(400, { ok: false, error: 'invalid_json' });
+    }
+  } else {
+    // No-JS fallback: the <form> POSTs as URL-encoded when the client
+    // has JS disabled. Parse into the same shape validateLead accepts.
+    const params = new URLSearchParams(raw);
+    body = {
+      name: params.get('name') || undefined,
+      email: params.get('email') || undefined,
+      businessType: params.get('businessType') || undefined,
+      currentUrl: params.get('currentUrl') || undefined,
+      frustration: params.get('frustration') || undefined,
+      source: params.get('source') || undefined,
+      company_website: params.get('company_website') || undefined,
+    };
   }
 
   // Honeypot: bots gleefully fill the hidden field. Silent 200 so they

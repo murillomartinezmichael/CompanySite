@@ -6,6 +6,11 @@ Format per entry: **D-CS-###** · date · one-line rule · why · reversibility.
 
 ---
 
+## D-CS-00X · 2026-07-05 · Vitest pinned to `^2.1.9` (not 4.x)
+
+- **Why:** Vitest 4.x requires Node 20.19+ or 22.12+; the dev Node here is 21.0.0 (unsupported in that matrix) and boot fails with `SyntaxError: 'node:util' does not provide styleText`. Vitest 2.1.9 supports Node 18/20/21/22 and gives us the full test API we need (parametrized `it.each`, `vi.useFakeTimers`, coverage-v8-compatible).
+- **Reversibility:** Bump when the dev Node is on the LTS track (20.19+) — one-line `package.json` change.
+
 ## D-CS-001 · 2026-07-05 · Stack pivoted from single-file nginx to Astro 4 + Tailwind + Cloudflare Pages
 
 - **Why:** New brief calls for a TikTok-conversion site with editorial polish, mobile-first, Lighthouse 95+, per-CTA analytics, and a serverless intake email. Static-HTML + nginx cannot ship the last two without bolting on a separate service; Astro static + Pages Functions is a single-repo answer.

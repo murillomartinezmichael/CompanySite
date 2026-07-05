@@ -6,15 +6,15 @@
 
 ## NEXT ACTION
 
-Two open lanes — pick one:
+**Deploy (money-path opens).** Cloudflare Pages: connect repo → root dir `CompanySite` → build `npm run build` → output `dist` → set `RESEND_API_KEY` env var → attach `m3mm.net`. This is the only blocker between hardened+tested code and a working intake in production. Michael's hands (dashboard clicks).
 
-**A. Deploy (money-path opens).** Cloudflare Pages: connect repo → root dir `CompanySite` → build `npm run build` → output `dist` → set `RESEND_API_KEY` env var → attach `m3mm.net`. Blocker between hardened code and a working intake in production.
-
-**B. Ladder RUNG 2 — TEST.** Unit tests on `functions/_lib/validate.ts` + `functions/_lib/rate.ts` (already extracted for this reason). Add vitest to devDeps, one spec per exported function, run in CI. Should be ~1 hour of work; unlocks confident refactors.
-
-Recommended: A. Money path first, tests second — the site does zero business sitting on my laptop.
+While that waits, next Claude-executable rung is RUNG 3 CLEAN — sweep `functions/api/lead.ts` + `functions/api/track.ts` for one-screen functions, honest names, dead branches.
 
 ---
+
+## SHIPPED (2026-07-05, session 3 — Rung 2 TEST close)
+
+- **Ladder Rung 2 (TEST) complete.** Vitest 2.1.9 wired (Node 21 compat), `vitest.config.ts` scoped to `tests/**/*.test.ts` with coverage thresholds 85/85/80/85. Suite = 44/44 green across 3 files: `tests/functions/validate.test.ts` (18 — primary happy/edge), `tests/functions/rate.test.ts` (7 — sliding-window + fake timers + retry-after math), `tests/functions/validate.supplemental.test.ts` (19 — `esc` HTML-escape, `clean` non-string defense, honeypot silent-swallow contract, multi-field error capture, over-cap truncation).
 
 ## SHIPPED (2026-07-05, session 2 continuation)
 

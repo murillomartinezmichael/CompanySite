@@ -12,8 +12,25 @@ export type RateResult = { ok: true } | { ok: false; retryAfter: number };
 
 const buckets = new Map<string, number[]>();
 
+// Every N calls, sweep buckets whose newest hit has aged past 2× window.
+// Prevents unbounded growth under a long-tail scan-attack across many IPs.
+let sinceLastGc = 0;
+const GC_EVERY = 200;
+
+function gc(now: number, windowSeconds: number): void {
+  const cutoff = now - windowSeconds * 2;
+  for (const [ip, hits] of buckets) {
+    const newest = hits[hits.length - 1];
+    if (newest === undefined || newest < cutoff) buckets.delete(ip);
+  }
+}
+
 export function checkRate(ip: string, maxPerWindow: number, windowSeconds: number): RateResult {
   const now = Date.now() / 1000;
+  if (++sinceLastGc >= GC_EVERY) {
+    sinceLastGc = 0;
+    gc(now, windowSeconds);
+  }
   const hits = (buckets.get(ip) || []).filter((t) => now - t < windowSeconds);
   if (hits.length >= maxPerWindow) {
     const oldest = hits[0];
@@ -23,4 +40,10 @@ export function checkRate(ip: string, maxPerWindow: number, windowSeconds: numbe
   hits.push(now);
   buckets.set(ip, hits);
   return { ok: true };
+}
+
+// Exposed for tests only. Not part of the runtime contract.
+export function __resetBuckets(): void {
+  buckets.clear();
+  sinceLastGc = 0;
 }
