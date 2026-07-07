@@ -7,6 +7,49 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-07 · CompanySite · CTA sweep #5 — nav-intake intent + form default (tick 16)
+
+**Card:** CompanySite conversion pass — round 5
+**Move to:** Done
+
+**What shipped:** Fifth CTA sweep against `docs/CONVERSION_STANDARDS.md`.
+Walked every `data-cta` on m3mm.net; 2 gaps left after sweeps #1–#4.
+
+1. **§ 2 intent metadata:** Header nav "Contact" (`data-cta="nav-intake"`)
+   routed to `#intake` but carried no `data-intent`, inconsistent with the
+   other four intake-bound CTAs (`header-review`, `hero-review`,
+   `footer-email`, `footer-intake`) that all declare `book:free-review`.
+   Nav-Contact click was firing `cta_click` with `intent: undefined` and,
+   if the visitor then submitted the form directly, `intake_submit`
+   inherited the empty hidden intent field. Now carries
+   `data-intent="book:free-review"`.
+
+2. **§ 4 loop closure:** `Intake.astro`'s hidden `intent` field defaulted
+   to `""`. Any visitor landing on `/audit` (TikTok bio target) and
+   scrolling straight to submit fired `intake_submit` with
+   `intent: undefined`. Standards § 4 requires every intake_submit to
+   carry intent. Added a `defaultIntent` prop (default `book:free-review`)
+   that seeds the hidden field. Any `[data-intent]` click still overrides
+   via existing `wirePrefill()` logic (verified — `prefill.ts:56` writes
+   unconditionally).
+
+Verified `npm run build` clean; `dist/index.html` +
+`dist/audit/index.html` both render `name="intent" value="book:free-review"`
+on the hidden field; `data-cta="nav-intake"` now shows
+`data-intent="book:free-review"` in built markup.
+
+**Files touched:** `src/components/Header.astro` (+1 attr) ·
+`src/components/Intake.astro` (+1 prop, hidden field default) — 2 files, ~10 LoC net.
+
+**Commits (this tick — local only per brief):** 1 commit.
+
+**Next up:** Attribution loop is now truly end-to-end for direct-submit
+paths as well. Only remaining § 2 gaps are pure-nav elements
+(`nav-proof` / `nav-services` / logo) which don't need intent by design.
+Rung VI EXPAND (real testimonials wall, still Mike-BLOCKED) next.
+
+---
+
 ## 2026-07-07 · CompanySite · CTA sweep #4 — product: intent on case studies (tick 11)
 
 **Card:** CompanySite conversion pass — round 4

@@ -4,12 +4,19 @@ interface Props {
   headline?: string;
   sub?: string;
   source?: string;
+  defaultIntent?: string;
 }
 const {
   eyebrow = 'Free site review',
   headline = 'Tell me what\'s broken. I\'ll tell you what to fix.',
   sub = 'Two minutes. No sales call. I reply within 24 hours with a plain-English write-up: what\'s working, what\'s costing you customers, and whether it needs a rebuild or just a fix.',
   source = 'homepage',
+  // CONVERSION_STANDARDS.md § 4 — every intake_submit must carry intent.
+  // Visitors who scroll straight to the form without touching a CTA
+  // (common on /audit, the TikTok bio target) would otherwise submit
+  // with intent=undefined. Any [data-intent] click still overrides via
+  // wirePrefill() before submit.
+  defaultIntent = 'book:free-review',
 } = Astro.props;
 ---
 
@@ -82,7 +89,7 @@ const {
       <span class="pointer-events-none absolute bottom-4 right-4 h-3 w-3 border-b border-r border-clay/50"></span>
 
       <input type="hidden" name="source" value={source} />
-      <input type="hidden" name="intent" value="" />
+      <input type="hidden" name="intent" value={defaultIntent} />
 
       <div class="grid gap-6 sm:grid-cols-2">
         <label class="flex flex-col gap-2">
