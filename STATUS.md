@@ -15,7 +15,7 @@ Current rung: **RUNG 4 — SPEED** (pending Cloudflare Pages deploy; RUNGS 1–3
 | Rung | Focus | Status |
 |---|---|---|
 | 1. HARDEN | Failure paths, validation, retries, idempotency on `/api/lead` + `/api/track` | ✅ 2026-07-05 (9-check smoke matrix green — body cap 16KB, Origin allowlist, Content-Type gate, Resend timeout 6s, structured `errors[]`, Retry-After 429, `_lib/{validate,rate}` split for future testability) |
-| 2. TEST | Coverage on money paths — form validation, honeypot, rate limit, email dispatch | ✅ 2026-07-06 (vitest 58/58 green across 4 files · `validate.test.ts` 18 · `rate.test.ts` 7 · `validate.supplemental.test.ts` 19 · `track-parse.test.ts` 14) |
+| 2. TEST | Coverage on money paths — form validation, honeypot, rate limit, email dispatch, canonical/SEO invariant | ✅ 2026-07-06 (vitest 68/68 green across 6 files · `validate.test.ts` 18 · `rate.test.ts` 7 · `validate.supplemental.test.ts` 19 · `track-parse.test.ts` 14 · `prefill.test.ts` 6 · `canonical.test.ts` 4) |
 | 3. CLEAN | Dead code, honest names, one-screen functions | ✅ 2026-07-06 (`astro check` 0/0/0 across 16 files · `rate.ts` self-GC · form-urlencoded intake · pure `track-parse.ts` split from `/api/track` · 22.5 KB gz total on wire) |
 | 4. SPEED | Real Lighthouse in Chrome, fix the top bottleneck only | ⏳ pending Cloudflare Pages deploy (Mike-only) |
 | 5. DOCUMENT | Stranger runs it in 5 minutes from README | ⏳ pending (README already close) |

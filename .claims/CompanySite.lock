@@ -1,8 +1,7 @@
-timestamp: 2026-07-07T00:47:00Z
-session_goal: Conversion audit per docs/CONVERSION_STANDARDS.md — walk every CTA, fix at most 3 gaps (destination / prefill / attribution). Fallback: canonical link audit if no CTA gaps found.
+timestamp: 2026-07-07T01:26:00Z
+session_goal: Canonical URL audit fallback — every page must emit <link rel=canonical> pointing to https://m3mm.net (not Railway subdomain). Sweep src/public/functions for domain leakage. At most 3 fixes.
 paths_to_touch:
-  - src/components/*.astro        (CTA sweep)
-  - src/pages/*.astro              (CTA sweep + canonical)
-  - src/lib/track.ts               (attribution)
-  - TODO.md / STATUS.md / DECISIONS.md
-prior_tombstone_cleared: 2026-07-05 lock (was Rung I/II labor — completed and shipped per TODO)
+  - src/**/*.astro                 (canonical + og:url sanity)
+  - public/{robots.txt,_headers,_redirects}
+  - TODO.md / STATUS.md / DECISIONS.md (exit rite)
+prior_tombstone_cleared: n/a — same-tick refresh of 2026-07-07T00:47Z lock (CTA audit closed cleanly)

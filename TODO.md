@@ -29,6 +29,21 @@ strike on the top bottleneck. Do NOT blind-optimize.
 
 ---
 
+## SHIPPED (2026-07-06, session 7 — canonical URL audit + regression test)
+
+- **Canonical audit closed clean (D-CS-009).** Full sweep of rendered source
+  and built `dist/`. Every page emits `<link rel="canonical">` from
+  `src/layouts/Layout.astro`, derived from `Astro.site = 'https://m3mm.net'`
+  (astro.config.mjs). Built canonicals: `/` → `https://m3mm.net/`, `/audit` →
+  `https://m3mm.net/audit`. `og:url` matches canonical on both. JSON-LD
+  schema.org `url` = `https://m3mm.net/`. Zero
+  `companysite-production.up.railway.app` leakage anywhere in rendered source.
+- **Regression test: `tests/build/canonical.test.ts` (4 tests).** Asserts the
+  astro.config.mjs prod-origin pin, the Layout canonical wiring, `og:url ↔
+  canonical` sync, and no-leakage on the top-level rendered surfaces. Suite =
+  **68/68 green in 360ms**. Any future edit that breaks the canonical
+  invariant fails CI before it ships.
+
 ## SHIPPED (2026-07-06, session 6 — CONVERSION_STANDARDS pass)
 
 - **CTA audit complete against `docs/CONVERSION_STANDARDS.md`.** Full sweep in
