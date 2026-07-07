@@ -9,8 +9,8 @@ const { minimal = false } = Astro.props;
   <div class="container-page flex items-center justify-between py-6">
     <a href="/" class="group flex items-center gap-2.5" aria-label="M³ home" data-cta="logo" data-section="header">
       <span
-        class="grid h-9 w-9 place-items-center bg-ink-panel ring-1 ring-ink-line transition-all group-hover:ring-clay/60"
-        style="clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));"
+        class="grid h-9 w-9 place-items-center bg-ink-soft ring-1 ring-ink-line transition-all group-hover:ring-clay/60"
+        style="border-radius: 2px;"
       >
         <span class="font-display text-lg font-semibold leading-none">
           M<sup class="ml-[1px] text-[10px] text-clay">3</sup>
@@ -29,8 +29,8 @@ const { minimal = false } = Astro.props;
 
     <a
       href="#intake"
-      class="bg-clay px-4 py-2 text-sm font-semibold text-ink transition-all hover:bg-clay-glow hover:shadow-glow-clay"
-      style="clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)); letter-spacing: 0.02em;"
+      class="inline-flex items-center gap-1.5 border border-clay bg-transparent px-4 py-2 text-sm font-semibold text-clay transition-all duration-150 hover:border-cyber hover:bg-cyber hover:text-ink hover:shadow-glow-clay"
+      style="border-radius: 2px; letter-spacing: 0.03em;"
       data-cta="header-review"
       data-section="header"
     >

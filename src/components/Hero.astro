@@ -14,16 +14,11 @@ const {
 ---
 
 <section class="relative isolate overflow-hidden">
-  <!-- Ambient glow behind hero -->
-  <div class="pointer-events-none absolute inset-x-0 -top-16 h-[720px] -z-10">
-    <div class="absolute inset-x-0 top-0 h-full bg-gradient-to-b from-clay/[0.14] via-transparent to-transparent"></div>
-    <div class="absolute left-1/2 top-40 h-[400px] w-[720px] -translate-x-1/2 rounded-full bg-clay/[0.09] blur-3xl"></div>
-    <div class="absolute right-0 top-24 h-[280px] w-[280px] rounded-full bg-neon/[0.05] blur-3xl"></div>
+  <!-- Ambient hint only (spec: never large neon areas). A single
+       subtle two-stop cyan gradient at 6% — no blurred neon orbs. -->
+  <div class="pointer-events-none absolute inset-x-0 -top-16 h-[420px] -z-10">
+    <div class="absolute inset-x-0 top-0 h-full bg-gradient-to-b from-clay/[0.06] via-transparent to-transparent"></div>
   </div>
-
-  <!-- Fine grid overlay -->
-  <div class="pointer-events-none absolute inset-0 -z-10 opacity-[0.09]"
-       style="background-image:linear-gradient(to right,#ffffff 1px,transparent 1px),linear-gradient(to bottom,#ffffff 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse at top,black 20%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at top,black 20%,transparent 70%);"></div>
 
   <div class="container-page relative pb-20 pt-14 sm:pt-20 lg:pb-28 lg:pt-24">
     <!-- Eyebrow row -->

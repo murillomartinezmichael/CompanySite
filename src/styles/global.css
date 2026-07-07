@@ -3,11 +3,17 @@
 @tailwind utilities;
 
 /* ─────────────────────────────────────────────────────────────────
-   CYBERPUNK 2055 · Lucy palette · foundation layer.
-   Class names in components (text-clay, text-neon, bg-ink, etc.) stay
-   the same — tailwind.config.mjs remaps the HEX. Only what CAN'T live
-   in tokens (body::before scanlines, ::after grid, glow shadows,
-   clip-path polygons, glitch keyframe on the hero) lives here.
+   CYBERPUNK EDGERUNNERS — design system v3
+   Applied per Mike's paste spec (2026-07-06):
+     - 90% dark. Neon is thin + rare (1px borders, tiny glows).
+     - Cyan = primary accent. Yellow = CTAs + hover only.
+     - Magenta = rare punch (max 2 uses per page).
+     - Never all three accents in the same component.
+     - Hover glow cap: 12px, ~0.3 alpha.
+     - Grid/scanline texture <5% opacity.
+     - Transitions 120–180ms.
+   Class names stay stable across component code — the token file does
+   the heavy lifting; this layer covers what can't live in tokens.
    ───────────────────────────────────────────────────────────────── */
 
 @layer base {
@@ -17,36 +23,35 @@
   }
   body {
     @apply bg-ink text-bone font-sans antialiased;
-    /* Ambient radial glows — David lime top-dominant, magenta rim in corner,
-       Lucy cyan as a quiet third element on the opposite corner */
+    /* Spec: no gradients heavier than a subtle two-stop dark. Two tiny
+       radial hints only, both under 8% alpha, both dark-toned. */
     background-image:
-      radial-gradient(60% 50% at 50% 0%,   rgba(180, 255, 61, 0.10), transparent 70%),
-      radial-gradient(80% 60% at 100% 100%, rgba(255,  44, 158, 0.06), transparent 65%),
-      radial-gradient(50% 50% at 0% 50%,   rgba(107, 197, 245, 0.04), transparent 65%);
+      radial-gradient(80% 60% at 50% 0%,   rgba(125, 249, 255, 0.05), transparent 70%),
+      radial-gradient(80% 60% at 100% 100%, rgba(255,  46, 136, 0.03), transparent 65%);
     background-attachment: fixed;
     min-height: 100vh;
     position: relative;
   }
 
-  /* Scanlines — quiet, not aggressive. Fixed overlay, sits above content. */
+  /* Scanlines — fixed overlay, well under 5% opacity per spec */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
     pointer-events: none;
     z-index: 100;
-    opacity: 0.4;
+    opacity: 0.35;
     mix-blend-mode: overlay;
     background: repeating-linear-gradient(
       0deg,
       transparent 0px,
       transparent 2px,
-      rgba(255, 255, 255, 0.015) 2px,
-      rgba(255, 255, 255, 0.015) 3px
+      rgba(255, 255, 255, 0.012) 2px,
+      rgba(255, 255, 255, 0.012) 3px
     );
   }
 
-  /* Netrunner grid — subtle 48px lattice in David lime, behind everything */
+  /* Grid lattice — cyan hairlines at ~4% alpha, 48px cells */
   body::after {
     content: '';
     position: fixed;
@@ -54,13 +59,16 @@
     pointer-events: none;
     z-index: -1;
     background-image:
-      linear-gradient(rgba(180, 255, 61, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(180, 255, 61, 0.04) 1px, transparent 1px);
+      linear-gradient(rgba(125, 249, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(125, 249, 255, 0.035) 1px, transparent 1px);
     background-size: 48px 48px;
   }
 
   h1, h2, h3, h4 {
     @apply font-display font-medium;
+    /* Body text always #E8ECF2 — headings inherit unless a single accent
+       word overrides. Never neon body text. */
+    color: theme('colors.bone.DEFAULT');
     text-wrap: balance;
   }
   p {
@@ -69,7 +77,7 @@
   :focus-visible {
     outline: 2px solid theme('colors.clay.DEFAULT');
     outline-offset: 3px;
-    border-radius: 4px;
+    border-radius: 2px;
   }
   ::selection {
     background: theme('colors.clay.DEFAULT');
@@ -86,7 +94,7 @@
 
   /* DIM mode — user-toggleable, softens every neon effect */
   body.dim::before { opacity: 0.2; }
-  body.dim::after  { opacity: 0.5; }
+  body.dim::after  { opacity: 0.4; }
   body.dim *,
   body.dim *::before,
   body.dim *::after {
@@ -101,52 +109,40 @@
     @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
   }
 
-  /* Primary CTA — cyan corner-clip polygon on void ground (replaces the
-     rounded clay pill). Chrome bevel gloss on hover from ::before. */
+  /* Primary CTA — spec: transparent bg, 1px cyan border, cyan text.
+     Hover: fills yellow with dark text + 12px cyan glow. 150ms. */
   .btn-primary {
-    @apply relative inline-flex items-center justify-center gap-2.5 overflow-hidden bg-clay px-7 py-4 text-base font-semibold text-ink transition-all duration-300 hover:bg-clay-glow hover:shadow-glow-clay active:scale-[0.98];
-    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
-    letter-spacing: 0.02em;
+    @apply inline-flex items-center justify-center gap-2.5 border border-clay bg-transparent px-7 py-3.5 text-base font-semibold text-clay transition-all duration-150;
+    border-radius: 2px;
+    letter-spacing: 0.03em;
   }
-  .btn-primary::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,0.35) 50%, transparent 80%);
-    transform: translateX(-100%);
-    transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-    pointer-events: none;
+  .btn-primary:hover {
+    background-color: theme('colors.cyber');
+    border-color: theme('colors.cyber');
+    color: theme('colors.ink.DEFAULT');
+    box-shadow: 0 0 12px rgba(125, 249, 255, 0.30);
   }
-  .btn-primary:hover::before {
-    transform: translateX(100%);
+  .btn-primary:active {
+    transform: scale(0.99);
   }
 
-  /* Ghost CTA — cyan-outlined, mono text */
+  /* Ghost CTA — thinner, more restrained */
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 border border-ink-line px-7 py-4 text-base font-medium text-bone transition-all duration-200 hover:border-clay hover:bg-ink-panel;
-    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    @apply inline-flex items-center justify-center gap-2 border px-7 py-3.5 text-base font-medium text-bone transition-all duration-150;
+    border-radius: 2px;
+    border-color: theme('colors.ink.line');
+  }
+  .btn-ghost:hover {
+    border-color: theme('colors.clay.DEFAULT');
+    color: theme('colors.clay.DEFAULT');
   }
 
-  /* Panel — chrome card with cyan hairline glow on top edge */
+  /* Card / panel — surface navy with a 1px cyan-15% border, sharp corners */
   .panel {
-    @apply relative border border-ink-line bg-ink-soft/60 backdrop-blur-sm shadow-panel;
-    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
-  }
-  .panel::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 14px; height: 1px;
-    background: theme('colors.clay.DEFAULT');
-    box-shadow: 0 0 8px theme('colors.clay.DEFAULT');
-  }
-  .panel::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 1px; height: 14px;
-    background: theme('colors.clay.DEFAULT');
-    box-shadow: 0 0 8px theme('colors.clay.DEFAULT');
+    background-color: theme('colors.ink.soft');
+    border: 1px solid rgba(125, 249, 255, 0.15);
+    border-radius: 4px;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset;
   }
 
   .kicker {
@@ -155,54 +151,63 @@
   .kicker-neon {
     @apply font-mono text-[11px] font-medium uppercase tracking-[0.24em] text-clay/90;
   }
-  .hairline {
-    @apply block h-px w-12 bg-clay/70;
-  }
+
+  /* Thin cyan hairline — used as section-open markers */
+  .hairline,
   .hairline-neon {
     @apply block h-px w-12 bg-clay/70;
   }
+
   .mono {
     font-family: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
     font-feature-settings: 'ss01' on, 'ss02' on;
   }
+
   .field-label {
     @apply font-mono flex items-center justify-between text-[11px] font-medium uppercase tracking-[0.18em] text-bone-muted;
   }
   .field-input {
-    @apply w-full border border-ink-line bg-ink/60 px-4 py-3.5 text-bone placeholder:text-bone-muted/60 transition-all duration-200 focus:border-clay focus:bg-ink focus:outline-none focus:ring-2 focus:ring-clay/30;
+    @apply w-full border bg-ink/60 px-4 py-3 text-bone placeholder:text-bone-muted/60 transition-all duration-150;
+    border-color: theme('colors.ink.line');
+    border-radius: 2px;
   }
+  .field-input:focus {
+    outline: none;
+    border-color: theme('colors.clay.DEFAULT');
+    background: theme('colors.ink.DEFAULT');
+    box-shadow: 0 0 12px rgba(125, 249, 255, 0.30);
+  }
+
   .reveal {
     opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateY(20px);
+    transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
     will-change: opacity, transform;
   }
   .reveal.is-visible {
     opacity: 1;
     transform: translateY(0);
   }
-  .reveal-delay-1 { transition-delay: 80ms; }
-  .reveal-delay-2 { transition-delay: 160ms; }
-  .reveal-delay-3 { transition-delay: 240ms; }
-  .reveal-delay-4 { transition-delay: 320ms; }
+  .reveal-delay-1 { transition-delay: 60ms; }
+  .reveal-delay-2 { transition-delay: 120ms; }
+  .reveal-delay-3 { transition-delay: 180ms; }
+  .reveal-delay-4 { transition-delay: 240ms; }
 
-  /* Hero glitch — the em text on H1 gets a 4-second glitch cycle, lime glow */
+  /* Hero accent word — subtle cyan glow, no glitch animation
+     (spec: no lens flares / heavy effects; motion snappy not showy) */
   .glitch-em {
     display: inline-block;
-    animation: glitch 4s ease-in-out infinite;
-    text-shadow: 0 0 22px rgba(180, 255, 61, 0.55);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .glitch-em { animation: none; }
+    color: theme('colors.clay.DEFAULT');
+    text-shadow: 0 0 12px rgba(125, 249, 255, 0.30);
   }
 
-  /* DIM toggle — floating bottom-left, cyberpunk chip */
+  /* DIM toggle — cyan-outlined chip, bottom-left, out of widget path */
   .dim-toggle {
     position: fixed;
     left: 16px; bottom: 16px;
     z-index: 40;
-    background: rgba(11, 25, 41, 0.85);
-    border: 1px solid theme('colors.clay.deep');
+    background: rgba(13, 11, 20, 0.85);
+    border: 1px solid theme('colors.clay.DEFAULT');
     color: theme('colors.clay.DEFAULT');
     font-family: 'JetBrains Mono', ui-monospace, monospace;
     font-size: 10px;
@@ -211,41 +216,39 @@
     padding: 8px 12px;
     cursor: pointer;
     backdrop-filter: blur(6px);
-    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
-    box-shadow: 0 0 24px rgba(180, 255, 61, 0.25);
-    transition: color 0.15s, border-color 0.15s;
+    border-radius: 2px;
+    transition: color 0.15s, border-color 0.15s, box-shadow 0.15s;
   }
   .dim-toggle:hover {
-    color: theme('colors.bone.DEFAULT');
-    border-color: theme('colors.clay.DEFAULT');
+    color: theme('colors.ink.DEFAULT');
+    background: theme('colors.cyber');
+    border-color: theme('colors.cyber');
+    box-shadow: 0 0 12px rgba(125, 249, 255, 0.30);
   }
   .dim-toggle .led {
     display: inline-block;
     width: 6px; height: 6px; border-radius: 50%;
     background: theme('colors.clay.DEFAULT');
-    box-shadow: 0 0 6px theme('colors.clay.DEFAULT');
+    box-shadow: 0 0 4px theme('colors.clay.DEFAULT');
     margin-right: 6px;
     vertical-align: middle;
-    animation: pulseSoft 2s ease-in-out infinite;
   }
   body.dim .dim-toggle .led {
     background: theme('colors.bone.muted');
     box-shadow: none;
-    animation: none;
   }
   body.dim .dim-toggle {
     color: theme('colors.bone.muted');
     border-color: theme('colors.ink.line');
   }
 
-  /* Photosensitivity disclaimer — small note above the footer */
+  /* Photosensitivity disclaimer above footer — thin magenta hairline */
   .a11y-note {
     @apply mx-auto max-w-4xl mt-16 mb-6 px-6 py-4 text-xs text-bone-muted;
     font-family: 'JetBrains Mono', ui-monospace, monospace;
     letter-spacing: 0.02em;
-    border: 1px dashed rgba(255, 44, 158, 0.20);
-    border-left-width: 3px;
-    background: rgba(255, 44, 158, 0.03);
+    border-left: 1px solid rgba(255, 46, 136, 0.35);
+    background: transparent;
   }
   .a11y-note b {
     color: theme('colors.neon');
@@ -262,6 +265,16 @@
     text-underline-offset: 3px;
   }
   .a11y-note button.inline:hover {
-    color: theme('colors.bone.DEFAULT');
+    color: theme('colors.cyber');
+  }
+
+  /* Section divider — 1px cyan hairline, thin as spec */
+  .rule-cyan {
+    @apply block h-px w-full;
+    background: rgba(125, 249, 255, 0.25);
+  }
+  .rule-magenta {
+    @apply block h-px w-full;
+    background: rgba(255, 46, 136, 0.25);
   }
 }

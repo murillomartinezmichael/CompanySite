@@ -1,17 +1,18 @@
 /** @type {import('tailwindcss').Config} */
 // ─────────────────────────────────────────────────────────────────────────
-// CYBERPUNK 2055 · Edgerunners palette — 2026-07-06 shift v2.
+// CYBERPUNK 2055 · Edgerunners design system v3 — 2026-07-06.
 //
-// Mike's follow-up: "more of the guy than the girl" — David's electric
-// lime is now the dominant hero color, Lucy's cyan drops to secondary,
-// magenta rim glow stays the shared accent both characters carry.
+// Spec (Mike's paste): 90% dark, neon accents thin + rare. Cyan is the
+// primary accent (thin borders, small glows, underlines). Yellow appears
+// only on primary CTA hover fills. Magenta is a rare punch, max 2 uses
+// per page. Never all three accents in the same component.
 //
-// Semantic mapping (class names unchanged from v1, only HEX shifted):
-//   clay   → David's electric lime  (was Lucy cyan)
-//   neon   → magenta rim glow       (unchanged — the color both share)
-//   cyber  → Lucy cyan              (was netrunner violet — now the secondary)
-//   ink    → void / navy dark       (deep space-blue behind the scene)
-//   bone   → silver-ice text        (unchanged)
+// Semantic mapping (Tailwind class names unchanged; HEX shifted):
+//   clay   → primary cyan            (was David lime — spec puts cyan back on top)
+//   cyber  → CTA yellow              (was Lucy cyan — repurposed for hover fills)
+//   neon   → magenta rare punch      (barely shifted hue)
+//   ink    → void/navy/purple family (warmer than v2's blue-black)
+//   bone   → icy silver text
 // ─────────────────────────────────────────────────────────────────────────
 export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
@@ -19,23 +20,23 @@ export default {
     extend: {
       colors: {
         ink: {
-          DEFAULT: '#030814',   // void — page ground
-          soft:    '#0B1929',   // midnight — sections
-          panel:   '#12213a',   // panel — cards
-          line:    '#1E3556',   // hairline
+          DEFAULT: '#0D0B14',   // --bg-void  · page ground
+          soft:    '#1B2A4A',   // --surface  · nav, cards, panels
+          panel:   '#2B2140',   // --surface-alt · alternate sections
+          line:    '#22223A',   // hairline (raw hex; rgba variants in raw CSS)
         },
         bone: {
-          DEFAULT: '#E8F4FF',   // ice — primary text
-          dim:     '#C6D4E8',   // silver — secondary text
-          muted:   '#7A8BA8',   // dim — labels + mono
+          DEFAULT: '#E8ECF2',   // --text-main  · body copy, headings
+          dim:     '#B8B4CC',   // secondary body
+          muted:   '#8F8AA8',   // --text-muted · labels, mono, metadata
         },
         clay: {
-          DEFAULT: '#B4FF3D',   // David lime — primary accent (the guy)
-          deep:    '#7ACC00',   // deeper lime shadow
-          glow:    '#D0FF80',   // lighter lime hover / glow
+          DEFAULT: '#7DF9FF',   // --accent-cyan · PRIMARY accent
+          deep:    '#3AB3BD',   // deeper cyan for shadows
+          glow:    '#B7FBFF',   // hover-tint (thin usage only)
         },
-        cyber: '#6BC5F5',       // Lucy cyan — secondary accent (the girl)
-        neon:  '#FF2C9E',       // magenta rim glow — shared accent
+        cyber: '#F5D90A',       // --accent-yellow · CTAs + hover ONLY
+        neon:  '#FF2E88',       // --accent-magenta · rare punch (max 2/page)
       },
       fontFamily: {
         // Space Grotesk for display (cyberpunk grotesque), JetBrains Mono
@@ -52,17 +53,17 @@ export default {
         'display-md':  ['clamp(1.5rem, 3vw, 2.25rem)', { lineHeight: '1.1', letterSpacing: '-0.015em' }],
       },
       boxShadow: {
-        // Primary glow is lime (David's hoodie), secondary is the magenta
-        // rim light both characters carry in the Earth scene.
-        'glow-clay': '0 0 60px -10px rgba(180, 255, 61, 0.55)',
-        'glow-hot':  '0 0 60px -10px rgba(255, 44, 158, 0.5)',
-        'panel':     '0 1px 0 rgba(255,255,255,0.04) inset, 0 20px 60px -30px rgba(0,0,0,0.9)',
+        // Spec: hover states can add a faint cyan glow — 12px cap, ~0.3 alpha.
+        // No large ambient glows. `glow-clay` is the ONLY hover token; kept
+        // name for backwards compat with existing component classes.
+        'glow-clay': '0 0 12px rgba(125, 249, 255, 0.30)',
+        'glow-hot':  '0 0 12px rgba(255,  46, 136, 0.30)',
+        'panel':     '0 1px 0 rgba(255,255,255,0.03) inset, 0 12px 40px -30px rgba(0,0,0,0.9)',
       },
       backgroundImage: {
-        // Netrunner grid — now lime-tinted hairlines to sit under David-first
-        // accents. Grain kept as legacy token.
         'grain': "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E\")",
-        'grid': "linear-gradient(rgba(180,255,61,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(180,255,61,0.05) 1px, transparent 1px)",
+        // Grid at <5% opacity per spec — cyan hairlines
+        'grid': "linear-gradient(rgba(125,249,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(125,249,255,0.04) 1px, transparent 1px)",
       },
       animation: {
         'fade-up':    'fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both',
