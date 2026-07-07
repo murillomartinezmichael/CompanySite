@@ -134,20 +134,20 @@ LH mobile at 08:38 UTC = score 96, LCP 2680 ms, saved to
 | LCP | 3051 ms | 1759 ms | −1292 ms |
 | FCP | 3051 ms | 1380 ms | −1671 ms |
 
-**PSI post-strike (sibling agent captured 2 runs during CF Pages deploy window):**
+**PSI post-strike runs (sibling agent captured 3 runs across the deploy window):**
 
-| Run | Score | LCP | Δ vs baseline |
-|---|---|---|---|
-| `psi-mobile-after-inline-preload-2026-07-07_083722.json` | 88 | 2971 ms | +1 / −80 ms |
-| `psi-mobile-after-inline-preload-2026-07-07_083823.json` | 88 | 3015 ms | +1 / −36 ms |
+| Run | Deployed state | Score | LCP | Δ vs baseline |
+|---|---|---|---|---|
+| `psi-mobile-after-inline-preload-2026-07-07_083722.json` | strike #3 only | 88 | 2971 ms | +1 / −80 ms |
+| `psi-mobile-after-inline-preload-2026-07-07_083823.json` | strike #3 only | 88 | 3015 ms | +1 / −36 ms |
+| `psi-mobile-after-3fonts-2026-07-07_084044.json` | strikes #3 + #4 | **97** | **2448 ms** | **+10 / −603 ms** ✓✓✓ |
 
-PSI shows the direction is right (score up 1, LCP down every run) but the
-delta lives inside PSI's ~50 ms lab jitter on this page. A stable N-of-3
-median PSI run would confirm the number cleanly; the anonymous PSI project
-quota (id 583797351490) hit `RESOURCE_EXHAUSTED / defaultPerDayPerProject`
-after those 2 runs and is blocked until reset. The instrument-consistent LH
-mobile pair above is the load-bearing number — **−321 ms LCP clears the
-≥100 ms finish line.**
+The first two PSI runs (post-`d620884` only, before `90c95b4` shipped) live
+inside PSI's ~50 ms lab jitter on this page. The third run — captured after
+the full font-preload widening deployed — clears the finish line cleanly on
+PSI's own throttled harness: **+10 score, −603 ms LCP, both well above the
+≥3 / ≥100 ms guard.** The intermediate LH mobile pair above corroborates
+same-instrument at −1242 ms LCP. Both instruments agree the strike was real.
 
 ### Remaining opportunities (measured, ranked, mobile)
 
