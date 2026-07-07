@@ -1,16 +1,9 @@
 @echo off
-REM Serve CompanySite locally on port 8081.
+REM CompanySite - Astro dev server. Opens http://localhost:4321 by default.
 setlocal
 cd /d "%~dp0"
-
-where python >nul 2>nul || (echo [ERROR] Python needed to serve static files. ^& pause ^& exit /b 1)
-
-echo.
-echo Serving CompanySite at http://localhost:8081
+where npm >nul 2>nul || (echo [ERROR] npm not on PATH - run setup.bat first^& exit /b 1)
+echo Starting Astro dev server on http://localhost:4321
 echo Press Ctrl+C to stop.
-echo.
-
-start "" cmd /c "timeout /t 2 >nul & start http://localhost:8081"
-python -m http.server 8081
-
+call npm run dev
 endlocal

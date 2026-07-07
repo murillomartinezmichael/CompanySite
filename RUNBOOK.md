@@ -57,10 +57,53 @@ is needed for the static build itself.
 
 ## 3. Deploy
 
-Push to `main`. Cloudflare Pages sees the push, runs `npm ci && npm run build`,
-uploads `dist/` and mounts `functions/` at the edge. Typical time-to-live: ~90s.
+### 3.1 First-time deploy (Mike-hands-only, ~5 min)
 
-**Post-deploy smoke:**
+The Pages project doesn't exist yet. This one-time setup creates it and pushes
+the current `dist/`. Runs once, ever.
+
+```bash
+cd C:/Users/Michael/Documents/GitHub/CompanySite
+
+# 1. Auth (browser flow — opens dashboard consent)
+npx wrangler login
+
+# 2. Fresh production build
+npm ci
+npm run build
+
+# 3. Create the Pages project (choose "None" for framework preset, "dist" as build output)
+npx wrangler pages project create m3-companysite --production-branch main
+
+# 4. First upload (this IS the deploy)
+npx wrangler pages deploy dist --project-name=m3-companysite --branch=main
+
+# 5. Dashboard follow-up (browser, 2 min):
+#    - Cloudflare → Pages → m3-companysite → Settings → Environment variables
+#      Add: RESEND_API_KEY   (production)
+#      Optional: LEAD_TO, LEAD_FROM
+#    - Custom domains → Set up a custom domain → m3mm.net
+#      (Cloudflare guides the DNS; if the zone is already on Cloudflare it's
+#      one click.)
+```
+
+### 3.2 Subsequent deploys (~90s)
+
+Once the Pages project exists there are two paths:
+
+**Path A — auto-deploy via GitHub (preferred once wired).** Push to `main`.
+Cloudflare Pages sees the push, runs `npm ci && npm run build`, uploads
+`dist/` and mounts `functions/` at the edge.
+
+**Path B — direct upload via wrangler.** Sandbox-friendly, no GitHub round-trip:
+
+```bash
+cd C:/Users/Michael/Documents/GitHub/CompanySite
+npm run build
+npx wrangler pages deploy dist --project-name=m3-companysite --branch=main
+```
+
+### 3.3 Post-deploy smoke (any path)
 
 ```bash
 curl -sSI https://m3mm.net | head -1
@@ -73,6 +116,16 @@ curl -sS -X POST https://m3mm.net/api/lead \
   -H "Content-Type: application/json" \
   -d '{"name":"smoke","email":"smoke@example.com","businessType":"test","frustration":"local smoke test that is at least ten chars"}'
 # {"ok":true}
+```
+
+### 3.4 Pre-deploy readiness (this runs every time before you paste)
+
+```bash
+cd C:/Users/Michael/Documents/GitHub/CompanySite
+npm test                # expect 58/58 green (as of 2026-07-06)
+npm run build           # expect "2 page(s) built" · <60 KB gz total
+ls -la dist/index.html dist/audit/index.html dist/_headers dist/_redirects
+# 4 files present; if any is missing, do NOT deploy.
 ```
 
 ---

@@ -6,11 +6,45 @@
 
 ## NEXT ACTION
 
-**Deploy — money path opens.** Cloudflare Pages dashboard: connect this repo (`murillomartinezmichael/CompanySite`) → build `npm run build` → output `dist` → set `RESEND_API_KEY` env var → attach `m3mm.net`. Only Mike's hands can do this (dashboard clicks + DNS). Ninety-second job.
+**Deploy — money path opens.** Repo is one command away as of 2026-07-06:
+`npm test` = 58/58 green (14 new from `track-parse.test.ts`), `npm run build`
+= 2 pages / 22.5 KB gzipped, `dist/` is present with `_headers` + `_redirects`
++ `og.svg`. Mike pastes:
 
-While Mike's on the deploy: Ladder RUNG 4 SPEED is the next Claude-executable slot — real Lighthouse in Chrome once m3mm.net answers 200, then measured strike on the top bottleneck. Do NOT blind-optimize.
+```bash
+cd C:/Users/Michael/Documents/GitHub/CompanySite
+npx wrangler login
+npm ci && npm run build
+npx wrangler pages project create m3-companysite --production-branch main
+npx wrangler pages deploy dist --project-name=m3-companysite --branch=main
+```
+
+Then browser: dashboard → Environment variables → `RESEND_API_KEY` →
+Custom domain → `m3mm.net`. Full step-by-step in `RUNBOOK.md § 3.1`.
+Post-deploy smoke in § 3.3.
+
+While Mike's on the deploy: Ladder RUNG 4 SPEED is the next Claude-executable
+slot — real Lighthouse in Chrome once m3mm.net answers 200, then measured
+strike on the top bottleneck. Do NOT blind-optimize.
 
 ---
+
+## SHIPPED (2026-07-06, session 5 — deploy-readiness handoff)
+
+- **`track-parse.ts` extracted + 14 new tests.** Pure helper split out of
+  `functions/api/track.ts` (parse + validate CTA beacon payloads). Suite grew
+  44 → **58 passed / 58 total** in 347ms. Zero code changes to `/api/track` —
+  extraction is behavior-preserving. Files: `functions/_lib/track-parse.ts` +
+  `tests/functions/track-parse.test.ts`.
+- **`RUNBOOK.md § 3` rewritten with paste-ready deploy.** Split into 3.1
+  first-time (wrangler login + project create + first upload + dashboard env +
+  DNS), 3.2 subsequent (auto-deploy Path A or direct-upload Path B), 3.3
+  post-deploy smoke, 3.4 pre-deploy readiness. Mike now pastes a 5-line block
+  instead of clicking through Cloudflare Pages onboarding cold.
+- **Fresh build + test verified 2026-07-06 20:56 EDT.** `npm test` 58/58 in
+  347ms · `npm run build` 2 pages in 1.27s · `dist/` = 22.5 KB gzipped total
+  (index 42 KB raw, audit 14 KB raw, single 29 KB CSS bundle). Well under the
+  60 KB gzipped target.
 
 ## SHIPPED (2026-07-05, session 4 — canon ignition, Rungs 2 + 3)
 

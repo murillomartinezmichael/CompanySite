@@ -4,6 +4,7 @@
 **Stack:** Astro 4 + Tailwind 3 + Cloudflare Pages + Pages Functions (Resend)
 **Definition of Done:** bio link → page → form submission works end to end and looks expensive.
 **DoD hit:** 2026-07-05 (local, wrangler pages dev verified).
+**Deploy-ready:** 2026-07-06 (58/58 tests, `dist/` 22.5 KB gz, RUNBOOK § 3 paste-ready — waiting only on Mike's `wrangler login` + first-time project create).
 
 ---
 
