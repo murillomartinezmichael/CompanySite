@@ -17,10 +17,12 @@
   }
   body {
     @apply bg-ink text-bone font-sans antialiased;
-    /* Ambient radial glows in Lucy palette — soft cyan top, faint magenta far corner */
+    /* Ambient radial glows — David lime top-dominant, magenta rim in corner,
+       Lucy cyan as a quiet third element on the opposite corner */
     background-image:
-      radial-gradient(60% 50% at 50% 0%, rgba(107, 197, 245, 0.10), transparent 70%),
-      radial-gradient(80% 60% at 100% 100%, rgba(255, 44, 158, 0.06), transparent 65%);
+      radial-gradient(60% 50% at 50% 0%,   rgba(180, 255, 61, 0.10), transparent 70%),
+      radial-gradient(80% 60% at 100% 100%, rgba(255,  44, 158, 0.06), transparent 65%),
+      radial-gradient(50% 50% at 0% 50%,   rgba(107, 197, 245, 0.04), transparent 65%);
     background-attachment: fixed;
     min-height: 100vh;
     position: relative;
@@ -44,7 +46,7 @@
     );
   }
 
-  /* Netrunner grid — subtle 48px lattice, behind everything */
+  /* Netrunner grid — subtle 48px lattice in David lime, behind everything */
   body::after {
     content: '';
     position: fixed;
@@ -52,8 +54,8 @@
     pointer-events: none;
     z-index: -1;
     background-image:
-      linear-gradient(rgba(107, 197, 245, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(107, 197, 245, 0.04) 1px, transparent 1px);
+      linear-gradient(rgba(180, 255, 61, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(180, 255, 61, 0.04) 1px, transparent 1px);
     background-size: 48px 48px;
   }
 
@@ -184,11 +186,11 @@
   .reveal-delay-3 { transition-delay: 240ms; }
   .reveal-delay-4 { transition-delay: 320ms; }
 
-  /* Hero glitch — the em text on H1 gets a 4-second glitch cycle */
+  /* Hero glitch — the em text on H1 gets a 4-second glitch cycle, lime glow */
   .glitch-em {
     display: inline-block;
     animation: glitch 4s ease-in-out infinite;
-    text-shadow: 0 0 20px rgba(107, 197, 245, 0.5);
+    text-shadow: 0 0 22px rgba(180, 255, 61, 0.55);
   }
   @media (prefers-reduced-motion: reduce) {
     .glitch-em { animation: none; }
@@ -210,7 +212,7 @@
     cursor: pointer;
     backdrop-filter: blur(6px);
     clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
-    box-shadow: 0 0 24px rgba(107, 197, 245, 0.25);
+    box-shadow: 0 0 24px rgba(180, 255, 61, 0.25);
     transition: color 0.15s, border-color 0.15s;
   }
   .dim-toggle:hover {

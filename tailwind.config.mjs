@@ -1,18 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 // ─────────────────────────────────────────────────────────────────────────
-// CYBERPUNK 2055 · Lucy palette (Edgerunners) — 2026-07-06 restoration.
+// CYBERPUNK 2055 · Edgerunners palette — 2026-07-06 shift v2.
 //
-// The prior editorial (clay-red + neon-yellow) palette got rolled back per
-// Mike's directive. Class names stay the same (`text-clay`, `text-neon`,
-// `bg-ink`, `text-bone` …) so component code doesn't churn — only the HEX
-// values shift.
+// Mike's follow-up: "more of the guy than the girl" — David's electric
+// lime is now the dominant hero color, Lucy's cyan drops to secondary,
+// magenta rim glow stays the shared accent both characters carry.
 //
-// Semantic mapping:
-//   clay   → Netrunner cyan     (was aggressive red)
-//   neon   → cool magenta       (was aggressive yellow — Mike's "yall changed it with the yellow" complaint)
-//   cyber  → violet accent      (was another cyan)
-//   ink    → void / midnight    (deeper night-city dark)
-//   bone   → silver-ice text    (was warm off-white)
+// Semantic mapping (class names unchanged from v1, only HEX shifted):
+//   clay   → David's electric lime  (was Lucy cyan)
+//   neon   → magenta rim glow       (unchanged — the color both share)
+//   cyber  → Lucy cyan              (was netrunner violet — now the secondary)
+//   ink    → void / navy dark       (deep space-blue behind the scene)
+//   bone   → silver-ice text        (unchanged)
 // ─────────────────────────────────────────────────────────────────────────
 export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
@@ -31,12 +30,12 @@ export default {
           muted:   '#7A8BA8',   // dim — labels + mono
         },
         clay: {
-          DEFAULT: '#6BC5F5',   // Lucy blue — primary accent
-          deep:    '#2E7FB8',   // deeper cyan for shadows
-          glow:    '#B3DFF8',   // hover / glow layer
+          DEFAULT: '#B4FF3D',   // David lime — primary accent (the guy)
+          deep:    '#7ACC00',   // deeper lime shadow
+          glow:    '#D0FF80',   // lighter lime hover / glow
         },
-        cyber: '#A87BFF',       // netrunner violet
-        neon:  '#FF2C9E',       // cool magenta — replaces the yellow entirely
+        cyber: '#6BC5F5',       // Lucy cyan — secondary accent (the girl)
+        neon:  '#FF2C9E',       // magenta rim glow — shared accent
       },
       fontFamily: {
         // Space Grotesk for display (cyberpunk grotesque), JetBrains Mono
@@ -53,18 +52,17 @@ export default {
         'display-md':  ['clamp(1.5rem, 3vw, 2.25rem)', { lineHeight: '1.1', letterSpacing: '-0.015em' }],
       },
       boxShadow: {
-        // Rewired: cyan glow replaces clay glow, plus a magenta glow token
-        // for the secondary accent.
-        'glow-clay': '0 0 60px -10px rgba(107, 197, 245, 0.55)',
+        // Primary glow is lime (David's hoodie), secondary is the magenta
+        // rim light both characters carry in the Earth scene.
+        'glow-clay': '0 0 60px -10px rgba(180, 255, 61, 0.55)',
         'glow-hot':  '0 0 60px -10px rgba(255, 44, 158, 0.5)',
         'panel':     '0 1px 0 rgba(255,255,255,0.04) inset, 0 20px 60px -30px rgba(0,0,0,0.9)',
       },
       backgroundImage: {
-        // Netrunner grid instead of grain — subtle 48px lattice using cyan
-        // hairlines. Kept the SVG-grain token in case anything else consumes
-        // it, but body no longer applies it.
+        // Netrunner grid — now lime-tinted hairlines to sit under David-first
+        // accents. Grain kept as legacy token.
         'grain': "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E\")",
-        'grid': "linear-gradient(rgba(107,197,245,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(107,197,245,0.05) 1px, transparent 1px)",
+        'grid': "linear-gradient(rgba(180,255,61,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(180,255,61,0.05) 1px, transparent 1px)",
       },
       animation: {
         'fade-up':    'fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both',
