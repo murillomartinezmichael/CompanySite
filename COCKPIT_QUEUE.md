@@ -164,3 +164,45 @@ final capture) · `7d8a18d` (docs finalize + LH final JSON) · `5c19929`
 already close (README polished session 8). Next money rung = Rung VI EXPAND —
 CockpitCloud lead sink (parallel-agent shipped scaffolding in `a286781`).
 
+---
+
+## 2026-07-07 · CompanySite · CTA conversion audit — tick-8 (3 § gaps closed)
+
+**Card:** CompanySite conversion pass — round 2
+**Move to:** Done
+
+**What shipped:** Second sweep of every CTA on m3mm.net against
+`docs/CONVERSION_STANDARDS.md` §§ 1–4 (round 1 in `657e650` closed the
+Services tier CTAs). This round targets the non-tier CTAs and the missing
+attribution wiring on the intake form.
+
+1. **§ 2 intent metadata:** Hero primary CTA, Header "Free review" button,
+   and Footer "Free site review →" all lacked `data-intent`. Now all three
+   carry `data-intent="book:free-review"` so intake_submit records real
+   attribution instead of firing with `intent: undefined`.
+2. **§ 4 attribution loop closure:** `prefill.ts` was writing intent into
+   `form#intake-form input[name="intent"]` — a field that didn't exist on
+   `Intake.astro`. Silent no-op. Added the hidden field; switched submit
+   handler from textarea-prefix inference to reading the hidden field
+   directly. This is what makes `book:*` attribution work (no CATALOG
+   entry, so textarea inference could never fire).
+3. **§ 1 destination handles promise:** Footer `mailto:` had no subject
+   line, violating the "mailto with subject line" rule. Now opens with
+   both a subject and a short body scaffold (Business / Current site /
+   What's frustrating me) so footer-originated emails land legible.
+
+Verified: `npm run build` clean, `dist/index.html` shows all 5
+`data-intent` values (4 tiers + `book:free-review`), hidden intent field
+renders, mailto carries subject+body.
+
+**Files touched:** `src/components/Hero.astro`, `src/components/Header.astro`,
+`src/components/Footer.astro`, `src/components/Intake.astro`,
+`src/lib/prefill.ts`.
+
+**Commit (1, local only per brief):** `64dc3c3` — `fix(cta): close
+conversion gaps against CONVERSION_STANDARDS §§ 1–4`.
+
+**Next up:** Attribution loop is now truly end-to-end for both tier and
+book intents. Rung VI EXPAND (CockpitCloud lead sink) still the next money
+rung.
+
