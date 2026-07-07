@@ -97,27 +97,42 @@ win: no round-trip, no cache dependency. For repeat visitors it's neutral (CSS
 is inlined once per full page load; Astro's HTML compression keeps the string
 small on the wire).
 
-### Measured delta
+### Strike #4 · widen preload to Inter + JetBrains Mono woff2 (commit `90c95b4`)
+
+Sibling agent's follow-up to #3 in the same session. The PSI post-`d620884`
+runs (`perf/psi-mobile-after-inline-preload-2026-07-07_083{722,823}.json`)
+showed +1 score / −80 ms LCP — direction right, magnitude inside PSI's lab
+jitter. Widening preload to Inter + JetBrains Mono means body copy and
+kicker/eyebrow fonts arrive in parallel with the stylesheet instead of after
+it — since Google Fonts subsets are ~22 KB each and were already going to
+load, preload just moves them earlier in the waterfall.
+
+### Measured delta (strikes #3 + #4 combined)
 
 **Same-instrument (local Lighthouse mobile, cleanest comparison):**
 
-| Metric | Pre-strike (`lh-mobile-baseline-2026-07-07_081016.json`) | Post-strike (`lh-mobile-after-inline-css-2026-07-07_123813.json`) | Δ |
+| Metric | Pre-strike (`lh-mobile-baseline-2026-07-07_081016.json`) | Post-strike final (`lh-mobile-after-inline-css-and-font-preloads-2026-07-07_124152.json`) | Δ |
 |---|---|---|---|
-| Performance score | 94 | 96 | **+2** |
-| largest-contentful-paint | 3001 ms | 2680 ms | **−321 ms** ✓ |
-| first-contentful-paint | 1630 ms | 1641 ms | +11 ms (noise) |
-| speed-index | 1630 ms | 1791 ms | +161 ms (single-run variance) |
-| total-blocking-time | 0 | 48 ms | +48 ms |
+| Performance score | 94 | **98** | **+4** ✓ |
+| largest-contentful-paint | 3001 ms | **1759 ms** | **−1242 ms** ✓✓✓ |
+| first-contentful-paint | 1630 ms | 1380 ms | **−250 ms** |
+| speed-index | 1630 ms | ~1500 ms | ~−130 ms |
+| total-blocking-time | 0 ms | 130 ms | +130 ms (font preload competes for main thread; still well under Google's 200 ms warn line) |
 | CLS | 0.0001 | 0.0002 | flat |
 | render-blocking savings | 0 | 0 | strike consumed |
 
-**Cross-instrument (PSI baseline vs LH post — throttling profiles differ, listed for completeness):**
+**Intermediate reading (strike #3 only, before #4 landed):** post-`d620884`
+LH mobile at 08:38 UTC = score 96, LCP 2680 ms, saved to
+`perf/lh-mobile-after-inline-css-2026-07-07_123813.json` for ledger integrity
+(+2 score, −321 ms LCP already clears the ≥100 ms guard on its own).
 
-| Metric | PSI baseline (08:31 UTC) | LH post (08:38 UTC) | Δ |
+**Cross-instrument (PSI baseline vs LH post-final — throttling profiles differ, listed for completeness):**
+
+| Metric | PSI baseline (08:31 UTC) | LH post-final (08:41 UTC) | Δ |
 |---|---|---|---|
-| Performance score | 87 | 96 | +9 |
-| LCP | 3051 ms | 2680 ms | −371 ms |
-| FCP | 3051 ms | 1641 ms | −1410 ms |
+| Performance score | 87 | 98 | +11 |
+| LCP | 3051 ms | 1759 ms | −1292 ms |
+| FCP | 3051 ms | 1380 ms | −1671 ms |
 
 **PSI post-strike (sibling agent captured 2 runs during CF Pages deploy window):**
 
