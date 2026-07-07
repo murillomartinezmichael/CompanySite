@@ -10,6 +10,22 @@ interface Props {
 const { entry, index } = Astro.props;
 const d = entry.data;
 const flip = index % 2 === 1;
+
+// Attribution on outbound case-study visits so referral traffic from m3mm.net
+// is legible in the client site's analytics.
+let outboundLiveUrl: string | undefined;
+if (d.liveUrl) {
+  try {
+    const u = new URL(d.liveUrl);
+    u.searchParams.set('utm_source', 'm3mm.net');
+    u.searchParams.set('utm_medium', 'case-study');
+    u.searchParams.set('utm_campaign', 'proof');
+    u.searchParams.set('utm_content', entry.slug);
+    outboundLiveUrl = u.toString();
+  } catch {
+    outboundLiveUrl = d.liveUrl;
+  }
+}
 ---
 
 <article class={`panel group relative overflow-hidden p-6 sm:p-10 ${flip ? 'lg:flex-row-reverse' : ''} lg:flex lg:items-center lg:gap-14`}>
@@ -66,9 +82,9 @@ const flip = index % 2 === 1;
       </dl>
     )}
 
-    {d.liveUrl && (
+    {outboundLiveUrl && (
       <a
-        href={d.liveUrl}
+        href={outboundLiveUrl}
         target="_blank"
         rel="noopener noreferrer"
         class="mt-6 inline-flex items-center gap-1.5 text-sm text-clay transition-colors hover:text-clay-glow"

@@ -2,6 +2,7 @@
 const services = [
   {
     key: 'site-that-books',
+    intent: 'tier:website:site-that-books',
     number: '01',
     title: 'A site that books jobs',
     for: 'Contractors · home services · local pros',
@@ -17,6 +18,7 @@ const services = [
   },
   {
     key: 'automations',
+    intent: 'tier:automation:hours-saved',
     number: '02',
     title: 'Automations that save you hours',
     for: 'Anyone doing the same task twice a week',
@@ -32,6 +34,7 @@ const services = [
   },
   {
     key: 'ai-assistant',
+    intent: 'tier:widget:ai-assistant',
     number: '03',
     title: 'A guide that answers your customers',
     for: 'Businesses whose site gets the same 20 questions',
@@ -84,6 +87,7 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
             class="group relative block py-10 transition-colors duration-500 hover:bg-ink-soft/40 sm:py-14"
             data-cta={`service-${s.key}`}
             data-section="services"
+            data-intent={s.intent}
           >
             <!-- Accent stripe on left, appears on hover -->
             <span class={`pointer-events-none absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent ${a.line} to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100`}></span>

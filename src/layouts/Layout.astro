@@ -85,8 +85,10 @@ const canonical = new URL(path, Astro.site ?? 'https://m3mm.net').toString();
     <script>
       import { wireCTAs } from '@/lib/track';
       import { wireReveals } from '@/lib/reveal';
+      import { wirePrefill } from '@/lib/prefill';
       wireCTAs();
       wireReveals();
+      wirePrefill();
     </script>
   </body>
 </html>
