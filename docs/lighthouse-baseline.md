@@ -208,3 +208,37 @@ daily quota was exhausted mid-session, blocking a fresh remote re-check.
 Files touched: `src/components/Footer.astro` (+29/-2, in sibling commit
 `9167f81`), this ledger, `perf/lh-mobile-baseline-tick10-*.json` (new, in
 sibling commit), `perf/lh-local-after-tick10-*.json` (new, this tick).
+
+---
+
+### Strike #6 · strip `.reveal` from above-fold Hero blocks (tick-16)
+
+**Baseline.** Live m3mm.net LH-mobile: **Perf 99 / LCP 1750 ms** (`perf/lh-mobile-baseline-tick16-2026-07-07_215425.json`). PSI mobile still 429 — daily quota exhausted three ticks in a row; falling back to the tick-7-established LH-local convention for A/B measurement.
+
+**Root cause.** LCP element per the `lcp-breakdown-insight` audit is `div.container-page > div.mt-12 > div.reveal > p.max-w-2xl` (the "One engineer. Five years shipping…" sub-headline). Its own breakdown:
+
+| Subpart | ms |
+|---|---|
+| Time to first byte | 105 |
+| Element render delay | **1644** |
+
+The `.reveal` class in `src/styles/global.css` starts elements at `opacity: 0; transform: translateY(20px)` and only flips them to visible when `src/lib/reveal.ts`'s IntersectionObserver fires, gated by JS parse/execute + a 60/120/180/240ms `transition-delay`. For above-the-fold elements this adds JS-load-time + ~500 ms transition to LCP — literally the 1644 ms element render delay. The reveal animation is real UX polish for below-the-fold sections; on the hero it just gates the largest paint behind JavaScript.
+
+**Fix.** `src/components/Hero.astro`: drop the `reveal` / `reveal-delay-{1,2,3}` classes from the four above-fold blocks (eyebrow row, H1, sub + CTA column, editorial stat block). All four are always in the initial viewport on the Moto G Power mobile profile PSI/LH uses. `.reveal` stays wired in Services / Intake where scroll-driven fade actually plays.
+
+**Measurement (LH-local A/B against `astro preview`, matched form-factor + preset):**
+
+| Metric | Pre-fix | Post-fix | Δ |
+|---|---|---|---|
+| Performance score | 98 | 98 | 0 (score ceiling) |
+| **LCP** | **1792 ms** | **1536 ms** | **−256 ms** |
+| FCP | 1396 ms | 1536 ms | +140 ms (FCP = LCP now; one paint, not two) |
+| TBT | 151 ms | 132 ms | −19 ms |
+| CLS | 0 | 0 | 0 |
+
+Pre-fix LCP selector: `div.container-page > div.mt-12 > div.reveal > p.max-w-2xl` (opacity 0 → 1 fade).
+Post-fix LCP selector: `div.container-page > div.mt-12 > div > p.max-w-2xl` (no wrapper reveal; paints with FCP).
+
+**Delta of note.** The score ceiling stays at 98 on the local preview (99 on live), but the LCP moves 256 ms — 2.5× the session-guard's ≥100 ms threshold. FCP and LCP now register as the same event, which is the correct behavior for a text-hero page: the sub-headline paints when the CSS is ready, not when the IntersectionObserver fires.
+
+**Files touched:** `src/components/Hero.astro` (4 class-string edits), this ledger, `perf/lh-mobile-baseline-tick16-*.json`, `perf/lh-mobile-preview-{prefix,postfix}-tick16-*.json`.
