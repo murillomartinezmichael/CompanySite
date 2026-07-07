@@ -1,5 +1,12 @@
 ---
 const year = new Date().getFullYear();
+
+// Split so CF's edge email regex can't match. Hydrated to a real mailto:
+// on load; without JS the link falls through to the intake page.
+const EMAIL_USER = 'murillomartinezmichael';
+const EMAIL_HOST = 'gmail.com';
+const EMAIL_SUBJECT = 'Free site review request — m3mm.net';
+const EMAIL_BODY = "Hey Mike,\n\nBusiness: \nCurrent site: \nWhat's frustrating me: \n\n— sent from m3mm.net footer";
 ---
 
 <footer class="mt-24 border-t border-ink-line/60">
@@ -11,8 +18,38 @@ const year = new Date().getFullYear();
       <span>© {year} M³ · Atlanta, GA</span>
     </div>
     <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
-      <a href="mailto:murillomartinezmichael@gmail.com?subject=Free%20site%20review%20request%20%E2%80%94%20m3mm.net&body=Hey%20Mike%2C%0A%0ABusiness%3A%20%0ACurrent%20site%3A%20%0AWhat%27s%20frustrating%20me%3A%20%0A%0A%E2%80%94%20sent%20from%20m3mm.net%20footer" class="transition-colors hover:text-bone" data-cta="footer-email" data-section="footer" data-intent="book:free-review">murillomartinezmichael@gmail.com</a>
+      <a
+        href="/audit#intake"
+        class="transition-colors hover:text-bone"
+        data-cta="footer-email"
+        data-section="footer"
+        data-intent="book:free-review"
+        data-em-u={EMAIL_USER}
+        data-em-h={EMAIL_HOST}
+        data-em-sub={EMAIL_SUBJECT}
+        data-em-body={EMAIL_BODY}
+      >email →</a>
       <a href="#intake" class="transition-colors hover:text-bone" data-cta="footer-intake" data-section="footer" data-intent="book:free-review">Free site review →</a>
     </div>
   </div>
 </footer>
+
+<script is:inline>
+  // Hydrate the footer email link to a real mailto: without leaving the
+  // address in HTML source. Raw emails trigger Cloudflare's Email Address
+  // Obfuscation, which injects a render-blocking cdn-cgi email-decode
+  // script on every page (~200ms wasted in the LCP critical chain, per
+  // perf/lh-mobile-baseline-tick10-…json → render-blocking-insight).
+  (function () {
+    var a = document.querySelector('a[data-em-u][data-em-h]');
+    if (!a) return;
+    var u = a.dataset.emU, h = a.dataset.emH;
+    var addr = u + '@' + h;
+    var sub = a.dataset.emSub || '', body = a.dataset.emBody || '';
+    var q = (sub || body)
+      ? '?subject=' + encodeURIComponent(sub) + '&body=' + encodeURIComponent(body)
+      : '';
+    a.href = 'mailto:' + addr + q;
+    a.textContent = addr;
+  })();
+</script>
