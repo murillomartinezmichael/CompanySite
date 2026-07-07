@@ -48,10 +48,26 @@ const canonical = new URL(path, Astro.site ?? 'https://m3mm.net').toString();
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!--
+      Rung IV QUICKEN strike (2026-07-07): defer the Google Fonts stylesheet
+      via the preload+onload swap pattern. Lighthouse baseline flagged this
+      exact URL as 247ms render-blocking (docs/lighthouse-2026-07-07.json:
+      audits.render-blocking-resources.items[0]). display=swap in the URL
+      means fonts still fall back cleanly during the async fetch, no FOIT.
+      <noscript> fallback keeps no-JS browsers rendering with real fonts.
+    -->
     <link
-      rel="stylesheet"
+      rel="preload"
+      as="style"
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      />
+    </noscript>
 
     <script is:inline type="application/ld+json" set:html={JSON.stringify({
       '@context': 'https://schema.org',
