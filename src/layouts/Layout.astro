@@ -49,17 +49,32 @@ const canonical = new URL(path, Astro.site ?? 'https://m3mm.net').toString();
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!--
-      Preload the Space Grotesk latin subset used by the H1 hero (LCP element).
-      Skips the CSS-parse gate so the woff2 downloads in parallel with the
-      stylesheet. Hashed URL matches what Google Fonts currently serves for
-      v22 latin; refresh from the stylesheet response if PSI ever flags
-      "preloaded resource not used".
+      Preload the latin woff2 subsets Google Fonts serves for our 3 families.
+      Skips the CSS-parse gate so fonts download in parallel with the stylesheet
+      instead of after it. Space Grotesk powers the H1 hero (LCP element), Inter
+      the body copy, JetBrains Mono the eyebrow/kicker. All three would load
+      anyway; preload just moves them earlier. Refresh hashed URLs from the
+      googleapis.com/css2 response if PSI ever flags "preloaded resource not used".
     -->
     <link
       rel="preload"
       as="font"
       type="font/woff2"
       href="https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2"
       crossorigin
     />
     <!--
