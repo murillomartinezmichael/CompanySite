@@ -82,6 +82,7 @@ const {
       <span class="pointer-events-none absolute bottom-4 right-4 h-3 w-3 border-b border-r border-clay/50"></span>
 
       <input type="hidden" name="source" value={source} />
+      <input type="hidden" name="intent" value="" />
 
       <div class="grid gap-6 sm:grid-cols-2">
         <label class="flex flex-col gap-2">
@@ -183,22 +184,10 @@ const {
 
 <script>
   import { track } from '@/lib/track';
-  import { isPriorPrefill, CATALOG } from '@/lib/prefill';
+  import { isPriorPrefill } from '@/lib/prefill';
 
   const form = document.getElementById('intake-form') as HTMLFormElement | null;
   const status = document.getElementById('intake-status') as HTMLDivElement | null;
-
-  // CONVERSION_STANDARDS § 4 requires intake_submit to carry `intent`. The
-  // form itself doesn't know which CTA the visitor clicked, but wirePrefill()
-  // wrote the tier title into the frustration textarea — so we can recover
-  // the intent by matching the message prefix against CATALOG.
-  function inferIntent(message: string): string | undefined {
-    if (!isPriorPrefill(message)) return undefined;
-    for (const [key, entry] of Object.entries(CATALOG)) {
-      if (message.startsWith(entry.title + ' — from ')) return key;
-    }
-    return undefined;
-  }
 
   if (form && status) {
     form.addEventListener('submit', async (e) => {
@@ -225,7 +214,7 @@ const {
 
       const message = String(data.frustration || '');
       const hasPrefill = isPriorPrefill(message);
-      const intent = inferIntent(message);
+      const intent = String(data.intent || '') || undefined;
       const source = String(data.source || 'unknown');
 
       try {

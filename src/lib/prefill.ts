@@ -46,6 +46,15 @@ export function wirePrefill(): void {
       if (!el) return;
       const intent = el.dataset.intent;
       if (!intent) return;
+
+      // Record intent to the intake form's hidden field so intake_submit
+      // carries attribution even for generic CTAs (e.g. book:free-review)
+      // that have no CATALOG entry to prefill the textarea from.
+      const intentField = document.querySelector<HTMLInputElement>(
+        'form#intake-form input[name="intent"]'
+      );
+      if (intentField) intentField.value = intent;
+
       const entry = CATALOG[intent];
       if (!entry) return;
       const ta = document.querySelector<HTMLTextAreaElement>(
