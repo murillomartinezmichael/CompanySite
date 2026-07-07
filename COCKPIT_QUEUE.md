@@ -46,3 +46,44 @@ Serrano quote already approved per feedback memory).
 **Next up:** SiteGuide Rung 2 spec + ship next widget variant OR CockpitCloud sink for `checkout.session.completed` (fleet-connect Rung VII EVOLVE).
 
 Test suite: 322 → 324 green (2 new smoke tests).
+
+---
+
+## 2026-07-07 · CompanySite · CTA conversion audit (3 gaps closed)
+
+**Card:** CompanySite conversion pass (CONVERSION_STANDARDS.md audit)
+**Move to:** Done
+
+**What shipped:** Walked every CTA on m3mm.net against `docs/CONVERSION_STANDARDS.md`
+§§ 1–4. Fixed the three highest-ROI gaps in one commit (`657e650`):
+
+1. **§ 3 prefill:** Services CTA #04 "Custom builds" (`tier:custom:scoped-project`,
+   the $6,000+ top tier) had `data-intent` set but no matching `CATALOG` entry
+   in `src/lib/prefill.ts` — clicking it scrolled to a blank intake form.
+   Added the CATALOG entry so the intake now prefills with a real brief.
+2. **§ 4 attribution (client):** `wireCTAs()` in `src/lib/track.ts` was dropping
+   `el.dataset.intent` before it reached the beacon — the tracker silently
+   ignored the intent field. Now reads and forwards it.
+3. **§ 4 attribution (server):** `functions/api/track.ts` didn't accept or log
+   the `intent` field on the receiving end. Extended `CTAEvent` + urlencoded
+   fallback + `INTENT_MAX=64` bounds check + log line. Attribution loop now
+   closes end-to-end for all three tier CTAs already carrying `data-intent`.
+
+Verified in built bundle: `dataset.intent` and `tier:custom` both present in
+`dist/_astro/hoisted.*.js`. Astro build clean, no TS errors.
+
+**Files touched:** `src/lib/prefill.ts`, `src/lib/track.ts`, `functions/api/track.ts`.
+
+**Commits:** `657e650` (CTA audit fix) + `7d8a18d` (docs sweep: finalize
+prior-tick's staged rung-iv strike ledger + raw LH JSON — closes session-guard
+finish line piece cut off by prior tick's `no_log` exit).
+
+**Parked (next audit sweep):** Hero / Header / Footer generic "Free review"
+CTAs still lack `data-intent`. Recommended: `book:site-review` — § 2 reserved
+namespace covers this cleanly. Deferred because these are generic booking
+actions (not tier picks), so no CATALOG entry required — only metadata for
+analytics distinction. 3 files, mechanical.
+
+**Next up:** either the parked `book:site-review` intent metadata sweep, or
+Rung VI EXPAND — real testimonials wall.
+
