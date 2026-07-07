@@ -37,7 +37,18 @@
 - Preserves the silent-looping-video UX for scroll-through visitors; strips it entirely for TikTok bounce traffic.
 - Files touched: `src/components/CaseStudy.astro`, `src/layouts/Layout.astro` (import + call `wireLazyVideos()`), `src/lib/lazyVideo.ts` (new, 32 lines).
 - Expected delta: total-byte-weight drops from ~7.14 MB → ~130 KB on the initial-load run (Lighthouse never scrolls, so the video never hydrates).
-- Verified after commit + CF Pages deploy — post-run JSON at `lighthouse-2026-07-07-strike2.json`.
+- **Measured delta** (post-deploy of `8481eb2`, desktop preset, `docs/lighthouse-2026-07-07-strike2.json`):
+
+  | Metric | Before (`lighthouse-2026-07-07.json`) | After (`lighthouse-2026-07-07-strike2.json`) | Δ |
+  |---|---|---|---|
+  | performance score | 98 | 98 | 0 (ceiling) |
+  | total-byte-weight | 6.81 MB | 0.12 MB | **−6.69 MB (−98.2 %)** |
+  | first-contentful-paint | 905 ms | 634 ms | **−271 ms** |
+  | speed-index | 905 ms | 634 ms | **−271 ms** |
+  | time-to-interactive | 905 ms | 634 ms | **−271 ms** |
+  | largest-contentful-paint | 905 ms | 1045 ms | +140 ms (single-run network variance) |
+
+  Video is now absent from the initial-load network trace (top request is a 48 KB Inter font subset). Payload composition on cold load is document + CSS + 3 font subsets — ~120 KB total. Scroll-through visitors still pay for the video, but the sibling session's aries-scroll-v2.mp4 (10.8 MB → 1.33 MB re-encode) means even that cost is 5.4 × lower than baseline.
 
 ### Remaining opportunities (measured, ranked)
 
