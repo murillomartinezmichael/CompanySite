@@ -16,13 +16,14 @@ built.** Candidates (ordered by money impact, not interest):
 2. **ClipForge-driven case-study MP4 landing** — the two `<video>` slots
    in Aries + Big 7 case studies stub to poster-only. Slotting real
    MP4s is 2 files + a `<video>` flip, not a build change.
-3. **Namespace extension: `book:site-review` for generic "Free review" CTAs**
-   in Hero / Header / Footer (§ 2 CONVERSION_STANDARDS). Requires:
-   (a) extending the root shared doc `docs/CONVERSION_STANDARDS.md`
-   (out of per-tick lane — log to Cockpit), (b) new CATALOG entry in
-   `src/lib/prefill.ts`, (c) `data-intent="book:site-review"` on the
-   three generic CTAs. Parked in session-9 by sibling agent's commit
-   `657e650`; still parked.
+3. ~~Namespace extension for generic "Free review" CTAs~~ **DONE tick-5
+   2026-07-07** — commit `64dc3c3`. Used existing reserved `book:`
+   namespace (§ 2 already covers "consult" = free review), so no
+   shared-doc edit needed. `data-intent="book:free-review"` now on
+   Header / Hero / Footer generic CTAs + footer mailto. Hidden `intent`
+   input on intake form captures the value on click (any CTA, not just
+   tier-mapped ones) so `intake_submit` carries attribution for the
+   generic-CTA funnel too.
 
 `/api/lead` → CockpitCloud sink SHIPPED session-10 (sibling agent, commit
 `a286781`). Rung VI EXPAND candidate #1 done.
@@ -30,6 +31,36 @@ built.** Candidates (ordered by money impact, not interest):
 Ladder Rung IV SPEED is CLOSED for this cycle. Next Rung IV strike
 opens when a new feature ships that could regress perf (measured, not
 speculative).
+
+---
+
+## SHIPPED (2026-07-07, tick 5 — CTA § 2/§ 3/§ 4 gap-close)
+
+- **Three CONVERSION_STANDARDS gaps closed in one commit `64dc3c3`
+  (5 files, +20/-21, local only per session brief).**
+- **§ 2 intent metadata** — Header, Hero, Footer generic "Free review"
+  CTAs now carry `data-intent="book:free-review"` (existing reserved
+  namespace, no shared-doc edit needed). Previously fired
+  `cta_click` with intent `undefined`.
+- **§ 4 attribution loop** — added `<input type="hidden" name="intent">`
+  to the intake form; `wirePrefill()` in `src/lib/prefill.ts` now
+  writes any clicked `[data-intent]` value into it (not just
+  CATALOG-mapped tiers). Intake submit handler reads intent directly
+  from the hidden field — removed the fragile `inferIntent()` regex
+  that could only recover intent when a message-textarea prefill was
+  present. `intake_submit` now carries a real intent for
+  book:free-review visitors too.
+- **§ 3 intake surface prefill** — footer `mailto:` now opens with a
+  populated `?subject=` line and a 3-field body scaffold so
+  direct-email visitors arrive in inbox with the same context the
+  form intake would have captured. Also flagged with
+  `data-intent="book:free-review"` for consistency.
+- Verified: `npm test` **84/84 green**, `npm run build` clean, `dist/`
+  HTML contains all 5 `data-intent` values (4 tiers + `book:free-review`),
+  hidden intent field renders on both `/` and `/audit`, mailto carries
+  full subject+body.
+- Files changed: `src/components/{Header,Hero,Footer,Intake}.astro` +
+  `src/lib/prefill.ts`. Zero deps.
 
 ---
 
