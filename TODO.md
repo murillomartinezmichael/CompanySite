@@ -34,6 +34,33 @@ speculative).
 
 ---
 
+## SHIPPED (2026-07-07, tick 16 — Rung IV Strike #6: strip .reveal from above-fold blocks + accounting close)
+
+- **`perf(hero)` commit `41a1b4a`: LCP 1792 → 1536 ms (−256 ms) local A/B.**
+  Untouched `.reveal` on above-fold Hero/Header blocks was delaying the
+  h1 paint behind an IntersectionObserver frame. Stripped `.reveal` from
+  the LCP element chain; kept it for below-fold sections. Preview A/B:
+  `perf/lh-mobile-preview-prefix-tick16-2026-07-07_215811.json`
+  (LCP 1792 ms) → `perf/lh-mobile-preview-postfix-tick16-2026-07-07_215910.json`
+  (LCP 1536 ms). Clears the ≥100 ms LCP guard.
+- **Live baseline `perf/lh-mobile-baseline-tick16-2026-07-07_215425.json`:**
+  m3mm.net Perf 99 / LCP 1750 ms — session-9 improvements deployed and
+  holding at ceiling. Fresh strike #6 lands on the already-shipped
+  work; site is at Perf 99 pre-strike.
+- **Tick-10 late accounting close: 4 dangling `perf/lh-mobile-after-*` JSONs
+  committed.** Prior tick-10 exit dropped these before the accounting
+  commit (`ec4b73a`) captured them. Now tracked:
+  `cf-email-decode-strike-final`, `cf-email-decode-strike-run2`,
+  `jetbrains-preload-drop`, `jetbrains-preload-drop-run2`. All live
+  m3mm.net mobile Lighthouse runs from the tick-10 window (12:24-12:30).
+- **Push status:** 3 commits ahead of origin/main (`34b93f5`, `41a1b4a`,
+  `f3edf28`) plus this accounting commit. Deferred to Mike per
+  `scripts/auto-improve/GUARDS_ACTIVE` + universal tick constraint
+  ("never push").
+- Files this tick: `TODO.md` (+ this bullet) + 4 `perf/*.json` (add-only).
+
+---
+
 ## SHIPPED (2026-07-07, tick 11 — CTA sweep #4 + tick-10 accounting close)
 
 - **CTA gap closed: case-study visit links now carry `product:` intent
