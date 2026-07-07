@@ -30,25 +30,56 @@ export type CockpitSinkResult =
 
 export const COCKPIT_SINK_TIMEOUT_MS = 6_000;
 
-/** Build the JSON body posted to CockpitCloud. Kept as a separate export so
- *  tests can assert the exact wire shape without spinning up a fetch mock. */
-export function buildCockpitLeadCard(id: string, lead: Lead, ip: string): Record<string, unknown> {
+/** Build the JSON body posted to CockpitCloud's `POST /v1/events` endpoint.
+ *  Matches `Backend/schemas.py::EventIn` shape verbatim so the receiver
+ *  consumes it without transformation — the bond only works when the two
+ *  sides agree on the wire.
+ *
+ *  Field limits per EventIn (2026-07-07 CockpitCloud commit 5527302):
+ *    source     1-64 chars    (required)
+ *    kind       lead|sale|deploy|incident|milestone (required)
+ *    name       1-255 chars   (required)
+ *    next_step  ≤ 4000 chars  (default empty)
+ *    link       ≤ 2000 chars  (default empty)
+ *    link_label ≤ 64 chars    (default empty)
+ *
+ *  We compose `next_step` as the triage-at-a-glance payload since that's the
+ *  card field surfaced in the kanban preview. The idempotency key travels in
+ *  the log line, not the body (CockpitCloud comment: "caller is idempotent").
+ */
+export function buildCockpitLeadCard(_id: string, lead: Lead, ip: string): Record<string, unknown> {
+  // source — combine the CompanySite section + the hero source so triage
+  // knows both where the visitor came from and which surface produced them.
+  const source = `companysite:${lead.source}`.slice(0, 64);
+
+  // name — client name + business type, capped at 255. Shown as the card title.
+  const name = `${lead.name} — ${lead.businessType}`.slice(0, 255);
+
+  // next_step — the human-actionable summary. Mike glances this and knows
+  // whether to reply now or later. Truncated at 4000 to satisfy the schema.
+  const parts = [
+    `Reply within 24h.`,
+    `Email: ${lead.email}`,
+    lead.currentUrl ? `Their site: ${lead.currentUrl}` : null,
+    ``,
+    `Frustration:`,
+    lead.frustration,
+    ``,
+    `Source IP: ${ip}`,
+  ].filter((s) => s !== null);
+  const next_step = parts.join('\n').slice(0, 4000);
+
+  // link — click-through target for triage; their site if they gave one.
+  const link = (lead.currentUrl ?? '').slice(0, 2000);
+  const link_label = lead.currentUrl ? 'Their site' : '';
+
   return {
+    source,
     kind: 'lead',
-    id,
-    at: new Date().toISOString(),
-    source: lead.source,
-    name: lead.name,
-    email: lead.email,
-    businessType: lead.businessType,
-    currentUrl: lead.currentUrl ?? null,
-    frustration: lead.frustration,
-    // Meta — helps triage at a glance in the kanban without opening the card
-    meta: {
-      frustrationLength: lead.frustration.length,
-      hasCurrentUrl: Boolean(lead.currentUrl),
-      ip,
-    },
+    name,
+    next_step,
+    link,
+    link_label,
   };
 }
 

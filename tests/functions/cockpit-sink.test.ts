@@ -34,31 +34,51 @@ function stubFetch(status = 202, body: unknown = { ok: true }) {
 }
 
 describe('buildCockpitLeadCard', () => {
-  it('emits the canonical wire shape with meta + null currentUrl handling', () => {
+  it('emits the CockpitCloud EventIn shape verbatim (source/kind/name/next_step/link/link_label)', () => {
     const card = buildCockpitLeadCard('lead_abc', sampleLead, '203.0.113.7');
     expect(card).toMatchObject({
+      source: 'companysite:hero',
       kind: 'lead',
-      id: 'lead_abc',
-      source: 'hero',
-      name: 'Test Client',
-      email: 'client@example.com',
-      businessType: 'Home services',
-      currentUrl: 'https://example.com',
-      frustration: sampleLead.frustration,
-      meta: {
-        frustrationLength: sampleLead.frustration.length,
-        hasCurrentUrl: true,
-        ip: '203.0.113.7',
-      },
+      name: 'Test Client — Home services',
+      link: 'https://example.com',
+      link_label: 'Their site',
     });
-    // ISO timestamp (Z suffix)
-    expect((card as { at: string }).at).toMatch(/Z$/);
+    // next_step contains the triage payload — email + site + frustration + IP
+    const nextStep = String((card as { next_step: string }).next_step);
+    expect(nextStep).toContain('Reply within 24h');
+    expect(nextStep).toContain('client@example.com');
+    expect(nextStep).toContain('https://example.com');
+    expect(nextStep).toContain(sampleLead.frustration);
+    expect(nextStep).toContain('203.0.113.7');
   });
 
-  it('sets currentUrl:null and hasCurrentUrl:false when Lead has no URL', () => {
+  it('drops the "Their site" line and link_label when Lead has no currentUrl', () => {
     const card = buildCockpitLeadCard('id', { ...sampleLead, currentUrl: undefined }, 'ip');
-    expect(card.currentUrl).toBeNull();
-    expect((card as { meta: { hasCurrentUrl: boolean } }).meta.hasCurrentUrl).toBe(false);
+    expect(card.link).toBe('');
+    expect(card.link_label).toBe('');
+    expect(String(card.next_step)).not.toContain('Their site:');
+  });
+
+  it('caps source at 64, name at 255, next_step at 4000, link at 2000, link_label at 64', () => {
+    const longLead: Lead = {
+      name: 'A'.repeat(400),
+      email: 'x@y.z',
+      businessType: 'B'.repeat(400),
+      currentUrl: 'https://' + 'c'.repeat(2500) + '.example.com',
+      frustration: 'F'.repeat(5000),
+      source: 'S'.repeat(200),
+    };
+    const card = buildCockpitLeadCard('id', longLead, 'ip');
+    expect(String(card.source).length).toBeLessThanOrEqual(64);
+    expect(String(card.name).length).toBeLessThanOrEqual(255);
+    expect(String(card.next_step).length).toBeLessThanOrEqual(4000);
+    expect(String(card.link).length).toBeLessThanOrEqual(2000);
+    expect(String(card.link_label).length).toBeLessThanOrEqual(64);
+  });
+
+  it('prefixes source with "companysite:" so triage knows the origin', () => {
+    const card = buildCockpitLeadCard('id', { ...sampleLead, source: 'audit-page' }, 'ip');
+    expect(card.source).toBe('companysite:audit-page');
   });
 });
 
@@ -99,24 +119,24 @@ describe('sendToCockpit', () => {
     expect(calls).toHaveLength(0);
   });
 
-  it('POSTs the card body when URL is set and returns ok+status on 2xx', async () => {
-    const { impl, calls } = stubFetch(202);
+  it('POSTs the EventIn body when URL is set and returns ok+status on 2xx', async () => {
+    const { impl, calls } = stubFetch(201);
     const r = await sendToCockpit(
-      { COCKPIT_INGEST_URL: 'https://cockpit.example.com/ingest' },
+      { COCKPIT_INGEST_URL: 'https://cockpit.example.com/v1/events' },
       'lead_abc',
       sampleLead,
       '203.0.113.7',
       impl,
     );
-    expect(r).toEqual({ ok: true, status: 202 });
+    expect(r).toEqual({ ok: true, status: 201 });
     expect(calls).toHaveLength(1);
-    expect(calls[0].url).toBe('https://cockpit.example.com/ingest');
+    expect(calls[0].url).toBe('https://cockpit.example.com/v1/events');
     expect(calls[0].init.method).toBe('POST');
     const parsed = JSON.parse(String(calls[0].init.body));
     expect(parsed.kind).toBe('lead');
-    expect(parsed.id).toBe('lead_abc');
-    expect(parsed.name).toBe('Test Client');
-    expect(parsed.meta.ip).toBe('203.0.113.7');
+    expect(parsed.source).toBe('companysite:hero');
+    expect(parsed.name).toBe('Test Client — Home services');
+    expect(String(parsed.next_step)).toContain('client@example.com');
   });
 
   it('surfaces non-2xx status via ok:false', async () => {
