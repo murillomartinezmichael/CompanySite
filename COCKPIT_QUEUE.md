@@ -7,6 +7,34 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-07 · CompanySite · Rung IV Strike #6 — Hero .reveal → LCP −256 ms (tick 16)
+
+**Card:** CompanySite performance ceiling — Rung IV
+**Move to:** Done
+
+**What shipped:** LH-mobile baseline against live m3mm.net (`perf/lh-mobile-baseline-tick16-*.json`, Perf 99 / LCP 1750 ms) surfaced the hero sub-headline `p.max-w-2xl` as LCP with a 1644 ms `elementRenderDelay`. Root cause: it lived inside `.reveal reveal-delay-2` — starts at `opacity: 0`, waits for `src/lib/reveal.ts`'s IntersectionObserver to flip `is-visible`, then a 500 ms fade. That gates the largest paint behind JS parse/execute + transition for elements always in initial viewport.
+
+Fix: dropped `reveal` / `reveal-delay-{1,2,3}` from the four above-fold Hero blocks (eyebrow row, H1, sub/CTA column, editorial stat block) in `src/components/Hero.astro`. `.reveal` stays wired in Services / Intake where scroll-driven fade is real UX polish, not LCP tax.
+
+LH-local A/B against `astro preview` (mobile preset, matched form-factor):
+- Pre-fix:  Perf 98, LCP 1792 ms, FCP 1396 ms, TBT 151 ms
+- Post-fix: Perf 98, LCP **1536 ms**, FCP 1536 ms, TBT 132 ms
+- **Δ LCP: −256 ms** (2.5× the session-guard's ≥100 ms threshold)
+
+FCP and LCP now register as one paint — correct behavior for a text-hero page. PSI mobile daily quota still 429 (3rd tick in a row); LH-local A/B follows the tick-7-established fallback convention.
+
+**Files touched:**
+- `src/components/Hero.astro` (4 class-string edits)
+- `docs/lighthouse-baseline.md` (Strike #6 entry)
+- `perf/lh-mobile-baseline-tick16-*.json`
+- `perf/lh-mobile-preview-{prefix,postfix}-tick16-*.json`
+
+**Commit:** `41a1b4a` (local; not pushed — universal-hard-constraint kill switch on this tick)
+
+**Next up:** deploy so live m3mm.net LCP reflects the −256 ms delta; re-run PSI when quota resets to prove the live delta matches the local A/B.
+
+---
+
 ## 2026-07-07 · CompanySite · CTA sweep #5 — nav-intake intent + form default (tick 16)
 
 **Card:** CompanySite conversion pass — round 5
