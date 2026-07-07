@@ -123,9 +123,11 @@ const canonical = new URL(path, Astro.site ?? 'https://m3mm.net').toString();
       import { wireCTAs } from '@/lib/track';
       import { wireReveals } from '@/lib/reveal';
       import { wirePrefill } from '@/lib/prefill';
+      import { wireLazyVideos } from '@/lib/lazyVideo';
       wireCTAs();
       wireReveals();
       wirePrefill();
+      wireLazyVideos();
     </script>
 
     <script is:inline>

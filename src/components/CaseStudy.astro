@@ -34,14 +34,14 @@ if (d.liveUrl) {
     {d.video ? (
       <video
         class="h-full w-full object-cover"
-        preload="metadata"
+        preload="none"
         playsinline
         muted
         loop
-        autoplay
         poster={d.poster}
+        data-lazy
       >
-        <source src={d.video} type="video/mp4" />
+        <source data-src={d.video} type="video/mp4" />
       </video>
     ) : (
       <CaseStudyArt slug={entry.slug} client={d.client} />
