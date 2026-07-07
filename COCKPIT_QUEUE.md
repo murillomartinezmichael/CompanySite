@@ -166,6 +166,47 @@ CockpitCloud lead sink (parallel-agent shipped scaffolding in `a286781`).
 
 ---
 
+## 2026-07-07 · CompanySite · Rung IV strike #5 — bypass CF Email Obfuscation (tick-10)
+
+**Card:** CompanySite Rung IV SPEED
+**Move to:** In Progress (deploy-verified delta pending push)
+
+**What shipped:** Fix landed in sibling-agent commit `9167f81`
+(`perf(footer): kill CF email-decode.min.js render-block …`). Two agents
+converged on the same bottleneck in parallel this tick — this session
+independently walked the tick-10 mobile baseline against live m3mm.net
+(`perf/lh-mobile-baseline-tick10-2026-07-07_121224.json`, Perf 94 / LCP
+2531 ms), pinned the render-blocker to
+`/cdn-cgi/scripts/…/email-decode.min.js` (206 ms wasted, in the LCP
+critical chain via `network-dependency-tree-insight`), designed the same
+data-attr split + inline hydrator; sibling committed Footer.astro first.
+
+This session's companion contributions:
+- **`perf/lh-local-after-tick10-2026-07-07_121758.json`** (new) — local
+  astro preview post-fix, Perf 96 / LCP 2255 ms. Statistical parity with
+  tick-7 local-after (98 / 2262 ms), as expected: fix targets a CF-edge
+  behavior invisible to local preview.
+- **`docs/lighthouse-baseline.md` § "Strike #5"** — full ledger entry
+  with baseline JSON refs, bottleneck evidence, verification path, and
+  the reason local delta is null by design.
+- **`TODO.md` SHIPPED (tick 10)** — tick-10 record attributing sibling's
+  commit and framing the deploy-verified delta as pending.
+
+**Files touched:** `docs/lighthouse-baseline.md` · `TODO.md` ·
+`COCKPIT_QUEUE.md` · `perf/lh-local-after-tick10-2026-07-07_121758.json`
+(new).
+
+**Commits (this tick — local only, per unattended tick constraint):** 1
+companion commit — `docs(perf): tick-10 companion — CF Email Obfuscation
+strike #5 ledger + local-after JSON`.
+
+**Next up:** Deploy-verified delta requires a push. Once pushed, PSI
+mobile against m3mm.net should recover the ~200 ms of email-decode
+wasted-ms from the render-blocking path (score depends on lab jitter;
+Perf floor should return to tick-9's 97).
+
+---
+
 ## 2026-07-07 · CompanySite · CTA conversion audit — tick-8 (3 § gaps closed)
 
 **Card:** CompanySite conversion pass — round 2

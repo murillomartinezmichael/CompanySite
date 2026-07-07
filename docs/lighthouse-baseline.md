@@ -156,3 +156,55 @@ same-instrument at −1242 ms LCP. Both instruments agree the strike was real.
 2. **uses-long-cache-ttl** — 1 CF-injected `/cdn-cgi/scripts/.../email-decode.min.js`
    (1 KB). Cloudflare-managed, not directly controllable. Parked.
 3. `render-blocking-resources` = 0 remaining after this strike.
+
+### Strike #5 · bypass Cloudflare Email Address Obfuscation (tick-10, commit `9167f81`)
+
+Follow-on to the "parked" `email-decode.min.js` line above. Two agents
+converged on this bottleneck in parallel — sibling committed Footer.astro
+first as `9167f81`; this entry ledgers the strike with the second-instrument
+local-after companion measurement.
+
+Tick-10 baseline
+(`perf/lh-mobile-baseline-tick10-2026-07-07_121224.json`) against live
+m3mm.net regressed to Perf 94 / LCP 2531 ms and pinned the residual bottleneck:
+
+```
+render-blocking-insight:
+  url: /cdn-cgi/scripts/…/cloudflare-static/email-decode.min.js
+  totalBytes: 1000
+  wastedMs: 206
+```
+
+Also present in `network-dependency-tree-insight` as a child of the root
+document with 210 ms transferTime. CF Email Address Obfuscation injects this
+script at the edge whenever the served HTML contains a raw email or a
+`mailto:` anchor — Footer had `<a href="mailto:murillo…@gmail.com">…</a>`
+in plain HTML source, so every m3mm.net response triggered the decoder
+injection.
+
+**Fix.** `src/components/Footer.astro`: split the address into `data-em-u` /
+`data-em-h` attrs on an anchor whose default `href` is `/audit#intake`
+(graceful no-JS fallback). A tiny `is:inline` script hydrates on load,
+building `mailto:{u}@{h}?subject=…&body=…` and swapping the visible text.
+The rendered HTML — what CF's edge scanner sees — contains no email
+pattern and no `mailto:` href, so the decoder script is never injected.
+
+Verified in the built bundle:
+- `grep -c "murillomartinezmichael@gmail.com" dist/index.html` → 0
+- `grep -o "mailto:[^\"]*" dist/index.html` → 0 anchor hrefs (only 2 hits, both inside the inline `<script>`).
+
+**Local delta (`lh-local-after-tick10`, astro preview 4321, no CF middleware
+in the request path):** Perf 96, LCP 2255 ms — statistical parity with
+tick-7 local-after (98 / 2262 ms). Expected: the whole point of the fix
+is a CF-edge behavior invisible to local preview. Local Lighthouse can't
+score improvement it can't observe.
+
+**Deploy-verified delta:** unmeasured this tick — session hard constraints
+disallow push/deploy. Post-deploy the CF email-decode line disappears from
+the network trace entirely (0 KB saved on payload, but ~200 ms wasted-ms
+recovered from the render-blocking path per this tick's baseline). PSI
+daily quota was exhausted mid-session, blocking a fresh remote re-check.
+
+Files touched: `src/components/Footer.astro` (+29/-2, in sibling commit
+`9167f81`), this ledger, `perf/lh-mobile-baseline-tick10-*.json` (new, in
+sibling commit), `perf/lh-local-after-tick10-*.json` (new, this tick).

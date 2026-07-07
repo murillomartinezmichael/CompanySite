@@ -34,6 +34,27 @@ speculative).
 
 ---
 
+## SHIPPED (2026-07-07, tick 10 — Rung IV strike #5: bypass CF Email Obfuscation)
+
+- **Fix landed in sibling-agent commit `9167f81`** (`perf(footer): kill CF
+  email-decode.min.js render-block …`). Two agents converged on the same
+  bottleneck in parallel this tick; sibling committed first. Footer.astro
+  now splits the address into `data-em-u` / `data-em-h` attrs behind an
+  `/audit#intake` fallback, hydrates a real `mailto:` on load — CF's edge
+  scanner sees no email pattern in HTML source, so
+  `/cdn-cgi/scripts/…/email-decode.min.js` (206 ms wasted, LCP critical
+  chain per tick-10 baseline) stops being injected on deploy.
+- This tick's companion: baseline JSON `perf/lh-mobile-baseline-tick10-…json`
+  (live m3mm.net, Perf 94 / LCP 2531 ms) + local companion
+  `perf/lh-local-after-tick10-…json` (astro preview, Perf 96 / LCP 2255
+  ms — statistical parity with tick-7 local, expected since the fix is a
+  CF-edge behavior invisible to local preview). Ledger `docs/lighthouse-baseline.md`
+  § "Strike #5" documents the fix + verification path.
+- Deploy-verified PSI delta unmeasured — PSI daily quota exhausted mid-tick;
+  push/deploy disallowed by tick constraints.
+
+---
+
 ## SHIPPED (2026-07-07, tick 5 — CTA § 2/§ 3/§ 4 gap-close)
 
 - **Three CONVERSION_STANDARDS gaps closed in one commit `64dc3c3`
