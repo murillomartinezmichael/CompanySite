@@ -49,12 +49,18 @@ const canonical = new URL(path, Astro.site ?? 'https://m3mm.net').toString();
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!--
-      Preload the latin woff2 subsets Google Fonts serves for our 3 families.
-      Skips the CSS-parse gate so fonts download in parallel with the stylesheet
-      instead of after it. Space Grotesk powers the H1 hero (LCP element), Inter
-      the body copy, JetBrains Mono the eyebrow/kicker. All three would load
-      anyway; preload just moves them earlier. Refresh hashed URLs from the
-      googleapis.com/css2 response if PSI ever flags "preloaded resource not used".
+      Preload only the two LCP-critical latin woff2 subsets. Space Grotesk
+      powers the H1 hero (LCP element) so it gets fetchpriority="high" — the
+      browser races it against every other early network op. Inter drives the
+      body copy visible above the fold on mobile so it stays preloaded at
+      default priority. JetBrains Mono was dropped from preload (2026-07-07
+      Rung I SPEED strike): it only paints small eyebrow/kicker text and its
+      31KB was contending with Space Grotesk for the same simulated mobile
+      bandwidth (perf/lh-mobile-after-cf-email-decode-strike-*.json → all
+      three preloads finishing at 256–258ms in parallel). ui-monospace
+      fallback carries the kickers cleanly until CSS-driven fetch lands.
+      Refresh hashed URLs from the googleapis.com/css2 response if PSI ever
+      flags "preloaded resource not used".
     -->
     <link
       rel="preload"
@@ -62,19 +68,13 @@ const canonical = new URL(path, Astro.site ?? 'https://m3mm.net').toString();
       type="font/woff2"
       href="https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU.woff2"
       crossorigin
+      fetchpriority="high"
     />
     <link
       rel="preload"
       as="font"
       type="font/woff2"
       href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      href="https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2"
       crossorigin
     />
     <!--
