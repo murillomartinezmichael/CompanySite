@@ -193,12 +193,117 @@
   .reveal-delay-3 { transition-delay: 180ms; }
   .reveal-delay-4 { transition-delay: 240ms; }
 
-  /* Hero accent word — subtle cyan glow, no glitch animation
-     (spec: no lens flares / heavy effects; motion snappy not showy) */
+  /* Hero accent word — full RGB channel-split with slow drift animation.
+     Cyan behind, magenta ahead, 8s glitch cycle that reduced-motion
+     shuts off. This is the LUCY-POSTER vibe: the site is Mike's main —
+     restraint gets dropped so the hero reads at TikTok-scroll speed. */
   .glitch-em {
     display: inline-block;
     color: theme('colors.clay.DEFAULT');
-    text-shadow: 0 0 12px rgba(125, 249, 255, 0.30);
+    text-shadow:
+       3px 0 0 rgba(255,  46, 136, 0.70),
+      -3px 0 0 rgba(125, 249, 255, 0.70),
+       0   0 16px rgba(125, 249, 255, 0.35);
+    animation: rgbDrift 8s ease-in-out infinite;
+  }
+  @keyframes rgbDrift {
+    0%, 100% {
+      text-shadow:
+         3px 0 0 rgba(255,  46, 136, 0.70),
+        -3px 0 0 rgba(125, 249, 255, 0.70),
+         0   0 16px rgba(125, 249, 255, 0.35);
+    }
+    48% {
+      text-shadow:
+         2px 1px 0 rgba(255,  46, 136, 0.60),
+        -2px -1px 0 rgba(125, 249, 255, 0.60),
+         0   0 16px rgba(125, 249, 255, 0.35);
+    }
+    52% {
+      text-shadow:
+        -3px -1px 0 rgba(255,  46, 136, 0.90),
+         3px  1px 0 rgba(125, 249, 255, 0.90),
+         0    0  22px rgba(245, 217, 10, 0.40);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .glitch-em {
+      animation: none;
+      text-shadow: 0 0 14px rgba(125, 249, 255, 0.35);
+    }
+  }
+
+  /* Sharpie-yellow highlight — full saturation, covers the middle band
+     of the em text like a marker stroke. Ref: the yellow background
+     zones behind Lucy's face in the poster. */
+  .highlight-yellow {
+    position: relative;
+    display: inline-block;
+  }
+  .highlight-yellow::before {
+    content: '';
+    position: absolute;
+    left: -0.15em; right: -0.15em;
+    top: 22%; bottom: 12%;
+    background: theme('colors.cyber');
+    z-index: -1;
+    transform: skewY(-2deg);
+    opacity: 0.95;
+    box-shadow:
+       6px 0 0 rgba(255,  46, 136, 0.35),
+      -6px 0 0 rgba(125, 249, 255, 0.35);
+  }
+  .highlight-yellow .fg {
+    color: theme('colors.ink.DEFAULT');
+    text-shadow: none !important;
+    font-weight: 700;
+  }
+
+  /* Halftone dot — bigger, denser, more visible. Ref: the polka-dot
+     zone in the bottom-left of the Lucy poster. */
+  .halftone-dots {
+    background-image: radial-gradient(theme('colors.cyber') 1.5px, transparent 2px);
+    background-size: 10px 10px;
+    background-position: 0 0;
+    opacity: 0.85;
+    mask-image: radial-gradient(ellipse at bottom left, black 35%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at bottom left, black 35%, transparent 75%);
+  }
+  .halftone-dots-cyan {
+    background-image: radial-gradient(theme('colors.clay.DEFAULT') 1.5px, transparent 2px);
+    background-size: 10px 10px;
+    opacity: 0.7;
+    mask-image: radial-gradient(ellipse at top right, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at top right, black 30%, transparent 75%);
+  }
+
+  /* Violet geometric triangle — bigger, more saturated */
+  .triangle-violet {
+    position: absolute;
+    background: linear-gradient(135deg, rgba(168, 123, 255, 0.55), rgba(168, 123, 255, 0.10));
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    opacity: 0.75;
+    pointer-events: none;
+  }
+
+  /* RGB-glitch bar — thicker, brighter, three-stripe split */
+  .glitch-bar {
+    height: 6px;
+    background: linear-gradient(90deg,
+      rgba(125, 249, 255, 0.85) 0 33%,
+      rgba(255, 46, 136, 0.85) 33% 66%,
+      rgba(245, 217, 10, 0.85) 66% 100%);
+    opacity: 0.75;
+    filter: drop-shadow(0 0 8px rgba(125, 249, 255, 0.4));
+  }
+
+  /* Pastel Lucy-hair gradient — pink + mint + silver, decorative zone */
+  .lucy-hair-band {
+    background: linear-gradient(90deg,
+      rgba(255, 182, 217, 0.35) 0%,
+      rgba(178, 244, 235, 0.35) 50%,
+      rgba(190, 208, 235, 0.30) 100%);
+    filter: blur(1px);
   }
 
   /* DIM toggle — cyan-outlined chip, bottom-left, out of widget path */

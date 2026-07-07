@@ -14,11 +14,32 @@ const {
 ---
 
 <section class="relative isolate overflow-hidden">
-  <!-- Ambient hint only (spec: never large neon areas). A single
-       subtle two-stop cyan gradient at 6% — no blurred neon orbs. -->
+  <!-- Ambient hint (subtle two-stop cyan gradient at 6%) -->
   <div class="pointer-events-none absolute inset-x-0 -top-16 h-[420px] -z-10">
     <div class="absolute inset-x-0 top-0 h-full bg-gradient-to-b from-clay/[0.06] via-transparent to-transparent"></div>
   </div>
+
+  <!-- Character layers — Lucy-poster energy. This is Mike's main
+       project so restraint gets dropped: bigger, saturated, glitchy,
+       decorative overlays that build TikTok-scroll-stopping character. -->
+
+  <!-- Violet triangle top-right (matches the poster's geometric shape) -->
+  <div class="triangle-violet pointer-events-none absolute right-0 top-8 h-[380px] w-[380px] -z-10 hidden sm:block" aria-hidden="true"></div>
+
+  <!-- Cyan halftone swarm bottom-left corner (the polka-dot poster zone) -->
+  <div class="halftone-dots-cyan pointer-events-none absolute top-24 right-8 h-[220px] w-[280px] -z-10 hidden md:block" aria-hidden="true"></div>
+
+  <!-- Yellow halftone swarm bottom-left corner -->
+  <div class="halftone-dots pointer-events-none absolute -bottom-12 -left-8 h-[280px] w-[380px] -z-10 hidden sm:block" aria-hidden="true"></div>
+
+  <!-- Three-stripe RGB glitch bar under the eyebrow row -->
+  <div class="glitch-bar pointer-events-none absolute inset-x-12 top-[26%] -z-10" aria-hidden="true"></div>
+
+  <!-- Second glitch bar higher up, offset -->
+  <div class="glitch-bar pointer-events-none absolute right-6 top-[8%] w-[140px] -z-10" aria-hidden="true" style="opacity: 0.65;"></div>
+
+  <!-- Pastel Lucy-hair gradient band across the marquee -->
+  <div class="lucy-hair-band pointer-events-none absolute inset-x-0 bottom-0 h-[110px] -z-10" aria-hidden="true"></div>
 
   <div class="container-page relative pb-20 pt-14 sm:pt-20 lg:pb-28 lg:pt-24">
     <!-- Eyebrow row -->
@@ -37,11 +58,11 @@ const {
     <!-- Cyberpunk headline — glitch on the em, no yellow underline -->
     <h1 class="reveal reveal-delay-1 text-display-2xl">
       <span class="block text-bone">Websites that</span>
-      <span class="relative inline-block">
-        <span class="relative z-10 text-clay glitch-em">get you customers.</span>
-        <!-- Cyan hairline underline (drawn on load, replaces the yellow squiggle) -->
+      <span class="highlight-yellow relative inline-block">
+        <span class="fg relative z-10 glitch-em">get you customers.</span>
+        <!-- Cyan hairline underline (drawn on load, reinforces the highlight) -->
         <svg
-          class="absolute -bottom-2 left-0 h-[0.14em] w-full text-clay/70 sm:-bottom-3"
+          class="absolute -bottom-2 left-0 h-[0.14em] w-full text-clay/60 sm:-bottom-3"
           viewBox="0 0 400 6"
           preserveAspectRatio="none"
           aria-hidden="true"
