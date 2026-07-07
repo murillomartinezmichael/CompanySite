@@ -34,6 +34,35 @@ speculative).
 
 ---
 
+## SHIPPED (2026-07-07, tick 11 — CTA sweep #4 + tick-10 accounting close)
+
+- **CTA gap closed: case-study visit links now carry `product:` intent
+  (`2f77d9a`).** Walked every `[data-cta]` in `src/components/*`. Prior
+  ticks (5-10) closed the tier / book / navigation surfaces. One
+  remaining gap: `CaseStudy.astro` "Visit the live site" outbound anchor
+  had `data-cta` + UTM but no `data-intent`, so `cta_click` fired with
+  `intent: undefined`. Per CONVERSION_STANDARDS § 2 the reserved
+  `product:` namespace covers case studies. Now:
+  `data-intent={`product:${entry.slug}`}` renders as `product:aries` /
+  `product:big7`. Server-side `INTENT_MAX=64` in `functions/api/track.ts`
+  (added tick-8) accepts arbitrary namespaces, no server change needed.
+- **Tick-10 dangling accounting committed (`ec4b73a`).** Prior tick
+  exited `no_log` before docs / measurement JSONs got in. Committed
+  Strike #5 ledger entry in `docs/lighthouse-baseline.md`, TODO tick-10
+  SHIPPED section, COCKPIT_QUEUE entry, and both tick-10 JSONs
+  (`lh-local-after-tick10-*.json`, `lh-mobile-after-cf-email-decode-strike-*.json`).
+- **Fresh PSI mobile against live m3mm.net: HTTP 429.** PSI daily quota
+  still exhausted (rolled over from tick-10). Retry next tick after
+  quota reset.
+- Verified: `npm test` **84/84 green**, `npm run build` clean, `dist/`
+  HTML contains 7 distinct `data-intent` values across 4 tiers + book
+  + 2 product namespaces.
+- Files changed this tick: `src/components/CaseStudy.astro` (+1/-0).
+  Docs / metadata commit added `docs/lighthouse-baseline.md`, `TODO.md`,
+  `COCKPIT_QUEUE.md`, 2 perf JSONs.
+
+---
+
 ## SHIPPED (2026-07-07, tick 10 — Rung IV strike #5: bypass CF Email Obfuscation)
 
 - **Fix landed in sibling-agent commit `9167f81`** (`perf(footer): kill CF

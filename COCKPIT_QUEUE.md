@@ -7,6 +7,43 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-07 · CompanySite · CTA sweep #4 — product: intent on case studies (tick 11)
+
+**Card:** CompanySite conversion pass — round 4
+**Move to:** Done
+
+**What shipped:** Fourth CTA sweep against `docs/CONVERSION_STANDARDS.md`.
+Prior sweeps (ticks 5, 8, 10) closed tier / book / navigation surfaces;
+this one closes case-study outbound attribution. `CaseStudy.astro` "Visit
+the live site" anchor had `data-cta` + UTM params but no `data-intent`,
+so `cta_click` beacons fired with `intent: undefined`. Per
+CONVERSION_STANDARDS § 2 the reserved `product:` namespace covers case
+studies. Now the anchor carries `data-intent={`product:${entry.slug}`}`
+which renders as `product:aries` / `product:big7` in built HTML.
+Server-side `INTENT_MAX=64` in `functions/api/track.ts` already accepts
+arbitrary namespaces (added tick-8) so no server change needed.
+
+Also committed this tick: tick-10's dangling accounting (docs, TODO,
+COCKPIT queue entry, and both measurement JSONs) that never made it in
+before the prior tick's `no_log` exit — commit `ec4b73a`.
+
+**Files touched:** `src/components/CaseStudy.astro` (+1/-0) · docs commit
+touches TODO.md, COCKPIT_QUEUE.md, docs/lighthouse-baseline.md,
+perf/lh-local-after-tick10-*.json, perf/lh-mobile-after-cf-email-decode-strike-*.json.
+
+**Commits (2, local only per tick constraint):** `ec4b73a` (tick-10
+accounting close) · `2f77d9a` (product: intent fix).
+
+**Verified:** `npm test` 84/84 green, `npm run build` clean, `dist/index.html`
+now shows 7 distinct `data-intent` values (4 tiers + book + 2 products).
+
+**Next up:** Rung VI EXPAND — real testimonials wall still BLOCKED on
+Mike (needs real client quotes). ClipForge MP4 slot fill is a file-drop
+task. Deploy of tick-10's email-decode fix + fresh PSI (post-quota-reset)
+would confirm the ~200 ms wasted-ms recovery.
+
+---
+
 ## 2026-07-07 · CompanySite · Rung IV audit — ceiling confirmed + JSON-LD hygiene
 
 **Card:** CompanySite Rung IV SPEED
