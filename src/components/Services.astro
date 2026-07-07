@@ -15,6 +15,7 @@ const services = [
       'SEO basics done right — no monthly upsell',
     ],
     accent: 'clay',
+    cta: 'Get a quote',
   },
   {
     key: 'automations',
@@ -31,6 +32,7 @@ const services = [
       'Zapier, n8n, or custom — whichever fits',
     ],
     accent: 'neon',
+    cta: 'Get a quote',
   },
   {
     key: 'ai-assistant',
@@ -47,6 +49,24 @@ const services = [
       'Runs on M³ infra — no ChatGPT subscription needed',
     ],
     accent: 'cyber',
+    cta: 'Get a quote',
+  },
+  {
+    key: 'custom-builds',
+    intent: 'tier:custom:scoped-project',
+    number: '04',
+    title: 'Custom builds',
+    for: 'For businesses whose problem doesn\'t fit a template',
+    from: '$6,000 · scoped per project',
+    body: 'Web portals, internal tools, customer dashboards, integrations between systems that don\'t talk, payment and transaction flows, full product builds. If it\'s software and it solves a real business problem, it\'s in scope. Same deal as everything else: flat quote, you own the code.',
+    bullets: [
+      'Full-stack builds — frontend, backend, database, hosting',
+      'Integrations & APIs — connect the tools you already pay for',
+      'Payment / transaction processing done properly',
+      'One person, senior-level, no agency markup',
+    ],
+    accent: 'clay',
+    cta: 'Scope a project',
   },
 ] as const;
 
@@ -69,7 +89,7 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
         <p class="kicker mono">Services</p>
       </div>
       <h2 class="text-display-lg">
-        Three things I do. <span class="text-bone-dim">Priced flat.</span>
+        Four things I do. <span class="text-bone-dim">Priced flat.</span>
       </h2>
       <p class="mt-6 text-lg text-bone-dim">
         No monthly retainers. No hourly ambiguity. You get a quote, we agree, I build. If
@@ -126,7 +146,7 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
               <!-- CTA arrow -->
               <div class="hidden items-center lg:flex">
                 <span class={`mono text-xs uppercase tracking-[0.2em] ${a.text} ${a.hover} transition-all duration-500 group-hover:translate-x-1`}>
-                  Get a quote
+                  {s.cta}
                 </span>
                 <svg class={`ml-2 h-4 w-4 ${a.text} ${a.hover} transition-transform duration-500 group-hover:translate-x-1`} viewBox="0 0 16 16" fill="none" aria-hidden="true">
                   <path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
