@@ -49,6 +49,20 @@ const canonical = new URL(path, Astro.site ?? 'https://m3mm.net').toString();
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!--
+      Preload the Space Grotesk latin subset used by the H1 hero (LCP element).
+      Skips the CSS-parse gate so the woff2 downloads in parallel with the
+      stylesheet. Hashed URL matches what Google Fonts currently serves for
+      v22 latin; refresh from the stylesheet response if PSI ever flags
+      "preloaded resource not used".
+    -->
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU.woff2"
+      crossorigin
+    />
+    <!--
       Rung IV QUICKEN strike (2026-07-07): defer the Google Fonts stylesheet
       via the preload+onload swap pattern. Lighthouse baseline flagged this
       exact URL as 247ms render-blocking (docs/lighthouse-2026-07-07.json:

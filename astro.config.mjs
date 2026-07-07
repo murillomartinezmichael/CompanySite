@@ -5,6 +5,6 @@ export default defineConfig({
   site: 'https://m3mm.net',
   output: 'static',
   integrations: [tailwind({ applyBaseStyles: false })],
-  build: { inlineStylesheets: 'auto' },
+  build: { inlineStylesheets: 'always' },
   compressHTML: true,
 });
