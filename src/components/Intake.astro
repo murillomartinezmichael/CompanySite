@@ -197,6 +197,23 @@ const {
   const status = document.getElementById('intake-status') as HTMLDivElement | null;
 
   if (form && status) {
+    // CONVERSION_STANDARDS.md § 4 — intake_start fires once, on the first
+    // field focus, so we can measure abandonment between CTA click and
+    // submit. focusin bubbles, so a single `once` listener on the form
+    // catches whichever field the visitor lands on first (name / email /
+    // frustration textarea after a Services prefill, etc.).
+    form.addEventListener('focusin', () => {
+      const source = String(form.dataset.source || 'unknown');
+      const intentInput = form.querySelector<HTMLInputElement>('input[name=intent]');
+      const intent = intentInput?.value || undefined;
+      track({
+        name: 'intake_start',
+        section: 'intake',
+        intent,
+        meta: { source },
+      });
+    }, { once: true });
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const submitBtn = form.querySelector<HTMLButtonElement>('button[type=submit]');

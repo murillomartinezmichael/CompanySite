@@ -34,6 +34,32 @@ speculative).
 
 ---
 
+## SHIPPED (2026-07-07, tick 16b — CTA § 4 alignment: `intake_start` event)
+
+- **Funnel gap closed: `intake_start` now fires on first field focus.**
+  CONVERSION_STANDARDS § 4 table lists four required events for the CTA
+  loop (`cta_click` → `intake_start` → `intake_submit` → `checkout_complete`).
+  Session-10 aligned `intake_submit`/`intake_error` payloads; `intake_start`
+  was still missing, so we couldn't measure the abandonment gap between
+  "clicks CTA" (huge, tracked) and "submits form" (tiny, tracked). Added a
+  single `focusin`/`{ once: true }` listener on `#intake-form` — bubbles from
+  any field, fires once per page-load, sends `{intent, source}` via the same
+  `sendBeacon`-preferred `track()` path used for `intake_submit`.
+- **Verified.** `dist/_astro/hoisted.*.js` now contains all three tokens
+  (`intake_start`, `intake_submit`, `intake_error`). Tests **84/84 green** in
+  571ms; build 2 pages in 1.17s. Zero deps.
+- **CTA sweep result: no other gaps found.** Walked all 10 `[data-cta]`
+  elements across Header/Hero/Footer/Services/CaseStudy/Intake. All have real
+  `href` destinations (no `#`), all promise CTAs carry `data-intent`
+  (`book:free-review`, `tier:*`, `product:*`), case-study outbound `liveUrl`
+  visits carry the full UTM quartet (`m3mm.net · case-study · proof · <slug>`).
+  Canonical audit is already closed clean with a regression test (session 7).
+- Files this tick-b: `src/components/Intake.astro` (+14 net) + this TODO bullet.
+- **Push:** deferred per tick constraint. 4 prior tick-16 commits still queued
+  (`34b93f5`, `41a1b4a`, `f3edf28`, `d19734d`, `246146f`); this makes 5.
+
+---
+
 ## SHIPPED (2026-07-07, tick 16 — Rung IV Strike #6: strip .reveal from above-fold blocks + accounting close)
 
 - **`perf(hero)` commit `41a1b4a`: LCP 1792 → 1536 ms (−256 ms) local A/B.**
