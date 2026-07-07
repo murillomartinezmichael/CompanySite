@@ -33,6 +33,40 @@ speculative).
 
 ---
 
+## SHIPPED (2026-07-07, tick 7 — Rung IV audit: headroom exhausted + schema hygiene)
+
+- **Fresh mobile Lighthouse baselines confirm Rung IV is at ceiling.** Two runs:
+  - `perf/lh-mobile-baseline-tick7-2026-07-07_085505.json` — LIVE m3mm.net:
+    Perf **96** · FCP **1791 ms** · LCP **2555 ms** · SI **2868 ms** · TBT 0 · CLS 0.
+    All 20 diagnostics score 1.0. `overallSavingsMs > 0` opportunities: none.
+  - `perf/lh-local-before-tick7-2026-07-07_090114.json` + `…after…_090315.json`
+    against `serve dist` on `localhost:4200` (same throttled 4G simulation):
+    Perf 98 / LCP 2262-2268 ms — delta noise (±20 ms) on both metrics.
+- **Investigated font-weight subsetting; confirmed no-op.** Google Fonts CSS
+  API serves identical latin-subset WOFF2 URLs for Space Grotesk and Inter
+  regardless of requested weight combos (variable font behavior). Trimming
+  `wght@300;400;500;600;700` → `wght@500;600;700` returned the exact same
+  `V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU.woff2`. Same for JetBrains Mono:
+  `wght@400;500;700` vs `wght@400;500` both resolve to
+  `tDbv2o-flEEny…knk-4.woff2`. Session 8's PARKED "self-host fonts" note is
+  now the only remaining lever, but it's a re-architecture, not a strike.
+- **Schema.org hygiene, tick-7 only code change: JSON-LD `email` →
+  `contactPoint`.** `Layout.astro` was emitting a raw email string in the
+  `ProfessionalService` JSON-LD, which contributes to Cloudflare's Email
+  Address Obfuscation trigger (also fired by the footer `mailto:` — so this
+  alone doesn't kill the `cdn-cgi/scripts/…/email-decode.min.js` inject).
+  Replaced with a `schema.org/ContactPoint` pointing to `/audit`. Cleaner
+  contact discoverability, no perf claim.
+- Tests **84/84 green**, build 2 pages in 1.21 s. One file changed
+  (`src/layouts/Layout.astro`, +11/-1). Zero deps.
+
+**Rung IV re-strike outcome:** unchanged from session 9 (Perf 97 · LCP 2448
+ms production, session 9's saved run). Guard `≥3 score OR ≥100 ms LCP` NOT
+cleared this tick — headroom is honestly gone at this rung until either
+(a) fonts self-host or (b) a section reshuffle moves LCP off Space Grotesk.
+
+---
+
 ## SHIPPED (2026-07-07, session 10 — CTA audit re-close + `intake_submit` §4 alignment)
 
 - **Fresh full CTA/canonical sweep against `docs/CONVERSION_STANDARDS.md`.**

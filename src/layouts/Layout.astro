@@ -112,7 +112,18 @@ const canonical = new URL(path, Astro.site ?? 'https://m3mm.net').toString();
         addressRegion: 'GA',
         addressCountry: 'US',
       },
-      email: 'murillomartinezmichael@gmail.com',
+      // Contact via intake form. Raw email in HTML triggers Cloudflare's
+      // Email Address Obfuscation, which injects cdn-cgi/scripts/…/
+      // email-decode.min.js on every page and adds a same-origin RTT under
+      // simulated mobile throttling. Perf/lh-mobile-baseline-tick7-… flagged
+      // it in the network trace; routing contact through the intake URL
+      // drops that resource without losing schema.org contact discoverability.
+      contactPoint: {
+        '@type': 'ContactPoint',
+        contactType: 'sales',
+        url: 'https://m3mm.net/audit',
+        availableLanguage: 'English',
+      },
       knowsAbout: ['Web development', 'Automation', 'Small business websites', 'Lead generation'],
     })} />
   </head>

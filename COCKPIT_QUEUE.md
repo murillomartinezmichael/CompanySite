@@ -7,6 +7,36 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-07 · CompanySite · Rung IV audit — ceiling confirmed + JSON-LD hygiene
+
+**Card:** CompanySite Rung IV SPEED
+**Move to:** In Progress (audit only — no rung close)
+
+**What shipped:** Fresh Lighthouse mobile baselines saved under `perf/`
+(`lh-mobile-baseline-tick7-…json` = LIVE m3mm.net Perf 96 · LCP 2555 ms;
+`lh-local-{before,after}-tick7-…json` = local `serve dist` on port 4200,
+Perf 98 · LCP 2262-2268 ms). Confirmed all 20 diagnostics score 1.0 with
+zero flagged opportunities. Investigated font-weight subsetting — Google
+Fonts serves identical latin-subset WOFF2 URLs regardless of `wght@` combo
+for Space Grotesk, Inter, and JetBrains Mono (variable font behavior), so
+trimming unused weights is a no-op. Only code change this tick: JSON-LD
+`email` → `schema.org/ContactPoint` in `Layout.astro` for schema hygiene
+(Cloudflare's Email-Address-Obfuscation still fires because of Footer's
+`mailto:` — no perf claim). Guard `≥3 score OR ≥100 ms LCP` NOT cleared;
+Rung IV headroom exhausted until fonts self-host or the LCP element moves.
+
+**Files touched:** `src/layouts/Layout.astro` (+11/-1) · `TODO.md` · `STATUS.md` ·
+`perf/lh-mobile-baseline-tick7-2026-07-07_085505.json` (new) ·
+`perf/lh-local-before-tick7-2026-07-07_090114.json` (new) ·
+`perf/lh-local-after-tick7-2026-07-07_090315.json` (new).
+
+**Commits:** (this tick — local only, per unattended tick constraint).
+
+**Next up:** Rung VI EXPAND candidate #2 — ClipForge-driven case-study MP4
+landings (2 files + `<video>` flip).
+
+---
+
 ## 2026-07-07 · CompanySite · Rung IV SPEED strike #2 (video lazy-load)
 
 **Card:** CompanySite Rung IV SPEED
