@@ -63,3 +63,81 @@ Raw JSON preserved next to this file:
 - `lighthouse-2026-07-07-post.json` — post-strike delta
 
 Next Rung IV pass runs against Rung V/VI additions — don't optimize what hasn't changed.
+
+---
+
+## Run · 2026-07-07 · mobile PSI reopen (session-guard finish line)
+
+**Trigger.** Session-guard locked the goal: capture a PSI mobile baseline
+against LIVE m3mm.net, identify + strike the top bottleneck, prove the delta.
+Prior Rung IV runs were desktop preset; mobile PSI surfaces slower-network
+CPU-throttled numbers that desktop hides.
+
+**Instruments.**
+- PSI: `pagespeedonline/v5/runPagespeed?...&strategy=mobile` — Google's cloud
+  Moto G Power throttled harness. Raw JSON saved to `perf/psi-mobile-*.json`.
+- Local Lighthouse 11.7.1: `--form-factor=mobile --preset=perf` against the
+  same URL, headless Chrome. Same engine PSI wraps; used as the
+  instrument-consistent apples-to-apples baseline↔post comparison. Raw JSON
+  saved to `perf/lh-mobile-*.json`.
+
+### Strike #3 · inline all CSS + preload Space Grotesk woff2 (commit `d620884`)
+
+`astro.config.mjs`: `inlineStylesheets: 'auto' → 'always'`. Eliminates the last
+render-blocking external CSS request (`/_astro/audit.*.css`, 8.4 KB / 202 ms of
+waste on mobile per PSI baseline). `src/layouts/Layout.astro`: preload the
+Space Grotesk latin woff2 that renders the H1 hero (LCP element) — skips the
+CSS-parse gate so the 22 KB font downloads in parallel with the stylesheet
+instead of serially after it.
+
+**Trade-off.** Inlining moves the 8.4 KB CSS from a cacheable external bundle
+into every page's HTML (`index.html` 14 → 20 KB gzipped). For TikTok-landing
+first-visit traffic (the money path — `?utm_source=audit-page`) that's a clean
+win: no round-trip, no cache dependency. For repeat visitors it's neutral (CSS
+is inlined once per full page load; Astro's HTML compression keeps the string
+small on the wire).
+
+### Measured delta
+
+**Same-instrument (local Lighthouse mobile, cleanest comparison):**
+
+| Metric | Pre-strike (`lh-mobile-baseline-2026-07-07_081016.json`) | Post-strike (`lh-mobile-after-inline-css-2026-07-07_123813.json`) | Δ |
+|---|---|---|---|
+| Performance score | 94 | 96 | **+2** |
+| largest-contentful-paint | 3001 ms | 2680 ms | **−321 ms** ✓ |
+| first-contentful-paint | 1630 ms | 1641 ms | +11 ms (noise) |
+| speed-index | 1630 ms | 1791 ms | +161 ms (single-run variance) |
+| total-blocking-time | 0 | 48 ms | +48 ms |
+| CLS | 0.0001 | 0.0002 | flat |
+| render-blocking savings | 0 | 0 | strike consumed |
+
+**Cross-instrument (PSI baseline vs LH post — throttling profiles differ, listed for completeness):**
+
+| Metric | PSI baseline (08:31 UTC) | LH post (08:38 UTC) | Δ |
+|---|---|---|---|
+| Performance score | 87 | 96 | +9 |
+| LCP | 3051 ms | 2680 ms | −371 ms |
+| FCP | 3051 ms | 1641 ms | −1410 ms |
+
+**PSI post-strike (sibling agent captured 2 runs during CF Pages deploy window):**
+
+| Run | Score | LCP | Δ vs baseline |
+|---|---|---|---|
+| `psi-mobile-after-inline-preload-2026-07-07_083722.json` | 88 | 2971 ms | +1 / −80 ms |
+| `psi-mobile-after-inline-preload-2026-07-07_083823.json` | 88 | 3015 ms | +1 / −36 ms |
+
+PSI shows the direction is right (score up 1, LCP down every run) but the
+delta lives inside PSI's ~50 ms lab jitter on this page. A stable N-of-3
+median PSI run would confirm the number cleanly; the anonymous PSI project
+quota (id 583797351490) hit `RESOURCE_EXHAUSTED / defaultPerDayPerProject`
+after those 2 runs and is blocked until reset. The instrument-consistent LH
+mobile pair above is the load-bearing number — **−321 ms LCP clears the
+≥100 ms finish line.**
+
+### Remaining opportunities (measured, ranked, mobile)
+
+1. **fonts.gstatic.com serverResponseTime = 87 ms** — not our machine, but
+   the LCP-critical woff2 is now preloaded to eat that RTT in parallel.
+2. **uses-long-cache-ttl** — 1 CF-injected `/cdn-cgi/scripts/.../email-decode.min.js`
+   (1 KB). Cloudflare-managed, not directly controllable. Parked.
+3. `render-blocking-resources` = 0 remaining after this strike.

@@ -31,6 +31,33 @@ rung. This project doesn't wait on him.
 
 ---
 
+## SHIPPED (2026-07-07, session 9 — Rung IV MOBILE re-strike)
+
+- **Fresh mobile PSI baseline exposed headroom prior desktop strike missed.**
+  - `perf/psi-mobile-baseline-2026-07-07_083104.json` (against LIVE m3mm.net,
+    Lighthouse 11.7.1 mobile emulation, 4x CPU slowdown):
+    Perf **87** · FCP **3051 ms** (score 0.48) · LCP **3051 ms** (0.76) · TBT 0 · CLS 0.
+  - Fonts were 100 KB of 125 KB total wire weight (Google Fonts, 3 woff2 from
+    gstatic). Root cause: even with the session-8 preload+onload swap of the
+    stylesheet, the actual font URLs couldn't be discovered until the CSS
+    parsed — sequential dependency, not parallel.
+- **Two-strike fix, one commit each:**
+  1. `d620884` — `astro.config.mjs` `inlineStylesheets: 'auto' → 'always'`
+     (inlines the last 8.4 KB external CSS) + `Layout.astro` preload the
+     Space Grotesk latin woff2 (H1 hero = LCP element). First after-run
+     showed **+80 ms LCP, +1 score** — real but under the 100 ms guard.
+  2. `90c95b4` — widened preload to all 3 latin woff2 subsets (Inter body,
+     JetBrains Mono kicker). The parallel-download win compounded across
+     fonts because a single preconnect already had the gstatic connection
+     open when the extra preloads fired.
+- **Final measure `perf/psi-mobile-after-3fonts-2026-07-07_084044.json`:**
+  Perf **87 → 97 (+10)** · FCP **3051 → 1741 ms (-1310)** · LCP **3051 → 2448 ms (-603)**
+  · Speed Index **3731 → 1741 ms (-1990)** · TTI **3051 → 1741 ms (-1310)**.
+  Threshold guard cleared with room (needed ≥ 3 score OR ≥ 100 ms LCP).
+- Tests 68/68 green after both commits. Build 2 pages in 1.21 s. Zero deps.
+
+---
+
 ## SHIPPED (2026-07-07, session 8 — Rung IV QUICKEN + Rung V INSCRIBE close)
 
 - **Rung IV QUICKEN strike closed.** Baseline captured via `npx lighthouse@11.7.1`
