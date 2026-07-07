@@ -8,12 +8,15 @@ const { minimal = false } = Astro.props;
 <header class="relative z-30">
   <div class="container-page flex items-center justify-between py-6">
     <a href="/" class="group flex items-center gap-2.5" aria-label="M³ home" data-cta="logo" data-section="header">
-      <span class="grid h-9 w-9 place-items-center rounded-lg bg-ink-panel ring-1 ring-ink-line transition-all group-hover:ring-clay/60">
-        <span class="font-display text-lg font-medium leading-none">
+      <span
+        class="grid h-9 w-9 place-items-center bg-ink-panel ring-1 ring-ink-line transition-all group-hover:ring-clay/60"
+        style="clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));"
+      >
+        <span class="font-display text-lg font-semibold leading-none">
           M<sup class="ml-[1px] text-[10px] text-clay">3</sup>
         </span>
       </span>
-      <span class="hidden text-sm text-bone-dim sm:inline">Websites that book jobs</span>
+      <span class="hidden font-mono text-xs uppercase tracking-[0.18em] text-bone-muted sm:inline">Websites that book jobs</span>
     </a>
 
     {!minimal && (
@@ -26,11 +29,12 @@ const { minimal = false } = Astro.props;
 
     <a
       href="#intake"
-      class="rounded-full bg-clay px-4 py-2 text-sm font-medium text-ink transition-all hover:bg-clay-glow hover:shadow-glow-clay"
+      class="bg-clay px-4 py-2 text-sm font-semibold text-ink transition-all hover:bg-clay-glow hover:shadow-glow-clay"
+      style="clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)); letter-spacing: 0.02em;"
       data-cta="header-review"
       data-section="header"
     >
-      Free review
+      Free review ▸
     </a>
   </div>
 </header>

@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─────────────────────────────────────────────────────────────────
+   CYBERPUNK 2055 · Lucy palette · foundation layer.
+   Class names in components (text-clay, text-neon, bg-ink, etc.) stay
+   the same — tailwind.config.mjs remaps the HEX. Only what CAN'T live
+   in tokens (body::before scanlines, ::after grid, glow shadows,
+   clip-path polygons, glitch keyframe on the hero) lives here.
+   ───────────────────────────────────────────────────────────────── */
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -9,21 +17,46 @@
   }
   body {
     @apply bg-ink text-bone font-sans antialiased;
+    /* Ambient radial glows in Lucy palette — soft cyan top, faint magenta far corner */
     background-image:
-      radial-gradient(60% 50% at 50% 0%, rgba(255, 59, 92, 0.10), transparent 70%),
-      radial-gradient(80% 60% at 100% 100%, rgba(0, 231, 255, 0.05), transparent 65%);
+      radial-gradient(60% 50% at 50% 0%, rgba(107, 197, 245, 0.10), transparent 70%),
+      radial-gradient(80% 60% at 100% 100%, rgba(255, 44, 158, 0.06), transparent 65%);
     background-attachment: fixed;
+    min-height: 100vh;
+    position: relative;
   }
+
+  /* Scanlines — quiet, not aggressive. Fixed overlay, sits above content. */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
     pointer-events: none;
     z-index: 100;
-    opacity: 0.35;
+    opacity: 0.4;
     mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+    background: repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 2px,
+      rgba(255, 255, 255, 0.015) 2px,
+      rgba(255, 255, 255, 0.015) 3px
+    );
   }
+
+  /* Netrunner grid — subtle 48px lattice, behind everything */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    background-image:
+      linear-gradient(rgba(107, 197, 245, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(107, 197, 245, 0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
   h1, h2, h3, h4 {
     @apply font-display font-medium;
     text-wrap: balance;
@@ -40,6 +73,7 @@
     background: theme('colors.clay.DEFAULT');
     color: theme('colors.ink.DEFAULT');
   }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
       animation-duration: 0.01ms !important;
@@ -47,14 +81,30 @@
       scroll-behavior: auto !important;
     }
   }
+
+  /* DIM mode — user-toggleable, softens every neon effect */
+  body.dim::before { opacity: 0.2; }
+  body.dim::after  { opacity: 0.5; }
+  body.dim *,
+  body.dim *::before,
+  body.dim *::after {
+    animation: none !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
 }
 
 @layer components {
   .container-page {
     @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
   }
+
+  /* Primary CTA — cyan corner-clip polygon on void ground (replaces the
+     rounded clay pill). Chrome bevel gloss on hover from ::before. */
   .btn-primary {
-    @apply relative inline-flex items-center justify-center gap-2.5 overflow-hidden rounded-full bg-clay px-7 py-4 text-base font-medium text-ink transition-all duration-300 hover:bg-clay-glow hover:shadow-glow-clay active:scale-[0.98];
+    @apply relative inline-flex items-center justify-center gap-2.5 overflow-hidden bg-clay px-7 py-4 text-base font-semibold text-ink transition-all duration-300 hover:bg-clay-glow hover:shadow-glow-clay active:scale-[0.98];
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+    letter-spacing: 0.02em;
   }
   .btn-primary::before {
     content: '';
@@ -68,33 +118,56 @@
   .btn-primary:hover::before {
     transform: translateX(100%);
   }
+
+  /* Ghost CTA — cyan-outlined, mono text */
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink-line px-7 py-4 text-base font-medium text-bone transition-all duration-200 hover:border-bone/40 hover:bg-ink-panel;
+    @apply inline-flex items-center justify-center gap-2 border border-ink-line px-7 py-4 text-base font-medium text-bone transition-all duration-200 hover:border-clay hover:bg-ink-panel;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
   }
+
+  /* Panel — chrome card with cyan hairline glow on top edge */
   .panel {
-    @apply rounded-2xl border border-ink-line bg-ink-soft/60 backdrop-blur-sm shadow-panel;
+    @apply relative border border-ink-line bg-ink-soft/60 backdrop-blur-sm shadow-panel;
+    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
   }
+  .panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 14px; height: 1px;
+    background: theme('colors.clay.DEFAULT');
+    box-shadow: 0 0 8px theme('colors.clay.DEFAULT');
+  }
+  .panel::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 1px; height: 14px;
+    background: theme('colors.clay.DEFAULT');
+    box-shadow: 0 0 8px theme('colors.clay.DEFAULT');
+  }
+
   .kicker {
-    @apply text-[11px] font-medium uppercase tracking-[0.24em] text-bone-muted;
+    @apply font-mono text-[11px] font-medium uppercase tracking-[0.24em] text-bone-muted;
   }
   .kicker-neon {
-    @apply text-[11px] font-medium uppercase tracking-[0.24em] text-neon/80;
+    @apply font-mono text-[11px] font-medium uppercase tracking-[0.24em] text-clay/90;
   }
   .hairline {
     @apply block h-px w-12 bg-clay/70;
   }
   .hairline-neon {
-    @apply block h-px w-12 bg-neon/50;
+    @apply block h-px w-12 bg-clay/70;
   }
   .mono {
     font-family: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
     font-feature-settings: 'ss01' on, 'ss02' on;
   }
   .field-label {
-    @apply flex items-center justify-between text-[11px] font-medium uppercase tracking-[0.18em] text-bone-muted;
+    @apply font-mono flex items-center justify-between text-[11px] font-medium uppercase tracking-[0.18em] text-bone-muted;
   }
   .field-input {
-    @apply w-full rounded-lg border border-ink-line bg-ink/60 px-4 py-3.5 text-bone placeholder:text-bone-muted/60 transition-all duration-200 focus:border-clay focus:bg-ink focus:outline-none focus:ring-2 focus:ring-clay/30;
+    @apply w-full border border-ink-line bg-ink/60 px-4 py-3.5 text-bone placeholder:text-bone-muted/60 transition-all duration-200 focus:border-clay focus:bg-ink focus:outline-none focus:ring-2 focus:ring-clay/30;
   }
   .reveal {
     opacity: 0;
@@ -110,4 +183,83 @@
   .reveal-delay-2 { transition-delay: 160ms; }
   .reveal-delay-3 { transition-delay: 240ms; }
   .reveal-delay-4 { transition-delay: 320ms; }
+
+  /* Hero glitch — the em text on H1 gets a 4-second glitch cycle */
+  .glitch-em {
+    display: inline-block;
+    animation: glitch 4s ease-in-out infinite;
+    text-shadow: 0 0 20px rgba(107, 197, 245, 0.5);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .glitch-em { animation: none; }
+  }
+
+  /* DIM toggle — floating bottom-left, cyberpunk chip */
+  .dim-toggle {
+    position: fixed;
+    left: 16px; bottom: 16px;
+    z-index: 40;
+    background: rgba(11, 25, 41, 0.85);
+    border: 1px solid theme('colors.clay.deep');
+    color: theme('colors.clay.DEFAULT');
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 8px 12px;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+    box-shadow: 0 0 24px rgba(107, 197, 245, 0.25);
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .dim-toggle:hover {
+    color: theme('colors.bone.DEFAULT');
+    border-color: theme('colors.clay.DEFAULT');
+  }
+  .dim-toggle .led {
+    display: inline-block;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: theme('colors.clay.DEFAULT');
+    box-shadow: 0 0 6px theme('colors.clay.DEFAULT');
+    margin-right: 6px;
+    vertical-align: middle;
+    animation: pulseSoft 2s ease-in-out infinite;
+  }
+  body.dim .dim-toggle .led {
+    background: theme('colors.bone.muted');
+    box-shadow: none;
+    animation: none;
+  }
+  body.dim .dim-toggle {
+    color: theme('colors.bone.muted');
+    border-color: theme('colors.ink.line');
+  }
+
+  /* Photosensitivity disclaimer — small note above the footer */
+  .a11y-note {
+    @apply mx-auto max-w-4xl mt-16 mb-6 px-6 py-4 text-xs text-bone-muted;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    letter-spacing: 0.02em;
+    border: 1px dashed rgba(255, 44, 158, 0.20);
+    border-left-width: 3px;
+    background: rgba(255, 44, 158, 0.03);
+  }
+  .a11y-note b {
+    color: theme('colors.neon');
+    font-weight: 600;
+  }
+  .a11y-note button.inline {
+    background: transparent;
+    color: theme('colors.clay.DEFAULT');
+    border: none;
+    font: inherit;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .a11y-note button.inline:hover {
+    color: theme('colors.bone.DEFAULT');
+  }
 }

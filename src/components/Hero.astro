@@ -30,32 +30,32 @@ const {
     <div class="mb-10 flex flex-wrap items-center gap-x-4 gap-y-2 reveal">
       <span class="hairline-neon"></span>
       <p class="kicker mono">{eyebrow}</p>
-      <span class="ml-auto hidden items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-bone-muted sm:inline-flex">
+      <span class="ml-auto hidden items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-bone-muted sm:inline-flex">
         <span class="relative flex h-2 w-2">
-          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-          <span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-400"></span>
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-clay opacity-70"></span>
+          <span class="relative inline-flex h-2 w-2 rounded-full bg-clay" style="box-shadow: 0 0 6px currentColor;"></span>
         </span>
-        <span class="mono">Booking · 24h reply</span>
+        <span>Booking · 24h reply</span>
       </span>
     </div>
 
-    <!-- Editorial headline -->
+    <!-- Cyberpunk headline — glitch on the em, no yellow underline -->
     <h1 class="reveal reveal-delay-1 text-display-2xl">
       <span class="block text-bone">Websites that</span>
       <span class="relative inline-block">
-        <span class="relative z-10 text-clay">get you customers.</span>
-        <!-- Hand-drawn underline stroke, drawn on load -->
+        <span class="relative z-10 text-clay glitch-em">get you customers.</span>
+        <!-- Cyan hairline underline (drawn on load, replaces the yellow squiggle) -->
         <svg
-          class="absolute -bottom-2 left-0 h-[0.22em] w-full text-neon/60 sm:-bottom-3"
-          viewBox="0 0 400 12"
+          class="absolute -bottom-2 left-0 h-[0.14em] w-full text-clay/70 sm:-bottom-3"
+          viewBox="0 0 400 6"
           preserveAspectRatio="none"
           aria-hidden="true"
         >
           <path
-            d="M2 8 Q90 1 200 6 T398 5"
+            d="M2 3 L398 3"
             stroke="currentColor"
-            stroke-width="3"
-            stroke-linecap="round"
+            stroke-width="2"
+            stroke-linecap="square"
             fill="none"
             stroke-dasharray="500"
             style="animation: drawLine 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both;"
@@ -88,11 +88,11 @@ const {
 
       <!-- Editorial stat block (right column on desktop) -->
       <div class="reveal reveal-delay-3 border-l border-ink-line pl-6 sm:pl-8 lg:border-l lg:pl-10">
-        <div class="mono text-[11px] uppercase tracking-[0.22em] text-neon/70">
-          Since 2023
+        <div class="font-mono text-[11px] uppercase tracking-[0.22em] text-clay/80">
+          // Since 2023
         </div>
         <div class="mt-3 font-display text-display-lg leading-none text-bone">
-          12<span class="text-clay">.</span>
+          12<span class="text-neon">.</span>
         </div>
         <p class="mt-3 text-sm text-bone-dim">
           Client sites shipped. Every one live, every one still up, every one delivered by
