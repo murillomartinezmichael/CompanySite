@@ -42,3 +42,13 @@ Format per entry: **D-CS-###** · date · one-line rule · why · reversibility.
 
 - **Why:** Zero third-party JS, zero cookies, zero GDPR surface, Cloudflare tail logs are enough for MVP. Swap to Plausible or D1 persistence later when volume warrants.
 - **Reversibility:** One function (`functions/api/track.ts`) — swap the log line for a write to D1 / Plausible / whatever.
+
+## D-CS-007 · 2026-07-06 · `data-intent` + prefill catalog on Services CTAs (CONVERSION_STANDARDS § 2, § 3)
+
+- **Why:** Services rows scrolled to `#intake` but landed the visitor on a blank textarea, forcing them to re-explain what they clicked — an anti-pattern named in `docs/CONVERSION_STANDARDS.md § 8` ("CTA scrolls to a form that's blank"). Fix: each service carries `data-intent` in the reserved `tier:` namespace (`tier:website:site-that-books`, `tier:automation:hours-saved`, `tier:widget:ai-assistant`), and `src/lib/prefill.ts` writes a structured brief into the `frustration` textarea on click. Separator-marker (`\n---\nAdd anything else below:\n`) lets a second click replace an earlier prefill without clobbering user-typed text.
+- **Reversibility:** Two-line delete on Services.astro (`data-intent`) plus removing `wirePrefill()` from Layout — no schema, no persistence.
+
+## D-CS-008 · 2026-07-06 · UTM tagging on outbound case-study `liveUrl`
+
+- **Why:** Referral traffic from m3mm.net to Aries / Big 7 was arriving anonymous — the client couldn't tell from analytics that leads originated at the portfolio. Now every `liveUrl` gets `utm_source=m3mm.net · utm_medium=case-study · utm_campaign=proof · utm_content=<slug>`. Applied server-side (at Astro build time) via `URL.searchParams.set` so the tags survive rel="noopener" and can be overridden safely if a client asks for a different taxonomy.
+- **Reversibility:** Trivial — delete the `outboundLiveUrl` block in `src/components/CaseStudy.astro` and revert `href={d.liveUrl}`.

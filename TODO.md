@@ -29,6 +29,30 @@ strike on the top bottleneck. Do NOT blind-optimize.
 
 ---
 
+## SHIPPED (2026-07-06, session 6 — CONVERSION_STANDARDS pass)
+
+- **CTA audit complete against `docs/CONVERSION_STANDARDS.md`.** Full sweep in
+  session log — 3 real gaps found, 3 fixed, 0 new dead links. Gaps 1 + 2 addressed
+  the Services rows (`data-intent` + prefill); gap 3 addressed outbound
+  attribution on case-study `liveUrl` visits.
+- **`data-intent` on Services rows (§ 2).** Each of the 3 Services `<a href="#intake">`
+  rows now carries a namespaced intent — `tier:website:site-that-books`,
+  `tier:automation:hours-saved`, `tier:widget:ai-assistant`. Reserved namespaces
+  per CONVERSION_STANDARDS § 2 table.
+- **Intake prefill wired (§ 3).** New `src/lib/prefill.ts` holds the CATALOG +
+  `buildBrief` + `isPriorPrefill` + `wirePrefill`. Layout bootstrap calls
+  `wirePrefill()` alongside `wireCTAs()` and `wireReveals()`. Click a Services
+  row → `frustration` textarea populates with the tier title + starting price +
+  a one-line detail + a separator inviting the visitor to add their own text.
+  Never clobbers user-typed content (separator check).
+- **UTM attribution on outbound case-study links.** `src/components/CaseStudy.astro`
+  now appends `utm_source=m3mm.net · utm_medium=case-study · utm_campaign=proof ·
+  utm_content=<slug>` to every rendered `liveUrl`. Verified in built HTML for both
+  `aries` and `big7`.
+- **Test coverage + green build.** New `tests/lib/prefill.test.ts` covers the
+  three pure helpers (6 tests). Suite = **64/64 green in 370ms**; `npm run build`
+  = 2 pages / 1.28s. Zero new deps.
+
 ## SHIPPED (2026-07-06, session 5 — deploy-readiness handoff)
 
 - **`track-parse.ts` extracted + 14 new tests.** Pure helper split out of
