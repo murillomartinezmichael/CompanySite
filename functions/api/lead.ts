@@ -15,12 +15,19 @@
 
 import { LIMITS, validateLead, esc, type Lead } from '../_lib/validate';
 import { checkRate } from '../_lib/rate';
+import { sendToCockpit, leadIdempotencyKey } from '../_lib/cockpit-sink';
 
 type Env = {
   RESEND_API_KEY?: string;
   LEAD_TO?: string;
   LEAD_FROM?: string;
   ALLOWED_ORIGINS?: string; // comma-separated; defaults below
+  // Rung VI EXPAND / Rung VII EVOLVE (2026-07-07): strategic fleet bond with
+  // CockpitCloud. When both are unset the sink no-ops silently — feature-flag
+  // pattern so the code can ship dark and light up when Mike deploys
+  // CockpitCloud + sets these env vars.
+  COCKPIT_INGEST_URL?: string;
+  COCKPIT_INGEST_TOKEN?: string;
 };
 
 const DEFAULT_ORIGINS = [
@@ -187,6 +194,13 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const adminResult = await sendEmail(env, to, `M³ intake · ${lead.name} (${lead.businessType})`, adminHtml, lead.email);
   const replyResult = await sendEmail(env, lead.email, 'Got your review request — M³', replyHtml);
 
+  // Fleet bond — forward to CockpitCloud kanban if configured. Env-gated,
+  // never blocks the visitor's 200. Idempotency key is deterministic on
+  // stable lead fields so any Cloudflare double-invocation dedupes at the
+  // CockpitCloud side.
+  const cockpitId = leadIdempotencyKey(lead);
+  const cockpitResult = await sendToCockpit(env, cockpitId, lead, ip);
+
   console.log(JSON.stringify({
     event: 'lead_received',
     source: lead.source,
@@ -194,6 +208,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     hasUrl: Boolean(lead.currentUrl),
     frustrationLength: lead.frustration.length,
     resend: { admin: adminResult, reply: replyResult },
+    cockpit: cockpitResult,
+    cockpitId,
     ip,
     ts: Date.now(),
   }));

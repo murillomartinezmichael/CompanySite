@@ -49,9 +49,19 @@ mode — that's expected. Client-side error handling shows a graceful fallback.
 | `RESEND_API_KEY` | For real emails | Bearer token for the Resend API. Get one at resend.com. Without it, `/api/lead` still returns 200 (logs the lead) but no email is sent. |
 | `LEAD_TO` | No | Recipient of intake notifications. Defaults to `murillomartinezmichael@gmail.com`. |
 | `LEAD_FROM` | No | Sender address. Must be a verified sender in Resend. Defaults to Resend's sandbox address. |
+| `COCKPIT_INGEST_URL` | No | CockpitCloud ingestion endpoint. When set, every submitted lead POSTs a `kind:"lead"` card to this URL so it lands in the kanban instead of only in email. When unset the sink is silently skipped — no user-facing change. Malformed URLs are treated as unset (typo guard). |
+| `COCKPIT_INGEST_TOKEN` | No | Bearer token added as `Authorization: Bearer <token>` when POSTing to `COCKPIT_INGEST_URL`. Omit for open ingest endpoints. Only sent when the URL var is also set. |
 
 Set these in Cloudflare Pages → Settings → Environment variables. No `.env` file
 is needed for the static build itself.
+
+**CockpitCloud fleet bond** — `/api/lead` forwards every validated lead as a
+compact JSON card (`kind`, `id` idempotency-key, `at` ISO ts, `source`, `name`,
+`email`, `businessType`, `currentUrl`, `frustration`, `meta`) alongside its
+Resend send. Fully env-gated: ships dark until Mike deploys CockpitCloud +
+sets the two vars above. Test coverage: `tests/functions/cockpit-sink.test.ts`
+(14 tests — pure helper + env-off skip + POST shape + Bearer token +
+non-2xx surfaced + network-error collapse + X-Cockpit-Kind header).
 
 ---
 
