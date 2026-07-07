@@ -1,0 +1,8 @@
+timestamp: 2026-07-07T00:47:00Z
+session_goal: Conversion audit per docs/CONVERSION_STANDARDS.md — walk every CTA, fix at most 3 gaps (destination / prefill / attribution). Fallback: canonical link audit if no CTA gaps found.
+paths_to_touch:
+  - src/components/*.astro        (CTA sweep)
+  - src/pages/*.astro              (CTA sweep + canonical)
+  - src/lib/track.ts               (attribution)
+  - TODO.md / STATUS.md / DECISIONS.md
+prior_tombstone_cleared: 2026-07-05 lock (was Rung I/II labor — completed and shipped per TODO)
