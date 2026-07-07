@@ -7,6 +7,25 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-07 · CompanySite · CTA § 4 alignment — intake_start event (tick 16b)
+
+**Card:** CompanySite conversion — CTA loop closure
+**Move to:** Done
+
+**What shipped:** Full CTA audit vs `docs/CONVERSION_STANDARDS.md`. All 10 `[data-cta]` elements verified: real `href` destinations (no `#`), promise CTAs carry `data-intent` (`book:free-review`, `tier:*`, `product:*`), case-study outbound `liveUrl` visits carry the UTM quartet, canonical audit is closed clean with a regression test. Only real gap: `intake_start` was missing from the § 4 four-event table (`cta_click` → **`intake_start`** → `intake_submit` → `checkout_complete`). Without it, no measurement of fill-abandonment between CTA click (large volume) and submit (small volume).
+
+Fix: single `focusin` / `{ once: true }` listener on `#intake-form` in `src/components/Intake.astro`. Fires once on whichever field the visitor lands on first, with `{intent, source}` — same `sendBeacon`-preferred `track()` path as the other intake events. Commit `639b357`.
+
+**Files touched:**
+- `src/components/Intake.astro` (+17 net)
+- `TODO.md` (SHIPPED bullet + push-queue count)
+
+**Verified:** Tests 84/84 green in 571ms. Build 2 pages in 1.17s. `dist/_astro/hoisted.*.js` contains all three: `intake_start`, `intake_submit`, `intake_error`.
+
+**Next up:** Push queue is now at 6 tick-16 commits — Mike to `git push origin main` when ready, then confirm `intake_start` fires against production (open `/audit`, focus name field, DevTools Network → filter `/api/track` → expect one `intake_start` beacon).
+
+---
+
 ## 2026-07-07 · CompanySite · Rung IV Strike #6 — Hero .reveal → LCP −256 ms (tick 16)
 
 **Card:** CompanySite performance ceiling — Rung IV
