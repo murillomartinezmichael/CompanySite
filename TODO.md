@@ -9,25 +9,58 @@
 **Rung VI EXPAND — one money-impacting capability from the brief not yet
 built.** Candidates (ordered by money impact, not interest):
 
-1. **`/api/lead` writes to CockpitCloud as a "Lead" card** — same session
-   Mike's live at m3mm.net can start seeing leads land in his kanban
-   without opening email. Cross-fleet strategic bond (Book V Rung VII).
-2. **Real testimonials wall** — swap the placeholder quotes for real
+1. **Real testimonials wall** — swap the placeholder quotes for real
    client words (David Serrano / Aries + Big 7 owner). Conversion lift
-   on the section directly above `/intake`.
-3. **ClipForge-driven case-study MP4 landing** — the two `<video>` slots
+   on the section directly above `/intake`. **BLOCKED on Mike:** need
+   real quotes; refuses to fabricate (LAW VI).
+2. **ClipForge-driven case-study MP4 landing** — the two `<video>` slots
    in Aries + Big 7 case studies stub to poster-only. Slotting real
    MP4s is 2 files + a `<video>` flip, not a build change.
+3. **Namespace extension: `book:site-review` for generic "Free review" CTAs**
+   in Hero / Header / Footer (§ 2 CONVERSION_STANDARDS). Requires:
+   (a) extending the root shared doc `docs/CONVERSION_STANDARDS.md`
+   (out of per-tick lane — log to Cockpit), (b) new CATALOG entry in
+   `src/lib/prefill.ts`, (c) `data-intent="book:site-review"` on the
+   three generic CTAs. Parked in session-9 by sibling agent's commit
+   `657e650`; still parked.
 
-Pick #2 next — real testimonials is copy-only, no deps, no perf risk,
-directly moves conversion above the intake fold.
+`/api/lead` → CockpitCloud sink SHIPPED session-10 (sibling agent, commit
+`a286781`). Rung VI EXPAND candidate #1 done.
 
 Ladder Rung IV SPEED is CLOSED for this cycle. Next Rung IV strike
 opens when a new feature ships that could regress perf (measured, not
 speculative).
 
-While Mike's on Stripe (SiteGuide Rung 2): I re-fire on the next money
-rung. This project doesn't wait on him.
+---
+
+## SHIPPED (2026-07-07, session 10 — CTA audit re-close + `intake_submit` §4 alignment)
+
+- **Fresh full CTA/canonical sweep against `docs/CONVERSION_STANDARDS.md`.**
+  10 interactive elements walked. All carry `data-cta`; all have real
+  destinations (no `href="#"`); Services rows carry `data-intent` (session-6);
+  outbound case-study `liveUrl` carries UTM (session-6); canonical + og:url
+  wired from `Astro.site` (session-7 regression test still green). Sibling
+  agent (parallel lane) shipped 3 additional gap fixes in commit `657e650`:
+  Custom-build tier CATALOG entry, `wireCTAs()` intent forward, `/api/track`
+  intent read+log.
+- **`intake_submit` event fields aligned to § 4 spec.** `Intake.astro` was
+  firing `intake-success` with only `{source}`; the spec table requires
+  event name `intake_submit` with `intent`, `has_prefill (bool)`,
+  `message_length`. Fix:
+  - Imported `isPriorPrefill`, `CATALOG` from `src/lib/prefill.ts` (public
+    API stable — no sibling-lane collision).
+  - Added `inferIntent(message)` — walks CATALOG, matches by prefill title
+    prefix. Returns the intent the visitor clicked (when known).
+  - Fires `intake_submit` (success) and `intake_error` (failure) with
+    `{intent, has_prefill, message_length}` in `meta`.
+- **Verified in built bundle:** `dist/_astro/hoisted.*.js` contains all four
+  new tokens (`intake_submit`, `intake_error`, `has_prefill`, `message_length`).
+  Zero old-name references remain in either source or `dist/`.
+- Tests **84/84 green** (grew from 68 → 84 via sibling's cockpit-sink suite),
+  build 2 pages in 1.25 s. One file changed (Intake.astro, +30/-2). Zero deps.
+- **Parked (unchanged from session 9):** namespace extension for the generic
+  "Free review" CTAs in Hero/Header/Footer — requires shared-doc edit
+  outside per-tick lane. See NEXT ACTION #3.
 
 ---
 

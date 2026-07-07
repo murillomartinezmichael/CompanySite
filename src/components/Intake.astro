@@ -183,9 +183,22 @@ const {
 
 <script>
   import { track } from '@/lib/track';
+  import { isPriorPrefill, CATALOG } from '@/lib/prefill';
 
   const form = document.getElementById('intake-form') as HTMLFormElement | null;
   const status = document.getElementById('intake-status') as HTMLDivElement | null;
+
+  // CONVERSION_STANDARDS § 4 requires intake_submit to carry `intent`. The
+  // form itself doesn't know which CTA the visitor clicked, but wirePrefill()
+  // wrote the tier title into the frustration textarea — so we can recover
+  // the intent by matching the message prefix against CATALOG.
+  function inferIntent(message: string): string | undefined {
+    if (!isPriorPrefill(message)) return undefined;
+    for (const [key, entry] of Object.entries(CATALOG)) {
+      if (message.startsWith(entry.title + ' — from ')) return key;
+    }
+    return undefined;
+  }
 
   if (form && status) {
     form.addEventListener('submit', async (e) => {
@@ -210,6 +223,11 @@ const {
       status.classList.add('border-clay/40', 'bg-clay/10');
       status.textContent = 'Sending…';
 
+      const message = String(data.frustration || '');
+      const hasPrefill = isPriorPrefill(message);
+      const intent = inferIntent(message);
+      const source = String(data.source || 'unknown');
+
       try {
         const res = await fetch('/api/lead', {
           method: 'POST',
@@ -219,13 +237,23 @@ const {
 
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-        track({ name: 'intake-success', section: 'intake', meta: { source: String(data.source || 'unknown') } });
+        track({
+          name: 'intake_submit',
+          section: 'intake',
+          intent,
+          meta: { source, has_prefill: hasPrefill, message_length: message.length },
+        });
         status.textContent = 'Got it. I\'ll reply within 24 hours to ' + (data.email || 'your email') + '.';
         status.classList.remove('border-clay/40', 'bg-clay/10');
         status.classList.add('border-emerald-400/40', 'bg-emerald-500/10');
         form.reset();
       } catch {
-        track({ name: 'intake-error', section: 'intake' });
+        track({
+          name: 'intake_error',
+          section: 'intake',
+          intent,
+          meta: { source, has_prefill: hasPrefill, message_length: message.length },
+        });
         status.textContent = 'Something broke on send. Email murillomartinezmichael@gmail.com and I\'ll pick it up manually.';
         status.classList.remove('border-clay/40', 'bg-clay/10');
         status.classList.add('border-red-400/40', 'bg-red-500/10');
