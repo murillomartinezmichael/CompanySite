@@ -6,28 +6,60 @@
 
 ## NEXT ACTION
 
-**Deploy — money path opens.** Repo is one command away as of 2026-07-06:
-`npm test` = 58/58 green (14 new from `track-parse.test.ts`), `npm run build`
-= 2 pages / 22.5 KB gzipped, `dist/` is present with `_headers` + `_redirects`
-+ `og.svg`. Mike pastes:
+**Rung VI EXPAND — one money-impacting capability from the brief not yet
+built.** Candidates (ordered by money impact, not interest):
 
-```bash
-cd C:/Users/Michael/Documents/GitHub/CompanySite
-npx wrangler login
-npm ci && npm run build
-npx wrangler pages project create m3-companysite --production-branch main
-npx wrangler pages deploy dist --project-name=m3-companysite --branch=main
-```
+1. **`/api/lead` writes to CockpitCloud as a "Lead" card** — same session
+   Mike's live at m3mm.net can start seeing leads land in his kanban
+   without opening email. Cross-fleet strategic bond (Book V Rung VII).
+2. **Real testimonials wall** — swap the placeholder quotes for real
+   client words (David Serrano / Aries + Big 7 owner). Conversion lift
+   on the section directly above `/intake`.
+3. **ClipForge-driven case-study MP4 landing** — the two `<video>` slots
+   in Aries + Big 7 case studies stub to poster-only. Slotting real
+   MP4s is 2 files + a `<video>` flip, not a build change.
 
-Then browser: dashboard → Environment variables → `RESEND_API_KEY` →
-Custom domain → `m3mm.net`. Full step-by-step in `RUNBOOK.md § 3.1`.
-Post-deploy smoke in § 3.3.
+Pick #2 next — real testimonials is copy-only, no deps, no perf risk,
+directly moves conversion above the intake fold.
 
-While Mike's on the deploy: Ladder RUNG 4 SPEED is the next Claude-executable
-slot — real Lighthouse in Chrome once m3mm.net answers 200, then measured
-strike on the top bottleneck. Do NOT blind-optimize.
+Ladder Rung IV SPEED is CLOSED for this cycle. Next Rung IV strike
+opens when a new feature ships that could regress perf (measured, not
+speculative).
+
+While Mike's on Stripe (SiteGuide Rung 2): I re-fire on the next money
+rung. This project doesn't wait on him.
 
 ---
+
+## SHIPPED (2026-07-07, session 8 — Rung IV QUICKEN + Rung V INSCRIBE close)
+
+- **Rung IV QUICKEN strike closed.** Baseline captured via `npx lighthouse@11.7.1`
+  against LIVE m3mm.net (desktop preset, headless Chrome).
+  - Baseline: Perf 98 · A11y 96 · BP 93 · SEO 91 · PWA 28.
+  - Top opportunity by measured savings: `render-blocking-resources` @ 437 ms.
+  - Struck the biggest single blocker (Google Fonts stylesheet, 247 ms) via
+    preload+onload swap in `Layout.astro` — no new deps, no runtime shift,
+    `<noscript>` fallback for no-JS, `display=swap` in URL already avoids FOIT.
+  - Post-strike measure: **render-blocking savings 343 ms → 96 ms** (−247 ms
+    exactly as predicted). Only Astro's above-the-fold `audit.*.css` remains
+    blocking; parked (can't defer without CLS risk).
+  - Ledger: `docs/lighthouse-baseline.md` + raw JSONs `docs/lighthouse-2026-07-07{,-post}.json`.
+  - Score didn't budge (already at ceiling for the categorical rounding) —
+    resource cost drop is the real signal.
+  - Commit `7040dcf`, deployed `8afab351.m3-companysite.pages.dev`, live at m3mm.net.
+
+- **Rung V INSCRIBE — README refreshed so a stranger runs this in 5 min.**
+  - Added LIVE status badge (m3mm.net · Cloudflare Pages · 2026-07-06).
+  - Stack section now names the real fonts (Space Grotesk + Inter + JetBrains
+    Mono, with the async-load note) — was still saying "Fraunces + Inter"
+    from the pre-cyberpunk state.
+  - Deploy section rewritten: first-time uses wrangler direct upload (matches
+    what actually shipped 2026-07-06), subsequent gets either direct upload
+    or GitHub-connect. Post-deploy smoke curl block included.
+  - New "Test" section: `npm test` = 68 tests across 6 files, hits every
+    money-path pure helper without a CF runtime.
+  - New "Perf" section: cross-links `docs/lighthouse-baseline.md`, records
+    current 98/96/93/91 + latest strike delta.
 
 ## SHIPPED (2026-07-06, session 7 — canonical URL audit + regression test)
 

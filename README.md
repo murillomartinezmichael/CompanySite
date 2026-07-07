@@ -1,15 +1,19 @@
 # CompanySite — m3mm.net
 
+**Status:** 🟢 LIVE at [https://m3mm.net](https://m3mm.net) (Cloudflare Pages, since 2026-07-06).
+**Aesthetic:** Cyberpunk 2055 · Edgerunners palette (Lucy cyan primary, magenta rare punch, yellow CTA hover, David-lime accent).
+**Perf:** Lighthouse desktop = 98/96/93/91. Measurement + strike ledger at [`docs/lighthouse-baseline.md`](docs/lighthouse-baseline.md).
+
 M³'s marketing site. Turns TikTok/Instagram traffic into DMs and quote requests.
 Visitors arrive already half-sold from a video; this site's only job is to close the loop.
 
 ## Stack
 
 - **Astro 4** — static output, zero runtime JS by default
-- **Tailwind 3** — utility-first, dark-premium design system
+- **Tailwind 3** — utility-first, cyberpunk design system in `tailwind.config.mjs`
 - **Cloudflare Pages** — build + host + edge functions
-- **Cloudflare Pages Functions** (`functions/api/*.ts`) — serverless intake + analytics
-- **Fonts:** Fraunces (display) + Inter (body), via Google Fonts
+- **Cloudflare Pages Functions** (`functions/api/*.ts`) — serverless intake (`/api/lead` via Resend) + analytics beacon (`/api/track`)
+- **Fonts:** Space Grotesk (display) + Inter (body) + JetBrains Mono (labels), Google Fonts loaded async (preload+onload swap — Rung IV strike)
 
 ## Structure
 
@@ -62,19 +66,42 @@ npm run preview        # serve dist/
 
 ## Deploy — Cloudflare Pages
 
-1. Push this repo to GitHub.
-2. In Cloudflare dashboard → **Pages → Create → Connect to Git**.
-3. Point at the `CompanySite/` directory (root directory setting).
-4. **Build command:** `npm run build`
-5. **Build output directory:** `dist`
-6. **Functions directory:** `functions` (auto-detected — no config needed).
-7. **Environment variables** (Settings → Environment):
-   - `RESEND_API_KEY` — from resend.com (required for real emails; without it, form submits still succeed but no email is sent — logs the lead to console)
-   - `LEAD_TO` — optional; defaults to `murillomartinezmichael@gmail.com`
-   - `LEAD_FROM` — optional; defaults to Resend sandbox address. Set to a verified domain sender (e.g. `hello@m3mm.net`) once DNS is set up.
-8. **Custom domain:** attach `m3mm.net`.
+Two paths — first-time uses **wrangler direct upload**, ongoing runs pick either.
 
-Cloudflare Pages redeploys on every push to `main`.
+### First-time (Mike-hands, ~5 min)
+
+```bash
+cd CompanySite
+npx wrangler login                                          # browser consent
+npm ci && npm run build
+npx wrangler pages project create m3-companysite \
+  --production-branch main
+npx wrangler pages deploy dist \
+  --project-name=m3-companysite --branch=main
+```
+
+Then in the dashboard:
+- **Settings → Environment variables** — add `RESEND_API_KEY` (production). Optional: `LEAD_TO`, `LEAD_FROM`.
+- **Custom domains** — attach `m3mm.net`.
+
+### Subsequent deploys (~30 sec)
+
+Either:
+- `npx wrangler pages deploy dist --project-name=m3-companysite --branch=main` (direct upload from local `dist/`), or
+- Connect the GitHub repo in the dashboard → CF auto-deploys on every `main` push.
+
+Full step-by-step + first-live-buyer test-mode smoke checklist in [`RUNBOOK.md § 3`](RUNBOOK.md).
+
+### Post-deploy smoke
+
+```bash
+curl -sSI https://m3mm.net | head -1                        # HTTP/2 200
+curl -sS  https://m3mm.net | grep -c "get you customers"    # 1
+curl -sS -X POST https://m3mm.net/api/lead \
+  -H "Content-Type: application/json" \
+  -d '{"name":"smoke","email":"s@e.com","businessType":"test","frustration":"ten char minimum"}'
+# -> {"ok":true}
+```
 
 ## Environment variables
 
@@ -99,6 +126,24 @@ Missing media falls back to a "coming soon" tile so the site never breaks on mis
 
 Any element with `data-cta="<name>"` fires a tracked event on click via `src/lib/track.ts`.
 Add `data-section="<section>"` to tag which section it lives in. That's the whole contract.
+
+## Test
+
+```bash
+npm test                    # vitest — 68 tests across 6 files
+                            # covers /api/lead + /api/track validators,
+                            # rate limiter, HTML escape, prefill helpers
+```
+
+Suite hits every money-path function pure helper (validate, rate, track-parse, prefill catalog) without needing a Cloudflare runtime — extracted from the function bodies exactly so they'd be unit-testable.
+
+## Perf
+
+Rung IV QUICKEN cycle — every optimization is measured before + after.
+Current desktop Lighthouse: **98 / 96 / 93 / 91**. Strike ledger + raw JSON in
+[`docs/lighthouse-baseline.md`](docs/lighthouse-baseline.md).
+
+Latest strike (2026-07-07): Google Fonts stylesheet deferred via preload+onload swap → −247 ms render-blocking, no score change (already at ceiling), no FOIT (display=swap in URL).
 
 ## Standards & docs
 
