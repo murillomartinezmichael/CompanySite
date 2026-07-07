@@ -22,6 +22,7 @@ const RATE_WINDOW_S = 60;
 const CTA_NAME_MAX = 80;
 const SECTION_MAX = 40;
 const SOURCE_MAX = 64;
+const INTENT_MAX = 64;
 const PATH_MAX = 256;
 const REFERRER_MAX = 512;
 
@@ -29,6 +30,7 @@ type CTAEvent = {
   name?: string;
   section?: string;
   source?: string;
+  intent?: string;
   path?: string;
   referrer?: string;
   ts?: number;
@@ -61,7 +63,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request }) => {
     // sendBeacon sometimes delivers as text; try URLSearchParams as fallback.
     try {
       const p = new URLSearchParams(text);
-      body = { name: p.get('name') || undefined, section: p.get('section') || undefined, source: p.get('source') || undefined };
+      body = { name: p.get('name') || undefined, section: p.get('section') || undefined, source: p.get('source') || undefined, intent: p.get('intent') || undefined };
     } catch { /* noop */ }
   }
 
@@ -71,6 +73,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request }) => {
     cta: clean(body.name, CTA_NAME_MAX) || 'unknown',
     section: clean(body.section, SECTION_MAX) || undefined,
     source: clean(body.source, SOURCE_MAX) || undefined,
+    intent: clean(body.intent, INTENT_MAX) || undefined,
     path: clean(body.path, PATH_MAX) || undefined,
     referrer: clean(body.referrer, REFERRER_MAX) || undefined,
     ip,

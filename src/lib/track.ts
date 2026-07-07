@@ -2,6 +2,7 @@ export type CTAEvent = {
   name: string;
   section?: string;
   source?: string;
+  intent?: string;
   meta?: Record<string, string | number | boolean>;
 };
 
@@ -34,6 +35,7 @@ export function wireCTAs() {
         name: el.dataset.cta || 'unknown',
         section: el.dataset.section,
         source: new URLSearchParams(location.search).get('src') || undefined,
+        intent: el.dataset.intent,
       });
     }, { passive: true });
   });

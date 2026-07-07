@@ -20,6 +20,11 @@ export const CATALOG: Record<string, CatalogEntry> = {
     from: '$800',
     detail: 'Drop-in AI chat trained on your services + pricing.',
   },
+  'tier:custom:scoped-project': {
+    title: 'Custom build',
+    from: '$6,000 · scoped per project',
+    detail: 'Full-stack build, integration, or internal tool — whatever doesn\'t fit a template.',
+  },
 };
 
 const SEPARATOR = '\n---\nAdd anything else below:\n';
