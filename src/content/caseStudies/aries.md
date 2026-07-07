@@ -3,7 +3,7 @@ client: Aries Outdoor Living
 kind: Custom decks, pergolas, outdoor structures
 location: Atlanta, GA
 year: 2026
-video: /videos/aries-scroll.mp4
+video: /videos/aries-scroll-v2.mp4
 # poster: /videos/aries-poster.jpg  (add later — client TikTok has no poster still)
 liveUrl: https://ariesoutdoorliving.com
 problem: >-
