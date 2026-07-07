@@ -3,9 +3,8 @@ client: Aries Outdoor Living
 kind: Custom decks, pergolas, outdoor structures
 location: Atlanta, GA
 year: 2026
-# Drop /public/videos/aries-scroll.mp4 + aries-poster.jpg, then uncomment:
-# video: /videos/aries-scroll.mp4
-# poster: /videos/aries-poster.jpg
+video: /videos/aries-scroll.mp4
+# poster: /videos/aries-poster.jpg  (add later — client TikTok has no poster still)
 liveUrl: https://ariesoutdoorliving.com
 problem: >-
   Aries was booking jobs from Instagram DMs and word-of-mouth. Their old site
