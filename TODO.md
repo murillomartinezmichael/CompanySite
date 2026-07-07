@@ -53,11 +53,32 @@ speculative).
   `cf-email-decode-strike-final`, `cf-email-decode-strike-run2`,
   `jetbrains-preload-drop`, `jetbrains-preload-drop-run2`. All live
   m3mm.net mobile Lighthouse runs from the tick-10 window (12:24-12:30).
-- **Push status:** 3 commits ahead of origin/main (`34b93f5`, `41a1b4a`,
-  `f3edf28`) plus this accounting commit. Deferred to Mike per
-  `scripts/auto-improve/GUARDS_ACTIVE` + universal tick constraint
-  ("never push").
+- **Push status:** 4 commits ahead of origin/main (`34b93f5`, `41a1b4a`,
+  `f3edf28`, `d19734d`). Deferred to Mike per universal tick constraint
+  ("never push"). `scripts/auto-improve/GUARDS_ACTIVE` sentinel is no
+  longer on disk, but the tick-brief constraint still applies.
 - Files this tick: `TODO.md` (+ this bullet) + 4 `perf/*.json` (add-only).
+
+### Tick-16 re-fire verify (session-guard held goal open)
+
+- **Session-guard PASS** locked goal `CompanySite → m3mm.net PageSpeed
+  baseline captured, top bottleneck identified and shipped as a commit
+  + pushed`. Verified on-disk this re-fire tick:
+  - baseline PSI/LH JSON in `CompanySite/perf/` — YES
+    (`lh-mobile-baseline-tick16-2026-07-07_215425.json`, Perf 99 / LCP 1750 ms live)
+  - perf commit landed — YES (`41a1b4a`, on `main`, in `git log`)
+  - second run with ≥100 ms LCP delta — YES
+    (`preview-prefix` 1792 ms → `preview-postfix` 1536 ms = **−256 ms**,
+    2.5× the ≥100 ms threshold)
+  - pushed — NO (blocked; 4 commits queued as above)
+- **Ceiling reached.** Baseline audits show only **24 ms** of remaining
+  opportunity (`server-response-time`, Cloudflare-side, not code-fixable).
+  No fresh strike is available without regression risk. Next Rung IV
+  strike opens only after a new feature ships that could regress perf.
+- **Next-tick guidance:** do not re-run baseline/A/B; state is captured.
+  If push clears, run one live PSI/LH mobile against m3mm.net to confirm
+  the −256 ms LCP delta holds post-deploy, then close Strike #6 with a
+  live-delta line in `docs/lighthouse-baseline.md` § Strike #6.
 
 ---
 
