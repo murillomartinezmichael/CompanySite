@@ -29,3 +29,20 @@ Tests 68/68 green.
 
 **Next up:** CompanySite Rung VI EXPAND — real testimonials wall (David
 Serrano quote already approved per feedback memory).
+
+---
+
+## 2026-07-07 · SiteGuide · /demos/paid success page shipped
+
+**Card:** SiteGuide Stripe money loop (visual close)
+**Move to:** Done
+
+**What shipped:** New `demo/paid.html` bone-on-ink success page + `GET /demos/paid` route + explicit `X-Frame-Options=DENY` for the payment-confirmation surface. Stripe checkout `success_url` flipped from `/demos?paid=...` to `/demos/paid?paid=...` so buyers land on a polished page instead of the store front. Client-side script reads the tenant id from `?paid=...` and surfaces which template was bought (id sanitized to `[a-z0-9_-]`, session id truncated to last 6 chars).
+
+**Files touched:** `SiteGuide/demo/paid.html` (new), `SiteGuide/Backend/main.py` (route), `SiteGuide/Backend/checkout.py` (success_url), `SiteGuide/tests/test_smoke.py` (+2 tests), `SiteGuide/tests/test_checkout.py` (assertions), `SiteGuide/TODO.md` (SHIPPED entry).
+
+**Commits:** `8e69a0e` (feature) · `27ef0b7` (TODO update). Live on Railway; verified 200 + XFO=DENY + all security headers on prod.
+
+**Next up:** SiteGuide Rung 2 spec + ship next widget variant OR CockpitCloud sink for `checkout.session.completed` (fleet-connect Rung VII EVOLVE).
+
+Test suite: 322 → 324 green (2 new smoke tests).
