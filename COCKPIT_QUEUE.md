@@ -87,3 +87,50 @@ analytics distinction. 3 files, mechanical.
 **Next up:** either the parked `book:site-review` intent metadata sweep, or
 Rung VI EXPAND — real testimonials wall.
 
+---
+
+## 2026-07-07 · CompanySite · Rung IV MOBILE re-strike (session 9)
+
+**Card:** CompanySite Rung IV SPEED
+**Move to:** Done
+
+**What shipped:** Fresh mobile PSI baseline exposed headroom the prior desktop
+strike missed (mobile Perf 87 vs desktop 98 — mobile CPU throttle surfaces
+what desktop hides). Two-strike fix, no new deps, no functional changes:
+
+1. **`d620884` — inline all CSS + preload Space Grotesk woff2.**
+   `astro.config.mjs` `inlineStylesheets: 'auto' → 'always'` eliminates the
+   last render-blocking external CSS request (`/_astro/audit.*.css`, 202 ms
+   of waste). `Layout.astro` preloads the H1 hero (LCP element) woff2 so it
+   downloads in parallel with the stylesheet instead of after CSS parse.
+2. **`90c95b4` — widened preload to Inter + JetBrains Mono woff2 subsets.**
+   PSI post-`d620884` showed the direction was right but delta lived inside
+   lab jitter (+1 score, −80 ms LCP). Widening preload made body + kicker
+   fonts arrive in parallel too, compounding across a single preconnect.
+
+**Measured delta (PSI mobile, live m3mm.net):**
+- Perf **87 → 97 (+10)** ✓
+- LCP **3051 → 2448 ms (−603 ms)** ✓✓
+- FCP **3051 → 1741 ms (−1310 ms)**
+- Speed Index **3731 → 1741 ms (−1990 ms)**
+- TTI **3051 → 1741 ms (−1310 ms)**
+- TBT / CLS remained 0 / 0
+
+Session-guard finish line (score delta ≥ 3 OR LCP delta ≥ 100 ms) cleared
+with room on BOTH criteria. Same-instrument LH mobile pair corroborates at
+−1242 ms LCP (94 → 98). Tests 68/68 green after both commits; build 2 pages
+in 1.21 s; zero new deps.
+
+**Files touched:** `astro.config.mjs`, `src/layouts/Layout.astro`, `TODO.md`,
+`STATUS.md`, `docs/lighthouse-baseline.md`, `perf/psi-mobile-*.json`,
+`perf/lh-mobile-after-*.json`.
+
+**Commits (5, all local, pushed once GUARDS_ACTIVE lifts):** `d620884`
+(inline CSS + font preload) · `90c95b4` (widen preload) · `7748a3d` (PSI
+final capture) · `7d8a18d` (docs finalize + LH final JSON) · `5c19929`
+(docs enrich with PSI-3fonts row) · `97347b4` (STATUS ladder update).
+
+**Next up:** Ladder Rung IV SPEED closed for this cycle. Rung V INSCRIBE
+already close (README polished session 8). Next money rung = Rung VI EXPAND —
+CockpitCloud lead sink (parallel-agent shipped scaffolding in `a286781`).
+
