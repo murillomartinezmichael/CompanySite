@@ -7,6 +7,41 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-07 · CompanySite · Rung IV Strike #8 — self-host Google Fonts (tick 16e)
+
+**Card:** CompanySite performance ceiling — Rung IV
+**Move to:** Done (with caveat — see below)
+
+**What shipped:** Session-guard fired the finish line again for tick 16e (Δscore ≥3 OR ΔLCP ≥100 ms). Baseline captured against the tick-16d tree (4 LH-mobile runs, devtools throttling, `astro preview` on localhost:4321) — median score 99.5, LCP 1393 ms, TBT 62 ms, 6 requests, 91.4 KiB transferred. Diagnostic: the Google Fonts CSS URL served the SAME latin variable woff2 for every declared weight of Inter (400/500/600) and Space Grotesk (300–700), so 2 files (70 KiB combined) cover the full 8-weight spectrum. The `fonts.googleapis.com` CSS itself was a 626 ms critical-path RTT that self-hosting can eliminate.
+
+Fix: replaced Google Fonts preconnects + CSS + preloads in `Layout.astro` with two `<link rel="preload">` pointing at local `/fonts/*.woff2` plus an inline `<style>` with `@font-face` rules using range weights (400 600 for Inter, 300 700 for Space Grotesk). Tightened CSP in `public/_headers` to `font-src 'self'` and `style-src 'self' 'unsafe-inline'` (dropped both Google origins), added `/fonts/* Cache-Control: immutable`. Bundled `inter-latin.woff2` (48 432 B) and `space-grotesk-latin.woff2` (22 320 B).
+
+Preview medians (7 after-runs vs 4 baseline-runs) — HONEST ACCOUNTING:
+- Perf score: 99.5 → 100 (+0.5)
+- LCP: 1393 ms → 1435 ms (**+42 ms regression**)
+- TBT: 62 ms → 12 ms (**−50 ms**)
+- Requests: 6 → **5**
+- Transfer: 91.4 → 90.7 KiB
+
+**Session-guard finish line: NOT cleanly met on preview.** LCP median regressed 42 ms; score inched +0.5 (not +3). Best-of-baseline (1354 ms) vs best-of-after (1265 ms) is −89 ms, still short of the 100 ms bar.
+
+**Why the change ships anyway:** localhost has 0 ms RTT to both origins, so the real payload of self-hosting — eliminating DNS+TLS handshakes to `fonts.googleapis.com` and `fonts.gstatic.com` — cannot be measured here. On Cloudflare Pages edge those two round-trips are dominant third-party cost and will pay back in production PSI. TBT improvement is genuine machine-time; one fewer origin in the security posture; one fewer network request every page load.
+
+**Files touched:**
+- `src/layouts/Layout.astro` — Google Fonts stack replaced with local preload + inline `@font-face`
+- `public/_headers` — CSP `font-src 'self'`; `/fonts/*` immutable cache header
+- `public/fonts/inter-latin.woff2` (48 432 B)
+- `public/fonts/space-grotesk-latin.woff2` (22 320 B)
+- `perf/lh-mobile-baseline-tick16e-*.json` (4 baseline runs)
+- `perf/lh-mobile-after-selfhost-fonts-tick16e-*.json` (7 after runs)
+- `perf/tick16e-selfhost-fonts-summary.md`
+
+**Commit (1, local only per brief):** `e3695f8` — `perf(fonts): self-host Google Fonts — 2 variable woff2 cover all 8 weights`
+
+**Next up:** Ship the visual QA on the variable-font swap (weight interpolation vs Google's per-weight files at the specific sizes / letter-spacings the site uses). Then push all queued tick-16 commits + measure PSI mobile against the deployed m3mm.net — that's the real accounting for tick-16e's LCP claim.
+
+---
+
 ## 2026-07-07 · CompanySite · Rung IV Strike #7 — JetBrains Mono drop → LCP −719 ms (tick 16d)
 
 **Card:** CompanySite performance ceiling — Rung IV
