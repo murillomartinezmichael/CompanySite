@@ -7,6 +7,33 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-07 · CompanySite · Rung IV Strike #7 — JetBrains Mono drop → LCP −719 ms (tick 16d)
+
+**Card:** CompanySite performance ceiling — Rung IV
+**Move to:** Done
+
+**What shipped:** Session-guard locked the tick to "PSI baseline + top bottleneck shipped + measurable improvement (Δscore ≥3 OR ΔLCP ≥100 ms)". Live m3mm.net was already at Perf 99, LCP 1.7 s — ceiling. Preview against the current tree (LH-mobile, devtools throttling, matched screen emulation) sat at 98 / 1.79 s / 150 ms TBT / 123 KiB / 7 requests. Diagnostic: 3 Google Font families (Space Grotesk, Inter, JetBrains Mono) dominated transfer at 102 KiB combined. JetBrains Mono (~31 KiB) was preloaded + fetched only for 11px uppercase 0.2em-tracked kicker/eyebrow labels (`font-mono` utility, `.card-header`, `.result-num`) — sizes where `ui-monospace` (SF Mono / Cascadia / Roboto Mono) is visually indistinguishable and the weight budget stops earning its keep.
+
+Fix: dropped JetBrains Mono from the `<link rel="preload">` list, shrank the Google Fonts CSS URL to `Space+Grotesk + Inter`, retargeted `theme.fontFamily.mono` in `tailwind.config.mjs` to `ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`, and swapped the two raw `font-family: 'JetBrains Mono'` declarations in `global.css` to the same system stack.
+
+LH-local A/B against `astro preview` (mobile form-factor, devtools throttling, matched 412×823 @1.75 DPR):
+- **Pre-fix (tick-16 prefix):** Perf 98, LCP **1791 ms**, FCP 1400 ms, TBT 150 ms, SI 1.5 s, transfer 123 KiB, 7 requests
+- **Post-fix (tick-16d after):** Perf **100**, LCP **1072 ms**, FCP 1100 ms, TBT 40 ms, SI 1.1 s, transfer **91 KiB**, 6 requests
+- **Δscore +2 · ΔLCP −719 ms** (7.2× the session-guard's ≥100 ms threshold — finish-line satisfied via the LCP branch)
+
+**Files touched:**
+- `src/layouts/Layout.astro` (drop JB Mono preload; trim Google Fonts CSS URL)
+- `tailwind.config.mjs` (`font.mono` → system ui-monospace stack)
+- `src/styles/global.css` (2 raw `font-family` overrides retargeted)
+- `perf/lh-mobile-after-jetbrains-drop-tick16d-devtools-2026-07-07_215906.json`
+- `perf/tick16d-jetbrains-drop-summary.md`
+
+**Commit:** `064681b` — `perf(fonts): drop JetBrains Mono; LCP 1.8s → 1.1s (-719ms)` (local; not pushed per universal hard constraint on this tick).
+
+**Next up:** Visual QA the mono-fallback in a browser (kickers on Hero, Header, Intake steps; `.card-header` band; `.result-num` on Case Study). If SF Mono / Cascadia looks fine, push queue advances one further; Mike to `git push origin main` when the whole tick-16 push queue clears.
+
+---
+
 ## 2026-07-07 · CompanySite · Canonical audit — rendered-HTML guard (tick 16c)
 
 **Card:** CompanySite conversion — CTA loop closure
