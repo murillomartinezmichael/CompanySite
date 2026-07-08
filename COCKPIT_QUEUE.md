@@ -7,6 +7,43 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-07 · CompanySite · Canonical audit — rendered-HTML guard (tick 16c)
+
+**Card:** CompanySite conversion — CTA loop closure
+**Move to:** Done
+
+**What shipped:** Sixth CTA sweep against `docs/CONVERSION_STANDARDS.md`
+§§ 1–4 found zero remaining gaps — every `[data-cta]` on m3mm.net has a
+real destination, promise CTAs carry `data-intent`, prefill fires via
+`wirePrefill()`, `cta_click` fires via `wireCTAs()`, and case-study
+outbound `liveUrl` visits carry the UTM quartet. Pivoted to the
+per-tick-brief fallback: canonical audit.
+
+Existing `tests/build/canonical.test.ts` guards the source (Astro.site
+pinned, `<link rel="canonical">` emitted from Layout, og:url in sync,
+no Railway subdomain leakage). This tick added the *rendered-output*
+guard — `scripts/audit-canonicals.mjs` walks every `dist/**/*.html`,
+requires exactly one `<link rel="canonical">` per page, and fails if the
+href does not start with `https://m3mm.net`. Wired as
+`npm run audit:canonicals`.
+
+Verified against a fresh build: `dist/index.html → https://m3mm.net/`
+and `dist/audit/index.html → https://m3mm.net/audit`, both OK. Tests
+84/84 green.
+
+**Files touched:**
+- `scripts/audit-canonicals.mjs` (new, no deps)
+- `package.json` (+1 script line)
+
+**Commit (1, local only per brief):** `8849d7c` — `feat(audit):
+rendered-HTML canonical audit`.
+
+**Next up:** Post-deploy, run `npm run build && npm run audit:canonicals`
+against the CI dist to catch regressions where a new page skips Layout
+or hand-edits a canonical to a preview subdomain.
+
+---
+
 ## 2026-07-07 · CompanySite · CTA § 4 alignment — intake_start event (tick 16b)
 
 **Card:** CompanySite conversion — CTA loop closure
