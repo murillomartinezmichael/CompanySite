@@ -11,7 +11,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "audit:canonicals": "node scripts/audit-canonicals.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
