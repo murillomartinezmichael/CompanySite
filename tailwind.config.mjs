@@ -39,12 +39,13 @@ export default {
         neon:  '#FF2E88',       // --accent-magenta · rare punch (max 2/page)
       },
       fontFamily: {
-        // Space Grotesk for display (cyberpunk grotesque), JetBrains Mono
-        // for kickers/labels, Inter for body copy. Fraunces removed —
-        // serifs don't fit the 2055 aesthetic.
+        // Space Grotesk display, Inter body. Mono resolves to the OS's own
+        // ui-monospace (SF Mono / Cascadia / Roboto Mono) — kicker labels are
+        // 11px uppercase 0.2em tracked, so system mono is visually clean and
+        // saves ~31KB font transfer + one preload slot.
         display: ['"Space Grotesk"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
         sans:    ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        mono:    ['"JetBrains Mono"', '"IBM Plex Mono"', 'ui-monospace', 'monospace'],
+        mono:    ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
       },
       fontSize: {
         'display-2xl': ['clamp(3rem, 11vw, 9.5rem)', { lineHeight: '0.88', letterSpacing: '-0.045em' }],

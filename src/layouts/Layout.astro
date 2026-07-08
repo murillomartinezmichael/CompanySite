@@ -49,12 +49,11 @@ const canonical = new URL(path, Astro.site ?? 'https://m3mm.net').toString();
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!--
-      Preload the latin woff2 subsets Google Fonts serves for our 3 families.
-      Skips the CSS-parse gate so fonts download in parallel with the stylesheet
-      instead of after it. Space Grotesk powers the H1 hero (LCP element), Inter
-      the body copy, JetBrains Mono the eyebrow/kicker. All three would load
-      anyway; preload just moves them earlier. Refresh hashed URLs from the
-      googleapis.com/css2 response if PSI ever flags "preloaded resource not used".
+      Preload the latin woff2 subsets Google Fonts serves for our 2 remaining
+      families. JetBrains Mono was dropped (tick-16d) — only used on 11px
+      uppercase kicker labels where ui-monospace (SF Mono / Cascadia / Roboto
+      Mono) is visually indistinguishable at that size + tracking, and it
+      saved ~31KB font transfer and one preload slot.
     -->
     <link
       rel="preload"
@@ -72,29 +71,14 @@ const canonical = new URL(path, Astro.site ?? 'https://m3mm.net').toString();
     />
     <link
       rel="preload"
-      as="font"
-      type="font/woff2"
-      href="https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2"
-      crossorigin
-    />
-    <!--
-      Rung IV QUICKEN strike (2026-07-07): defer the Google Fonts stylesheet
-      via the preload+onload swap pattern. Lighthouse baseline flagged this
-      exact URL as 247ms render-blocking (docs/lighthouse-2026-07-07.json:
-      audits.render-blocking-resources.items[0]). display=swap in the URL
-      means fonts still fall back cleanly during the async fetch, no FOIT.
-      <noscript> fallback keeps no-JS browsers rendering with real fonts.
-    -->
-    <link
-      rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
       onload="this.onload=null;this.rel='stylesheet'"
     />
     <noscript>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
       />
     </noscript>
 

@@ -159,7 +159,7 @@
   }
 
   .mono {
-    font-family: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     font-feature-settings: 'ss01' on, 'ss02' on;
   }
 
@@ -314,7 +314,7 @@
     background: rgba(13, 11, 20, 0.85);
     border: 1px solid theme('colors.clay.DEFAULT');
     color: theme('colors.clay.DEFAULT');
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     font-size: 10px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -350,7 +350,7 @@
   /* Photosensitivity disclaimer above footer — thin magenta hairline */
   .a11y-note {
     @apply mx-auto max-w-4xl mt-16 mb-6 px-6 py-4 text-xs text-bone-muted;
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     letter-spacing: 0.02em;
     border-left: 1px solid rgba(255, 46, 136, 0.35);
     background: transparent;
