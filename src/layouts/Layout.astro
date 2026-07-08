@@ -46,41 +46,35 @@ const canonical = new URL(path, Astro.site ?? 'https://m3mm.net').toString();
 
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230D0B14'/%3E%3Ctext x='50%25' y='60%25' font-family='Space Grotesk,Inter,sans-serif' font-size='38' font-weight='700' text-anchor='middle' fill='%23E8ECF2'%3EM%3C/text%3E%3Ctext x='82%25' y='36%25' font-family='Space Grotesk,Inter,sans-serif' font-size='16' font-weight='700' text-anchor='middle' fill='%237DF9FF'%3E3%3C/text%3E%3C/svg%3E" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!--
-      Preload the latin woff2 subsets Google Fonts serves for our 2 remaining
-      families. JetBrains Mono was dropped (tick-16d) — only used on 11px
-      uppercase kicker labels where ui-monospace (SF Mono / Cascadia / Roboto
-      Mono) is visually indistinguishable at that size + tracking, and it
-      saved ~31KB font transfer and one preload slot.
+      Self-hosted fonts (tick-16e). Google Fonts CSS + preconnects dropped:
+      Inter (400/500/600) and Space Grotesk (300–700) each ship as ONE variable
+      woff2 (latin subset) served by GF for every weight, so 2 files cover all 8
+      declared weights. Same-origin removes the fonts.googleapis.com CSS RTT
+      (626 ms in tick-16d preview trace) and both gstatic/googleapis handshakes.
+      JetBrains Mono was dropped in tick-16d; font-mono falls back to
+      ui-monospace.
     -->
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      href="https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU.woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
-      onload="this.onload=null;this.rel='stylesheet'"
-    />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
-      />
-    </noscript>
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/space-grotesk-latin.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-latin.woff2" crossorigin />
+    <style is:inline>
+      @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 400 600;
+        font-display: swap;
+        src: url('/fonts/inter-latin.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: 'Space Grotesk';
+        font-style: normal;
+        font-weight: 300 700;
+        font-display: swap;
+        src: url('/fonts/space-grotesk-latin.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+    </style>
 
     <script is:inline type="application/ld+json" set:html={JSON.stringify({
       '@context': 'https://schema.org',
