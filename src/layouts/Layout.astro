@@ -137,6 +137,50 @@ const canonical = new URL(path, Astro.site ?? 'https://m3mm.net').toString();
       <span class="led"></span><span id="dim-label">NEON</span>
     </button>
 
+    <!-- Sticky mobile CTA — TikTok/IG traffic converts on the button they can
+         reach with their thumb. Hidden on desktop (Header nav already covers it)
+         and hidden on /audit (visitor is already in the intake). Fades in
+         after 260px scroll so it doesn't compete with the Hero CTA. -->
+    <a
+      id="sticky-cta"
+      href={path === '/audit' ? '#intake' : '/audit'}
+      class="sticky-cta lg:hidden"
+      data-cta="sticky-mobile"
+      data-section="sticky"
+      data-intent="book:free-review"
+      aria-label="Get a free site review"
+    >
+      <span>Free review</span>
+      <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+
+    <script is:inline>
+      // Sticky mobile CTA — reveal on scroll past the hero fold, hide near
+      // the intake so it doesn't overlap the actual form. LocalStorage-persist
+      // dismissed state so the visitor can hide it if they want.
+      (function () {
+        var el = document.getElementById('sticky-cta');
+        if (!el) return;
+        var intake = document.getElementById('intake');
+        function tick() {
+          var y = window.scrollY || window.pageYOffset;
+          var shouldShow = y > 260;
+          if (intake) {
+            var rect = intake.getBoundingClientRect();
+            var vh = window.innerHeight || document.documentElement.clientHeight;
+            // Hide when the intake form is within one screen height of the top.
+            if (rect.top < vh * 1.1) shouldShow = false;
+          }
+          el.classList.toggle('is-visible', shouldShow);
+        }
+        tick();
+        window.addEventListener('scroll', tick, { passive: true });
+        window.addEventListener('resize', tick, { passive: true });
+      })();
+    </script>
+
     <script>
       import { wireCTAs } from '@/lib/track';
       import { wireReveals } from '@/lib/reveal';

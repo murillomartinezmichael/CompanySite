@@ -1,0 +1,100 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+---
+
+<Layout
+  title="Thanks — I'll reply within 24 hours · M³"
+  description="Your intake landed. What happens next: a personal review from Michael, within 24 hours, no template reply."
+  path="/thanks"
+  noindex={true}
+>
+  <Header slot="header" minimal={true} />
+
+  <section class="relative isolate overflow-hidden">
+    <div class="pointer-events-none absolute inset-x-0 top-0 h-[500px] bg-gradient-to-b from-clay/[0.10] via-transparent to-transparent"></div>
+
+    <div class="container-page relative pb-24 pt-14 sm:pt-24">
+      <div class="max-w-3xl">
+        <div class="mb-6 flex items-center gap-3">
+          <span class="hairline-neon"></span>
+          <p class="kicker mono">// Sent · queued for personal review</p>
+        </div>
+
+        <h1 class="text-display-lg">
+          Got it. <span class="text-bone-dim">Reply within</span>
+          <span class="highlight-yellow"><span class="fg">24 hours.</span></span>
+        </h1>
+
+        <p class="mt-6 max-w-2xl text-lg text-bone-dim">
+          Real reply, not a template. I'll actually pull your site up — Lighthouse,
+          mobile, funnel, copy — and email back with what's costing you customers.
+          One engineer. Same guy who quotes it builds it.
+        </p>
+
+        <!-- What happens next — three checkpoint cards -->
+        <ol class="mt-14 grid gap-5 sm:grid-cols-3">
+          <li class="panel flex flex-col gap-2 p-6">
+            <span class="mono text-[10px] uppercase tracking-[0.22em] text-clay/80">Now</span>
+            <p class="font-medium text-bone">Intake landed</p>
+            <p class="text-sm text-bone-dim">Sitting in my inbox. Nothing on your side.</p>
+          </li>
+          <li class="panel flex flex-col gap-2 p-6">
+            <span class="mono text-[10px] uppercase tracking-[0.22em] text-neon/80">Next 24h</span>
+            <p class="font-medium text-bone">Personal review</p>
+            <p class="text-sm text-bone-dim">I pull up your site or funnel and read it carefully.</p>
+          </li>
+          <li class="panel flex flex-col gap-2 p-6">
+            <span class="mono text-[10px] uppercase tracking-[0.22em] text-cyber/80">Email back</span>
+            <p class="font-medium text-bone">Written review</p>
+            <p class="text-sm text-bone-dim">What's working, what's leaking customers, rough scope if a rebuild fits.</p>
+          </li>
+        </ol>
+
+        <!-- Escape hatches while they wait — real conversion is here. -->
+        <div class="mt-16 border-t border-ink-line/60 pt-10">
+          <p class="kicker mono mb-6">// While you wait</p>
+          <div class="grid gap-6 sm:grid-cols-2">
+            <a
+              href="/#proof"
+              class="group panel flex flex-col gap-2 p-6 transition-colors hover:bg-ink-soft/60"
+              data-cta="thanks-see-work"
+              data-section="thanks"
+              data-intent="browse:case-studies"
+            >
+              <span class="mono text-[10px] uppercase tracking-[0.22em] text-clay/80">→ See recent work</span>
+              <p class="font-medium text-bone">Aries · Big 7 · SiteGuide</p>
+              <p class="text-sm text-bone-dim">Real client sites, real outcomes, real code.</p>
+            </a>
+            <a
+              href="https://siteguide-production.up.railway.app/demos"
+              target="_blank"
+              rel="noopener"
+              class="group panel flex flex-col gap-2 p-6 transition-colors hover:bg-ink-soft/60"
+              data-cta="thanks-siteguide"
+              data-section="thanks"
+              data-intent="downshift:siteguide-templates"
+            >
+              <span class="mono text-[10px] uppercase tracking-[0.22em] text-cyber/80">→ Off-the-shelf templates</span>
+              <p class="font-medium text-bone">SiteGuide storefront</p>
+              <p class="text-sm text-bone-dim">Twelve one-page templates you can preview + buy today.</p>
+            </a>
+          </div>
+        </div>
+
+        <!-- Urgency path — TikTok/IG DMers who need it faster than 24h -->
+        <div class="mt-14 rounded-2xl border border-neon/30 bg-ink-soft/40 p-6 sm:p-8">
+          <p class="kicker mono mb-3 text-neon/80">// If it's actually urgent</p>
+          <p class="text-bone-dim">
+            You saw me on TikTok or IG and this can't wait a day —
+            <a href="mailto:murillomartinezmichael@gmail.com?subject=Urgent%20-%20from%20audit%20form" class="underline decoration-neon/60 decoration-1 underline-offset-[6px] text-bone hover:text-neon" data-cta="thanks-urgent-email" data-section="thanks" data-intent="urgent:direct-email">email me directly</a>
+            and put "urgent" in the subject. Reply time drops to same-day.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Layout>

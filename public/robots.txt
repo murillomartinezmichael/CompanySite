@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://m3mm.net/sitemap.xml

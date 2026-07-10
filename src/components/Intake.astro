@@ -256,10 +256,14 @@ const {
           intent,
           meta: { source, has_prefill: hasPrefill, message_length: message.length },
         });
-        status.textContent = 'Got it. I\'ll reply within 24 hours to ' + (data.email || 'your email') + '.';
+        status.textContent = 'Got it. Redirecting…';
         status.classList.remove('border-clay/40', 'bg-clay/10');
         status.classList.add('border-emerald-400/40', 'bg-emerald-500/10');
         form.reset();
+        // Redirect to the real thank-you page for a stronger conversion story
+        // (24h reply promise, next-step CTAs, urgency escape hatch). setTimeout
+        // gives the analytics beacon a beat to flush before navigation.
+        setTimeout(() => { window.location.href = '/thanks'; }, 450);
       } catch {
         track({
           name: 'intake_error',

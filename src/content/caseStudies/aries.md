@@ -4,7 +4,7 @@ kind: Custom decks, pergolas, outdoor structures
 location: Atlanta, GA
 year: 2026
 video: /videos/aries-scroll-v2.mp4
-# poster: /videos/aries-poster.jpg  (add later — client TikTok has no poster still)
+poster: /videos/aries-poster.jpg
 liveUrl: https://ariesoutdoorliving.com
 problem: >-
   Aries was booking jobs from Instagram DMs and word-of-mouth. Their old site

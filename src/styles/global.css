@@ -347,6 +347,63 @@
     border-color: theme('colors.ink.line');
   }
 
+  /* Sticky mobile CTA — TikTok/IG thumb-reachable "Free review" pill. Bottom-right
+     anchor keeps it clear of the DIM toggle (bottom-left). Fades in when the
+     visitor scrolls past the hero fold; script hides it near the Intake so it
+     never overlaps the actual form. Desktop hides it via lg:hidden (Header
+     nav is always reachable there). */
+  .sticky-cta {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 45;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0));
+    background: theme('colors.cyber');
+    color: theme('colors.ink.DEFAULT');
+    font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    border: 1px solid theme('colors.cyber');
+    border-radius: 999px;
+    box-shadow: 0 0 12px rgba(125, 249, 255, 0.30), 0 8px 24px rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition: opacity 180ms ease, transform 180ms ease, background 150ms ease, border-color 150ms ease;
+  }
+  .sticky-cta.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .sticky-cta:hover,
+  .sticky-cta:focus-visible {
+    background: theme('colors.clay.DEFAULT');
+    border-color: theme('colors.clay.DEFAULT');
+    color: theme('colors.ink.DEFAULT');
+    box-shadow: 0 0 12px rgba(125, 249, 255, 0.32), 0 8px 24px rgba(0, 0, 0, 0.45);
+  }
+  .sticky-cta svg {
+    width: 14px;
+    height: 14px;
+  }
+  body.dim .sticky-cta {
+    background: theme('colors.ink.soft');
+    color: theme('colors.bone.DEFAULT');
+    border-color: theme('colors.ink.line');
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sticky-cta { transition: opacity 120ms ease; transform: none; }
+    .sticky-cta.is-visible { transform: none; }
+  }
+
   /* Photosensitivity disclaimer above footer — thin magenta hairline */
   .a11y-note {
     @apply mx-auto max-w-4xl mt-16 mb-6 px-6 py-4 text-xs text-bone-muted;
