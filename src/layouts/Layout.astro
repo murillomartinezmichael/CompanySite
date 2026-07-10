@@ -103,6 +103,64 @@ const canonical = new URL(path, Astro.site ?? 'https://m3mm.net').toString();
         availableLanguage: 'English',
       },
       knowsAbout: ['Web development', 'Automation', 'Small business websites', 'Lead generation'],
+      // Structured pricing so Google can show tiered offers in search
+      // results ("M³ Atlanta website cost" queries). Mirrors the four
+      // Service.astro tiers verbatim; keep this in sync whenever pricing
+      // changes there. Quote-only tier omits price per Google's guidance
+      // that missing price is preferable to placeholder 0.
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: 'M³ website services',
+        itemListElement: [
+          {
+            '@type': 'Offer',
+            name: 'Basic site or cleanup',
+            description: 'One-page site, landing page, or refresh — mobile-first, clear CTA, contact path wired.',
+            priceSpecification: {
+              '@type': 'UnitPriceSpecification',
+              priceCurrency: 'USD',
+              price: 500,
+              minPrice: 500,
+            },
+            availability: 'https://schema.org/InStock',
+            url: 'https://m3mm.net/#services',
+          },
+          {
+            '@type': 'Offer',
+            name: 'Business website package',
+            description: 'Full custom business site with positioning, proof, service sections, and lead capture.',
+            priceSpecification: {
+              '@type': 'UnitPriceSpecification',
+              priceCurrency: 'USD',
+              price: 1000,
+              minPrice: 1000,
+              maxPrice: 2000,
+            },
+            availability: 'https://schema.org/InStock',
+            url: 'https://m3mm.net/#services',
+          },
+          {
+            '@type': 'Offer',
+            name: 'SiteGuide setup + customization',
+            description: 'Brand a SiteGuide starter template, configure the AI guide widget, wire launch, hand off.',
+            priceSpecification: {
+              '@type': 'UnitPriceSpecification',
+              priceCurrency: 'USD',
+              price: 500,
+              minPrice: 500,
+            },
+            availability: 'https://schema.org/InStock',
+            url: 'https://m3mm.net/#services',
+          },
+          {
+            '@type': 'Offer',
+            name: 'Premium custom company build',
+            description: 'Large company site, multi-page service-line build, portal, or integration — quote-only.',
+            availability: 'https://schema.org/InStock',
+            url: 'https://m3mm.net/#services',
+          },
+        ],
+      },
     })} />
   </head>
   <body>
