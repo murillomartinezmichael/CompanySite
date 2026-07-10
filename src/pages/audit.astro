@@ -23,11 +23,11 @@ import Intake from '@/components/Intake.astro';
         </div>
 
         <h1 class="text-display-lg">
-          Free site review. <span class="text-bone-dim">Two minutes.</span>
+          Turn your TikTok viewers into <span class="text-bone-dim">customers.</span>
         </h1>
 
         <p class="mt-6 max-w-2xl text-lg text-bone-dim">
-          I'll actually pull up your site — Lighthouse, mobile, the funnel, the copy — and reply within 24 hours with what's costing you customers and what to do about it. If nothing needs fixing, I'll tell you that too.
+          Free site review — I'll pull up your site personally (Lighthouse, mobile, funnel, copy), reply within 24 hours with what's costing you DMs and quote requests, and hand you a punch list. If nothing needs fixing, I'll tell you that too.
         </p>
 
         <ul class="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-sm text-bone-muted">
@@ -36,6 +36,25 @@ import Intake from '@/components/Intake.astro';
           <li>✓ 24h reply, personally</li>
           <li>✓ Free — actually free</li>
         </ul>
+
+        <!-- Downshift: visitor with $0 budget still leaves with a path to /demos.
+             Keeps cold TikTok traffic from bouncing when the free review's outcome
+             is "you need a real site" and they can't afford custom. -->
+        <div class="mt-8 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-bone-muted">
+          <span class="mono text-[11px] uppercase tracking-[0.2em] text-cyber/80">Budget under $500?</span>
+          <a
+            href="https://siteguide-production.up.railway.app/demos"
+            class="group inline-flex items-center gap-1.5 text-bone-dim underline decoration-cyber/50 decoration-1 underline-offset-[6px] transition-colors hover:text-cyber"
+            data-cta="downshift-siteguide"
+            data-section="audit-hero"
+            data-intent="downshift:siteguide-templates"
+            target="_blank"
+            rel="noopener"
+          >
+            Grab an off-the-shelf template from SiteGuide
+            <svg class="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
       </div>
     </div>
   </section>

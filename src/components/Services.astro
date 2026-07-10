@@ -2,68 +2,68 @@
 const services = [
   {
     key: 'site-that-books',
-    intent: 'tier:website:site-that-books',
+    intent: 'tier:website:starter',
     number: '01',
-    title: 'A site that books jobs',
-    for: 'Contractors · home services · local pros',
-    from: '$2,400',
-    body: 'A fast, mobile-first site with a real intake form, gallery, and reviews wired in. Deployed on my dime for the first year. You keep the domain, the code, the leads — all of it.',
+    title: 'Basic site or cleanup',
+    for: 'New businesses, small teams, quick credibility fixes',
+    from: '$500',
+    body: 'A clean one-page site, landing page, or refresh that gives a business a real home base: fast, mobile-first, clear CTA, and no mystery stack.',
     bullets: [
-      'Mobile-first (95%+ of your traffic)',
-      'Contact form that emails you the second someone submits',
-      'Google reviews + gallery + services pages',
-      'SEO basics done right — no monthly upsell',
+      'One-page site or refresh with clear CTA',
+      'Mobile-first, fast, and easy to read',
+      'Contact path wired cleanly',
+      'Starter SEO and share preview cleaned up',
     ],
     accent: 'clay',
     cta: 'Get a quote',
   },
   {
-    key: 'automations',
-    intent: 'tier:automation:hours-saved',
+    key: 'business-website',
+    intent: 'tier:website:business',
     number: '02',
-    title: 'Automations that save you hours',
-    for: 'Anyone doing the same task twice a week',
-    from: '$1,200',
-    body: 'Quoting, invoicing, follow-ups, review requests, calendar wrangling. If you\'re doing it manually, it can probably run itself. Bridges into Offload Labs for bigger workflows.',
+    title: 'Business website package',
+    for: 'Small business to regional/corporate-style company sites',
+    from: '$1,000-$2,000',
+    body: 'A full custom business site with stronger positioning, proof, service sections, and lead capture. Built for companies that need more trust than a template can carry.',
     bullets: [
-      'Auto-reply + qualify leads while you sleep',
-      'Quote → invoice pipeline in one tool',
-      'Review request drip after job completion',
-      'Zapier, n8n, or custom — whichever fits',
+      'Homepage plus core service/proof sections',
+      'Lead form, phone/email paths, and analytics events',
+      'Case studies, gallery, reviews, or trust sections',
+      'Clear scope cap so the price stays sane',
     ],
     accent: 'neon',
     cta: 'Get a quote',
   },
   {
-    key: 'ai-assistant',
-    intent: 'tier:widget:ai-assistant',
+    key: 'siteguide-setup',
+    intent: 'tier:siteguide:setup',
     number: '03',
-    title: 'A guide that answers your customers',
-    for: 'Businesses whose site gets the same 20 questions',
-    from: '$800',
-    body: 'Drop-in AI chat, trained on your services and pricing. Same tech I use on my own sites and Big 7. Deflects the after-hours questions so you\'re not answering DMs at 11pm.',
+    title: 'SiteGuide setup + customization',
+    for: 'Starter companies that like a template but want help launching',
+    from: '$500',
+    body: 'If SiteGuide is close but you want it customized, I can brand it, configure the widget, wire the launch path, and hand it off cleanly.',
     bullets: [
-      'One <script> tag, works on any site',
-      'Answers in your voice, from your knowledge',
-      'Escalates to you when it doesn\'t know',
-      'Runs on M³ infra — no ChatGPT subscription needed',
+      'Template polish and brand adjustments',
+      'Widget config and launch setup',
+      'Hosting/deploy handoff',
+      'Upgrade path into a custom M3 site later',
     ],
     accent: 'cyber',
-    cta: 'Get a quote',
+    cta: 'Customize SiteGuide',
   },
   {
     key: 'custom-builds',
     intent: 'tier:custom:scoped-project',
     number: '04',
-    title: 'Custom builds',
-    for: 'For businesses whose problem doesn\'t fit a template',
-    from: '$6,000 · scoped per project',
-    body: 'Web portals, internal tools, customer dashboards, integrations between systems that don\'t talk, payment and transaction flows, full product builds. If it\'s software and it solves a real business problem, it\'s in scope. Same deal as everything else: flat quote, you own the code.',
+    title: 'Premium custom company build',
+    for: 'AriesOutdoorLiving / Big7Construction caliber and up',
+    from: 'Quote-only over $2,000',
+    body: 'Large company sites, multi-page service-line builds, portals, integrations, or anything that needs real discovery. Bigger scope gets a real quote instead of pretending it fits a starter package.',
     bullets: [
-      'Full-stack builds — frontend, backend, database, hosting',
-      'Integrations & APIs — connect the tools you already pay for',
-      'Payment / transaction processing done properly',
-      'One person, senior-level, no agency markup',
+      'Large custom website or rebuild',
+      'Multiple buyer lanes, service pages, or locations',
+      'Forms, analytics, automations, or backend pieces',
+      'Flat quote, clear scope, you own the code',
     ],
     accent: 'clay',
     cta: 'Scope a project',
@@ -105,11 +105,10 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
         <p class="kicker mono">Services</p>
       </div>
       <h2 class="text-display-lg">
-        <span class="highlight-yellow"><span class="fg">Four things</span></span> I do. <span class="text-bone-dim">Priced flat.</span>
+        <span class="highlight-yellow"><span class="fg">Pick the lane</span></span>. <span class="text-bone-dim">No mystery pricing.</span>
       </h2>
       <p class="mt-6 text-lg text-bone-dim">
-        No monthly retainers. No hourly ambiguity. You get a quote, we agree, I build. If
-        you outgrow the scope, we scope again — same rate card.
+        SiteGuide covers the starter-template lane. M3 covers custom business sites: $500 for simple, $1k-$2k for bounded company sites, quote-only when the scope is Aries or Big7 sized.
       </p>
     </div>
 
@@ -138,12 +137,12 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
 
               <!-- Content -->
               <div>
-                <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                  <h3 class="font-display text-3xl font-medium leading-tight text-bone sm:text-4xl lg:text-5xl">
+                <div class="flex flex-wrap items-baseline gap-x-3 gap-y-2 sm:gap-x-4">
+                  <h3 class="font-display text-2xl font-medium leading-tight text-bone sm:text-4xl lg:text-5xl">
                     {s.title}
                   </h3>
-                  <span class={`mono text-xs uppercase tracking-[0.2em] ${a.text} opacity-70`}>
-                    from {s.from}
+                  <span class={`mono inline-flex items-center rounded-sm border border-current/40 px-2 py-0.5 text-xs font-semibold uppercase tracking-[0.14em] ${a.text} sm:text-sm`}>
+                    {s.from.toLowerCase().startsWith('quote') ? s.from : `from ${s.from}`}
                   </span>
                 </div>
                 <p class="mt-3 text-sm text-bone-muted">{s.for}</p>
@@ -178,5 +177,23 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
       Not sure which fits? The free review below sorts it. If none of them fit,
       I'll tell you that too.
     </p>
+
+    <!-- Downshift: budget under $500 -> SiteGuide off-the-shelf templates. Keeps low-budget visitors
+         from bouncing and hands them a warm path to the M³ template store instead. -->
+    <div class="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-bone-muted">
+      <span class="mono text-[11px] uppercase tracking-[0.2em] text-cyber/80">Budget under $500?</span>
+      <a
+        href="https://siteguide-production.up.railway.app/demos"
+        class="group inline-flex items-center gap-1.5 text-bone-dim underline decoration-cyber/50 decoration-1 underline-offset-[6px] transition-colors hover:text-cyber"
+        data-cta="downshift-siteguide"
+        data-section="services"
+        data-intent="downshift:siteguide-templates"
+        target="_blank"
+        rel="noopener"
+      >
+        Grab an off-the-shelf template from SiteGuide
+        <svg class="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
   </div>
 </section>
