@@ -1,0 +1,62 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Accessibility — M³"
+  description="Accessibility statement for M³. We aim to conform to WCAG 2.1 Level AA. Reach us at murillomartinezmichael@gmail.com if any part of the site is not usable for you."
+>
+  <section class="container-page py-16 lg:py-24 max-w-3xl">
+    <p class="text-xs uppercase tracking-[0.24em] text-bone-muted">Statement · Accessibility</p>
+    <h1 class="mt-4 font-display text-4xl sm:text-5xl leading-[1.05] text-bone">
+      Accessibility <em class="text-clay italic">Statement</em>
+    </h1>
+    <p class="mt-6 text-lg text-bone-muted leading-relaxed">
+      M³ is committed to making this website usable by as many people as possible, including people
+      with disabilities. This page explains what we are doing and how to reach us if any part of
+      the site is not working for you.
+    </p>
+
+    <h2 class="mt-14 font-display text-2xl text-bone">Our commitment</h2>
+    <p class="mt-4 text-bone-muted leading-relaxed">
+      We aim to conform to the
+      <a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank" rel="noopener" class="text-clay underline underline-offset-4 hover:text-bone">
+        Web Content Accessibility Guidelines (WCAG) 2.1 Level AA</a>.
+      These guidelines cover readable text, sufficient color contrast, keyboard navigation, alt
+      text on meaningful images, and clear labeling — the things that make a site work for people
+      using screen readers, screen magnifiers, or keyboard-only navigation.
+    </p>
+
+    <h2 class="mt-14 font-display text-2xl text-bone">What we have done</h2>
+    <ul class="mt-4 text-bone-muted leading-relaxed list-disc pl-6 space-y-2">
+      <li>A skip-to-content link at the top of every page for keyboard users.</li>
+      <li>A single <code class="text-sm bg-ink-panel px-1.5 py-0.5 rounded">&lt;main&gt;</code> landmark on every page.</li>
+      <li>Labeled buttons and form fields — no icon-only controls without an accessible name.</li>
+      <li>Visible keyboard focus indicators throughout.</li>
+      <li>Full support for <code class="text-sm bg-ink-panel px-1.5 py-0.5 rounded">prefers-reduced-motion</code> — animations disable for users who ask for less motion.</li>
+      <li>A defined page language (<code class="text-sm bg-ink-panel px-1.5 py-0.5 rounded">lang="en"</code>) so screen readers pronounce content correctly.</li>
+      <li>ARIA live regions on the intake form so async submission feedback is announced.</li>
+    </ul>
+
+    <h2 class="mt-14 font-display text-2xl text-bone">Known limitations</h2>
+    <p class="mt-4 text-bone-muted leading-relaxed">
+      Accessibility is ongoing work. If something on the site gets in your way — a page you can't
+      navigate, text you can't read, a form that won't accept your input — please tell us. We
+      treat accessibility reports as a priority.
+    </p>
+
+    <div class="mt-14 rounded-lg border border-ink-line bg-ink-panel/40 p-6 sm:p-8">
+      <h2 class="font-display text-2xl text-bone">How to contact us</h2>
+      <p class="mt-4 text-bone-muted leading-relaxed">
+        If you have trouble using any part of this site, or need information in a different format:
+      </p>
+      <p class="mt-4 text-bone">
+        <strong>Email:</strong>
+        <a href="mailto:murillomartinezmichael@gmail.com" class="text-clay underline underline-offset-4 hover:text-bone">murillomartinezmichael@gmail.com</a>
+      </p>
+      <p class="mt-3 text-bone-muted text-sm">We aim to respond within two business days.</p>
+    </div>
+
+    <p class="mt-10 text-xs uppercase tracking-[0.14em] text-bone-muted">Last updated · July 10, 2026</p>
+  </section>
+</Layout>
