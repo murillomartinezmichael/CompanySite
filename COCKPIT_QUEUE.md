@@ -7,6 +7,44 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-11 · CompanySite · canonical audit widened to 4 pages (tick 22)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** Canonical regression test (`tests/build/canonical.test.ts`)
+covered `/` and `/audit` from tick-7 but was silent on `/thanks` and
+`/accessibility` (added later). Layout.astro's `path` prop defaults to
+`'/'` — a future page that mounts `<Layout>` without `path=` would emit
+`https://m3mm.net/` as its canonical, duplicating SEO signal across the
+whole site. Widened the audit:
+
+1. **Leakage check now covers all 4 pages.** The Railway preview
+   subdomain (`companysite-production.up.railway.app`) can no longer
+   sneak into `/thanks` or `/accessibility` source.
+2. **New: every `src/pages/*.astro` on disk must appear in the
+   expectation list.** A new page added without a matching pin fails
+   the audit before it ships.
+3. **New: every page must render `<Layout path="…">` with the exact
+   literal path.** Blocks the silent-canonical-dedupe class of
+   regression at code-review time.
+
+Live dist/ verified 4/4 canonicals correct: `https://m3mm.net/`,
+`/audit`, `/thanks`, `/accessibility`. Zero Railway leakage in the
+built HTML.
+
+`npm test` 112/112 green in 393 ms (+2 canonical tests). `npm run
+build` clean, 4 pages in 1.25 s.
+
+**Files touched:** `tests/build/canonical.test.ts` (+51/−9).
+
+**Next up:** push the now-21-commit conversion-pass queue when Mike is
+at the terminal; re-run PSI mobile against live m3mm.net to close the
+tick-16e LCP claim; smoke `/audit?tier=business&biz=deck+builder…` on
+production.
+
+---
+
 ## 2026-07-11 · CompanySite · sticky-mobile CTA dead-end fix (tick 21)
 
 **Card:** CompanySite conversion pass
