@@ -7,6 +7,43 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-11 · CompanySite · sticky-mobile CTA dead-end fix (tick 21)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** CONVERSION_STANDARDS.md § 1 sweep found the last
+sticky-mobile dead-end tick-20 missed. `Layout.astro` sticky-CTA
+previously fell back to a bare `/audit` on any non-/audit page — mobile
+TikTok visitors on `/thanks` or `/accessibility` clicked "Free review"
+and landed at the top of `/audit` with the form one scroll away. Bad
+promise on the exact segment the site is engineered to convert.
+
+Mirrored tick-20's Header/Footer pattern in `Layout.astro`: derived
+`hasIntakeOnPage` + `stickyIntakeHref` so `/` + `/audit` still emit
+same-page `#intake` anchors while `/thanks` + `/accessibility` (and any
+future page that omits `<Intake>`) cross-navigate to `/audit#intake`.
+
+Regression pinned by a 5th test in `tests/build/intake-cta.test.ts`:
+asserts the new `hasIntakeOnPage` + `stickyIntakeHref` shape, forbids
+the old bare `/audit` ternary from creeping back, and confirms the
+sticky anchor is wired to the derived href.
+
+**Verified.** `npm test` **110/110 green** in 411ms (109 → 110 baseline).
+`npm run build` clean, 4 pages in 1.27s. Dist grep confirms:
+`/` + `/audit` → `href="#intake"`, `/thanks` + `/accessibility` →
+`href="/audit#intake"`.
+
+**Files touched:** `src/layouts/Layout.astro`, `tests/build/intake-cta.test.ts`.
+Commit `9c8898e`, local only per tick constraint.
+
+**Next up:** push queue now at 21 commits (from `c61aa82` sticky-CTA
+baseline through `9c8898e`). After push, smoke-test the sticky CTA on
+mobile viewport at m3mm.net/thanks — click "Free review" and verify the
+form is in-viewport on land (not top of page).
+
+---
+
 ## 2026-07-11 · CompanySite · intake CTA dead-end fix — path threaded end-to-end (tick 20)
 
 **Card:** CompanySite conversion pass
