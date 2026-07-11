@@ -6,7 +6,7 @@
 
 ## NEXT ACTION
 
-**`git push origin main`** — **12** queued conversion-pass commits (from `c61aa82` sticky-CTA baseline through `9d03f84` prefill-test repair) are verified push-ready. `npm test` **91/91 green** as of tick 17. After push, re-run PSI mobile against live m3mm.net to close tick-16e's LCP claim honestly, and smoke `/audit?tier=business&biz=deck+builder&email=hi@x.com&name=David` to confirm the URL-param prefill fires end-to-end on production.
+**`git push origin main`** — **13** queued conversion-pass commits (from `c61aa82` sticky-CTA baseline through `565cb12` Services-UTM close + regression pin) are verified push-ready. `npm test` **96/96 green** as of tick 18 (+5 new UTM-invariant tests). After push, re-run PSI mobile against live m3mm.net to close tick-16e's LCP claim honestly, and smoke `/audit?tier=business&biz=deck+builder&email=hi@x.com&name=David` to confirm the URL-param prefill fires end-to-end on production. Then check SiteGuide analytics for the four expected `utm_source=m3mm` variants (`utm_medium` = `audit`/`footer`/`services`/`thanks`).
 
 Then continue the offer-ladder repositioning (partially satisfied by the conversion pass — `/` already renders "from $500" + "from $1,000" price chips):
 
@@ -42,6 +42,17 @@ built.** Candidates (ordered by money impact, not interest):
 Ladder Rung IV SPEED is CLOSED for this cycle. Next Rung IV strike
 opens when a new feature ships that could regress perf (measured, not
 speculative).
+
+---
+
+## SHIPPED (2026-07-11 — tick 18: close Services SiteGuide downshift UTM + pin invariant)
+
+- **Closed the parked fourth outbound.** Tick 17 (`8f86748`) UTM'd 3 of 4 SiteGuide downshifts (Footer / `/audit` / `/thanks`); the queue entry explicitly parked the fourth on `Services.astro:186` for a future tick. Closed this tick.
+- **`Services.astro:186`** now links to `?utm_source=m3mm&utm_medium=services&utm_campaign=downshift` — matches the pattern (`utm_medium` mirrors `data-section` for beacon parity between CompanySite `cta_click` and SiteGuide's landing beacon).
+- **Regression pinned.** New `tests/build/outbound-utm.test.ts` (5 tests) scans all four source files, asserts each SiteGuide URL carries the correct `utm_medium=<section>`, and pins zero untagged `siteguide-production` references remain. A future downshift added without UTMs fails CI before it ships.
+- **Verified.** `npm test` **96/96 green** in 383 ms (91 → 96, +5 new). `npm run build` clean, 4 pages in 1.26 s. `dist/index.html` emits both `utm_medium=footer` + `utm_medium=services` — zero plain `/demos` leakage.
+- **Files:** `src/components/Services.astro` (1 line) · `tests/build/outbound-utm.test.ts` (+50, new). Commit **`565cb12`**, local only per tick constraint.
+- **Push queue now at 13 tick-16/17/18 commits** (from `c61aa82` sticky-CTA baseline through `565cb12`).
 
 ---
 

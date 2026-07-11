@@ -7,6 +7,48 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-11 · CompanySite · Close Services SiteGuide downshift UTM + pin regression (tick 18)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** Closed the fourth outbound SiteGuide downshift that tick-17
+parked. `Services.astro:186` — the biggest downshift surface on `/`, sitting
+under the four services rows — was linking to plain
+`siteguide-production.up.railway.app/demos` with no attribution, so
+budget-under-$500 traffic from the primary services surface arrived at
+SiteGuide untagged (while Footer/audit/thanks landed with clean UTMs).
+
+Added `?utm_source=m3mm&utm_medium=services&utm_campaign=downshift` to match
+the pattern established in tick 17 (`8f86748`) — same triplet, `utm_medium`
+mirrors `data-section="services"` so CompanySite's `cta_click` beacon and
+SiteGuide's landing beacon agree on the origin.
+
+**Pinned it with a regression test.** New `tests/build/outbound-utm.test.ts`
+(5 tests) scans all four source files, asserts each SiteGuide URL carries
+the correct `utm_medium=<section>`, and pins that zero untagged
+`siteguide-production` references remain in shipped sources. A future
+downshift added without UTMs fails CI before it ships.
+
+**Files touched:** `src/components/Services.astro` (1 line) ·
+`tests/build/outbound-utm.test.ts` (+50, new).
+
+**Verified:** `npm test` **96/96 green** in 383 ms (91 → 96, +5 new
+UTM-invariant tests). `npm run build` clean, 4 pages in 1.26 s.
+`dist/index.html` now emits both `utm_medium=footer` and `utm_medium=services`
+SiteGuide URLs — zero plain `/demos` leakage.
+
+**Commit (1, local only per tick constraint):** `565cb12` —
+`feat(conversion): UTM on Services SiteGuide downshift + pin regression`.
+
+**Next up:** Push queue now at **13 tick-16/17/18 commits** (from `c61aa82`
+sticky-CTA baseline through `565cb12`). Mike to `git push origin main` when
+ready. After push, all four `utm_source=m3mm` variants should light up
+SiteGuide's landing analytics as `utm_medium` = `audit` / `footer` /
+`services` / `thanks` — one for each downshift surface.
+
+---
+
 ## 2026-07-11 · CompanySite · UTM attribution on outbound SiteGuide downshifts (tick 17)
 
 **Card:** CompanySite conversion pass
