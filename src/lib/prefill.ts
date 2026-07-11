@@ -62,7 +62,9 @@ export function isPriorPrefill(text: string): boolean {
 // Short-name → full intent key map. Lets Michael write TikTok/IG bio
 // links like `?tier=starter` or `?tier=business` instead of the wire
 // intent value. Missing keys silently no-op — the URL is user-facing.
-const TIER_ALIASES: Record<string, string> = {
+// Exported for the URL-param contract test — a rename in CATALOG that
+// doesn't ripple here silently breaks a bio link.
+export const TIER_ALIASES: Readonly<Record<string, string>> = {
   starter: 'tier:website:starter',
   basic: 'tier:website:starter',
   business: 'tier:website:business',
@@ -77,7 +79,8 @@ const TIER_ALIASES: Record<string, string> = {
 // URL query params → form field name map. Only the names listed here
 // are accepted; anything else is ignored so a hostile URL can't seed
 // arbitrary field values (e.g. can't overwrite hidden `source`).
-const PARAM_TO_FIELD: Record<string, string> = {
+// Exported so the whitelist stays testable.
+export const PARAM_TO_FIELD: Readonly<Record<string, string>> = {
   biz: 'businessType',
   businesstype: 'businessType', // tolerate query-param case
   business: 'businessType',
@@ -91,7 +94,7 @@ const PARAM_TO_FIELD: Record<string, string> = {
 // Cap each URL-seeded value so a malicious bio link can't push a
 // megabyte string into the textarea/input. Real values are always
 // short — a name, an email, a URL, a two-word business type.
-const MAX_PARAM_LEN = 240;
+export const MAX_PARAM_LEN = 240;
 
 function readParams(): Record<string, string> {
   try {
