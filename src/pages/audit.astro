@@ -14,7 +14,7 @@ import Intake from '@/components/Intake.astro';
     { name: 'Free site review', url: '/audit' },
   ]}
 >
-  <Header slot="header" minimal={true} />
+  <Header slot="header" minimal={true} path="/audit" />
 
   <section class="relative isolate overflow-hidden">
     <div class="pointer-events-none absolute inset-x-0 top-0 h-[600px] bg-gradient-to-b from-clay/[0.10] via-transparent to-transparent"></div>
@@ -89,5 +89,5 @@ import Intake from '@/components/Intake.astro';
     source="audit-page"
   />
 
-  <Footer slot="footer" />
+  <Footer slot="footer" path="/audit" />
 </Layout>

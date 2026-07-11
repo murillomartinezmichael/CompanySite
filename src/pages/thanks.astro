@@ -15,7 +15,7 @@ import Footer from '@/components/Footer.astro';
     { name: 'Thanks', url: '/thanks' },
   ]}
 >
-  <Header slot="header" minimal={true} />
+  <Header slot="header" minimal={true} path="/thanks" />
 
   <section class="relative isolate overflow-hidden">
     <div class="pointer-events-none absolute inset-x-0 top-0 h-[500px] bg-gradient-to-b from-clay/[0.10] via-transparent to-transparent"></div>
@@ -121,5 +121,5 @@ import Footer from '@/components/Footer.astro';
     </div>
   </section>
 
-  <Footer slot="footer" />
+  <Footer slot="footer" path="/thanks" />
 </Layout>

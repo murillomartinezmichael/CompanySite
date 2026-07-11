@@ -1,5 +1,15 @@
 ---
+interface Props {
+  path?: string;
+}
+const { path = '/' } = Astro.props;
 const year = new Date().getFullYear();
+
+// CONVERSION_STANDARDS.md § 1 — no dead-end CTAs. Only `/` and `/audit`
+// render <Intake>, so `#intake` on any other page silently scrolls to
+// the top. Cross-navigate to `/audit#intake` on the pages that lack it.
+const hasIntakeOnPage = path === '/' || path === '/audit';
+const intakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
 
 // Split so CF's edge email regex can't match. Hydrated to a real mailto:
 // on load; without JS the link falls through to the intake page.
@@ -29,7 +39,7 @@ const EMAIL_BODY = "Hey Mike,\n\nBusiness: \nCurrent site: \nWhat's frustrating 
         data-em-sub={EMAIL_SUBJECT}
         data-em-body={EMAIL_BODY}
       >email →</a>
-      <a href="#intake" class="transition-colors hover:text-bone" data-cta="footer-intake" data-section="footer" data-intent="book:free-review">Free site review →</a>
+      <a href={intakeHref} class="transition-colors hover:text-bone" data-cta="footer-intake" data-section="footer" data-intent="book:free-review">Free site review →</a>
       <a
         href="https://siteguide-production.up.railway.app/demos?utm_source=m3mm&utm_medium=footer&utm_campaign=downshift"
         target="_blank"

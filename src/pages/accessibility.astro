@@ -13,7 +13,7 @@ import Footer from '@/components/Footer.astro';
     { name: 'Accessibility', url: '/accessibility' },
   ]}
 >
-  <Header slot="header" minimal={true} />
+  <Header slot="header" minimal={true} path="/accessibility" />
 
   <section class="container-page py-16 lg:py-24 max-w-3xl">
     <p class="text-xs uppercase tracking-[0.24em] text-bone-muted">Statement · Accessibility</p>
@@ -69,5 +69,5 @@ import Footer from '@/components/Footer.astro';
     <p class="mt-10 text-xs uppercase tracking-[0.14em] text-bone-muted">Last updated · July 10, 2026</p>
   </section>
 
-  <Footer slot="footer" />
+  <Footer slot="footer" path="/accessibility" />
 </Layout>

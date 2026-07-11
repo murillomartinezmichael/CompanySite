@@ -1,8 +1,16 @@
 ---
 interface Props {
   minimal?: boolean;
+  path?: string;
 }
-const { minimal = false } = Astro.props;
+const { minimal = false, path = '/' } = Astro.props;
+
+// CONVERSION_STANDARDS.md § 1 — no dead-end CTAs. Only `/` and `/audit`
+// render <Intake>, so `#intake` on any other page scrolls to the top —
+// a broken promise. Route those clicks to `/audit#intake` instead so
+// the CTA actually lands the visitor in the form.
+const hasIntakeOnPage = path === '/' || path === '/audit';
+const intakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
 ---
 
 <header class="relative z-30">
@@ -23,12 +31,12 @@ const { minimal = false } = Astro.props;
       <nav class="hidden items-center gap-8 text-sm text-bone-dim md:flex" aria-label="Primary">
         <a href="#proof" class="transition-colors hover:text-bone" data-cta="nav-proof" data-section="header">Work</a>
         <a href="#services" class="transition-colors hover:text-bone" data-cta="nav-services" data-section="header">Services</a>
-        <a href="#intake" class="transition-colors hover:text-bone" data-cta="nav-intake" data-section="header" data-intent="book:free-review">Contact</a>
+        <a href={intakeHref} class="transition-colors hover:text-bone" data-cta="nav-intake" data-section="header" data-intent="book:free-review">Contact</a>
       </nav>
     )}
 
     <a
-      href="#intake"
+      href={intakeHref}
       class="inline-flex items-center gap-1.5 border border-clay bg-transparent px-4 py-2 text-sm font-semibold text-clay transition-all duration-150 hover:border-cyber hover:bg-cyber hover:text-ink hover:shadow-glow-clay"
       style="border-radius: 2px; letter-spacing: 0.03em;"
       data-cta="header-review"
