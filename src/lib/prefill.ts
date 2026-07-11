@@ -1,29 +1,51 @@
+// Intake prefill — two paths:
+//
+// 1) Click-based: when the visitor clicks a `[data-intent]` CTA on-page
+//    (Hero, Services tier cards, Footer), the intent + a matching CATALOG
+//    entry are pushed into the intake form so the textarea is seeded and
+//    intent submits with attribution.
+//
+// 2) URL-param-based (2026-07-11): when the visitor lands from a link
+//    like `/audit?tier=business&biz=deck+builder&email=x@y.com`, the
+//    matching form fields are populated before the visitor types. This
+//    turns the TikTok/IG bio into a warm-lead surface — the same click
+//    already fills 60% of the form.
+//
+// Both paths are additive: click-based prefill still overrides URL-based
+// prefill if the visitor then clicks a tier CTA, so a wrong URL param
+// can't lock them out of picking a different tier.
+
+import { track } from '@/lib/track';
+
 export type CatalogEntry = {
   title: string;
   from: string;
   detail: string;
 };
 
+// Keys match the `intent` attribute on Services.astro's tier rows —
+// intentional pinning so a mismatch here silently disables prefill for
+// that tier, which is caught by manual smoke on the /audit form.
 export const CATALOG: Record<string, CatalogEntry> = {
-  'tier:website:site-that-books': {
-    title: 'A site that books jobs',
-    from: '$2,400',
-    detail: 'Mobile-first site + intake form + gallery + reviews wired in.',
+  'tier:website:starter': {
+    title: 'Basic site or cleanup',
+    from: '$500',
+    detail: 'One-page site, landing page, or refresh — mobile-first, clear CTA, contact path wired.',
   },
-  'tier:automation:hours-saved': {
-    title: 'Automations that save you hours',
-    from: '$1,200',
-    detail: 'Quoting, invoicing, follow-ups — the repetitive stuff, done for you.',
+  'tier:website:business': {
+    title: 'Business website package',
+    from: '$1,000-$2,000',
+    detail: 'Full custom business site — positioning, proof, service sections, lead capture. Bounded scope.',
   },
-  'tier:widget:ai-assistant': {
-    title: 'A guide that answers your customers',
-    from: '$800',
-    detail: 'Drop-in AI chat trained on your services + pricing.',
+  'tier:siteguide:setup': {
+    title: 'SiteGuide setup + customization',
+    from: '$500',
+    detail: 'Brand a SiteGuide template, configure the AI guide widget, wire the launch path, hand off.',
   },
   'tier:custom:scoped-project': {
-    title: 'Custom build',
-    from: '$6,000 · scoped per project',
-    detail: 'Full-stack build, integration, or internal tool — whatever doesn\'t fit a template.',
+    title: 'Premium custom company build',
+    from: 'Quote-only over $2,000',
+    detail: 'Large company site, multi-page service line, portal, or integration — scoped after a call.',
   },
 };
 
@@ -37,7 +59,117 @@ export function isPriorPrefill(text: string): boolean {
   return text.includes(SEPARATOR);
 }
 
+// Short-name → full intent key map. Lets Michael write TikTok/IG bio
+// links like `?tier=starter` or `?tier=business` instead of the wire
+// intent value. Missing keys silently no-op — the URL is user-facing.
+const TIER_ALIASES: Record<string, string> = {
+  starter: 'tier:website:starter',
+  basic: 'tier:website:starter',
+  business: 'tier:website:business',
+  bounded: 'tier:website:business',
+  siteguide: 'tier:siteguide:setup',
+  template: 'tier:siteguide:setup',
+  custom: 'tier:custom:scoped-project',
+  premium: 'tier:custom:scoped-project',
+  scope: 'tier:custom:scoped-project',
+};
+
+// URL query params → form field name map. Only the names listed here
+// are accepted; anything else is ignored so a hostile URL can't seed
+// arbitrary field values (e.g. can't overwrite hidden `source`).
+const PARAM_TO_FIELD: Record<string, string> = {
+  biz: 'businessType',
+  businesstype: 'businessType', // tolerate query-param case
+  business: 'businessType',
+  email: 'email',
+  name: 'name',
+  url: 'currentUrl',
+  currenturl: 'currentUrl',
+  site: 'currentUrl',
+};
+
+// Cap each URL-seeded value so a malicious bio link can't push a
+// megabyte string into the textarea/input. Real values are always
+// short — a name, an email, a URL, a two-word business type.
+const MAX_PARAM_LEN = 240;
+
+function readParams(): Record<string, string> {
+  try {
+    if (typeof window === 'undefined') return {};
+    const url = new URL(window.location.href);
+    const out: Record<string, string> = {};
+    url.searchParams.forEach((raw, key) => {
+      const v = (raw || '').trim().slice(0, MAX_PARAM_LEN);
+      if (v) out[key.toLowerCase()] = v;
+    });
+    return out;
+  } catch {
+    return {};
+  }
+}
+
+function setField(form: HTMLFormElement, name: string, value: string, overwrite = false): boolean {
+  const field = form.querySelector<HTMLInputElement | HTMLTextAreaElement>(
+    `[name="${CSS.escape(name)}"]`
+  );
+  if (!field) return false;
+  if (!overwrite && field.value.trim()) return false;
+  field.value = value;
+  field.dispatchEvent(new Event('input', { bubbles: true }));
+  return true;
+}
+
+// Runs once on page load. Idempotent: no-op if the form isn't on the
+// page (e.g. root `/` when the intake hasn't scrolled in) or if no
+// recognised params are present.
+export function applyUrlPrefill(): void {
+  const form = document.getElementById('intake-form') as HTMLFormElement | null;
+  if (!form) return;
+  const params = readParams();
+  if (!Object.keys(params).length) return;
+
+  const filled: string[] = [];
+
+  // Explicit tier / intent — carry into hidden `intent` field + seed textarea.
+  const rawTier = params['tier'] || params['intent'];
+  if (rawTier) {
+    const intent = TIER_ALIASES[rawTier.toLowerCase()] || (rawTier.startsWith('tier:') ? rawTier : null);
+    if (intent) {
+      if (setField(form, 'intent', intent, true)) filled.push('intent');
+      const entry = CATALOG[intent];
+      if (entry) {
+        const ta = form.querySelector<HTMLTextAreaElement>('textarea[name="frustration"]');
+        if (ta && !ta.value.trim()) {
+          ta.value = buildBrief(entry);
+          ta.dispatchEvent(new Event('input', { bubbles: true }));
+          filled.push('frustration');
+        }
+      }
+    }
+  }
+
+  // Direct field prefills — only the whitelisted names in PARAM_TO_FIELD.
+  Object.entries(params).forEach(([key, value]) => {
+    const fieldName = PARAM_TO_FIELD[key];
+    if (!fieldName) return;
+    if (setField(form, fieldName, value)) filled.push(fieldName);
+  });
+
+  if (filled.length) {
+    track({
+      name: 'intake_prefill',
+      section: 'intake',
+      intent: form.querySelector<HTMLInputElement>('input[name="intent"]')?.value || undefined,
+      meta: { fields: filled.join(','), count: filled.length },
+    });
+  }
+}
+
 export function wirePrefill(): void {
+  // URL params first — happens on load once.
+  applyUrlPrefill();
+
+  // Click-based prefill — same behavior as before, delegated on document.
   document.addEventListener(
     'click',
     (e) => {
@@ -47,9 +179,6 @@ export function wirePrefill(): void {
       const intent = el.dataset.intent;
       if (!intent) return;
 
-      // Record intent to the intake form's hidden field so intake_submit
-      // carries attribution even for generic CTAs (e.g. book:free-review)
-      // that have no CATALOG entry to prefill the textarea from.
       const intentField = document.querySelector<HTMLInputElement>(
         'form#intake-form input[name="intent"]'
       );
