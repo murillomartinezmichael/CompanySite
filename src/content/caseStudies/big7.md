@@ -17,10 +17,12 @@ outcome: >-
   Big 7 owns every lead. Deployed on Railway, embedded AI guide for
   after-hours questions.
 metrics:
-  - label: Deploy target
-    value: Railway (nginx:alpine)
-  - label: Embedded assistant
-    value: SiteGuide (Claude)
+  - label: Buyer lanes
+    value: 2 (Build + Repair)
+  - label: After-hours coverage
+    value: 24/7 AI guide
+  - label: Uptime
+    value: Zero-downtime hosting
 order: 2
 ---
 
