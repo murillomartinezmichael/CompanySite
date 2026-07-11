@@ -6,7 +6,7 @@
 
 ## NEXT ACTION
 
-**`git push origin main`** — **13** queued conversion-pass commits (from `c61aa82` sticky-CTA baseline through `565cb12` Services-UTM close + regression pin) are verified push-ready. `npm test` **96/96 green** as of tick 18 (+5 new UTM-invariant tests). After push, re-run PSI mobile against live m3mm.net to close tick-16e's LCP claim honestly, and smoke `/audit?tier=business&biz=deck+builder&email=hi@x.com&name=David` to confirm the URL-param prefill fires end-to-end on production. Then check SiteGuide analytics for the four expected `utm_source=m3mm` variants (`utm_medium` = `audit`/`footer`/`services`/`thanks`).
+**`git push origin main`** — **20** queued conversion-pass commits (from `c61aa82` sticky-CTA baseline through `d2a8a4d` intake-CTA dead-end fix) are verified push-ready. `npm test` **109/109 green** as of tick 20 (+4 new intake-CTA build tests). After push, re-run PSI mobile against live m3mm.net to close tick-16e's LCP claim honestly, and smoke `/audit?tier=business&biz=deck+builder&email=hi@x.com&name=David` to confirm the URL-param prefill fires end-to-end on production. Then smoke `/thanks` + `/accessibility` to confirm the "Free review →" links in Header/Footer navigate to `/audit#intake` (not silently scroll to top). Then check SiteGuide analytics for the four expected `utm_source=m3mm` variants (`utm_medium` = `audit`/`footer`/`services`/`thanks`).
 
 Then continue the offer-ladder repositioning (partially satisfied by the conversion pass — `/` already renders "from $500" + "from $1,000" price chips):
 
@@ -42,6 +42,18 @@ built.** Candidates (ordered by money impact, not interest):
 Ladder Rung IV SPEED is CLOSED for this cycle. Next Rung IV strike
 opens when a new feature ships that could regress perf (measured, not
 speculative).
+
+---
+
+## SHIPPED (2026-07-11 — tick 20: intake-CTA dead-end fix, path threaded end-to-end)
+
+- **CONVERSION_STANDARDS § 1 gap closed on `/thanks` + `/accessibility`.** Only `/` and `/audit` render `<Intake>`, so Header/Footer's bare `href="#intake"` on the other two pages silently scrolled to the top instead of landing the visitor in the form. TikTok visitors who submit and land on `/thanks` clicked "Free review →" and nothing changed — silent broken promise.
+- **`Header.astro` + `Footer.astro`** now accept `path?: string`; when the current path lacks `<Intake>`, the emitted href becomes `/audit#intake` — a cross-navigation to the page that actually mounts the form.
+- **All four pages forward path explicitly** (index=`/`, audit=`/audit`, thanks=`/thanks`, accessibility=`/accessibility`). No more silent fall-through to the `/` default — a future page (about, pricing, etc.) that omits the prop fails the build test before it can regress.
+- **Regression pinned by 4 build tests in `tests/build/intake-cta.test.ts`:** Header interface + `hasIntakeOnPage` fork, Footer same, per-page path forwarding, and no-rogue-inline-`#intake` on the two intake-less pages.
+- **Verified.** `npm test` **109/109 green** in 428 ms (+4 build tests over 105 baseline). `npm run build` clean, 4 pages in 1.24 s. Local only per tick constraint.
+- **Files:** `src/components/{Header,Footer}.astro` · `src/pages/{index,audit,thanks,accessibility}.astro` · `tests/build/intake-cta.test.ts` (new). Commit **`d2a8a4d`**.
+- **Push queue now at 20 commits** (from `c61aa82` sticky-CTA baseline through `d2a8a4d`).
 
 ---
 
@@ -487,3 +499,4 @@ Source of product truth: ..\AI_HUB.md.
 **Verification gate:** npm test; npm run build; mobile visual smoke; lead and analytics endpoints.
 <!-- AI-HUB-SYNC:END -->
 - [ ] RESUME (2026-07-11 12:53): auto-improve worker crashed. Last commit: eebae5b docs(cockpit): queue tick-18 Services-UTM close + regression pin. See C:\Users\Michael\Documents\GitHub\CompanySite\.autoimprove\crash-2026-07-11_12-53-32.json.
+- [ ] RESUME (2026-07-11 13:25): auto-improve worker crashed. Last commit: d2a8a4d fix(conversion): thread path prop end-to-end so intake CTAs never dead-end. See C:\Users\Michael\Documents\GitHub\CompanySite\.autoimprove\crash-2026-07-11_13-25-02.json.

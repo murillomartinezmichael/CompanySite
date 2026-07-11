@@ -7,6 +7,44 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-11 · CompanySite · intake CTA dead-end fix — path threaded end-to-end (tick 20)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** CONVERSION_STANDARDS.md § 1 dead-end audit closed on
+the two pages that were silently regressing. Only `/` and `/audit` render
+`<Intake>`; on `/thanks` and `/accessibility` the Header/Footer emitted a
+bare `href="#intake"` that scrolled to the top of the page instead of
+landing the visitor in the form. The "Free review →" promise resolved to
+a broken UX on the two pages TikTok visitors actually see after they
+submit or click the accessibility link.
+
+`Header.astro` and `Footer.astro` now accept a `path?: string` prop; when
+the current path lacks the intake section they emit `/audit#intake`
+instead. All four pages (`index`, `audit`, `thanks`, `accessibility`)
+forward their own path explicitly — no more relying on the `/` default.
+The Layout also accepts `path` for canonical URL parity.
+
+Regression pinned by 4 build tests in `tests/build/intake-cta.test.ts`:
+Header exposes the interface + `hasIntakeOnPage` fork; Footer exposes the
+same; every page forwards its own path; `/thanks` + `/accessibility`
+cannot grow a rogue inline `#intake` anchor without failing CI.
+
+**Files touched:** `src/components/Header.astro`, `src/components/Footer.astro`,
+`src/pages/{index,audit,thanks,accessibility}.astro`, `tests/build/intake-cta.test.ts`.
+
+**Next up:** Push the now-20-commit queue (from `c61aa82` sticky-CTA
+baseline through `d2a8a4d`), then smoke `/thanks` + `/accessibility` on
+live m3mm.net to verify the "Free review" links resolve to
+`m3mm.net/audit#intake` (not `#intake` at the top of the page).
+
+**Verified:** `npm test` **109/109 green** in 428 ms (+4 new build tests
+over the prior 105 baseline). `npm run build` clean, 4 pages in 1.24 s.
+Commit **`d2a8a4d`**, local only per tick constraint.
+
+---
+
 ## 2026-07-11 · CompanySite · UTM capture on every analytics event (tick 19)
 
 **Card:** CompanySite conversion pass
