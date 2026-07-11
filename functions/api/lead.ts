@@ -182,12 +182,31 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     <p style="color:#888;font-size:12px;">IP: ${esc(ip)} &middot; Source: ${esc(lead.source)}</p>
   `;
 
+  // Deadline stamp — same 24h SLA the intake promises, made concrete.
+  // Uses UTC so it renders identically regardless of the visitor's TZ; the
+  // "before {date}" phrasing avoids any implication of a specific hour.
+  const deadlineDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  const deadlineStr = deadlineDate.toUTCString().replace(/^[A-Z][a-z]{2}, /, '');
+
   const replyHtml = `
-    <div style="font-family:Georgia,serif;max-width:560px;">
-      <h2 style="margin:0 0 12px;">Got it, ${esc(lead.name)}.</h2>
-      <p>I'll actually look at your site and reply within 24 hours with a plain-English review &mdash; what's working, what's costing you customers, and whether it needs a rebuild or just a fix.</p>
-      <p>If it turns out you don't need me, I'll tell you that too.</p>
-      <p>&mdash; Michael<br/><span style="color:#888;font-size:13px;">M³ &middot; Atlanta, GA</span></p>
+    <div style="font-family:Georgia,serif;max-width:560px;color:#111;line-height:1.55;">
+      <h2 style="margin:0 0 14px;font-size:22px;">Got it, ${esc(lead.name)}.</h2>
+      <p style="margin:0 0 14px;">I'll actually look at your site and reply with a plain-English review &mdash; what's working, what's costing you customers, and whether it needs a rebuild or just a fix. If it turns out you don't need me, I'll tell you that too.</p>
+      <p style="margin:0 0 20px;font-size:14px;color:#555;">
+        <b style="color:#111;">Deadline:</b> you'll hear back from me before ${esc(deadlineStr)}.
+      </p>
+
+      <div style="margin:22px 0;padding:14px 16px;background:#faf7f0;border-left:3px solid #FF3B5C;">
+        <p style="margin:0 0 6px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#888;">Recent client outcomes</p>
+        <p style="margin:0 0 4px;font-size:14px;"><b>Aries Outdoor Living</b> &mdash; sold at handoff, first quote request 3 days after launch.</p>
+        <p style="margin:0;font-size:14px;"><b>Big 7 Construction</b> &mdash; Build + Repair lanes live at big7construction.com.</p>
+      </div>
+
+      <p style="margin:18px 0 6px;font-size:13px;color:#555;">
+        Want to browse while you wait? <a href="https://siteguide-production.up.railway.app/demos" style="color:#FF3B5C;">See the 12 SiteGuide starter templates</a>.
+      </p>
+
+      <p style="margin:24px 0 0;">&mdash; Michael<br/><span style="color:#888;font-size:13px;">M³ &middot; Atlanta, GA &middot; m3mm.net</span></p>
     </div>
   `;
 
