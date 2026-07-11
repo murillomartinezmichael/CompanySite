@@ -9,6 +9,11 @@ import Footer from '@/components/Footer.astro';
   description="Your intake landed. What happens next: a personal review from Michael, within 24 hours, no template reply."
   path="/thanks"
   noindex={true}
+  breadcrumbs={[
+    { name: 'M³', url: '/' },
+    { name: 'Free site review', url: '/audit' },
+    { name: 'Thanks', url: '/thanks' },
+  ]}
 >
   <Header slot="header" minimal={true} />
 

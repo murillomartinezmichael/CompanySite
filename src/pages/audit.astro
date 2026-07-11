@@ -9,6 +9,10 @@ import Intake from '@/components/Intake.astro';
   title="Free site review — M³"
   description="Two-minute intake. Free review of your business site — I look at it personally and reply within 24 hours."
   path="/audit"
+  breadcrumbs={[
+    { name: 'M³', url: '/' },
+    { name: 'Free site review', url: '/audit' },
+  ]}
 >
   <Header slot="header" minimal={true} />
 
