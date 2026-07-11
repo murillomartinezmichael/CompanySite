@@ -1,11 +1,20 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
 ---
 
 <Layout
   title="Accessibility — M³"
   description="Accessibility statement for M³. We aim to conform to WCAG 2.1 Level AA. Reach us at murillomartinezmichael@gmail.com if any part of the site is not usable for you."
+  path="/accessibility"
+  breadcrumbs={[
+    { name: 'M³', url: '/' },
+    { name: 'Accessibility', url: '/accessibility' },
+  ]}
 >
+  <Header slot="header" minimal={true} />
+
   <section class="container-page py-16 lg:py-24 max-w-3xl">
     <p class="text-xs uppercase tracking-[0.24em] text-bone-muted">Statement · Accessibility</p>
     <h1 class="mt-4 font-display text-4xl sm:text-5xl leading-[1.05] text-bone">
@@ -59,4 +68,6 @@ import Layout from '../layouts/Layout.astro';
 
     <p class="mt-10 text-xs uppercase tracking-[0.14em] text-bone-muted">Last updated · July 10, 2026</p>
   </section>
+
+  <Footer slot="footer" />
 </Layout>
