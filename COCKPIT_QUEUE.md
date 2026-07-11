@@ -7,6 +7,50 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-11 · CompanySite · UTM capture on every analytics event (tick 19)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** Closed the last real bio-link attribution gap. TikTok/IG
+bio links tag traffic with `utm_source` / `utm_medium` / `utm_campaign` /
+`utm_content` / `utm_term`, but the client tracker was silently dropping
+them — every `cta_click`, `intake_start`, `intake_submit`, `intake_error`,
+and `intake_prefill` event fired without traffic-source context. Leads
+landed with no path back to a specific video.
+
+`src/lib/track.ts::readUtms(search)` — pure helper, reads the 5 standard
+keys off any search string, trims + caps each value at 240 chars, drops
+empties, rejects shorthand aliases (`src=`, `medium=`) so hostile links
+can't fake attribution shape. Module-level cache reads once per
+page-load; `track()` spreads UTMs into every event's `meta` — zero
+call-site churn, safe on existing meta keys thanks to the `utm_` prefix
+namespace.
+
+9 new tests in `tests/lib/track.test.ts` pin: empty in/out, all 5 keys
+captured intact, leading `?` optional, non-UTM ignored, 240-char DoS cap,
+whitespace trim, empty-value drop, malformed search survives, shorthand
+rejected. Suite **105/105 green** (+9); build clean;
+`dist/_astro/hoisted.*.js` emits all 5 UTM keys — bundle-verified.
+
+**Files touched:** `src/lib/track.ts` (+31/−1), `tests/lib/track.test.ts`
+(+68, new).
+
+**Commit (1, local only per brief):** `00d4581` — `feat(conversion):
+capture UTM params on every analytics event`.
+
+**Push queue now at 14 tick-16/17/18/19 commits** (from `c61aa82`
+sticky-CTA baseline through `00d4581`).
+
+**Next up:** After push, hit
+`/audit?utm_source=tiktok&utm_medium=bio&utm_campaign=smoke&tier=business`
+in a private tab and confirm the `intake_submit` beacon in Network tab
+carries all four (`utm_source`, `utm_medium`, `utm_campaign`, and
+`intent=tier:website:business`). Then the bio-link attribution loop is
+closed end-to-end.
+
+---
+
 ## 2026-07-11 · CompanySite · Close Services SiteGuide downshift UTM + pin regression (tick 18)
 
 **Card:** CompanySite conversion pass
