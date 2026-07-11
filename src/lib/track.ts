@@ -6,10 +6,45 @@ export type CTAEvent = {
   meta?: Record<string, string | number | boolean>;
 };
 
+// CONVERSION_STANDARDS.md § 4 — the CTA loop closes only if the traffic
+// source travels with every stage. TikTok/IG bio links carry utm_source /
+// utm_medium / utm_campaign; without capturing them at page load, the
+// intake_submit event lands with no way to attribute a lead back to a
+// specific video or campaign. Pure — takes a search string so it's
+// testable outside a browser.
+const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'] as const;
+const UTM_MAX = 240;
+
+export function readUtms(search: string): Record<string, string> {
+  const out: Record<string, string> = {};
+  try {
+    const params = new URLSearchParams(search || '');
+    for (const key of UTM_KEYS) {
+      const v = (params.get(key) || '').trim().slice(0, UTM_MAX);
+      if (v) out[key] = v;
+    }
+  } catch { /* malformed search → empty */ }
+  return out;
+}
+
+// Read once per page-load so history.pushState within an SPA-style flow
+// doesn't rewrite the traffic source out from under the funnel.
+let cachedUtms: Record<string, string> | null = null;
+function utmsForPayload(): Record<string, string> {
+  if (cachedUtms !== null) return cachedUtms;
+  cachedUtms = typeof location !== 'undefined' ? readUtms(location.search) : {};
+  return cachedUtms;
+}
+
 export function track(event: CTAEvent) {
   try {
+    const utms = utmsForPayload();
+    const meta = Object.keys(utms).length
+      ? { ...(event.meta || {}), ...utms }
+      : event.meta;
     const payload = {
       ...event,
+      meta,
       path: typeof location !== 'undefined' ? location.pathname : '',
       referrer: typeof document !== 'undefined' ? document.referrer : '',
       ts: Date.now(),

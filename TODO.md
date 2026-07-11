@@ -45,6 +45,17 @@ speculative).
 
 ---
 
+## SHIPPED (2026-07-11 — tick 19: UTM capture on every analytics event)
+
+- **Real conversion gap closed.** Bio-link UTM params (`utm_source` / `utm_medium` / `utm_campaign` / `utm_content` / `utm_term`) were being silently dropped by the client tracker. Every `cta_click`, `intake_start`, `intake_submit`, `intake_error`, and `intake_prefill` event was firing with no traffic-source context — so a TikTok bio link like `/audit?utm_source=tiktok&utm_medium=bio&utm_campaign=aries-video` produced leads that couldn't be attributed back to a specific video.
+- **`src/lib/track.ts::readUtms(search)`** — pure helper (testable outside a browser) reads the 5 standard UTM keys off any search string, trims + caps each value at 240 chars, drops empties, ignores non-UTM shorthand (`src=`, `medium=`, `campaign=`) so hostile bio links can't fabricate attribution shape.
+- **Module-level cache** — `utmsForPayload()` reads once per page-load; every `track()` call spreads the cached UTMs into `meta`, so every analytics stage (CTA loop § 4) carries the same traffic source without touching call sites. Zero regression risk on existing meta keys — new keys are namespaced with `utm_` prefix.
+- **Coverage: 9 new tests.** `tests/lib/track.test.ts` pins: (1) empty-in / empty-out invariant, (2) all 5 UTM keys captured intact, (3) leading `?` optional, (4) non-UTM keys ignored, (5) 240-char cap, (6) whitespace trim, (7) empty values dropped, (8) malformed search doesn't throw, (9) shorthand aliases (`src=`) rejected.
+- **Verified.** `npm test` **105/105 green** in 385 ms (+9). `npm run build` clean, 4 pages in 1.26 s. `dist/_astro/hoisted.*.js` emits all 5 UTM keys — bundle-verified.
+- **Files:** `src/lib/track.ts` (+31/−1) · `tests/lib/track.test.ts` (+68, new). Local-only per tick constraint.
+
+---
+
 ## SHIPPED (2026-07-11 — tick 18: close Services SiteGuide downshift UTM + pin invariant)
 
 - **Closed the parked fourth outbound.** Tick 17 (`8f86748`) UTM'd 3 of 4 SiteGuide downshifts (Footer / `/audit` / `/thanks`); the queue entry explicitly parked the fourth on `Services.astro:186` for a future tick. Closed this tick.
@@ -475,3 +486,4 @@ Source of product truth: ..\AI_HUB.md.
 
 **Verification gate:** npm test; npm run build; mobile visual smoke; lead and analytics endpoints.
 <!-- AI-HUB-SYNC:END -->
+- [ ] RESUME (2026-07-11 12:53): auto-improve worker crashed. Last commit: eebae5b docs(cockpit): queue tick-18 Services-UTM close + regression pin. See C:\Users\Michael\Documents\GitHub\CompanySite\.autoimprove\crash-2026-07-11_12-53-32.json.
