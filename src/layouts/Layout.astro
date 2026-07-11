@@ -43,7 +43,11 @@ const canonical = new URL(path, Astro.site ?? 'https://m3mm.net').toString();
     <meta name="author" content="Michael Murillo-Martinez" />
     <link rel="canonical" href={canonical} />
 
-    {noindex && <meta name="robots" content="noindex,nofollow" />}
+    {noindex ? (
+      <meta name="robots" content="noindex,nofollow" />
+    ) : (
+      <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+    )}
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
