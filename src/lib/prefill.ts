@@ -96,6 +96,25 @@ export const PARAM_TO_FIELD: Readonly<Record<string, string>> = {
 // short — a name, an email, a URL, a two-word business type.
 export const MAX_PARAM_LEN = 240;
 
+// Reserved intent namespaces per CONVERSION_STANDARDS.md § 2. A bio
+// link like `/audit?intent=product:aries` or `?intent=book:free-review`
+// must carry the raw intent through to attribution; TIER_ALIASES only
+// covers the `tier:` short-name surface. Anything not on this list is
+// silently rejected so a hostile URL can't fabricate a novel namespace.
+export const RESERVED_INTENT_NAMESPACES: ReadonlyArray<string> = [
+  'tier:',
+  'product:',
+  'feature:',
+  'plan:',
+  'book:',
+  'checkout:',
+];
+
+export function isReservedIntent(raw: string): boolean {
+  const lower = raw.toLowerCase();
+  return RESERVED_INTENT_NAMESPACES.some((ns) => lower.startsWith(ns) && lower.length > ns.length);
+}
+
 function readParams(): Record<string, string> {
   try {
     if (typeof window === 'undefined') return {};
@@ -136,7 +155,8 @@ export function applyUrlPrefill(): void {
   // Explicit tier / intent — carry into hidden `intent` field + seed textarea.
   const rawTier = params['tier'] || params['intent'];
   if (rawTier) {
-    const intent = TIER_ALIASES[rawTier.toLowerCase()] || (rawTier.startsWith('tier:') ? rawTier : null);
+    const lower = rawTier.toLowerCase();
+    const intent = TIER_ALIASES[lower] || (isReservedIntent(lower) ? lower : null);
     if (intent) {
       if (setField(form, 'intent', intent, true)) filled.push('intent');
       const entry = CATALOG[intent];

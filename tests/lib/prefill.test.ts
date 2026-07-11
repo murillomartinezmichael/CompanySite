@@ -6,6 +6,8 @@ import {
   TIER_ALIASES,
   PARAM_TO_FIELD,
   MAX_PARAM_LEN,
+  RESERVED_INTENT_NAMESPACES,
+  isReservedIntent,
 } from '../../src/lib/prefill';
 
 describe('CATALOG', () => {
@@ -103,6 +105,59 @@ describe('MAX_PARAM_LEN (DoS guardrail)', () => {
     // that a million-char query string can't push a megabyte into
     // form state before the browser truncates.
     expect(MAX_PARAM_LEN).toBeLessThanOrEqual(2048);
+  });
+});
+
+describe('RESERVED_INTENT_NAMESPACES (bio-link intent contract)', () => {
+  it('covers every reserved namespace listed in CONVERSION_STANDARDS.md § 2', () => {
+    // The doc reserves: tier: · product: · feature: · plan: · book: · checkout:
+    // A bio link may carry any of these; a rename in the doc must ripple here.
+    expect(RESERVED_INTENT_NAMESPACES).toContain('tier:');
+    expect(RESERVED_INTENT_NAMESPACES).toContain('product:');
+    expect(RESERVED_INTENT_NAMESPACES).toContain('feature:');
+    expect(RESERVED_INTENT_NAMESPACES).toContain('plan:');
+    expect(RESERVED_INTENT_NAMESPACES).toContain('book:');
+    expect(RESERVED_INTENT_NAMESPACES).toContain('checkout:');
+  });
+
+  it('every namespace ends with `:` so prefix match is unambiguous', () => {
+    for (const ns of RESERVED_INTENT_NAMESPACES) {
+      expect(ns.endsWith(':')).toBe(true);
+    }
+  });
+});
+
+describe('isReservedIntent (URL-param intent guardrail)', () => {
+  it('accepts a real intent under each reserved namespace', () => {
+    expect(isReservedIntent('tier:website:business')).toBe(true);
+    expect(isReservedIntent('product:aries')).toBe(true);
+    expect(isReservedIntent('feature:google-reviews')).toBe(true);
+    expect(isReservedIntent('plan:care:hosting')).toBe(true);
+    expect(isReservedIntent('book:free-review')).toBe(true);
+    expect(isReservedIntent('checkout:hosting-monthly')).toBe(true);
+  });
+
+  it('rejects a bare namespace with nothing after the colon', () => {
+    // `?intent=book:` shouldn't be treated as a valid intent — it carries
+    // zero attribution and would clobber the default intent field.
+    expect(isReservedIntent('tier:')).toBe(false);
+    expect(isReservedIntent('book:')).toBe(false);
+    expect(isReservedIntent('product:')).toBe(false);
+  });
+
+  it('rejects unreserved namespaces so hostile bio links cannot fabricate one', () => {
+    // A URL like `?intent=admin:root` or `?intent=source:tiktok` must be
+    // silently ignored so a bad actor cannot invent a new taxonomy.
+    expect(isReservedIntent('admin:root')).toBe(false);
+    expect(isReservedIntent('source:tiktok')).toBe(false);
+    expect(isReservedIntent('utm:medium')).toBe(false);
+    expect(isReservedIntent('random-string')).toBe(false);
+    expect(isReservedIntent('')).toBe(false);
+  });
+
+  it('accepts case-insensitive input (URL params come raw from the address bar)', () => {
+    expect(isReservedIntent('Book:free-review')).toBe(true);
+    expect(isReservedIntent('PRODUCT:aries')).toBe(true);
   });
 });
 

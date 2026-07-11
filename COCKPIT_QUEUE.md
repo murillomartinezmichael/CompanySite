@@ -7,6 +7,45 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-11 · CompanySite · URL-param intent accepts all reserved namespaces (tick 23)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** URL-param prefill flow (`src/lib/prefill.ts::applyUrlPrefill`)
+only accepted `tier:*` intents on the raw fallback path — a bio link like
+`/audit?intent=product:aries` or `?intent=book:free-review` silently
+no-op'd the hidden intent field, breaking the CONVERSION_STANDARDS § 2
+attribution contract for the five non-`tier:` reserved namespaces
+(`product:`, `feature:`, `plan:`, `book:`, `checkout:`).
+
+- **`RESERVED_INTENT_NAMESPACES`** — module-level constant mirroring
+  the reserved namespace table in CONVERSION_STANDARDS.md § 2. A rename
+  in the standard now surfaces as a test diff, not a silent regression.
+- **`isReservedIntent()`** — case-insensitive prefix check that rejects
+  bare namespaces (`?intent=book:` with no value) so a hostile URL can't
+  clobber the default intent with attribution-empty content.
+- **`applyUrlPrefill()`** now falls back through `isReservedIntent()`
+  instead of `startsWith('tier:')` — any of the six reserved namespaces
+  survives into the hidden intent field; `intake_submit` carries the
+  right attribution regardless of which bio link the visitor clicked.
+
+**Verified:** `npm test` 118/118 green in 426 ms (+9 new prefill tests
+covering all six namespaces, bare-namespace rejection, hostile-namespace
+rejection, and case-insensitive input). `npm run build` clean, 4 pages
+in 1.29 s. Zero deps. Local-only per tick constraint.
+
+**Files touched:**
+- `src/lib/prefill.ts` (+22/−2)
+- `tests/lib/prefill.test.ts` (+55/−0)
+
+**Next up:** Rotate off the URL-param prefill loop — session goal met
+across the six reserved namespaces. Next tick: pick from PARKED items
+(sitemap generation, self-host fonts) or wait for a post-push PSI run
+to close tick-16e's LCP claim honestly.
+
+---
+
 ## 2026-07-11 · CompanySite · canonical audit widened to 4 pages (tick 22)
 
 **Card:** CompanySite conversion pass
