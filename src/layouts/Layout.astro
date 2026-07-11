@@ -28,6 +28,16 @@ const {
 } = Astro.props;
 
 const canonical = new URL(path, Astro.site ?? 'https://m3mm.net').toString();
+
+// CONVERSION_STANDARDS.md § 1 — no dead-end CTAs. Only `/` and `/audit`
+// mount <Intake>; on those pages the sticky CTA is a same-page anchor.
+// On any other page (`/thanks`, `/accessibility`, future pages) the bare
+// `/audit` fallback lands the visitor at the top of the review page and
+// leaves the promise ("Free review") one scroll short of the form.
+// Cross-navigate to `/audit#intake` — same pattern as Header/Footer's
+// intakeHref (tick-20), pinned by tests/build/intake-cta.test.ts.
+const hasIntakeOnPage = path === '/' || path === '/audit';
+const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
 ---
 
 <!doctype html>
@@ -233,7 +243,7 @@ const canonical = new URL(path, Astro.site ?? 'https://m3mm.net').toString();
          after 260px scroll so it doesn't compete with the Hero CTA. -->
     <a
       id="sticky-cta"
-      href={path === '/audit' ? '#intake' : '/audit'}
+      href={stickyIntakeHref}
       class="sticky-cta lg:hidden"
       data-cta="sticky-mobile"
       data-section="sticky"

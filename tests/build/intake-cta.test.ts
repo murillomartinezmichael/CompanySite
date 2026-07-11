@@ -66,4 +66,21 @@ describe('Header + Footer thread `path` so intake CTAs never dead-end', () => {
       expect(src, `${file} must not link directly to #intake`).not.toMatch(/href="#intake"/);
     }
   });
+
+  it('Layout sticky-mobile CTA uses the same intakeHref pattern (no bare /audit fallback)', () => {
+    // Sticky mobile is the TikTok-thumb primary CTA once the visitor
+    // scrolls past the hero. Previously `href={path === '/audit' ? '#intake' : '/audit'}`
+    // — the else branch dropped visitors at the top of /audit and forced
+    // an extra scroll to reach the form. Now mirrors Header/Footer's
+    // hasIntakeOnPage / intakeHref shape so the fallback lands the
+    // visitor directly in the form.
+    const src = read('src/layouts/Layout.astro');
+    expect(src).toMatch(/const\s+hasIntakeOnPage\s*=\s*path\s*===\s*['"]\/['"]\s*\|\|\s*path\s*===\s*['"]\/audit['"]/);
+    expect(src).toMatch(/const\s+stickyIntakeHref\s*=\s*hasIntakeOnPage\s*\?\s*['"]#intake['"]\s*:\s*['"]\/audit#intake['"]/);
+    // The sticky anchor now uses the derived href — the literal bare
+    // `/audit` fallback shape must be gone.
+    expect(src).not.toMatch(/href=\{path\s*===\s*['"]\/audit['"]\s*\?\s*['"]#intake['"]\s*:\s*['"]\/audit['"]\}/);
+    // And the sticky <a> is wired to the new variable name.
+    expect(src).toMatch(/id=["']sticky-cta["'][\s\S]{0,200}href=\{stickyIntakeHref\}/);
+  });
 });
