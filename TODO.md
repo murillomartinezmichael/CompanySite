@@ -6,6 +6,17 @@
 
 ## NEXT ACTION
 
+**`git push origin main`** — **12** queued conversion-pass commits (from `c61aa82` sticky-CTA baseline through `9d03f84` prefill-test repair) are verified push-ready. `npm test` **91/91 green** as of tick 17. After push, re-run PSI mobile against live m3mm.net to close tick-16e's LCP claim honestly, and smoke `/audit?tier=business&biz=deck+builder&email=hi@x.com&name=David` to confirm the URL-param prefill fires end-to-end on production.
+
+Then continue the offer-ladder repositioning (partially satisfied by the conversion pass — `/` already renders "from $500" + "from $1,000" price chips):
+
+1. ~~Verify the live Services copy says: $500 basic, $1k-$2k bounded business site, quote-only over $2k~~ — home price chips confirmed 2026-07-11; audit the full Services section on live post-push.
+2. Add a soft SiteGuide cross-sell for DIY/template buyers.
+3. Mobile-smoke the services rows so the longer copy still scans at 375px.
+4. Run `npm test` + `npm run build`; ship only if both pass.
+
+---
+
 **Rung VI EXPAND — one money-impacting capability from the brief not yet
 built.** Candidates (ordered by money impact, not interest):
 
@@ -31,6 +42,34 @@ built.** Candidates (ordered by money impact, not interest):
 Ladder Rung IV SPEED is CLOSED for this cycle. Next Rung IV strike
 opens when a new feature ships that could regress perf (measured, not
 speculative).
+
+---
+
+## SHIPPED (2026-07-11 — tick 17: repair stale prefill tests + pin URL-param bio-link contract)
+
+- **Session-guard goal was "URL-param prefill on CompanySite Intake."** Prior tick shipped feature (`e2e92e0`) but CATALOG refresh inside that commit left **5 tests red** referencing dead 2026-07 intent keys. `npm test` was 79/84 green — push-blocked without noticing.
+- **Repaired.** Test file now references current CATALOG shape (`tier:website:starter`, `tier:website:business`, `tier:siteguide:setup`, `tier:custom:scoped-project`); loosened price-hint regex from `/^\$\d/` to `/\$\d/` so `Quote-only over $2,000` isn't false-flagged; added a "no stale keys" test so a future rename can't leave the tests behind.
+- **New contract coverage (5 tests):**
+  - `TIER_ALIASES` — every short-name resolves to a real CATALOG intent; each of the four tiers has at least one alias reachable (so `?tier=starter` etc. can't silently no-op after a rename).
+  - `PARAM_TO_FIELD` — whitelist rejects `source` / `intent` / `honeypot` (hostile bio link can't lie about attribution); covers every visitor-typed intake field.
+  - `MAX_PARAM_LEN` — bounded 0 < cap ≤ 2048 (DoS guardrail).
+- **Small API surface change:** `TIER_ALIASES`, `PARAM_TO_FIELD`, `MAX_PARAM_LEN` promoted from module-private to `Readonly<Record<…>>` exports so tests pin their shape. Runtime unchanged.
+- **Verified.** `npm test` **91/91 green** in 367 ms · `npm run build` **4 pages in 1.24 s**, clean · zero deps · `dist/_astro/hoisted.*.js` still contains `intake_prefill` bundle path.
+- **Files:** `src/lib/prefill.ts` (+9/−5) · `tests/lib/prefill.test.ts` (+89/−16). One commit local-only per tick constraint: **`9d03f84`**.
+- **Push queue now at 12 tick-16/17 commits** (from `c61aa82` sticky-CTA baseline through `9d03f84`).
+
+---
+
+## SHIPPED (2026-07-11 — push-readiness verification)
+
+- **Conversion pass verified push-ready.** `npm run dev` boots astro v4.16.19 in 535 ms with no errors. All four target routes curl 200 locally against `http://localhost:4321`:
+  - `/` (162 KiB): `lang="en"` + skip link + `<main>` + 11 `data-cta` + sticky-mobile CTA + "from $500" + "from $1,000" price chips all rendered.
+  - `/audit` (93 KiB): `lang="en"` + `<main>` + sticky-CTA + 7 `data-cta` + proof block (Aries + Big 7) — the new cold-TikTok proof strip from `8211871`.
+  - `/thanks` (81 KiB): `<meta name="robots" content="noindex,nofollow">` + OfferCatalog JSON-LD + BreadcrumbList JSON-LD + proof strip.
+  - `/sitemap.xml` (710 B): lists `/`, `/audit`, `/accessibility`; `/thanks` intentionally omitted with inline XML comment.
+- **10 queued commits verified push-ready** (from `c61aa82` sticky-CTA baseline → `48eb3dd` robots directives).
+- **SiteGuide checkout 503/400/200 matrix green.** `pytest tests/test_checkout.py -v` = **11/11 passed in 0.46 s** inside `.venv/Scripts/python.exe`. Named tests covering `test_checkout_503_when_key_unset`, `test_checkout_400_when_tenant_has_no_price`, `test_checkout_200_returns_url` — plus bonus 404, 403, 502.
+- Files: **none** (verification only). Queued Cockpit entry in `COCKPIT_QUEUE.md`.
 
 ---
 
@@ -405,3 +444,23 @@ cleared this tick — headroom is honestly gone at this rung until either
 1. Deploy CompanySite to Cloudflare Pages tonight? (y/n)
 2. Resend sender = verified `hello@m3mm.net` or sandbox for week 1? (verified/sandbox)
 3. Retire the old Railway CompanySite URL, or keep it as a 302 to m3mm.net? (retire/redirect)
+
+
+<!-- AI-HUB-SYNC:START -->
+## AI Hub Sync - 2026-07-09
+
+Source of product truth: ..\AI_HUB.md.
+
+**Lane:** M3 custom business website sales floor
+
+**UI/design verdict:** Correct direction. Keep the cyberpunk M3 identity, but make the buying ladder easier to scan than the visual effects. Mobile-first TikTok traffic means the first screen needs offer, proof, CTA, and no pricing confusion.
+
+**Product improvement:** Add case-study proof for Aries/Big7-style work, keep SiteGuide as the starter cross-sell, measure CTAs, and protect the $500/$1k-$2k/quote-only ladder from drifting back into a generic automation menu.
+
+**Next action:**
+- [ ] Verify the Services ladder UI at desktop and 375px, run npm test and npm run build, then deploy only if green.
+
+**Combine/separate call:** Keep separate from SiteGuide; cross-sell only.
+
+**Verification gate:** npm test; npm run build; mobile visual smoke; lead and analytics endpoints.
+<!-- AI-HUB-SYNC:END -->

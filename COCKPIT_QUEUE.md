@@ -7,6 +7,78 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-11 · CompanySite · Repair stale prefill tests + pin URL-param bio-link contract (tick 17)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** Tick-17 session-guard goal was "URL-param prefill on CompanySite Intake." Prior tick shipped the feature (`e2e92e0` — `?tier=business&biz=…&email=…&name=…`) but the CATALOG refresh inside that commit left **5 tests red** referencing dead 2026-07 intent keys (`tier:website:site-that-books`, `tier:automation:hours-saved`, `tier:widget:ai-assistant`). Local `npm test` was 79/84 green — push-blocked.
+
+Repaired the test file to the current CATALOG shape (`tier:website:starter`, `tier:website:business`, `tier:siteguide:setup`, `tier:custom:scoped-project`) and loosened the price-hint regex so the quote-only tier's "Quote-only over $2,000" hint isn't flagged as missing a dollar sign. Added a "no stale keys" test so a future rename can't leave the tests behind again.
+
+Then added 5 new contract tests for the URL-param surface:
+- **TIER_ALIASES:** every short-name resolves to a real CATALOG intent (`?tier=starter` etc. can't silently no-op); each of the four current tiers is reachable via at least one alias.
+- **PARAM_TO_FIELD whitelist:** hidden fields `source`, `intent`, `honeypot` are NOT in the whitelist (a hostile bio link like `?source=organic` can't lie about attribution); every visitor-typed intake field (`name`, `email`, `businessType`, `currentUrl`) has at least one alias.
+- **MAX_PARAM_LEN:** bounded 0 < cap ≤ 2048 (DoS guardrail — a megabyte query string can't push a megabyte into form state).
+
+Small API surface change: `TIER_ALIASES`, `PARAM_TO_FIELD`, `MAX_PARAM_LEN` promoted from module-private to `Readonly<Record<…>>` exports so the tests pin their shape. Runtime unchanged.
+
+**Verified:** `npm test` **91/91 green** in 367 ms (was 84 tests, 5 red before). `npm run build` **4 pages in 1.24 s**, clean. `dist/_astro/hoisted.*.js` still contains `intake_prefill` + `applyUrlPrefill` bundle path. Zero deps.
+
+**Files touched:**
+- `src/lib/prefill.ts` (+9/−5 — export three constants as `Readonly<Record<…>>`)
+- `tests/lib/prefill.test.ts` (+89/−16 — refresh + contract coverage)
+
+**Commit (1, local only per tick constraint):** `9d03f84` — `test(prefill): repair stale CATALOG refs + pin URL-param bio-link contract`.
+
+**Next up:** Push queue is now at **12 tick-16/17 commits** (from `c61aa82` sticky-CTA baseline through `9d03f84` prefill-test repair). Mike to `git push origin main` when ready. After push, smoke `/audit?tier=business&biz=deck+builder&email=hi@x.com&name=David` on live m3mm.net — expect the form to render pre-filled with all four fields + the business-tier brief in the textarea + one `intake_prefill` beacon fired.
+
+---
+
+## 2026-07-11 · CompanySite · Push-readiness verification — conversion pass (last 10 commits) boots + renders
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** Session-guard finish line was "verify the conversion pass from last session boots + renders + serves correctly locally so `git push` is a clean deploy." `npm run dev` boots astro v4.16.19 clean (Ready in 535 ms, no vite/type errors). Curled all four target routes against `http://localhost:4321`:
+
+- `/` — 200, 162 KiB. `lang="en"` present, `href="#main"` skip link, one `<main>`, 11 `data-cta` markers, sticky-mobile CTA element with `data-cta="sticky-mobile" data-intent="book:free-review"`, mobile price chips "from $500" + "from $1,000" both rendered.
+- `/audit` — 200, 93 KiB. `lang="en"` + `<main>`, sticky-CTA present, 7 `data-cta` markers, proof block references Aries + Big 7 (the cold-TikTok proof strip added in `8211871`).
+- `/thanks` — 200, 81 KiB. `<meta name="robots" content="noindex,nofollow">` set, OfferCatalog JSON-LD present, BreadcrumbList JSON-LD present, proof strip references Aries + Big 7.
+- `/sitemap.xml` — 200, 710 B. Lists `/`, `/audit`, `/accessibility`. `/thanks` intentionally omitted with an inline XML comment explaining the noindex reason (single grep hit came from that comment, not a `<loc>`).
+
+Push-ready confirmed. Tree is clean of code drift; only docs (BRD/CLAUDE/README/TODO) and untracked `AGENTS.md` outstanding.
+
+**Files touched:** none (verification only).
+
+**Commits:** none.
+
+**Next up:** `git push origin main` to publish the 10 queued conversion-pass commits (from `c61aa82` sticky-CTA baseline through `48eb3dd` robots directives). Re-run PSI mobile against live m3mm.net after deploy to close tick-16e's LCP claim honestly.
+
+---
+
+## 2026-07-11 · SiteGuide · Push-readiness verification — checkout endpoint 503/400/200 matrix green
+
+**Card:** SiteGuide Stripe money loop
+**Move to:** Done
+
+**What shipped:** Session-guard called for hitting `POST /v1/checkout/{site_id}` in three error states before push. `tests/test_checkout.py` already covers all three via FastAPI TestClient with a mock `stripe` module. Ran `pytest tests/test_checkout.py -v` inside the SiteGuide venv (`.venv/Scripts/python.exe`) — **11/11 passed in 0.46 s**:
+
+- `test_checkout_503_when_key_unset` — STRIPE_SECRET_KEY unset → 503 ✅
+- `test_checkout_400_when_tenant_has_no_price` — tenant without `stripe_price_id` → 400 ✅
+- `test_checkout_200_returns_url` — mocked stripe → 200 with `{"url": ...}` ✅
+- Bonus states also green: 404 unknown tenant, 403 origin not allowed, 502 stripe SDK raises
+
+Endpoint at `Backend/main.py:299` matches `Backend/checkout.py` design contract (deferred stripe import, error mapping, injected SDK for testability).
+
+**Files touched:** none (verification only).
+
+**Commits:** none.
+
+**Next up:** `git push origin main` if there's queued SiteGuide work; otherwise no push needed today. Real Stripe smoke test still owed once `STRIPE_SECRET_KEY` lives on Railway (currently disabled per 503 default).
+
+---
+
 ## 2026-07-07 · CompanySite · Rung IV Strike #8 — self-host Google Fonts (tick 16e)
 
 **Card:** CompanySite performance ceiling — Rung IV
