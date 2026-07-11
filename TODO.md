@@ -45,6 +45,19 @@ speculative).
 
 ---
 
+## SHIPPED (2026-07-11 — tick 24: non-reserved intent namespaces retired + pin invariant)
+
+- **CONVERSION_STANDARDS.md § 2 gap closed.** CTA sweep across `src/` found 6 CTAs using intent namespaces not in the reserved set (`tier:` / `product:` / `feature:` / `plan:` / `book:` / `checkout:`) — `browse:`, `downshift:`, and `urgent:` were silently invented and violated the § 2 "don't invent new namespaces silently" rule.
+- **Remapped to reserved namespaces** (tick constraint bans shared-doc edits, so extending the reserved list at `../docs/CONVERSION_STANDARDS.md` was off-table):
+  - `downshift:siteguide-templates` → `product:siteguide` (4× — Services / Footer / audit / thanks). SiteGuide is an M³ product.
+  - `browse:case-studies` → `product:case-studies` (thanks). Aggregate portfolio browse.
+  - `urgent:direct-email` → `book:urgent-review` (thanks). Booking action, direct-email variant.
+- **Regression pinned by `tests/build/reserved-intent-namespaces.test.ts` (9 tests).** Walks every `.astro/.ts/.tsx/.html` in `src/`, extracts literal `data-intent` values, asserts each starts with a reserved namespace. Pins the two files allowed to use template-literal intents (`CaseStudy.astro` `product:${slug}` and `Services.astro` `{s.intent}`) so a future silent drift into interpolated intents fails CI. Also asserts `Services.astro`'s tier CATALOG intents remain reserved.
+- **Verified.** `npm test` **127/127 green** in 410 ms (+9). `npm run build` clean, 4 pages in 1.34 s. `dist/` contains zero `downshift:` / `browse:` / `urgent:` references; new reserved intents render across all 4 pages.
+- **Files:** `src/components/{Services,Footer}.astro` · `src/pages/{audit,thanks}.astro` · `tests/build/reserved-intent-namespaces.test.ts` (new).
+
+---
+
 ## SHIPPED (2026-07-11 — tick 20: intake-CTA dead-end fix, path threaded end-to-end)
 
 - **CONVERSION_STANDARDS § 1 gap closed on `/thanks` + `/accessibility`.** Only `/` and `/audit` render `<Intake>`, so Header/Footer's bare `href="#intake"` on the other two pages silently scrolled to the top instead of landing the visitor in the form. TikTok visitors who submit and land on `/thanks` clicked "Free review →" and nothing changed — silent broken promise.
@@ -500,3 +513,11 @@ Source of product truth: ..\AI_HUB.md.
 <!-- AI-HUB-SYNC:END -->
 - [ ] RESUME (2026-07-11 12:53): auto-improve worker crashed. Last commit: eebae5b docs(cockpit): queue tick-18 Services-UTM close + regression pin. See C:\Users\Michael\Documents\GitHub\CompanySite\.autoimprove\crash-2026-07-11_12-53-32.json.
 - [ ] RESUME (2026-07-11 13:25): auto-improve worker crashed. Last commit: d2a8a4d fix(conversion): thread path prop end-to-end so intake CTAs never dead-end. See C:\Users\Michael\Documents\GitHub\CompanySite\.autoimprove\crash-2026-07-11_13-25-02.json.
+- [ ] Drain push queue ΓÇö 22 local commits waiting (tick constraint kept them local)
+- [ ] Canonical loop is closed after 20+ ticks; rotate focus off CTA/canonical audits next tick
+- [ ] Push local queue ΓÇö 23 commits deep, unpushed
+- [ ] Drain `COCKPIT_QUEUE.md` entry for tick 23
+- [ ] Extend URL-param prefill coverage from Intake to remaining SiteGuide demo landing paths (session goal calls for TikTok-bio links to land on pre-filled forms ΓÇö verify non-Intake entry points)
+- [ ] Per-template OG raster generation for SiteGuide demo pages (session goal, not touched this tick)
+- [ ] Product schema JSON-LD on SiteGuide demo pages for rich share cards (session goal, not touched this tick)
+- [ ] RESUME (2026-07-11 13:43): auto-improve worker crashed. Last commit: 51d4339 feat(conversion): URL-param intent accepts all 6 reserved namespaces. See C:\Users\Michael\Documents\GitHub\CompanySite\.autoimprove\crash-2026-07-11_13-43-37.json.

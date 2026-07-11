@@ -7,6 +7,56 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-11 · CompanySite · non-reserved intent namespaces retired (tick 24)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** CTA sweep against `docs/CONVERSION_STANDARDS.md § 2`
+found 6 CTAs using **non-reserved intent namespaces** (`browse:`,
+`downshift:`, `urgent:`) — silently invented, violating the "don't
+invent new namespaces" rule. Session-guard bans shared-doc edits, so
+remapped to the reserved set (`product:` / `book:`) that already
+covers the semantic:
+
+- **`downshift:siteguide-templates` → `product:siteguide`** — 4
+  outbound SiteGuide CTAs (Services / Footer / audit / thanks).
+  SiteGuide *is* an M³ product; the reserved `product:` namespace
+  covers it exactly.
+- **`browse:case-studies` → `product:case-studies`** — thanks-page
+  "See recent work" panel. Aggregate portfolio surface.
+- **`urgent:direct-email` → `book:urgent-review`** — thanks-page
+  urgent-mailto. Direct email for an urgent review is a booking
+  action; `book:` fits.
+
+**Regression pinned.** New `tests/build/reserved-intent-namespaces.test.ts`
+(9 tests) walks every `.astro/.ts/.tsx/.html` file in `src/`, extracts
+literal + interpolated `data-intent="..."` values, and asserts each
+starts with one of the 6 reserved namespaces. Also pins the two files
+allowed to use template-literal intents (`CaseStudy.astro`,
+`Services.astro`) — a future file introducing interpolated intents
+fails CI before it can silently drift.
+
+**Verified.** `npm test` **127/127 green** in 410 ms (+9 new).
+`npm run build` clean, 4 pages in 1.34 s. `dist/` contains zero
+`downshift:` / `browse:` / `urgent:` references; 8 new reserved
+intents (`product:siteguide` ×5, `product:case-studies` ×1,
+`book:urgent-review` ×1, plus an accessibility-page occurrence) render
+across all 4 pages. Zero deps.
+
+**Files touched:**
+- `src/components/{Services,Footer}.astro` (1 line each)
+- `src/pages/{audit,thanks}.astro` (1, 3 lines)
+- `tests/build/reserved-intent-namespaces.test.ts` (+79, new)
+
+**Next up:** Push queue continues to grow (24 commits deep now).
+Session goal per session-guard covers CompanySite + SiteGuide;
+CompanySite side is now honestly complete against CONVERSION_STANDARDS
+§ 1 / § 2 / § 3 / § 4 — rotate to SiteGuide for per-template OG
+raster + Product schema JSON-LD.
+
+---
+
 ## 2026-07-11 · CompanySite · URL-param intent accepts all reserved namespaces (tick 23)
 
 **Card:** CompanySite conversion pass
