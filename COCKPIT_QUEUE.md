@@ -7,6 +7,65 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-11 · CompanySite · UTM attribution on outbound SiteGuide downshifts (tick 17)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** Per-tick brief called for a CTA conversion audit against
+`docs/CONVERSION_STANDARDS.md` §§ 1–4. All 14 `[data-cta]` elements on
+m3mm.net were verified: real `href`s, tier CTAs prefill via `wirePrefill()`,
+`cta_click`/`intake_start`/`intake_submit` beacons close the funnel loop on
+same-origin. Prior sweeps (ticks 8, 10, 11, 16, 16b, 16c) closed those gaps.
+
+Only outstanding gap was **cross-domain attribution on the four outbound
+SiteGuide "downshift" links**. Every visitor who clicked "Grab an
+off-the-shelf template from SiteGuide" (from /audit hero, /thanks, footer,
+or the Services block) landed on `siteguide-production.up.railway.app/demos`
+with a naked URL — SiteGuide's analytics had no way to distinguish
+CompanySite→SiteGuide traffic from cold organic or another referrer.
+
+Fix on the three highest-ROI positions (SLA cap of 3 gaps per window):
+1. **`/audit` downshift (`data-section="audit-hero"`)** — TikTok bio-link
+   landing surface, highest outbound volume. Now
+   `?utm_source=m3mm&utm_medium=audit&utm_campaign=downshift`.
+2. **`/thanks` downshift (`data-section="thanks"`)** — post-conversion,
+   highest-intent visitor cohort. Same UTM triplet, `utm_medium=thanks`.
+3. **Footer downshift (`data-section="footer"`)** — site-wide safety net,
+   long-tail volume. Same triplet, `utm_medium=footer`.
+
+Naming rationale: `utm_source=m3mm` matches the m3mm.net apex so SiteGuide
+GA/Plausible reports collapse to a single source line.
+`utm_medium=<section>` mirrors the existing `data-section` value 1:1 so
+CompanySite's client-side `cta_click` beacon and SiteGuide's landing beacon
+agree on where each visitor came from. `utm_campaign=downshift` labels the
+identical "visitor can't afford custom → template store" conversion story
+across all three surfaces so the campaign rolls up cleanly.
+
+**Files touched:** `src/pages/audit.astro` · `src/pages/thanks.astro` ·
+`src/components/Footer.astro` (3 files, 1 line each, 3 net LoC).
+
+**Verified:** `npm run build` clean (4 pages, 1.28 s). `npm test` **91/91
+green** in 365 ms. Grepped `dist/**/*.html` — all three built pages carry
+the exact UTM triplet in the rendered `<a href>`. Astro emits raw `&` in
+string attribute values (universal browser support, minor validator quibble,
+matches the codebase convention).
+
+**Commit (1, local only per tick constraint):** `8f86748` — `feat(conversion):
+UTM attribution on 3 outbound SiteGuide downshifts`.
+
+**Parked (SLA cap):** Fourth outbound at `src/components/Services.astro:186`
+(same `data-cta="downshift-siteguide"` in the Services block) still lacks
+UTMs. Mechanical 1-line edit for a future tick — `utm_medium=services`.
+
+**Next up:** Push queue is now at **14 tick-16/17 commits** (from `c61aa82`
+sticky-CTA baseline through `8f86748` outbound UTM triplet). Mike to
+`git push origin main` when ready. After push, watch SiteGuide's landing
+analytics for the first hits carrying `utm_source=m3mm` — confirms the
+cross-domain loop is live end-to-end.
+
+---
+
 ## 2026-07-11 · CompanySite · Repair stale prefill tests + pin URL-param bio-link contract (tick 17)
 
 **Card:** CompanySite conversion pass
