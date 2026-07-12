@@ -63,14 +63,26 @@ export function track(event: CTAEvent) {
   } catch { /* noop */ }
 }
 
+// CONVERSION_STANDARDS.md § 4 — the `cta_click` event requires `intent`.
+// In-form CTAs (the intake-submit button) intentionally omit `data-intent`
+// on the element because the form's hidden `<input name="intent">` is the
+// canonical source of truth — wirePrefill() updates that input on tier-CTA
+// clicks so it always reflects the visitor's most recent pick. Without a
+// fallback here, the intake-submit `cta_click` beacon lands with
+// `intent: undefined` and the funnel dashboard sees a hollow click bucket
+// even though `intake_submit` correctly carries the intent. Reading the
+// enclosing form's hidden intent as fallback closes the loop end-to-end.
 export function wireCTAs() {
   document.querySelectorAll<HTMLElement>('[data-cta]').forEach((el) => {
     el.addEventListener('click', () => {
+      const formIntent = el
+        .closest('form')
+        ?.querySelector<HTMLInputElement>('input[name="intent"]')?.value || undefined;
       track({
         name: el.dataset.cta || 'unknown',
         section: el.dataset.section,
         source: new URLSearchParams(location.search).get('src') || undefined,
-        intent: el.dataset.intent,
+        intent: el.dataset.intent || formIntent,
       });
     }, { passive: true });
   });
