@@ -48,9 +48,35 @@ describe('canonical URL wiring', () => {
       'public/_headers',
       'public/_redirects',
       'public/robots.txt',
+      'public/sitemap.xml',
     ]) {
       expect(read(path)).not.toMatch(/companysite-production\.up\.railway\.app/i);
     }
+  });
+
+  it('sitemap.xml every <loc> uses the production origin', () => {
+    // Canonical points to m3mm.net; if sitemap ever advertised a Railway
+    // (or Cloudflare Pages preview) origin, Google would be told two
+    // different absolute URLs for the same page and pick whichever won
+    // its own de-dupe heuristic. Pin the origin at the sitemap level so
+    // canonical + sitemap can't drift.
+    const sitemap = read('public/sitemap.xml');
+    const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].trim());
+    expect(locs.length, 'sitemap.xml must list at least one URL').toBeGreaterThan(0);
+    for (const loc of locs) {
+      expect(loc, `sitemap.xml <loc> must use ${PROD_ORIGIN}: ${loc}`).toMatch(
+        new RegExp(`^${PROD_ORIGIN.replace(/[.]/g, '\\.')}(/|$)`),
+      );
+    }
+  });
+
+  it('robots.txt Sitemap: directive points at the production sitemap URL', () => {
+    // A stale Sitemap: line (Railway preview, wrong path, missing scheme)
+    // silently costs crawl budget on the correct sitemap. Match the exact
+    // production shape so a well-meaning edit can't lower-case the origin
+    // or drop the scheme without failing here.
+    const robots = read('public/robots.txt');
+    expect(robots).toMatch(new RegExp(`^Sitemap:\\s+${PROD_ORIGIN.replace(/[.]/g, '\\.')}/sitemap\\.xml\\s*$`, 'm'));
   });
 
   it('every src/pages/*.astro file is covered by an expectation', () => {
