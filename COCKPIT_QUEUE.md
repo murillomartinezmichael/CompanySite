@@ -7,6 +7,70 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-12 · CompanySite · cross-page CTA intent preservation (tick 19-auto)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** Auto-improve CTA sweep found two attribution gaps where
+cross-page fallbacks silently overwrote the visitor's entry intent with
+`/audit`'s default `book:free-review`: (1) `/thanks` "See recent work"
+→ `/#proof` dropped `product:case-studies`; (2) `/accessibility` "Email me"
+noscript-fallback → `/audit#intake` dropped `book:accessibility-report`.
+The click-side `cta_click` beacon carried the correct intent, but a visitor
+who scrolled to the intake and submitted after landing on the destination
+page got tagged as a generic `book:free-review` lead — funnel legibility
+between click and submit was broken. Fix threads intent via `?intent=` URL
+param so `applyUrlPrefill()` reads it on load and stamps it into the hidden
+intent input before submit (already validated against
+`RESERVED_INTENT_NAMESPACES` — `book:` and `product:` both pass). Sticky
+mobile / Header / Footer / Hero fallbacks all already carry
+`book:free-review` intent which matches Intake's default, so no change
+needed there. Existing pins for `/thanks` urgent-email fallback shape
+(`thanks-urgent-mailto.test.ts`) were not touched — the JS-off + broken
+mailto path there is separate scope.
+
+**Files:** `src/pages/thanks.astro` (+1/−1) · `src/pages/accessibility.astro` (+1/−1) · `tests/build/intent-preserving-fallback.test.ts` (new, +86). Commit **`efb0c56`**.
+
+**Verified:** `npm test` **158/158 green** in 604 ms (+8 new); `npm run build` clean, 4 pages in 1.72 s. `dist/thanks/index.html` and `dist/accessibility/index.html` render the intent-carrying hrefs verbatim.
+
+**Next up:** No open CTA gaps. Existing conversion invariants are locked by 8 build tests + 17 attribution-loop tests. Rotate off CTA audits.
+
+---
+
+## 2026-07-12 · CompanySite · /thanks urgent-email context + EAO bypass (tick 26)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** CTA re-sweep found one regression on `/thanks`: the
+urgent-email anchor still emitted a raw `mailto:…@gmail.com` in server
+HTML (retriggering CF Email Address Obfuscation — the same
+render-blocking `email-decode.min.js` inject killed for Footer in perf
+strike #5, tick 10) and carried subject-only, no body — Mike received
+"urgent" emails with zero context to match back to the intake the
+visitor had just submitted. Every other CTA across all 4 pages was
+already clean (checked Hero, Header nav+review, Services × 4, downshift,
+Footer × 4, Accessibility, CaseStudy visits, Intake submit, sticky
+mobile). Fix mirrors the Footer + Accessibility pattern from
+ticks 10 + 25: split address into `data-em-u` / `data-em-h`, hydrate on
+load into real mailto: with subject + body scaffold (Business /
+What's urgent / Deadline), noscript fallback to `/audit#intake` so the
+CTA never dead-ends, skip textContent overwrite so the mid-sentence
+"email me directly" label survives hydration. Regression pinned by 5
+new tests in `tests/build/thanks-urgent-mailto.test.ts` (no raw mailto,
+data-em-* quartet present, /audit#intake fallback, reserved
+`book:urgent-review` namespace preserved, hydration script correctness
+including no-textContent-overwrite guard).
+
+**Files:** `src/pages/thanks.astro` (+33/−1) · `tests/build/thanks-urgent-mailto.test.ts` (new, +82). Commit **`3275a1a`**.
+
+**Verified:** `npm test` **150/150 green** in 483 ms (+5 new); `npm run build` clean, 4 pages in 1.39 s. `dist/thanks/index.html` contains zero raw mailto or raw email string — CF EAO trigger surface eliminated.
+
+**Next up:** Drain 24+ commit push queue (still local per tick constraint). Rotate focus off CTA/mailto audits — full 4-page sweep now closed clean, all CTAs pass CONVERSION_STANDARDS § 1–4.
+
+---
+
 ## 2026-07-12 · CompanySite · /accessibility mailto attribution + EAO defense (tick 25)
 
 **Card:** CompanySite conversion pass
