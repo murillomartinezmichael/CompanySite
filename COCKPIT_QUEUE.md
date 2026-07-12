@@ -7,6 +7,57 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-12 · CompanySite · CaseStudy outbound UTM shape pinned (tick 19-auto continued)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** Full CTA + canonical audit against
+`docs/CONVERSION_STANDARDS.md` §§ 1–4 across all 4 pages and every
+component. Header logo/nav/CTA, Footer email/intake/SiteGuide/a11y,
+Hero primary, Services × 4 + downshift, CaseStudy × 2 outbound visits,
+sticky-mobile, /audit downshift, /thanks × 3 (see-work, siteguide,
+urgent-email), and /accessibility contact — every promise-CTA has a
+real destination (no `href="#"` anywhere), `data-cta`, and `data-intent`
+on a reserved namespace (`book:`/`product:`/`tier:`). Every cross-page
+intake CTA routes through `Header`/`Footer`/`Layout`'s `hasIntakeOnPage`
+→ `/audit#intake` fallback (guarded by `intake-cta.test.ts`). Every
+outbound SiteGuide downshift carries the UTM triplet with a section-
+specific `utm_medium` (guarded by `outbound-utm.test.ts`). Every page
+canonical resolves to `https://m3mm.net/...` via `Layout.astro`'s
+`new URL(path, Astro.site)` (guarded by both `canonical.test.ts` at
+source and `scripts/audit-canonicals.mjs` at dist — 4/4 pages OK on
+this build). No CTA gaps remained to fix; canonical audit already lived.
+
+One silent-regression seam remained: the CaseStudy "Visit the live
+site" anchor builds its outbound URL at render time from `d.liveUrl` via
+`new URL(...)` + four `searchParams.set()` calls. Unlike the four
+SiteGuide downshift links (whose UTM triplet lives as a string literal
+in source and is pinned by `outbound-utm.test.ts`), the CaseStudy UTM
+shape had zero test coverage. Dropping any of the four setters — or
+the URL wrapper itself — would silently ship unattributed clicks to
+Aries / Big7 / future client sites, hiding the referral traffic in
+their analytics (invisible to us on the origin side, meaningful to the
+client on the destination side, breaking § 4's "attribution loop
+closes" invariant).
+
+**Files:** `tests/build/casestudy-outbound-utm.test.ts` (new, +72).
+Commit **`35dec60`**.
+
+**Verified:** `npm test` **169/169 green** in 575 ms (+7 new: URL
+wrapper, four UTM setters, anchor `data-*` triplet, `target=_blank` +
+`rel="noopener noreferrer"`). `npm run build` clean, 4 pages in 1.50 s.
+`npm run audit:canonicals` all 4 dist pages resolve to production
+origin.
+
+**Next up:** CTA audit surface is exhausted for the current 4-page
+layout — every promise-CTA is pinned, every cross-page fallback has an
+intent-preserving `?intent=` carrier where applicable, every outbound
+third-party URL carries UTM attribution guarded by a source-shape test.
+Rotate off conversion audits. Local commit queue continues to grow.
+
+---
+
 ## 2026-07-12 · CompanySite · /thanks urgent-email JS-off intent preservation (tick 19-auto continued)
 
 **Card:** CompanySite conversion pass
