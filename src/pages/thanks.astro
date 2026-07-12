@@ -113,13 +113,45 @@ import Footer from '@/components/Footer.astro';
           <p class="kicker mono mb-3 text-neon/80">// If it's actually urgent</p>
           <p class="text-bone-dim">
             You saw me on TikTok or IG and this can't wait a day —
-            <a href="mailto:murillomartinezmichael@gmail.com?subject=Urgent%20-%20from%20audit%20form" class="underline decoration-neon/60 decoration-1 underline-offset-[6px] text-bone hover:text-neon" data-cta="thanks-urgent-email" data-section="thanks" data-intent="book:urgent-review">email me directly</a>
+            <a
+              href="/audit#intake"
+              class="underline decoration-neon/60 decoration-1 underline-offset-[6px] text-bone hover:text-neon"
+              data-cta="thanks-urgent-email"
+              data-section="thanks"
+              data-intent="book:urgent-review"
+              data-em-u="murillomartinezmichael"
+              data-em-h="gmail.com"
+              data-em-sub="Urgent — from audit form (m3mm.net)"
+              data-em-body={"Hey Mike,\n\nBusiness (so you can match this to my intake): \nWhat's urgent: \nDeadline: \n\n— sent from m3mm.net /thanks urgent path"}
+            >email me directly</a>
             and put "urgent" in the subject. Reply time drops to same-day.
           </p>
         </div>
       </div>
     </div>
   </section>
+
+  <script is:inline>
+    // Hydrate the urgent-email link to a real mailto: without leaving the
+    // address in HTML source. Same mechanism as Footer + Accessibility:
+    // a raw mailto: in server HTML triggers Cloudflare's Email Address
+    // Obfuscation, which injects cdn-cgi/scripts/…/email-decode.min.js —
+    // ~200 ms of render-blocking JS in the LCP critical chain (killed for
+    // Footer in perf strike #5 tick-10; this closes the /thanks regression).
+    // Without JS the link falls through to /audit#intake, so the CTA is
+    // never a dead-end. Visible link text stays "email me directly" so the
+    // surrounding sentence still reads naturally after hydration.
+    (function () {
+      var a = document.querySelector('a[data-cta="thanks-urgent-email"]');
+      if (!a || !a.dataset.emU || !a.dataset.emH) return;
+      var addr = a.dataset.emU + '@' + a.dataset.emH;
+      var sub = a.dataset.emSub || '', body = a.dataset.emBody || '';
+      var q = (sub || body)
+        ? '?subject=' + encodeURIComponent(sub) + '&body=' + encodeURIComponent(body)
+        : '';
+      a.href = 'mailto:' + addr + q;
+    })();
+  </script>
 
   <Footer slot="footer" path="/thanks" />
 </Layout>
