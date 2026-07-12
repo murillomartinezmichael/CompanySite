@@ -7,6 +7,46 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-12 · CompanySite · Sitemap + robots pinned in canonical audit (tick 19-auto continued)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** Second full CTA audit against `docs/CONVERSION_STANDARDS.md`
+plus the fallback canonical audit the tick brief asks for when CTAs come
+back clean. CTAs are clean — every promise-CTA on all 4 pages has a real
+destination, reserved-namespace `data-intent`, prefill wiring, and
+`cta_click` attribution via `[data-cta]` + `track.ts`. Outbound to
+SiteGuide carries the 4-UTM triplet from the prior tick, and every
+cross-page CTA fallback threads `?intent=` to keep the attribution loop
+closed on JS-off submits (already pinned).
+
+Canonical audit turned up one real gap: `tests/build/canonical.test.ts`
+swept `_headers`, `_redirects`, and `robots.txt` for the Railway preview
+subdomain but skipped `public/sitemap.xml`. If sitemap ever advertised a
+Railway (or Pages preview) origin while canonical stayed on m3mm.net,
+Google would be told two absolute URLs for the same page. Same failure
+mode as an unset canonical — silent SEO signal split, no runtime error.
+
+**Fix:** Extended `canonical.test.ts` with three new assertions —
+(1) `public/sitemap.xml` added to the Railway-subdomain leakage sweep,
+(2) positive check that every `<loc>` in the sitemap begins with
+`https://m3mm.net`, (3) positive check that `robots.txt` Sitemap
+directive uses the exact production sitemap URL. Tests only — no
+runtime shape changed.
+
+**Files:** `tests/build/canonical.test.ts` — commit **`5aec760`**.
+
+**Verified:** `npm test` **179/179 green** (was 176; +3 new canonical
+assertions). `npm run build` clean, 4 pages built. `dist/*.html` grep
+confirms all 4 pages emit `<link rel="canonical" href="https://m3mm.net/…">`.
+Local only per tick constraint.
+
+**Next up:** Push the queued conversion-pass commits to origin so the
+hardened invariants gate the next canonical / outbound-UTM edit.
+
+---
+
 ## 2026-07-12 · CompanySite · utm_content on 4 downshift SiteGuide URLs (tick 19-auto continued)
 
 **Card:** CompanySite conversion pass
