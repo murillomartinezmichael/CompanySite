@@ -7,6 +7,51 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-12 · CompanySite · utm_content on 4 downshift SiteGuide URLs (tick 19-auto continued)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** CTA audit against `docs/CONVERSION_STANDARDS.md § 4`
+(attribution). Site is exceptionally clean after 20 prior conversion-pass
+commits — every promise-CTA has real destination, reserved-namespace
+`data-intent`, prefill, and analytics. Real remaining gap: the four
+SiteGuide downshift placements (Footer / Services / audit / thanks) all
+shared `utm_source=m3mm` + `utm_campaign=downshift`, differing only by
+`utm_medium`. Per Google's UTM convention, `utm_medium` describes the
+channel type (email, cpc, referral) — not the placement inside a page.
+`utm_content` is the standard field for disambiguating multiple links
+inside the same campaign. Case-study outbound (Aries / Big 7 "Visit the
+live site") already uses the 4-UTM pattern (source/medium/campaign/
+content=slug); the downshift URLs did not.
+
+**Fix:** Added `utm_content=<placement-slug>` to each of the four
+downshift URLs — `footer-link`, `services-under-500`, `audit-under-500`,
+`thanks-storefront`. Additive only — existing `utm_medium=<page>` untouched
+so Michael's current SiteGuide dashboard filters keep working. SiteGuide
+analytics can now attribute a downshift click to the specific placement
+that produced it, not just the page it came from.
+
+**Pin:** `tests/build/outbound-utm.test.ts` now (1) requires `utm_content=`
+on every downshift URL, (2) pins each placement's expected slug, and (3)
+adds a uniqueness invariant so a future paste-duplicate can't land two
+placements with the same slug.
+
+**Files:** `src/components/Footer.astro` · `src/components/Services.astro`
+· `src/pages/audit.astro` · `src/pages/thanks.astro` ·
+`tests/build/outbound-utm.test.ts`. Commit **`472c918`**.
+
+**Verified:** `npm test` **177/177 green** in 543 ms (+2 new). `npm run
+build` clean, 4 pages built. `dist/*.html` grep confirms all four
+`utm_content` slugs render in emitted HTML alongside the existing
+`utm_content=aries` / `utm_content=big7` on case-study outbound. Local
+only per tick constraint.
+
+**Next up:** Push the queued conversion-pass commits to origin so
+SiteGuide's live analytics start seeing the new content slugs.
+
+---
+
 ## 2026-07-12 · CompanySite · `book:*` textarea seeds via BOOKING_PREFILLS (tick 19-auto continued)
 
 **Card:** CompanySite conversion pass
