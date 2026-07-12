@@ -6,7 +6,7 @@ import Footer from '@/components/Footer.astro';
 
 <Layout
   title="Accessibility — M³"
-  description="Accessibility statement for M³. We aim to conform to WCAG 2.1 Level AA. Reach us at murillomartinezmichael@gmail.com if any part of the site is not usable for you."
+  description="Accessibility statement for M³. We aim to conform to WCAG 2.1 Level AA — email me if any part of the site is not usable for you."
   path="/accessibility"
   breadcrumbs={[
     { name: 'M³', url: '/' },
@@ -61,10 +61,40 @@ import Footer from '@/components/Footer.astro';
       </p>
       <p class="mt-4 text-bone">
         <strong>Email:</strong>
-        <a href="mailto:murillomartinezmichael@gmail.com" class="text-clay underline underline-offset-4 hover:text-bone">murillomartinezmichael@gmail.com</a>
+        <a
+          href="/audit#intake"
+          class="text-clay underline underline-offset-4 hover:text-bone"
+          data-cta="accessibility-contact"
+          data-section="accessibility"
+          data-intent="book:accessibility-report"
+          data-em-u="murillomartinezmichael"
+          data-em-h="gmail.com"
+          data-em-sub="Accessibility — m3mm.net"
+          data-em-body={"Hey Mike,\n\nPage: /accessibility\nWhat's not working for me:\n\n— sent from m3mm.net accessibility page"}
+        >Email me →</a>
       </p>
       <p class="mt-3 text-bone-muted text-sm">We aim to respond within two business days.</p>
     </div>
+
+    <script is:inline>
+      // Hydrate the accessibility contact link to a real mailto: without
+      // leaving the raw address in HTML source. Same mechanism as Footer:
+      // raw email in HTML triggers Cloudflare's Email Address Obfuscation,
+      // which injects cdn-cgi/scripts/…/email-decode.min.js and blocks
+      // render on this page. Without JS the link still lands on
+      // /audit#intake so the promise ("Email:") isn't a dead-end.
+      (function () {
+        var a = document.querySelector('a[data-cta="accessibility-contact"]');
+        if (!a || !a.dataset.emU || !a.dataset.emH) return;
+        var addr = a.dataset.emU + '@' + a.dataset.emH;
+        var sub = a.dataset.emSub || '', body = a.dataset.emBody || '';
+        var q = (sub || body)
+          ? '?subject=' + encodeURIComponent(sub) + '&body=' + encodeURIComponent(body)
+          : '';
+        a.href = 'mailto:' + addr + q;
+        a.textContent = addr;
+      })();
+    </script>
 
     <p class="mt-10 text-xs uppercase tracking-[0.14em] text-bone-muted">Last updated · July 10, 2026</p>
   </section>

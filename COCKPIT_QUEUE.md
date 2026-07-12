@@ -7,6 +7,60 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-12 · CompanySite · /accessibility mailto attribution + EAO defense (tick 25)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** Full CTA sweep against `docs/CONVERSION_STANDARDS.md`
+across all 4 pages found exactly one uninstrumented CTA — the
+`/accessibility` contact mailto. Every other CTA (Hero, Header,
+Footer × 4, Services × 4 + downshift, CaseStudy × 2, Intake submit,
+Thanks × 3, sticky-mobile) already carried `data-cta` + `data-intent`
+in a reserved namespace, and every outbound (SiteGuide, case-study
+liveUrl) already carried `utm_source`/`medium`/`campaign`. Only
+`/accessibility` shipped without `data-cta`, so `track.ts::wireCTAs`
+never emitted a `cta_click` for accessibility-report emails — a
+disabled visitor who hit Email had zero funnel visibility.
+
+**Fix** mirrors Footer's split-hydrate pattern (tick-16e):
+- `<a>` ships to SSR labeled "Email me →", `href="/audit#intake"`
+  (JS-off fallback lands the visitor in the intake form, not a
+  dead-end).
+- `data-em-u` / `data-em-h` / `data-em-sub` / `data-em-body`
+  attributes hold the split address + prefilled subject/body.
+- Inline hydration script assembles the real `mailto:` on load and
+  swaps textContent to the raw address.
+- Adds `data-cta="accessibility-contact"`, `data-section="accessibility"`,
+  `data-intent="book:accessibility-report"` — reserved `book:` namespace
+  per § 2, so the funnel event carries context.
+- Strips the raw email from the page `description` prop, which was
+  propagating to `<meta name="description">`, `og:description`, and
+  `twitter:description`. All three would have triggered Cloudflare's
+  Email Address Obfuscation on `/accessibility` and injected the
+  render-blocking `email-decode.min.js` (same failure Layout.astro line
+  122 documents for the schema.org contact block).
+
+**Verified.** `npm run build` clean (4 pages, 1.35 s). `dist/accessibility/
+index.html` contains **zero** occurrences of the raw email string —
+EAO regex can no longer match. `data-cta="accessibility-contact"` +
+`data-em-u="murillomartinezmichael"` both present. `npm test`
+**145/145 green** in 469 ms — no existing test regressed.
+
+**Files touched:**
+- `src/pages/accessibility.astro` (+32 / −2)
+
+**Commit:** `75bab3e` (local, unpushed per session brief).
+
+**Next up:** Push queue continues to grow (25 commits deep now).
+Working tree still carries orphaned WIP from tick-19 crash
+(`BRD.md`, `CLAUDE.md`, `README.md`, `functions/_lib/validate.ts`,
+`functions/api/lead.ts`, `src/components/Intake.astro`,
+`src/lib/prefill.ts`) — a future tick should audit whether that WIP
+represents shippable work or should be discarded.
+
+---
+
 ## 2026-07-11 · CompanySite · non-reserved intent namespaces retired (tick 24)
 
 **Card:** CompanySite conversion pass
