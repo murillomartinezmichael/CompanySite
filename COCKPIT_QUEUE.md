@@ -7,6 +7,51 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-12 · CompanySite · `book:*` textarea seeds via BOOKING_PREFILLS (tick 19-auto continued)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** Full CTA re-audit against `docs/CONVERSION_STANDARDS.md`
+across all 4 pages / all components. Every promise-CTA still passes §§ 1
+(real destination), 2 (`data-intent` on a reserved namespace), and 4
+(analytics via `data-cta` + `track.ts`). One § 3 hole remained:
+`applyUrlPrefill` (URL-param path) and `wirePrefill` (click delegate)
+both seed the intake textarea via `buildBrief(CATALOG[intent])`, but
+CATALOG only covers the four priced tiers — its shape test enforces
+`entry.from` matches `/\$\d/`, so the two free `book:*` intents that
+cross-page CTAs thread via `?intent=` (`book:urgent-review` from
+/thanks urgent-email JS-off, `book:accessibility-report` from
+/accessibility contact JS-off) had nowhere to attach a seed. Result:
+the highest-intent visitors (someone actively saying "this is urgent"
+or "your site broke on me") landed at /audit#intake with the intent
+field correctly set but a completely blank textarea, having to
+reconstruct what they clicked. Violates § 3 "the prefill must write
+structured context."
+
+Fix adds a parallel `BOOKING_PREFILLS: Readonly<Record<intent, string>>`
+map alongside CATALOG in `src/lib/prefill.ts`, checked in both
+prefill paths after CATALOG. Each seed opens with a one-line context
+header ("Urgent — same-day site review" / "Accessibility issue on
+m3mm.net"), two labelled fields for the visitor to fill (deadline +
+what's urgent / page + what got in the way), and closes with SEPARATOR
+so `isPriorPrefill` detects it and a follow-up tier click can still
+overwrite. CATALOG shape untouched — priced-tier invariant preserved.
+
+**Files:** `src/lib/prefill.ts` (+22, -4), `tests/lib/prefill.test.ts`
+(+41). Commit **`ef75d6f`**.
+
+**Verified:** `npm test` **173/173 green** in 556 ms (+4 new: coverage
+for both book: intents, SEPARATOR shape → isPriorPrefill true, reserved
+`book:` namespace, and non-shadowing against CATALOG). `npm run build`
+clean, 4 pages in 1.47 s.
+
+**Next up:** Conversion audit is genuinely exhausted for the current
+surface — no known CTA / prefill / attribution gaps remain unpinned or
+unfixed. Rotate off. Local commit queue continues.
+
+---
+
 ## 2026-07-12 · CompanySite · CaseStudy outbound UTM shape pinned (tick 19-auto continued)
 
 **Card:** CompanySite conversion pass
