@@ -41,6 +41,17 @@ const CARRIERS: ReadonlyArray<{
     intent: 'book:accessibility-report',
     anchor: 'intake',
   },
+  {
+    // JS-off fallback: the mailto: hydration script may not run (CSP
+    // blocks inline, extension strips scripts, request cancelled mid-flight).
+    // Without the ?intent= param the visitor lands on /audit with the
+    // default book:free-review — an urgent-review click silently downgrades.
+    file: 'src/pages/thanks.astro',
+    cta: 'thanks-urgent-email',
+    destBase: '/audit',
+    intent: 'book:urgent-review',
+    anchor: 'intake',
+  },
 ];
 
 describe('cross-page CTA fallbacks preserve data-intent via ?intent= URL param', () => {

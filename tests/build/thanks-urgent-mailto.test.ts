@@ -46,14 +46,21 @@ describe('/thanks urgent-email CTA carries context + bypasses CF EAO', () => {
     expect(tag).toMatch(/data-em-body=/);
   });
 
-  it('noscript fallback href routes to /audit#intake — never dead-ends', () => {
+  it('noscript fallback href routes to /audit intake carrying the urgent intent — never dead-ends, never downgrades intent', () => {
     // Without JS the anchor still lands the visitor somewhere real. Also
     // enforced globally by tests/build/intake-cta.test.ts § "/thanks and
     // /accessibility route intake CTAs to /audit#intake" but we duplicate
     // the check here scoped to the urgent-email anchor for clarity.
+    //
+    // CONVERSION_STANDARDS § 4 — the CTA loop must close. If JS is off
+    // (mailto hydration hasn't run), the fallback URL used to be bare
+    // /audit#intake, which lands with the Intake component's default
+    // intent (book:free-review), silently downgrading a book:urgent-review
+    // click. Fix mirrors accessibility.astro's pattern: encode the intent
+    // in the URL so applyUrlPrefill picks it up on arrival.
     const anchor = src.match(/<a[^>]*data-cta="thanks-urgent-email"[^>]*>/);
     expect(anchor).not.toBeNull();
-    expect(anchor![0]).toMatch(/href="\/audit#intake"/);
+    expect(anchor![0]).toMatch(/href="\/audit\?intent=book:urgent-review#intake"/);
   });
 
   it('reserved data-intent namespace preserved (book:urgent-review)', () => {
