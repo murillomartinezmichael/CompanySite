@@ -10,6 +10,8 @@ export const LIMITS = {
   frustration: 4000,
   frustrationMin: 10,
   source: 64,
+  intent: 64,                  // matches functions/api/track.ts INTENT_MAX
+  utm: 240,                    // matches MAX_PARAM_LEN in src/lib/prefill.ts
 } as const;
 
 // Real-world-tolerant email pattern. Not RFC-strict; RFC-strict rejects
@@ -27,7 +29,19 @@ export type Lead = {
   frustration?: string;
   source?: string;
   company_website?: string; // honeypot
+  // Attribution — CONVERSION_STANDARDS.md § 4. All optional; blank is fine.
+  intent?: string;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  utm_content?: string;
+  utm_term?: string;
 };
+
+// Attribution field names kept in one place so the endpoint layer and the
+// clean/rehydrate step stay in sync.
+export const UTM_FIELDS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'] as const;
+export type UtmField = typeof UTM_FIELDS[number];
 
 export type FieldError = { field: string; code: string; message: string };
 
@@ -60,6 +74,12 @@ export function validateLead(input: Lead): { ok: true; lead: Required<Omit<Lead,
   const currentUrl = clean(input.currentUrl, LIMITS.currentUrl);
   const frustration = clean(input.frustration, LIMITS.frustration);
   const source = clean(input.source, LIMITS.source) || 'unknown';
+  const intent = clean(input.intent, LIMITS.intent);
+  const utm_source = clean(input.utm_source, LIMITS.utm);
+  const utm_medium = clean(input.utm_medium, LIMITS.utm);
+  const utm_campaign = clean(input.utm_campaign, LIMITS.utm);
+  const utm_content = clean(input.utm_content, LIMITS.utm);
+  const utm_term = clean(input.utm_term, LIMITS.utm);
 
   const errors: FieldError[] = [];
   if (!name) errors.push({ field: 'name', code: 'required', message: 'Name is required.' });
@@ -72,7 +92,13 @@ export function validateLead(input: Lead): { ok: true; lead: Required<Omit<Lead,
 
   if (errors.length) return { ok: false, errors };
 
-  return { ok: true, lead: { name, email, businessType, currentUrl, frustration, source } };
+  return {
+    ok: true,
+    lead: {
+      name, email, businessType, currentUrl, frustration, source,
+      intent, utm_source, utm_medium, utm_campaign, utm_content, utm_term,
+    },
+  };
 }
 
 /**

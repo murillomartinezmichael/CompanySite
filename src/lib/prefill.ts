@@ -96,6 +96,19 @@ export const PARAM_TO_FIELD: Readonly<Record<string, string>> = {
 // short — a name, an email, a URL, a two-word business type.
 export const MAX_PARAM_LEN = 240;
 
+// UTM keys captured from the bio-link URL into the intake form so
+// `/api/lead` sees the traffic source (CONVERSION_STANDARDS.md § 4).
+// Analytics beacons already carry these via track.ts; here we mirror
+// them into hidden form fields so the admin email + console log tell
+// Michael which TikTok video / IG post sourced the lead.
+export const UTM_FORM_KEYS: ReadonlyArray<string> = [
+  'utm_source',
+  'utm_medium',
+  'utm_campaign',
+  'utm_content',
+  'utm_term',
+];
+
 // Reserved intent namespaces per CONVERSION_STANDARDS.md § 2. A bio
 // link like `/audit?intent=product:aries` or `?intent=book:free-review`
 // must carry the raw intent through to attribution; TIER_ALIASES only
@@ -176,6 +189,15 @@ export function applyUrlPrefill(): void {
     const fieldName = PARAM_TO_FIELD[key];
     if (!fieldName) return;
     if (setField(form, fieldName, value)) filled.push(fieldName);
+  });
+
+  // UTM capture — overwrite the empty hidden inputs Intake.astro renders
+  // so the lead POST carries the traffic source. Overwrite is safe: the
+  // fields ship blank and are never visitor-typed.
+  UTM_FORM_KEYS.forEach((key) => {
+    const v = params[key];
+    if (!v) return;
+    if (setField(form, key, v, true)) filled.push(key);
   });
 
   if (filled.length) {

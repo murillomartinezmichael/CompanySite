@@ -13,7 +13,7 @@
 // Graceful degradation: with no RESEND_API_KEY the endpoint still 200s
 // and logs the lead. Documented, not faked (LAW 6).
 
-import { LIMITS, validateLead, esc, type Lead } from '../_lib/validate';
+import { LIMITS, validateLead, esc, UTM_FIELDS, type Lead } from '../_lib/validate';
 import { checkRate } from '../_lib/rate';
 import { sendToCockpit, leadIdempotencyKey } from '../_lib/cockpit-sink';
 
@@ -154,6 +154,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       frustration: params.get('frustration') || undefined,
       source: params.get('source') || undefined,
       company_website: params.get('company_website') || undefined,
+      intent: params.get('intent') || undefined,
+      utm_source: params.get('utm_source') || undefined,
+      utm_medium: params.get('utm_medium') || undefined,
+      utm_campaign: params.get('utm_campaign') || undefined,
+      utm_content: params.get('utm_content') || undefined,
+      utm_term: params.get('utm_term') || undefined,
     };
   }
 
@@ -171,6 +177,25 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   const to = env.LEAD_TO || 'murillomartinezmichael@gmail.com';
 
+  // Attribution block — CONVERSION_STANDARDS.md § 4. TikTok/IG bio-link
+  // UTMs + intent travel with the lead POST via Intake.astro hidden inputs
+  // populated by applyUrlPrefill(). Rendered only when any attribution
+  // field is set so a direct visit doesn't render an empty block.
+  const utmRows = UTM_FIELDS
+    .map((k) => [k, lead[k]] as const)
+    .filter(([, v]) => Boolean(v))
+    .map(([k, v]) => `<p style="margin:2px 0;"><b>${esc(k)}:</b> ${esc(v as string)}</p>`)
+    .join('');
+  const attributionHtml = (lead.intent || utmRows)
+    ? `
+    <div style="margin:16px 0;padding:10px 14px;background:#f4f4f0;border-left:3px solid #9AA;font-size:13px;">
+      <p style="margin:0 0 6px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#888;">Attribution</p>
+      ${lead.intent ? `<p style="margin:2px 0;"><b>Intent:</b> ${esc(lead.intent)}</p>` : ''}
+      ${utmRows}
+    </div>
+  `
+    : '';
+
   const adminHtml = `
     <h2 style="font-family:Georgia,serif;">New M³ intake — ${esc(lead.source)}</h2>
     <p><b>Name:</b> ${esc(lead.name)}</p>
@@ -179,6 +204,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     <p><b>Current URL:</b> ${lead.currentUrl ? `<a href="${esc(lead.currentUrl)}">${esc(lead.currentUrl)}</a>` : '&mdash;'}</p>
     <p><b>Frustration:</b></p>
     <blockquote style="border-left:3px solid #FF3B5C;margin:0;padding:8px 14px;color:#333;">${esc(lead.frustration)}</blockquote>
+    ${attributionHtml}
     <p style="color:#888;font-size:12px;">IP: ${esc(ip)} &middot; Source: ${esc(lead.source)}</p>
   `;
 
@@ -226,6 +252,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     business: lead.businessType,
     hasUrl: Boolean(lead.currentUrl),
     frustrationLength: lead.frustration.length,
+    intent: lead.intent || undefined,
+    utm_source: lead.utm_source || undefined,
+    utm_medium: lead.utm_medium || undefined,
+    utm_campaign: lead.utm_campaign || undefined,
+    utm_content: lead.utm_content || undefined,
+    utm_term: lead.utm_term || undefined,
     resend: { admin: adminResult, reply: replyResult },
     cockpit: cockpitResult,
     cockpitId,

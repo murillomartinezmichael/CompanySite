@@ -90,6 +90,16 @@ const {
 
       <input type="hidden" name="source" value={source} />
       <input type="hidden" name="intent" value={defaultIntent} />
+      <!-- UTM capture — CONVERSION_STANDARDS.md § 4. Bio-link UTMs must
+           travel with the lead POST so the admin email/log show which
+           TikTok video sourced the lead. applyUrlPrefill() populates these
+           from window.location.search on load; unset params stay empty
+           and validate cleanly. -->
+      <input type="hidden" name="utm_source" value="" />
+      <input type="hidden" name="utm_medium" value="" />
+      <input type="hidden" name="utm_campaign" value="" />
+      <input type="hidden" name="utm_content" value="" />
+      <input type="hidden" name="utm_term" value="" />
 
       <div class="grid gap-6 sm:grid-cols-2">
         <label class="flex flex-col gap-2">
