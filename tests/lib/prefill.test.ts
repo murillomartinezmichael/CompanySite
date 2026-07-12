@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   CATALOG,
+  BOOKING_PREFILLS,
   buildBrief,
   isPriorPrefill,
   TIER_ALIASES,
@@ -35,6 +36,46 @@ describe('CATALOG', () => {
     expect(CATALOG['tier:website:site-that-books']).toBeUndefined();
     expect(CATALOG['tier:automation:hours-saved']).toBeUndefined();
     expect(CATALOG['tier:widget:ai-assistant']).toBeUndefined();
+  });
+});
+
+describe('BOOKING_PREFILLS (free `book:*` textarea seeds)', () => {
+  // Cross-page CTAs on /thanks (urgent-email) and /accessibility
+  // (contact) thread ?intent=book:urgent-review and
+  // ?intent=book:accessibility-report through the URL as a JS-off
+  // fallback. On landing at /audit#intake, applyUrlPrefill must seed
+  // the textarea with structured context — otherwise the visitor
+  // arrives at an empty form and has to reconstruct what they clicked
+  // (CONVERSION_STANDARDS.md § 3).
+  it('covers both book: intents that cross-page CTAs currently thread', () => {
+    expect(BOOKING_PREFILLS['book:urgent-review']).toBeDefined();
+    expect(BOOKING_PREFILLS['book:accessibility-report']).toBeDefined();
+  });
+
+  it('every seed ends with the SEPARATOR so isPriorPrefill flags it', () => {
+    // Overwrite protection: wirePrefill's click handler only replaces a
+    // prior prefill, never user-typed content. If a seed doesn't include
+    // SEPARATOR, a follow-up tier click silently drops it.
+    for (const seed of Object.values(BOOKING_PREFILLS)) {
+      expect(isPriorPrefill(seed)).toBe(true);
+      expect(seed.trim().length).toBeGreaterThan(0);
+    }
+  });
+
+  it('every key is a reserved book: intent (bio-link contract)', () => {
+    for (const key of Object.keys(BOOKING_PREFILLS)) {
+      expect(key.startsWith('book:')).toBe(true);
+      expect(isReservedIntent(key)).toBe(true);
+    }
+  });
+
+  it('does not shadow a priced tier CATALOG entry', () => {
+    // If both maps carry the same intent, applyUrlPrefill would use
+    // CATALOG (checked first) and BOOKING_PREFILLS becomes dead code —
+    // catches an accidental duplication before it hides a real bug.
+    for (const key of Object.keys(BOOKING_PREFILLS)) {
+      expect(CATALOG[key]).toBeUndefined();
+    }
   });
 });
 

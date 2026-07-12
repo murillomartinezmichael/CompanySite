@@ -59,6 +59,22 @@ export function isPriorPrefill(text: string): boolean {
   return text.includes(SEPARATOR);
 }
 
+// Non-priced textarea seeds for `book:*` intents that land at
+// /audit#intake via cross-page fallbacks (thanks-urgent-email JS-off,
+// accessibility-contact JS-off, or a hostile CSP that blocked the
+// mailto hydration script). CATALOG covers priced tiers only — its
+// entries carry a dollar figure by contract, which doesn't fit a free
+// booking action. Without a seed here, the visitor arrives at an empty
+// textarea and has to recall what they clicked. CONVERSION_STANDARDS.md
+// § 3: "The prefill must write structured context" — this closes that
+// gap for the two book: intents cross-page CTAs currently thread.
+export const BOOKING_PREFILLS: Readonly<Record<string, string>> = {
+  'book:urgent-review':
+    `Urgent — same-day site review\nDeadline / event date: \nWhat's urgent about it: ${SEPARATOR}`,
+  'book:accessibility-report':
+    `Accessibility issue on m3mm.net\nPage where it happened: \nWhat got in your way: ${SEPARATOR}`,
+};
+
 // Short-name → full intent key map. Lets Michael write TikTok/IG bio
 // links like `?tier=starter` or `?tier=business` instead of the wire
 // intent value. Missing keys silently no-op — the URL is user-facing.
@@ -173,10 +189,11 @@ export function applyUrlPrefill(): void {
     if (intent) {
       if (setField(form, 'intent', intent, true)) filled.push('intent');
       const entry = CATALOG[intent];
-      if (entry) {
+      const bookingSeed = BOOKING_PREFILLS[intent];
+      if (entry || bookingSeed) {
         const ta = form.querySelector<HTMLTextAreaElement>('textarea[name="frustration"]');
         if (ta && !ta.value.trim()) {
-          ta.value = buildBrief(entry);
+          ta.value = entry ? buildBrief(entry) : bookingSeed;
           ta.dispatchEvent(new Event('input', { bubbles: true }));
           filled.push('frustration');
         }
@@ -230,13 +247,14 @@ export function wirePrefill(): void {
       if (intentField) intentField.value = intent;
 
       const entry = CATALOG[intent];
-      if (!entry) return;
+      const bookingSeed = BOOKING_PREFILLS[intent];
+      if (!entry && !bookingSeed) return;
       const ta = document.querySelector<HTMLTextAreaElement>(
         'form#intake-form textarea[name="frustration"]'
       );
       if (!ta) return;
       if (ta.value.trim() && !isPriorPrefill(ta.value)) return;
-      ta.value = buildBrief(entry);
+      ta.value = entry ? buildBrief(entry) : bookingSeed;
       ta.dispatchEvent(new Event('input', { bubbles: true }));
     },
     { passive: true }
