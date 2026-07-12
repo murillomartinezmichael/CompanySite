@@ -7,6 +7,51 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-12 · CompanySite · /thanks urgent-email JS-off intent preservation (tick 19-auto continued)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** Full CTA re-walk against `docs/CONVERSION_STANDARDS.md`
+§§ 1–4 across all 4 pages (home / audit / thanks / accessibility) and every
+component (Hero, Header, Footer, Services × 4 + downshift, CaseStudy × 2,
+Intake, sticky-mobile, thanks × 3, accessibility contact). Prior sweeps
+(ticks 17–26) closed nearly every gap; this pass found exactly one
+remaining hole. `/thanks` urgent-email fell out of the intent-preserving
+fallback pattern that `/thanks → /#proof` (product:case-studies) and
+`/accessibility → /audit#intake` (book:accessibility-report) already
+followed: its noscript fallback URL was bare `/audit#intake`, so when
+the mailto: hydration script hadn't run (CSP block, extension strip,
+request cancelled) an urgent-review click landed on /audit with the
+Intake component's default `book:free-review` intent — a silent
+attribution downgrade for the highest-intent cohort on the page.
+
+Fix mirrors accessibility-contact's shape: `href="/audit?intent=book:urgent-review#intake"`
+so `applyUrlPrefill()` reads the intent on load and stamps it into the
+hidden intent input before submit (already accepts the reserved `book:`
+namespace since tick 23). Added `thanks-urgent-email` as the third
+carrier in `tests/build/intent-preserving-fallback.test.ts`'s CARRIERS
+array — regression is now pinned by the same 4-assertion sweep that
+covers the other two carriers (anchor present, URL param shape, source-
+of-truth match between `data-intent` and `?intent=`, reserved namespace).
+Updated `thanks-urgent-mailto.test.ts` fallback-href assertion to pin
+the new URL literal.
+
+**Files:** `src/pages/thanks.astro` (+1 / −1) · `tests/build/intent-preserving-fallback.test.ts` (+11 / −0) · `tests/build/thanks-urgent-mailto.test.ts` (+11 / −4). Commit **`0b95494`**.
+
+**Verified:** `npm test` **162/162 green** in 553 ms (+4 new carrier
+tests, all passing); `npm run build` clean, 4 pages in 1.56 s.
+`dist/thanks/index.html` renders the intent-carrying href verbatim in
+the anchor's `href` attribute — grep confirms one exact match.
+
+**Next up:** No open CTA gaps across the 4-page surface. The three
+cross-page intent carriers (thanks-see-work, accessibility-contact,
+thanks-urgent-email) all share one pinned pattern; a fourth carrier
+added without ?intent= now fails CI before it ships. Rotate off CTA
+audits. Push queue continues to grow (local-only per tick constraint).
+
+---
+
 ## 2026-07-12 · CompanySite · cross-page CTA intent preservation (tick 19-auto)
 
 **Card:** CompanySite conversion pass
