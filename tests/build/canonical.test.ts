@@ -12,10 +12,20 @@ const PROD_ORIGIN = 'https://m3mm.net';
 // stamps the homepage URL onto every non-root page and duplicates the
 // canonical across the site. Pin the wiring at both the Layout-source
 // level and the per-page-invocation level.
-const PAGE_EXPECTATIONS: ReadonlyArray<{ file: string; path: string }> = [
+//
+// `noindex` marks pages whose <Layout> mounts with `noindex={true}` —
+// they must ALSO be absent from sitemap.xml. A conversion dead-end like
+// /thanks that leaks into sitemap.xml eats crawl budget on a page Google
+// is asked not to index; a public page missing from the sitemap loses
+// discovery. Pin both directions from one source of truth.
+const PAGE_EXPECTATIONS: ReadonlyArray<{
+  file: string;
+  path: string;
+  noindex?: boolean;
+}> = [
   { file: 'src/pages/index.astro', path: '/' },
   { file: 'src/pages/audit.astro', path: '/audit' },
-  { file: 'src/pages/thanks.astro', path: '/thanks' },
+  { file: 'src/pages/thanks.astro', path: '/thanks', noindex: true },
   { file: 'src/pages/accessibility.astro', path: '/accessibility' },
 ];
 
@@ -101,6 +111,42 @@ describe('canonical URL wiring', () => {
       expect(src, `${file} must mount <Layout path="${path}">`).toMatch(
         new RegExp(`<Layout\\b[^>]*\\bpath="${path}"`),
       );
+    }
+  });
+
+  it('every noindex page declares noindex={true} on <Layout>', () => {
+    // Layout defaults `noindex=false` (index,follow). If a page marked
+    // noindex in PAGE_EXPECTATIONS drops the `noindex={true}` prop,
+    // the meta robots tag flips silently and the page starts competing
+    // with the real conversion surface (/audit) in TikTok-driven SERPs.
+    for (const { file, noindex } of PAGE_EXPECTATIONS) {
+      if (!noindex) continue;
+      const src = read(file);
+      expect(src, `${file} must mount <Layout noindex={true}>`).toMatch(
+        /<Layout\b[^>]*\bnoindex=\{true\}/,
+      );
+    }
+  });
+
+  it('sitemap.xml membership matches per-page noindex', () => {
+    // Google's guidance: never list a noindexed URL in sitemap.xml.
+    // Inverse: any indexable public page missing from sitemap loses
+    // discovery. Derive both from PAGE_EXPECTATIONS so a new page can't
+    // land in one without the other.
+    const sitemap = read('public/sitemap.xml');
+    const locs = new Set(
+      [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].trim()),
+    );
+    for (const { path, noindex } of PAGE_EXPECTATIONS) {
+      // Sitemap always lists the fully-qualified URL. `/` becomes
+      // `${PROD_ORIGIN}/`; anything else drops the leading slash after
+      // the origin.
+      const expected = path === '/' ? `${PROD_ORIGIN}/` : `${PROD_ORIGIN}${path}`;
+      if (noindex) {
+        expect(locs, `${expected} is noindex — must NOT appear in sitemap.xml`).not.toContain(expected);
+      } else {
+        expect(locs, `${expected} is indexable — must appear in sitemap.xml`).toContain(expected);
+      }
     }
   });
 });
