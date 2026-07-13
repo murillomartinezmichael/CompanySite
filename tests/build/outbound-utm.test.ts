@@ -38,6 +38,13 @@ const SOURCES: Array<{ file: string; medium: string; content: string }> = [
   { file: 'src/components/Services.astro', medium: 'services', content: 'services-under-500' },
   { file: 'src/pages/audit.astro',         medium: 'audit',    content: 'audit-under-500' },
   { file: 'src/pages/thanks.astro',        medium: 'thanks',   content: 'thanks-storefront' },
+  // Auto-reply email sent from /api/lead — highest-intent SiteGuide
+  // outbound (visitor already submitted an intake and is browsing while
+  // waiting for the 24h reply). Historic gap: prior sweeps only walked
+  // `src/`, so this untagged link (until 2026-07-12) slipped both the
+  // visual audit and CI. `utm_medium=email` since the placement lives in
+  // an email body rather than a rendered HTML surface.
+  { file: 'functions/api/lead.ts',         medium: 'email',    content: 'intake-reply' },
 ];
 
 describe('outbound SiteGuide downshift links carry UTM attribution', () => {
@@ -74,18 +81,23 @@ describe('outbound SiteGuide downshift links carry UTM attribution', () => {
     expect(scanned, `untagged SiteGuide links found: ${scanned.join(', ')}`).toEqual([]);
   });
 
-  // Broadened invariant: the four SOURCES above are the currently-placed
-  // downshifts, but a new page (about, pricing, a landing test) that adds
-  // its own SiteGuide outbound link would slip past a hardcoded list.
-  // Walk every `.astro / .ts / .tsx / .html` under `src/` and pin the same
-  // UTM contract at the repo level, so an untagged link anywhere fails CI.
+  // Broadened invariant: the SOURCES above are the currently-placed
+  // downshifts, but a new page (about, pricing, a landing test) or a new
+  // server-side email template that adds its own SiteGuide outbound link
+  // would slip past a hardcoded list. Walk every relevant file under both
+  // `src/` and `functions/` and pin the same UTM contract at the repo
+  // level, so an untagged link anywhere fails CI.
   //
-  // Scope: only files that render/emit HTML at build time. Markdown case
-  // studies keep raw client `liveUrl` values (`ariesoutdoorliving.com`,
+  // Scope: files that render/emit HTML at build time OR emit HTML from a
+  // Pages Function (e.g. auto-reply email bodies). Markdown case studies
+  // keep raw client `liveUrl` values (`ariesoutdoorliving.com`,
   // `big7construction.com`) — `CaseStudy.astro` appends UTMs at render
   // time (asserted separately by `casestudy-outbound-utm.test.ts`).
-  it('every siteguide-production URL anywhere in src/ carries the downshift UTM contract', () => {
-    const files = walkSrc(root + 'src', ['.astro', '.ts', '.tsx', '.html']);
+  it('every siteguide-production URL anywhere in src/ + functions/ carries the downshift UTM contract', () => {
+    const files = [
+      ...walkSrc(root + 'src', ['.astro', '.ts', '.tsx', '.html']),
+      ...walkSrc(root + 'functions', ['.astro', '.ts', '.tsx', '.html']),
+    ];
     const rx = /https:\/\/siteguide-production\.up\.railway\.app\/[^"'\s)]*/g;
     const untagged: string[] = [];
     for (const abs of files) {

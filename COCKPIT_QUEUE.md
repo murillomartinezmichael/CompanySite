@@ -7,6 +7,57 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-12 · CompanySite · Auto-reply email SiteGuide downshift UTM (tick 20-auto)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** Full CTA audit against
+`docs/CONVERSION_STANDARDS.md` §§ 1–4 across the 4 rendered pages —
+every visible CTA has a real destination, a reserved-namespace
+`data-intent`, and closes the analytics loop (prior ticks). One real
+untagged surface remained: **`functions/api/lead.ts:232`** — the
+auto-reply email sent to every intake submitter linked to
+`siteguide-production.up.railway.app/demos` with no UTM parameters.
+Highest-intent SiteGuide outbound in the funnel (the visitor already
+converted on the intake and is browsing while waiting for the 24h
+reply), and it slipped both the visual audit and CI: the
+`outbound-utm.test.ts` invariant only walked `src/`, so a server-side
+email HTML template with the same URL pattern was invisible to the pin.
+
+**Fix (one CTA):** Added
+`?utm_source=m3mm&utm_medium=email&utm_campaign=downshift&utm_content=intake-reply`
+to the SiteGuide anchor in the reply email body. `utm_medium=email`
+mirrors the delivery surface (email vs. web downshifts that use
+`footer`/`services`/`audit`/`thanks`); `utm_content=intake-reply` is
+unique across the five downshift placements.
+
+**Pinned it.** Extended `outbound-utm.test.ts`:
+1. New SOURCES entry `functions/api/lead.ts → medium=email, content=intake-reply`
+   — makes the per-file assertion fail on any future edit that drops
+   or mistyped the UTM triplet on this specific link.
+2. Broadened the walk-based invariant to scan both `src/` AND
+   `functions/` (matching extensions: `.astro / .ts / .tsx / .html`).
+   A new Pages Function or email template that adds its own SiteGuide
+   downshift link without UTMs now fails CI before it ships.
+
+**Files touched:** `functions/api/lead.ts` (1 line) ·
+`tests/build/outbound-utm.test.ts` (+11/−4 — SOURCES entry + walk
+extension). No shared-doc edits; no push per tick constraint.
+
+**Verified:** `npm test` **185/185 green** in 568 ms (177 → 185, +8
+outbound-utm slots + higher baseline from prior ticks). `npm run build`
+clean, 4 pages in 1.69 s. Zero deps added.
+
+**Next up:** Push queue continues to grow — the earlier queue drain
+(from `c61aa82` sticky-CTA baseline) is still local. This tick adds
+one more commit on top. When the queue drains, SiteGuide's landing
+analytics should light up a fifth `utm_source=m3mm` variant:
+`utm_medium=email · utm_content=intake-reply` (auto-reply surface),
+sitting alongside the four web downshift mediums.
+
+---
+
 ## 2026-07-12 · CompanySite · Repo-wide SiteGuide UTM invariant pinned (tick 20-auto)
 
 **Card:** CompanySite conversion pass

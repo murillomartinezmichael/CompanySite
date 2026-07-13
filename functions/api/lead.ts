@@ -229,7 +229,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       </div>
 
       <p style="margin:18px 0 6px;font-size:13px;color:#555;">
-        Want to browse while you wait? <a href="https://siteguide-production.up.railway.app/demos" style="color:#FF3B5C;">See the 12 SiteGuide starter templates</a>.
+        Want to browse while you wait? <a href="https://siteguide-production.up.railway.app/demos?utm_source=m3mm&utm_medium=email&utm_campaign=downshift&utm_content=intake-reply" style="color:#FF3B5C;">See the 12 SiteGuide starter templates</a>.
       </p>
 
       <p style="margin:24px 0 0;">&mdash; Michael<br/><span style="color:#888;font-size:13px;">M³ &middot; Atlanta, GA &middot; m3mm.net</span></p>
