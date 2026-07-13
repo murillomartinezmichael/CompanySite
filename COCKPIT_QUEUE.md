@@ -7,6 +7,43 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-12 · CompanySite · Sitemap ↔ noindex invariant pinned (tick 19-auto continued)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** Continued canonical audit pass against
+`docs/CONVERSION_STANDARDS.md`. CTAs remain clean after 20+ prior
+conversion-pass commits — every promise-CTA on all 4 pages has real
+destination + reserved-namespace `data-intent` + prefill wiring +
+`cta_click` attribution. Fallback canonical audit turned up one real
+invariant gap: the `<Layout noindex={true}>` prop on `/thanks` and the
+sitemap.xml comment saying "/thanks intentionally omitted" were two
+independent facts. Nothing enforced they stayed in sync. If a future
+edit stripped `noindex={true}` off /thanks, it would silently start
+competing with `/audit` for TikTok-driven SERP traffic — a conversion
+dead-end outranking the actual conversion surface, no test failing.
+Inverse also unguarded: a new indexable page added without a sitemap
+entry would lose discovery silently.
+
+**Fix:** Extended `tests/build/canonical.test.ts` with two new
+assertions derived from a single source of truth (`PAGE_EXPECTATIONS`,
+now carrying an optional `noindex` flag): (1) every page marked
+`noindex` in the fixture must mount `<Layout noindex={true}>` in
+source, (2) sitemap.xml `<loc>` membership must match — noindex pages
+absent, indexable pages present, using the exact `PROD_ORIGIN` shape
+already pinned by the audit. Tests only — no runtime change.
+
+**Files:** `tests/build/canonical.test.ts`.
+
+**Verified:** `npm test` **181/181 green** (was 179; +2 new canonical
+assertions). Local only per tick constraint.
+
+**Next up:** Push the queued conversion-pass commits to origin so the
+hardened invariants gate the next canonical / sitemap edit.
+
+---
+
 ## 2026-07-12 · CompanySite · Sitemap + robots pinned in canonical audit (tick 19-auto continued)
 
 **Card:** CompanySite conversion pass
