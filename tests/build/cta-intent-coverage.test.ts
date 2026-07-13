@@ -55,6 +55,7 @@ type CtaTag = {
   file: string;
   cta: string;
   hasIntent: boolean;
+  hasSection: boolean;
   raw: string;
 };
 
@@ -73,6 +74,10 @@ function collectCtas(): CtaTag[] {
         cta: m[1],
         raw: m[0],
         hasIntent: /\bdata-intent="[^"]+"/.test(m[0]),
+        // Accept either the literal `data-section="…"` or Astro's
+        // expression form `data-section={source}` (Hero passes its
+        // placement in via a prop so a future page can override).
+        hasSection: /\bdata-section=("[^"]+"|\{[^}]+\})/.test(m[0]),
       });
     }
   }
@@ -128,6 +133,26 @@ describe('§ 2 + § 4 — every tracked CTA carries an intent or is nav-only', (
     expect(
       dead,
       `FORM_SUBMIT_CTAS contains names not present in source — remove them:\n  ${dead.join(', ')}`,
+    ).toEqual([]);
+  });
+
+  it('every data-cta also declares data-section (funnel placement bucket)', () => {
+    // wireCTAs() reads `el.dataset.section` into every cta_click beacon
+    // (see src/lib/track.ts). A CTA without data-section ships
+    // `section: undefined` — the click counts, but the funnel dashboard
+    // can't tell whether it fired from Hero, Services, Footer, or the
+    // sticky mobile bar. Same class of silent data loss the intent pin
+    // above closes; pin section too so a future CTA can't skip it.
+    // No allowlist — every currently-shipped CTA already carries
+    // data-section, so drift lands as a test failure instead of a
+    // sneaky "unknown-bucket" spike in Cockpit.
+    const offenders: string[] = [];
+    for (const t of ctas) {
+      if (!t.hasSection) offenders.push(`${t.file}: data-cta="${t.cta}" has no data-section`);
+    }
+    expect(
+      offenders,
+      `New tracked CTAs missing data-section — add data-section="<placement>" so cta_click carries a real funnel bucket:\n  ${offenders.join('\n  ')}`,
     ).toEqual([]);
   });
 
