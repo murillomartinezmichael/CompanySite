@@ -7,6 +7,40 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-12 · CompanySite · Repo-wide SiteGuide UTM invariant pinned (tick 20-auto)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** Conversion audit against
+`docs/CONVERSION_STANDARDS.md` § outbound attribution — every CTA on
+all 4 pages is compliant (real destination + reserved-namespace
+`data-intent` + prefill hook + `cta_click`/utm attribution). Audit
+surfaced one real gap: `tests/build/outbound-utm.test.ts` hardcoded
+4 known SiteGuide downshift placements (Footer / Services / audit /
+thanks). A future page (about, pricing, a landing test) that adds its
+own `siteguide-production.up.railway.app` link but forgets the UTM
+triplet would slip past the existing per-file assertion silently.
+
+**Fix:** Added an eighth invariant to `outbound-utm.test.ts` that
+walks every `.astro / .ts / .tsx / .html` under `src/` (helper
+`walkSrc()`), regex-extracts every `siteguide-production.up.railway.app`
+URL, and asserts each carries `utm_source=m3mm` + `utm_campaign=downshift`
++ `utm_content=<slug>`. Missing keys are reported per-file so a fix is
+a one-line diff. Markdown case-study `liveUrl` values are out of scope
+(rendered UTMs are added by `CaseStudy.astro` at build time and pinned
+separately by `casestudy-outbound-utm.test.ts`).
+
+**Files:** `tests/build/outbound-utm.test.ts` (+27/−1).
+
+**Verified:** `npm test` **184/184 green** in 575 ms (was 183; +1 new
+repo-wide invariant). Local only per tick constraint.
+
+**Next up:** Push the queued conversion-pass commits so the invariant
+gates the next SiteGuide outbound link edit.
+
+---
+
 ## 2026-07-12 · CompanySite · Canonical single-emitter + JSON-LD origin pinned (tick 19-auto continued)
 
 **Card:** CompanySite conversion pass

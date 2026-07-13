@@ -1,9 +1,23 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const read = (p: string) => readFileSync(root + p, 'utf8');
+
+function walkSrc(dir: string, exts: ReadonlyArray<string>): string[] {
+  const out: string[] = [];
+  for (const name of readdirSync(dir)) {
+    const abs = join(dir, name);
+    if (statSync(abs).isDirectory()) {
+      out.push(...walkSrc(abs, exts));
+    } else if (exts.some((e) => name.endsWith(e))) {
+      out.push(abs);
+    }
+  }
+  return out;
+}
 
 // CONVERSION_STANDARDS.md § outbound attribution — every outbound link to
 // SiteGuide must carry the UTM triplet so downshifted traffic is
@@ -58,5 +72,33 @@ describe('outbound SiteGuide downshift links carry UTM attribution', () => {
       }
     }
     expect(scanned, `untagged SiteGuide links found: ${scanned.join(', ')}`).toEqual([]);
+  });
+
+  // Broadened invariant: the four SOURCES above are the currently-placed
+  // downshifts, but a new page (about, pricing, a landing test) that adds
+  // its own SiteGuide outbound link would slip past a hardcoded list.
+  // Walk every `.astro / .ts / .tsx / .html` under `src/` and pin the same
+  // UTM contract at the repo level, so an untagged link anywhere fails CI.
+  //
+  // Scope: only files that render/emit HTML at build time. Markdown case
+  // studies keep raw client `liveUrl` values (`ariesoutdoorliving.com`,
+  // `big7construction.com`) — `CaseStudy.astro` appends UTMs at render
+  // time (asserted separately by `casestudy-outbound-utm.test.ts`).
+  it('every siteguide-production URL anywhere in src/ carries the downshift UTM contract', () => {
+    const files = walkSrc(root + 'src', ['.astro', '.ts', '.tsx', '.html']);
+    const rx = /https:\/\/siteguide-production\.up\.railway\.app\/[^"'\s)]*/g;
+    const untagged: string[] = [];
+    for (const abs of files) {
+      const rel = relative(root, abs).replace(/\\/g, '/');
+      const src = readFileSync(abs, 'utf8');
+      for (const url of src.match(rx) || []) {
+        const missing: string[] = [];
+        if (!url.includes('utm_source=m3mm')) missing.push('utm_source=m3mm');
+        if (!url.includes('utm_campaign=downshift')) missing.push('utm_campaign=downshift');
+        if (!/[?&]utm_content=[^&]+/.test(url)) missing.push('utm_content=<slug>');
+        if (missing.length) untagged.push(`${rel}: ${url} missing ${missing.join(', ')}`);
+      }
+    }
+    expect(untagged, `SiteGuide outbound links missing UTM attribution:\n  ${untagged.join('\n  ')}`).toEqual([]);
   });
 });
