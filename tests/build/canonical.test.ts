@@ -1,9 +1,23 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const read = (p: string) => readFileSync(root + p, 'utf8');
+
+function walkAstro(dir: string): string[] {
+  const out: string[] = [];
+  for (const name of readdirSync(dir)) {
+    const abs = join(dir, name);
+    if (statSync(abs).isDirectory()) {
+      out.push(...walkAstro(abs));
+    } else if (name.endsWith('.astro')) {
+      out.push(abs);
+    }
+  }
+  return out;
+}
 
 const PROD_ORIGIN = 'https://m3mm.net';
 
@@ -125,6 +139,45 @@ describe('canonical URL wiring', () => {
       expect(src, `${file} must mount <Layout noindex={true}>`).toMatch(
         /<Layout\b[^>]*\bnoindex=\{true\}/,
       );
+    }
+  });
+
+  it('Layout.astro is the sole emitter of <link rel="canonical">', () => {
+    // Two competing <link rel="canonical"> tags on a page make Google pick
+    // one, silently. The audit above pins canonical wiring inside Layout —
+    // but if a page or component ever renders its own canonical link, the
+    // per-page pin still passes while the shipped HTML carries two. Walk
+    // every .astro file under src/ and pin the emitter to Layout alone.
+    const files = walkAstro(root + 'src');
+    const emitters: string[] = [];
+    for (const file of files) {
+      const src = readFileSync(file, 'utf8');
+      if (/<link\s+[^>]*rel=["']canonical["']/i.test(src)) {
+        emitters.push(relative(root, file).replace(/\\/g, '/'));
+      }
+    }
+    expect(emitters).toEqual(['src/layouts/Layout.astro']);
+  });
+
+  it('Layout.astro absolute URLs all pin to the production origin', () => {
+    // JSON-LD schema.org emits `url` fields (organization, contactPoint,
+    // OfferCatalog items) and the breadcrumb builder resolves relative
+    // URLs against a hardcoded base. These `url`s compete with
+    // <link rel="canonical"> as an origin signal to Google — if schema
+    // says https://m3mm.net/audit and canonical resolves to a preview
+    // origin, Google gets to pick. Pin every non-namespace absolute URL
+    // in the Layout source to PROD_ORIGIN so an origin rename can't drift
+    // the schema payload silently.
+    const layout = read('src/layouts/Layout.astro');
+    const urls = [...layout.matchAll(/https?:\/\/[^\s'"<>)]+/g)].map((m) => m[0]);
+    // Semantic namespace identifiers (not content URLs) — allowlisted.
+    const isNamespace = (u: string) =>
+      u.startsWith('https://schema.org') || u.startsWith('http://www.w3.org');
+    const content = urls.filter((u) => !isNamespace(u));
+    expect(content.length, 'Layout must contain at least one content URL').toBeGreaterThan(0);
+    const originRe = new RegExp(`^${PROD_ORIGIN.replace(/[.]/g, '\\.')}(/|#|$)`);
+    for (const url of content) {
+      expect(url, `Layout absolute URL must be on ${PROD_ORIGIN}: ${url}`).toMatch(originRe);
     }
   });
 

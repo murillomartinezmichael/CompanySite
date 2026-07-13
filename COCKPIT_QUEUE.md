@@ -7,6 +7,46 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-12 · CompanySite · Canonical single-emitter + JSON-LD origin pinned (tick 19-auto continued)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** Continued canonical audit against
+`docs/CONVERSION_STANDARDS.md`. CTAs remain clean after 20+ prior
+conversion-pass commits — every promise-CTA on all 4 pages has real
+destination + reserved-namespace `data-intent` + prefill + `cta_click`
+attribution. Fallback canonical audit surfaced two real gaps the prior
+audit couldn't catch. First: `<link rel="canonical">` is emitted only
+by `Layout.astro` today — but the existing per-page tests would still
+pass if a component or a page ever injected a second competing
+canonical tag, and Google would silently pick one. Second: `Layout.astro`
+hardcodes 8 absolute `https://m3mm.net` URLs across JSON-LD schema.org
+(organization `url`, contactPoint `url`, 4 OfferCatalog offer `url`s)
+plus the breadcrumb-builder base. Those `url` fields compete with
+`<link rel="canonical">` as an origin signal to Google — if schema
+ever drifted off the production origin while canonical stayed pinned,
+Google would resolve the conflict on its own heuristics.
+
+**Fix:** Extended `tests/build/canonical.test.ts` with two new
+invariants: (1) walk every `.astro` under `src/` and pin
+`Layout.astro` as the sole emitter of `<link rel="canonical">`
+(single-source-of-truth), (2) sweep every absolute `http(s)://` URL
+in `Layout.astro`, allowlist semantic namespace URIs (`schema.org`,
+`w3.org`), and require every remaining content URL to match the
+`PROD_ORIGIN` shape (`https://m3mm.net{/,#,end}`). Tests only — no
+runtime shape changed.
+
+**Files:** `tests/build/canonical.test.ts`.
+
+**Verified:** `npm test` **183/183 green** (was 181; +2 new canonical
+assertions). Local only per tick constraint.
+
+**Next up:** Push the queued conversion-pass commits to origin so the
+hardened invariants gate the next canonical / schema / sitemap edit.
+
+---
+
 ## 2026-07-12 · CompanySite · Sitemap ↔ noindex invariant pinned (tick 19-auto continued)
 
 **Card:** CompanySite conversion pass
