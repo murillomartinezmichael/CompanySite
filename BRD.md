@@ -7,6 +7,15 @@
 
 ---
 
+## 0. Positioning Update (2026-07-09)
+
+This supersedes the older fixed-price Offload Labs notes below where they conflict. CompanySite now sells the M3 custom business-site lane:
+
+- Audience: small businesses through corporate-style local/regional companies that want a credible custom website and lead funnel, not a DIY template.
+- Package ceiling: $500 basic starter/refresh, $1k-$2k bounded business-site packages.
+- Quote-only work: anything over $2k, multi-page/heavy-content builds, AriesOutdoorLiving-grade redesigns, Big7Construction-style company websites, integrations, portals, payments, and advanced automation.
+- Relationship to SiteGuide: SiteGuide is the lower-friction starter-company offer. CompanySite routes DIY/low-budget buyers there instead of trying to sell them a custom build.
+
 ## 1. Problem
 
 Offload Labs is Michael's freelance consulting business — automations, bots, and AI assistants for small business. Without a polished public site, prospects can't quickly answer "are these people real, what do they sell, how much, how do I buy." Every sales conversation starts with the same explanation, which is slow and inconsistent.
@@ -79,3 +88,20 @@ Offload Labs is Michael's freelance consulting business — automations, bots, a
 - PaymentBackend live + Stripe configured for 3 SKUs
 - Domain (custom)
 - Hosting (Railway today; consider Cloudflare Pages for $0)
+
+
+<!-- AI-HUB-SYNC:START -->
+## AI Product Research Update - 2026-07-09
+
+Source of product truth: ..\AI_HUB.md.
+
+**Lane:** M3 custom business website sales floor
+
+**Design decision:** Correct direction. Keep the cyberpunk M3 identity, but make the buying ladder easier to scan than the visual effects. Mobile-first TikTok traffic means the first screen needs offer, proof, CTA, and no pricing confusion.
+
+**Product direction:** Add case-study proof for Aries/Big7-style work, keep SiteGuide as the starter cross-sell, measure CTAs, and protect the $500/$1k-$2k/quote-only ladder from drifting back into a generic automation menu.
+
+**Scope boundary:** Keep separate from SiteGuide; cross-sell only.
+
+**Acceptance evidence:** npm test; npm run build; mobile visual smoke; lead and analytics endpoints.
+<!-- AI-HUB-SYNC:END -->

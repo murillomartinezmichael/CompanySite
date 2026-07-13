@@ -1,19 +1,10 @@
-# CLAUDE.md
+# AGENTS.md
 
 ## What This Is
 
 M³ marketing site at **m3mm.net**. Only job: convert TikTok / Instagram traffic
 into DMs and quote requests. Visitors arrive already half-sold from a video —
 this site closes the loop.
-
-## Product Positioning (2026-07-09)
-
-CompanySite is the M3 custom business-site sales floor, not the starter-template store.
-
-- Audience: small businesses through corporate-style local/regional companies that need a custom site, proof, and a lead path.
-- Offer ladder: $500 basic starter/refresh; $1,000-$2,000 bounded business-site package; quote-only above $2,000.
-- Premium quote-only examples: AriesOutdoorLiving-grade rebuilds, Big7Construction-style company sites, heavy service lines, portals, payments, integrations, or automation.
-- SiteGuide owns the starter-company DIY lane: templates, widgets, and bundles. Route low-budget/template buyers there instead of blurring the M3 custom offer.
 
 ## Stack
 
@@ -79,15 +70,14 @@ functions dir `functions` (auto). Env vars in dashboard: `RESEND_API_KEY`
 
 ## End-of-chunk: log to Cockpit
 
-Every shipped chunk (feature end-to-end, doc rolled out, deploy that survives smoke test) gets a Work Log entry in `../COCKPIT.html` — press `l`. No entry = the chunk didn't happen. Full protocol in `../CLAUDE.md § DEFINITION OF DONE — Cockpit Work Log`.
+Every shipped chunk (feature end-to-end, doc rolled out, deploy that survives smoke test) gets a Work Log entry in `../COCKPIT.html` — press `l`. No entry = the chunk didn't happen. Full protocol in `../AGENTS.md § DEFINITION OF DONE — Cockpit Work Log`.
 
 
 <!-- AI-HUB-SYNC:START -->
 ## Shared AI Hub
 
-Read ../AI_HUB.md after root ../CLAUDE.md and before changing this project. Product lane, UI verdict, and combine/separate decisions are centralized there so Claude and Codex stay synced.
+This project inherits ../AGENTS.md and the shared product brain at ../AI_HUB.md. Read local CLAUDE.md, TODO.md, and BRD.md before edits.
 
 Current lane: M3 custom business website sales floor
-
 Current next action: Verify the Services ladder UI at desktop and 375px, run npm test and npm run build, then deploy only if green.
 <!-- AI-HUB-SYNC:END -->

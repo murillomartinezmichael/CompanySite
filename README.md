@@ -7,6 +7,18 @@
 M³'s marketing site. Turns TikTok/Instagram traffic into DMs and quote requests.
 Visitors arrive already half-sold from a video; this site's only job is to close the loop.
 
+## Offer Ladder
+
+CompanySite is the M3 custom-work lane. The public site should make the ladder obvious:
+
+| Lane | Price posture | Best fit |
+|---|---|---|
+| Basic starter / refresh | from $500 | simple credibility site, one-page refresh, quick lead capture |
+| Business site package | $1,000-$2,000 | small to corporate-style local/regional company site with proof, intake, services, and deployment |
+| Premium custom | quote-only over $2,000 | AriesOutdoorLiving / Big7Construction caliber redesigns, larger content, integrations, portals, payments, automation |
+
+SiteGuide handles the DIY starter-company lane: templates, widgets, and bundles. CompanySite points low-budget/template buyers there and keeps this site focused on custom outcomes.
+
 ## Stack
 
 - **Astro 4** — static output, zero runtime JS by default
