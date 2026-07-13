@@ -7,6 +7,48 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-12 · CompanySite · CTA-intent coverage invariant (tick 20-auto continued)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** Fresh walk of every CTA against
+`docs/CONVERSION_STANDARDS.md` §§ 1–4 across the 4 rendered pages,
+looking for dead-end links, missing prefill context, or unattributed
+outbound links. **Found zero real gaps** — 185-test baseline was already
+covering canonical, UTM triplet, cross-page intent-preserving
+fallbacks, and the intake-submit intent fallback comprehensively.
+Rather than manufacture busywork, pinned the one invariant not yet
+covered: every tracked CTA must carry `data-intent` (or be on a small
+explicit nav-only / form-submit allowlist).
+
+**Fix (zero CTAs — added a fence instead):** New
+`tests/build/cta-intent-coverage.test.ts` walks every `.astro` file
+under `src/`, collects every `<... data-cta="...">` element, and
+asserts each one either declares `data-intent` inline or appears on
+one of two named allowlists — `NAV_ONLY_CTAS` (logo, nav-proof,
+nav-services, footer-a11y) or `FORM_SUBMIT_CTAS` (intake-submit,
+intent-from-hidden-form-input, already pinned by
+`intake-submit-intent-fallback.test.ts`). Also asserts every
+allowlist entry actually appears in shipped source (no dead
+allowlist), and pins the CTA-name-uniqueness contract (a duplicated
+`data-cta` name across files collapses two funnel buckets into one).
+
+**Why this closes a real risk:** § 2 / § 4 say the `cta_click` beacon
+must carry `intent`. Nothing in the pre-existing suite pinned that at
+the repo level — every existing test was targeted at one specific CTA
+(hero, downshift, thanks-see-work, etc.). A future edit adding a
+brand-new `data-cta="whatever"` with no intent would ship a hollow
+funnel bucket without any test flagging it. This test is the fence.
+
+**Files touched:**
+- `tests/build/cta-intent-coverage.test.ts` (new, +5 tests → 190 total)
+
+**Next up:** SiteGuide entitlements.py (session-guard's original goal) —
+that lives in a sibling repo, out of scope for the CompanySite tick.
+
+---
+
 ## 2026-07-12 · CompanySite · Auto-reply email SiteGuide downshift UTM (tick 20-auto)
 
 **Card:** CompanySite conversion pass
