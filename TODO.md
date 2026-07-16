@@ -6,14 +6,14 @@
 
 ## NEXT ACTION
 
-**`git push origin main`** — **20** queued conversion-pass commits (from `c61aa82` sticky-CTA baseline through `d2a8a4d` intake-CTA dead-end fix) are verified push-ready. `npm test` **109/109 green** as of tick 20 (+4 new intake-CTA build tests). After push, re-run PSI mobile against live m3mm.net to close tick-16e's LCP claim honestly, and smoke `/audit?tier=business&biz=deck+builder&email=hi@x.com&name=David` to confirm the URL-param prefill fires end-to-end on production. Then smoke `/thanks` + `/accessibility` to confirm the "Free review →" links in Header/Footer navigate to `/audit#intake` (not silently scroll to top). Then check SiteGuide analytics for the four expected `utm_source=m3mm` variants (`utm_medium` = `audit`/`footer`/`services`/`thanks`).
+**Rung-1 gates are CLOSED (2026-07-16, Fable).** The push had already happened (origin/main == main — the old "20 queued commits" note here was stale). Verified live on **m3mm.net** at 375px via Playwright: 15/15 — $500/$1k–$2k/quote-only ladder renders, SiteGuide cross-sell present (home + audit "BUDGET UNDER $500?"), `/audit?tier=…&name=David` URL-param prefill fires, `/thanks` + `/accessibility` "Free review →" links cross-navigate to `/audit#intake` (no dead anchors), skip link + `<main>` + `lang` + labeled inputs + single h1 + keyboard focus all pass. `npm test` **195/195** · `npm run build` clean (4 pages). Web vitals live: **CLS 0** on `/` and `/audit`; LCP 248/264 ms unthrottled lab proxy (PSI anonymous quota exhausted today — re-run PSI mobile when quota resets if you want the official score).
 
-Then continue the offer-ladder repositioning (partially satisfied by the conversion pass — `/` already renders "from $500" + "from $1,000" price chips):
+**What actually remains (all need Mike or assets):**
 
-1. ~~Verify the live Services copy says: $500 basic, $1k-$2k bounded business site, quote-only over $2k~~ — home price chips confirmed 2026-07-11; audit the full Services section on live post-push.
-2. Add a soft SiteGuide cross-sell for DIY/template buyers.
-3. Mobile-smoke the services rows so the longer copy still scans at 375px.
-4. Run `npm test` + `npm run build`; ship only if both pass.
+1. **Real testimonials wall** — BLOCKED on real quotes from David Serrano (Aries) + Big 7 owner. No fabrication (LAW #6).
+2. **Case-study MP4s** — the two `<video>` slots stub to poster-only until ClipForge clips exist.
+3. Check SiteGuide analytics for the four `utm_source=m3mm` variants (`utm_medium` = `audit`/`footer`/`services`/`thanks`) once real traffic flows.
+4. `/api/lead` real-write smoke skipped deliberately (fires a real Resend email at Mike) — last verified in prod 2026-07-06 per `MONEY_LADDER.md`.
 
 ---
 
