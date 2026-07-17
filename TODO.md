@@ -514,13 +514,9 @@ Source of product truth: ..\AI_HUB.md.
 
 **Verification gate:** npm test; npm run build; mobile visual smoke; lead and analytics endpoints.
 <!-- AI-HUB-SYNC:END -->
-- [ ] RESUME (2026-07-11 12:53): auto-improve worker crashed. Last commit: eebae5b docs(cockpit): queue tick-18 Services-UTM close + regression pin. See C:\Users\Michael\Documents\GitHub\CompanySite\.autoimprove\crash-2026-07-11_12-53-32.json.
-- [ ] RESUME (2026-07-11 13:25): auto-improve worker crashed. Last commit: d2a8a4d fix(conversion): thread path prop end-to-end so intake CTAs never dead-end. See C:\Users\Michael\Documents\GitHub\CompanySite\.autoimprove\crash-2026-07-11_13-25-02.json.
-- [ ] Drain push queue ΓÇö 22 local commits waiting (tick constraint kept them local)
 - [ ] Canonical loop is closed after 20+ ticks; rotate focus off CTA/canonical audits next tick
-- [ ] Push local queue ΓÇö 23 commits deep, unpushed
 - [ ] Drain `COCKPIT_QUEUE.md` entry for tick 23
 - [ ] Extend URL-param prefill coverage from Intake to remaining SiteGuide demo landing paths (session goal calls for TikTok-bio links to land on pre-filled forms ΓÇö verify non-Intake entry points)
 - [ ] Per-template OG raster generation for SiteGuide demo pages (session goal, not touched this tick)
 - [ ] Product schema JSON-LD on SiteGuide demo pages for rich share cards (session goal, not touched this tick)
-- [ ] RESUME (2026-07-11 13:43): auto-improve worker crashed. Last commit: 51d4339 feat(conversion): URL-param intent accepts all 6 reserved namespaces. See C:\Users\Michael\Documents\GitHub\CompanySite\.autoimprove\crash-2026-07-11_13-43-37.json.
+- [x] 2026-07-17: cleared stale 07-11 crash-RESUME + push-queue entries — repo verified clean and fully pushed (origin/main current).
