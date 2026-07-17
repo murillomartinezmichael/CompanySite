@@ -1445,8 +1445,8 @@ rung.
 ## 2026-07-16 - CompanySite - objection-handling FAQ
 
 **Card:** CompanySite conversion pass
-**Move to:** Done (physical-keyboard smoke remains a manual deploy gate)
+**Move to:** Done (physical-keyboard + live-deploy confirmation remains manual)
 
-**What shipped locally:** A six-question native FAQ now sits between Services and Intake, answers only confirmed pricing, ownership, budget, and review-process objections, and routes visitors either to the free review or the fully attributed SiteGuide under-$500 lane. Added source-level regression coverage for placement, semantics, confirmed claims, CTA metadata, UTMs, and keyboard-focus styling.
+**What shipped on `origin/main` (`efa2278`):** A six-question native FAQ now sits between Services and Intake, answers only confirmed pricing, ownership, budget, and review-process objections, and routes visitors either to the free review or the fully attributed SiteGuide under-$500 lane. Added source-level regression coverage for placement, semantics, confirmed claims, CTA metadata, UTMs, and keyboard-focus styling.
 
-**Verified:** Astro check 0 errors/warnings/hints; Vitest 203/203; Astro build 4 pages; canonical audit 4/4; local homepage HTTP 200. Browser smoke at 375x812 and 1440x900 confirmed six disclosures, pointer toggling, visible focus rings, 8px clearance before answer copy, and zero FAQ-local overflow. A one-minute physical-keyboard toggle remains queued in `PENDING_MANUAL.md` because synthetic Enter/Space events did not invoke the browser's native default action.
+**Verified:** Astro check 0 errors/warnings/hints; Vitest 211/211; Astro build 4 pages; canonical audit 4/4. Browser smoke at 375x812 and 1440x900 confirmed six disclosures, pointer toggling, visible focus rings, 8px clearance before answer copy, and zero FAQ-local overflow. A one-minute physical-keyboard toggle plus production confirmation remains queued in `PENDING_MANUAL.md` because synthetic Enter/Space events did not invoke the browser's native default action.
