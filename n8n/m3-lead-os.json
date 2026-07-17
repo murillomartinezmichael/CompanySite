@@ -1,0 +1,132 @@
+{
+  "name": "M³ Lead OS — CompanySite intake",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "m3-leads",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "webhook-m3-leads",
+      "name": "Lead Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "m3-leads"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body || $json;\nconst lead = body.lead || {};\nconst score = Number(body.score ?? 0);\nconst hot = Boolean(body.hot) || score >= 60;\nconst name = lead.name || 'Unknown';\nconst email = lead.email || '';\nconst biz = lead.businessType || '';\nconst url = lead.currentUrl || '';\nconst frustration = lead.frustration || '';\nconst source = lead.source || '';\nconst utm = [lead.utm_source, lead.utm_medium, lead.utm_campaign].filter(Boolean).join(' / ');\nconst subject = (hot ? 'HOT lead' : 'New lead') + ` · ${name} (${biz})`;\nconst text = [\n  subject,\n  '',\n  `Score: ${score}/100`,\n  `Email: ${email}`,\n  url ? `Site: ${url}` : 'Site: (none given)',\n  `Source: ${source}${utm ? ' · UTM ' + utm : ''}`,\n  '',\n  'Frustration:',\n  frustration,\n  '',\n  'Suggested reply:',\n  body.replyHint || '',\n  '',\n  `Id: ${body.id || ''}`,\n].join('\\n');\nreturn [{\n  json: {\n    ...body,\n    lead,\n    hot,\n    score,\n    subject,\n    text,\n    mailto: email,\n    firstName: String(name).split(/\\s+/)[0] || name,\n  }\n}];"
+      },
+      "id": "normalize",
+      "name": "Normalize + draft",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [520, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.hot}}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "if-hot",
+      "name": "Hot lead?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [760, 300]
+    },
+    {
+      "parameters": {
+        "content": "## Wire after import\n\n**Both branches** should email/Slack you with `{{$json.subject}}` + `{{$json.text}}`.\n\n**Hot (true):** louder channel (SMS / @mention Discord).\n\n**Optional:** Google Sheets append — receivedAt, name, email, businessType, score, hot, currentUrl, utms, id.\n\n**Auth:** Cloudflare sends `X-M3-Webhook-Secret`. Add Header Auth on the Webhook node, or an IF that compares header to env `M3_WEBHOOK_SECRET`.\n\nCompanySite already emails via Resend. This workflow = triage + CRM + 48h nudge.",
+        "height": 380,
+        "width": 400
+      },
+      "id": "sticky-setup",
+      "name": "Setup notes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [760, 520]
+    },
+    {
+      "parameters": {
+        "amount": 48,
+        "unit": "hours"
+      },
+      "id": "wait-48h",
+      "name": "Wait 48h",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [1000, 300],
+      "webhookId": "m3-lead-wait"
+    },
+    {
+      "parameters": {
+        "jsCode": "const j = $json;\nconst name = j.lead?.name || j.firstName || 'the lead';\nconst email = j.lead?.email || j.mailto || '';\nreturn [{\n  json: {\n    ...j,\n    reminderSubject: `Follow-up check · ${name}`,\n    reminderText: [\n      `Did you reply to ${name} (${email})?`,\n      '',\n      j.lead?.currentUrl ? `Their site: ${j.lead.currentUrl}` : '',\n      `Original score: ${j.score}`,\n      '',\n      'If yes — archive. If no — send the suggested reply from the first alert.',\n    ].filter(Boolean).join('\\n'),\n  }\n}];"
+      },
+      "id": "reminder-draft",
+      "name": "Reminder copy",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1240, 300]
+    },
+    {
+      "parameters": {
+        "content": "## After Reminder copy\n\nAdd Email/Discord: `{{$json.reminderSubject}}` / `{{$json.reminderText}}`.\n\nSkip reminder manually in n8n if you already closed the lead.",
+        "height": 180,
+        "width": 320
+      },
+      "id": "sticky-reminder",
+      "name": "Reminder notes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [1240, 520]
+    }
+  ],
+  "connections": {
+    "Lead Webhook": {
+      "main": [
+        [
+          { "node": "Normalize + draft", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Normalize + draft": {
+      "main": [
+        [
+          { "node": "Hot lead?", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Hot lead?": {
+      "main": [
+        [
+          { "node": "Wait 48h", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Wait 48h", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Wait 48h": {
+      "main": [
+        [
+          { "node": "Reminder copy", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "description": "M³ CompanySite lead OS: webhook → score/draft → hot branch → 48h reply reminder. Wire Email/Discord/Sheets after import."
+  }
+}

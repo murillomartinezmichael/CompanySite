@@ -16,6 +16,7 @@
 import { LIMITS, validateLead, esc, UTM_FIELDS, type Lead } from '../_lib/validate';
 import { checkRate } from '../_lib/rate';
 import { sendToCockpit, leadIdempotencyKey } from '../_lib/cockpit-sink';
+import { sendToN8n } from '../_lib/n8n-sink';
 
 type Env = {
   RESEND_API_KEY?: string;
@@ -28,6 +29,10 @@ type Env = {
   // CockpitCloud + sets these env vars.
   COCKPIT_INGEST_URL?: string;
   COCKPIT_INGEST_TOKEN?: string;
+  // Optional n8n Lead OS — Production webhook URL from the imported workflow.
+  // Unset = skip. Secret is optional header auth for the n8n IF / Header Auth.
+  N8N_LEAD_WEBHOOK_URL?: string;
+  N8N_LEAD_WEBHOOK_SECRET?: string;
 };
 
 const DEFAULT_ORIGINS = [
@@ -245,6 +250,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   // CockpitCloud side.
   const cockpitId = leadIdempotencyKey(lead);
   const cockpitResult = await sendToCockpit(env, cockpitId, lead, ip);
+  const n8nResult = await sendToN8n(env, cockpitId, lead, ip);
 
   console.log(JSON.stringify({
     event: 'lead_received',
@@ -260,6 +266,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     utm_term: lead.utm_term || undefined,
     resend: { admin: adminResult, reply: replyResult },
     cockpit: cockpitResult,
+    n8n: n8nResult,
     cockpitId,
     ip,
     ts: Date.now(),

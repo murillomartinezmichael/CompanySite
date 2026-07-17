@@ -35,6 +35,7 @@ const UTM_KEYS = ['utm_source=m3mm', 'utm_medium=', 'utm_campaign=downshift', 'u
 
 const SOURCES: Array<{ file: string; medium: string; content: string }> = [
   { file: 'src/components/Footer.astro',   medium: 'footer',   content: 'footer-link' },
+  { file: 'src/components/Faq.astro',      medium: 'faq',      content: 'faq-under-500' },
   { file: 'src/components/Services.astro', medium: 'services', content: 'services-under-500' },
   { file: 'src/pages/audit.astro',         medium: 'audit',    content: 'audit-under-500' },
   { file: 'src/pages/thanks.astro',        medium: 'thanks',   content: 'thanks-storefront' },

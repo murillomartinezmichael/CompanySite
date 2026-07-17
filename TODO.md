@@ -6,13 +6,17 @@
 
 ## NEXT ACTION
 
+**NEXT ACTION (2026-07-16):** Mike: give the new homepage FAQ one physical-keyboard smoke (Tab to a question, then toggle with Enter/Space). Responsive layout, pointer toggling, focus visibility, and overflow are already verified; after that one-minute gate, the local FAQ is ready to commit and deploy.
+
+**FAQ objection handler implemented locally (2026-07-16, Codex).** Added a native `<details>`/`<summary>` FAQ between Services and Intake with six fact-only answers covering the $500, $1k-$2k, and quote-only lanes; ownership/no-required-retainer; SiteGuide under-$500 downshift; and the 24-hour free-review promise. The intake CTA carries `book:free-review`; the SiteGuide CTA carries `product:siteguide` plus a unique `utm_medium=faq` / `utm_content=faq-under-500` lane. Regression coverage pins placement, native semantics, confirmed claims, CTA attribution, and keyboard focus styling. Validation: `npx astro check` **0/0/0**; `npm test` **203/203**; `npm run build` clean (**4 pages**); canonical audit **4/4**; local preview `/` **200**. Browser smoke at **375x812** and **1440x900** confirmed six disclosures, pointer open/close, visible focus rings, an 8px answer clearance, and zero FAQ-local overflow.
+
 **Rung-1 gates are CLOSED (2026-07-16, Fable).** The push had already happened (origin/main == main — the old "20 queued commits" note here was stale). Verified live on **m3mm.net** at 375px via Playwright: 15/15 — $500/$1k–$2k/quote-only ladder renders, SiteGuide cross-sell present (home + audit "BUDGET UNDER $500?"), `/audit?tier=…&name=David` URL-param prefill fires, `/thanks` + `/accessibility` "Free review →" links cross-navigate to `/audit#intake` (no dead anchors), skip link + `<main>` + `lang` + labeled inputs + single h1 + keyboard focus all pass. `npm test` **195/195** · `npm run build` clean (4 pages). Web vitals live: **CLS 0** on `/` and `/audit`; LCP 248/264 ms unthrottled lab proxy (PSI anonymous quota exhausted today — re-run PSI mobile when quota resets if you want the official score).
 
-**What actually remains (all need Mike or assets):**
+**Manual/data follow-ups:**
 
 1. **Real testimonials wall** — BLOCKED on real quotes from David Serrano (Aries) + Big 7 owner. No fabrication (LAW #6).
 2. **Case-study MP4s** — the two `<video>` slots stub to poster-only until ClipForge clips exist.
-3. Check SiteGuide analytics for the four `utm_source=m3mm` variants (`utm_medium` = `audit`/`footer`/`services`/`thanks`) once real traffic flows.
+3. Check SiteGuide analytics for the five `utm_source=m3mm` variants (`utm_medium` = `audit`/`faq`/`footer`/`services`/`thanks`) once real traffic flows.
 4. `/api/lead` real-write smoke skipped deliberately (fires a real Resend email at Mike) — last verified in prod 2026-07-06 per `MONEY_LADDER.md`.
 
 ---
@@ -481,7 +485,6 @@ cleared this tick — headroom is honestly gone at this rung until either
 - Case-study MP4s: drop `public/videos/{aries,big7}-scroll.mp4` + posters, uncomment `video`/`poster` fields in `src/content/caseStudies/*.md`. Michael's ClipForge output goes here.
 - Add a real testimonial from David Serrano (Aries client) once approved.
 - Metrics / results ribbon under hero (parked from quality pass — is a section addition, not craft).
-- FAQ section (parked; section addition).
 - About/founder block (parked; section addition).
 - Sitemap generation (`@astrojs/sitemap` integration + reintroduce `Sitemap:` line in `robots.txt`).
 - Self-host fonts to shave the last font-download from Google (Lighthouse `preload-webfonts` win).

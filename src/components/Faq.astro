@@ -1,0 +1,109 @@
+---
+interface FaqItem {
+  question: string;
+  answer: string;
+  link?: {
+    href: string;
+    label: string;
+  };
+}
+
+const faqs: readonly FaqItem[] = [
+  {
+    question: 'What can I get for $500?',
+    answer: 'A basic one-page site, landing page, or cleanup: mobile-first layout, a clear call to action, a working contact path, and starter SEO and share-preview cleanup.',
+  },
+  {
+    question: 'What fits the $1,000-$2,000 package?',
+    answer: 'A bounded custom business site with a homepage, core service and proof sections, lead capture, analytics events, and the agreed trust content such as reviews, case studies, or a gallery.',
+  },
+  {
+    question: 'When does a project become quote-only?',
+    answer: 'Work over $2,000 gets a real scope and quote. That includes large rebuilds, multiple service lines or locations, portals, payments, integrations, automation, and other discovery-heavy builds.',
+  },
+  {
+    question: 'Do I own the site, and is a monthly retainer required?',
+    answer: 'You own the code. M3 scopes the project, builds it, and hands it off without requiring a monthly agency retainer.',
+  },
+  {
+    question: 'What if my budget is under $500?',
+    answer: 'Start with an off-the-shelf SiteGuide template. It keeps the launch affordable and leaves a clean upgrade path into a custom M3 site later.',
+    link: {
+      href: 'https://siteguide-production.up.railway.app/demos?utm_source=m3mm&utm_medium=faq&utm_campaign=downshift&utm_content=faq-under-500',
+      label: 'Browse SiteGuide templates',
+    },
+  },
+  {
+    question: 'What happens after the free review?',
+    answer: 'Michael personally checks your mobile experience, speed, funnel, and copy, then replies within 24 hours with a written punch list. There is no required sales call, and if nothing needs fixing, he will say so.',
+  },
+];
+---
+
+<section id="faq" class="relative py-24 sm:py-32" aria-labelledby="faq-heading">
+  <div class="container-page">
+    <div class="grid gap-12 lg:grid-cols-[0.8fr,1.2fr] lg:gap-20">
+      <div class="reveal max-w-xl">
+        <div class="mb-6 flex items-center gap-3">
+          <span class="hairline"></span>
+          <p class="kicker mono">Before the quote</p>
+        </div>
+        <h2 id="faq-heading" class="text-display-lg">
+          Straight answers. <span class="text-bone-dim">No agency fog.</span>
+        </h2>
+        <p class="mt-6 text-lg text-bone-dim">
+          The scope stays clear before money changes hands. If the free review shows
+          that a smaller option fits, that is the recommendation.
+        </p>
+        <a
+          href="#intake"
+          class="btn-primary mt-8"
+          data-cta="faq-review"
+          data-section="faq"
+          data-intent="book:free-review"
+        >
+          <span class="relative z-10 flex items-center gap-2.5">
+            Get the free review
+            <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+        </a>
+      </div>
+
+      <div class="border-t border-ink-line/70">
+        {faqs.map((item) => (
+          <details class="group border-b border-ink-line/70">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-6 text-left text-bone transition-colors hover:text-clay focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clay focus-visible:ring-offset-4 focus-visible:ring-offset-ink [&::-webkit-details-marker]:hidden">
+              <span class="font-display text-xl font-medium leading-snug sm:text-2xl">
+                {item.question}
+              </span>
+              <svg class="h-5 w-5 flex-none text-clay transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+              </svg>
+            </summary>
+            <div class="max-w-2xl pb-7 pt-2 pr-10 text-bone-dim">
+              <p>{item.answer}</p>
+              {item.link && (
+                <a
+                  href={item.link.href}
+                  class="mt-4 inline-flex items-center gap-1.5 text-sm text-cyber underline decoration-cyber/50 underline-offset-[6px] transition-colors hover:text-bone"
+                  data-cta="faq-siteguide"
+                  data-section="faq"
+                  data-intent="product:siteguide"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  {item.link.label}
+                  <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </a>
+              )}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
