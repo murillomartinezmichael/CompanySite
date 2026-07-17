@@ -17,12 +17,17 @@ const intakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
   <div class="container-page flex items-center justify-between py-6">
     <a href="/" class="group flex items-center gap-2.5" aria-label="M³ home" data-cta="logo" data-section="header">
       <span
-        class="grid h-9 w-9 place-items-center bg-ink-soft ring-1 ring-ink-line transition-all group-hover:ring-clay/60"
+        class="grid h-9 w-9 place-items-center overflow-hidden bg-ink-soft ring-1 ring-ink-line transition-all group-hover:ring-clay/60"
         style="border-radius: 2px;"
       >
-        <span class="font-display text-lg font-semibold leading-none">
-          M<sup class="ml-[1px] text-[10px] text-clay">3</sup>
-        </span>
+        <img
+          src="/mark-light.png"
+          alt=""
+          width="28"
+          height="28"
+          class="h-7 w-7 object-contain"
+          decoding="async"
+        />
       </span>
       <span class="hidden font-mono text-xs uppercase tracking-[0.18em] text-bone-muted sm:inline">Websites that get you customers</span>
     </a>
