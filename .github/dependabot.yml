@@ -21,15 +21,9 @@ updates:
     commit-message:
       prefix: "chore(deps)"
 
-  # Docker base images (Dockerfile)
-  - package-ecosystem: "docker"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 3
-    labels: ["dependencies", "docker"]
-    commit-message:
-      prefix: "chore(deps)"
+  # Docker ecosystem removed 2026-07-19 — the Dockerfile was vestigial from
+  # the Railway era (deploy is Cloudflare Pages; zero doc/tooling references)
+  # and was deleted rather than kept on dependabot life support.
 
   # GitHub Actions versions (workflows)
   - package-ecosystem: "github-actions"
