@@ -39,6 +39,13 @@ describe('Header + Footer thread `path` so intake CTAs never dead-end', () => {
       { file: 'src/pages/audit.astro', expected: '/audit' },
       { file: 'src/pages/thanks.astro', expected: '/thanks' },
       { file: 'src/pages/accessibility.astro', expected: '/accessibility' },
+      // Trade landing pages (2026-07-19) — each mounts <Intake>, and
+      // Header/Footer/Layout's hasIntakeOnPage now includes `/for/*` so
+      // their CTAs stay same-page anchors instead of bouncing the visitor
+      // to /audit mid-funnel.
+      { file: 'src/pages/for/outdoor-living.astro', expected: '/for/outdoor-living' },
+      { file: 'src/pages/for/construction.astro', expected: '/for/construction' },
+      { file: 'src/pages/for/home-services.astro', expected: '/for/home-services' },
     ];
     for (const { file, expected } of pages) {
       const src = read(file);

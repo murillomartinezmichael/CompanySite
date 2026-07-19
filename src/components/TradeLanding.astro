@@ -1,0 +1,98 @@
+---
+// Trade-vertical landing hero — competitor research 2026-07-19 (high/M
+// positioning): Footbridge names 15 trade verticals, Hook targets
+// roofing/HVAC explicitly; our proof is already contractors but the copy
+// sold to a generic "business". Each /for/* page is the deep-link target
+// for a trade-specific TikTok/IG video so message match holds end-to-end.
+// Proof panels carry the SAME verified client facts as Hero + /audit +
+// /thanks — no trade gets an invented outcome.
+interface ProofPanel {
+  name: string;
+  accent: 'cyber' | 'neon';
+  pre: string;
+  strong: string;
+  post: string;
+}
+interface Props {
+  trade: string; // slug — becomes the data-section funnel bucket (for-<trade>)
+  kicker: string;
+  headline: string;
+  headlineDim: string;
+  sub: string;
+  proofs: ProofPanel[];
+}
+const { trade, kicker, headline, headlineDim, sub, proofs } = Astro.props;
+
+const accentText: Record<ProofPanel['accent'], string> = {
+  cyber: 'text-cyber/80',
+  neon: 'text-neon/80',
+};
+---
+
+<section class="relative isolate overflow-hidden">
+  <div class="pointer-events-none absolute inset-x-0 top-0 h-[600px] bg-gradient-to-b from-clay/[0.10] via-transparent to-transparent"></div>
+
+  <div class="container-page relative pb-4 pt-14 sm:pt-20">
+    <div class="max-w-3xl">
+      <div class="mb-6 flex items-center gap-3">
+        <span class="hairline"></span>
+        <p class="kicker">{kicker}</p>
+      </div>
+
+      <h1 class="text-display-lg">
+        {headline} <span class="text-bone-dim">{headlineDim}</span>
+      </h1>
+
+      <p class="mt-6 max-w-2xl text-lg text-bone-dim">{sub}</p>
+
+      <div class="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+        <a
+          href="#intake"
+          class="btn-primary"
+          data-cta="trade-review"
+          data-section={`for-${trade}`}
+          data-intent="book:free-review"
+        >
+          <span class="relative z-10 flex items-center gap-2.5">
+            Get my free teardown
+            <svg class="h-4 w-4 transition-transform" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </a>
+        <p class="mono text-xs uppercase tracking-[0.2em] text-bone-muted">
+          2 min · No sales call
+        </p>
+      </div>
+
+      <ul class="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-sm text-bone-muted">
+        <li>✓ No sales call</li>
+        <li>✓ Recorded video teardown, not a template</li>
+        <li>✓ 24h reply, personally</li>
+        <li>✓ Free — actually free</li>
+      </ul>
+
+      <!-- Trade-matched proof — same verifiable client outcomes rendered on
+           Hero + /audit + /thanks, filtered to the vertical this page sells. -->
+      <div class={`mt-12 grid gap-5 border-t border-ink-line/60 pt-8 ${proofs.length > 1 ? 'sm:grid-cols-2' : 'sm:max-w-xl'}`}>
+        {proofs.map((p) => (
+          <div class="panel flex flex-col gap-2 p-5">
+            <span class={`mono text-[10px] uppercase tracking-[0.22em] ${accentText[p.accent]}`}>{p.name}</span>
+            <p class="text-sm leading-snug text-bone-dim">
+              {p.pre} <span class="text-bone">{p.strong}</span>{p.post}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      <a
+        href="/?intent=product:case-studies#proof"
+        class="group mt-6 inline-flex items-center gap-1.5 text-sm text-bone-dim underline decoration-cyber/50 decoration-1 underline-offset-[6px] transition-colors hover:text-cyber"
+        data-cta="trade-see-work"
+        data-section={`for-${trade}`}
+        data-intent="product:case-studies"
+      >
+        See the full case studies
+        <svg class="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</section>

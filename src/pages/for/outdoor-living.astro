@@ -1,0 +1,45 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import TradeLanding from '@/components/TradeLanding.astro';
+import Intake from '@/components/Intake.astro';
+---
+
+<Layout
+  title="Websites for outdoor living contractors — M³"
+  description="Decks, pergolas, outdoor structures. Gallery-first sites that turn finished builds into booked jobs — free 5-minute video teardown of your site within 24 hours."
+  path="/for/outdoor-living"
+  breadcrumbs={[
+    { name: 'M³', url: '/' },
+    { name: 'For outdoor living contractors', url: '/for/outdoor-living' },
+  ]}
+>
+  <Header slot="header" minimal={true} path="/for/outdoor-living" />
+
+  <TradeLanding
+    trade="outdoor-living"
+    kicker="For outdoor living contractors"
+    headline="Websites that get outdoor living contractors"
+    headlineDim="booked."
+    sub="Your last finished build sells the next one. I build gallery-first sites that lead with the work — the way Aries Outdoor Living's rebuild did: sold at handoff, first quote request 3 days after launch."
+    proofs={[
+      {
+        name: 'Aries Outdoor Living',
+        accent: 'cyber',
+        pre: 'Same intake, same 24h review.',
+        strong: 'Sold at handoff',
+        post: ' · first quote request 3 days after launch.',
+      },
+    ]}
+  />
+
+  <Intake
+    eyebrow="Step 1 · Tell me what to look at"
+    headline="What's on your site and what's frustrating you about it?"
+    sub="The more specific you are, the more useful the teardown. If you don't have a site yet, say that — I'll review the funnel you have (Instagram, phone-only, etc.) and tell you what a site would change."
+    source="for-outdoor-living"
+  />
+
+  <Footer slot="footer" path="/for/outdoor-living" />
+</Layout>

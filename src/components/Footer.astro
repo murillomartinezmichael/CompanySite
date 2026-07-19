@@ -5,10 +5,11 @@ interface Props {
 const { path = '/' } = Astro.props;
 const year = new Date().getFullYear();
 
-// CONVERSION_STANDARDS.md § 1 — no dead-end CTAs. Only `/` and `/audit`
-// render <Intake>, so `#intake` on any other page silently scrolls to
-// the top. Cross-navigate to `/audit#intake` on the pages that lack it.
-const hasIntakeOnPage = path === '/' || path === '/audit';
+// CONVERSION_STANDARDS.md § 1 — no dead-end CTAs. Only `/`, `/audit`, and
+// the `/for/*` trade pages render <Intake>, so `#intake` on any other page
+// silently scrolls to the top. Cross-navigate to `/audit#intake` on the
+// pages that lack it.
+const hasIntakeOnPage = path === '/' || path === '/audit' || path.startsWith('/for/');
 const intakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
 
 // Split so CF's edge email regex can't match. Hydrated to a real mailto:

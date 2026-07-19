@@ -29,14 +29,14 @@ const {
 
 const canonical = new URL(path, Astro.site ?? 'https://m3mm.net').toString();
 
-// CONVERSION_STANDARDS.md § 1 — no dead-end CTAs. Only `/` and `/audit`
-// mount <Intake>; on those pages the sticky CTA is a same-page anchor.
-// On any other page (`/thanks`, `/accessibility`, future pages) the bare
-// `/audit` fallback lands the visitor at the top of the review page and
-// leaves the promise ("Free review") one scroll short of the form.
-// Cross-navigate to `/audit#intake` — same pattern as Header/Footer's
-// intakeHref (tick-20), pinned by tests/build/intake-cta.test.ts.
-const hasIntakeOnPage = path === '/' || path === '/audit';
+// CONVERSION_STANDARDS.md § 1 — no dead-end CTAs. Only `/`, `/audit`, and
+// the `/for/*` trade pages mount <Intake>; on those pages the sticky CTA is
+// a same-page anchor. On any other page (`/thanks`, `/accessibility`,
+// future pages) the bare `/audit` fallback lands the visitor at the top of
+// the review page and leaves the promise ("Free review") one scroll short
+// of the form. Cross-navigate to `/audit#intake` — same pattern as
+// Header/Footer's intakeHref (tick-20), pinned by tests/build/intake-cta.test.ts.
+const hasIntakeOnPage = path === '/' || path === '/audit' || path.startsWith('/for/');
 const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
 ---
 
