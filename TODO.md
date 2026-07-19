@@ -520,3 +520,36 @@ Source of product truth: ..\AI_HUB.md.
 - [ ] Per-template OG raster generation for SiteGuide demo pages (session goal, not touched this tick)
 - [ ] Product schema JSON-LD on SiteGuide demo pages for rich share cards (session goal, not touched this tick)
 - [x] 2026-07-17: cleared stale 07-11 crash-RESUME + push-queue entries — repo verified clean and fully pushed (origin/main current).
+
+---
+
+## Competitor research — vetted upgrades (2026-07-19)
+
+38-agent adversarial research pass (independent researcher + critic per product, claims spot-verified against live competitor sites). Full fleet report: `../docs/research/COMPETITOR_RESEARCH_2026-07-19.md`.
+
+**Top competitors studied:** Hook Agency, Footbridge Media, GoLive HQ, Designjoy
+
+### Upgrades (impact-ranked)
+
+- [ ] **[high/S] (features)** Reposition the free review on the form page as a deliverable: 'A 5-minute recorded video teardown of your current site within 24 hours — no sales call.' Record with OBS/Loom; add a 'teardown delivered' step to the existing n8n lead OS for tracking. Copy change only — same workload, dramatically stronger offer.
+  - *Pattern source:* Footbridge's audit CTA promises a concrete deliverable ('we review your site as if you already hired us'); Designjoy anchors trust in a named person doing visible work. m3mm.net's primary CTA is 'Free site review' with a 24h turnaround but no stated artifact — the visitor doesn't know what they'll receive.
+- [ ] **[high/S] (trust)** Add a one-line guarantee badge to the $500 and $1k-2k pricing cards: 'Full refund any time before launch.' (Avoid date-based penalties like '14 days or $250 back' until build-time data from a few more projects supports it.) One small Astro badge component + copy.
+  - *Pattern source:* Footbridge leads with a verified 90-day money-back guarantee; Designjoy offers verified '75% back after week one, no questions asked.' m3mm.net has zero guarantee or refund language anywhere (confirmed on the live site).
+- [ ] **[high/S] (design-patterns)** Add a pure CSS/JS before/after slider (no library) to each case study: Wayback Machine screenshot of Aries' old site vs the shipped site. One Astro component + two screenshots per case study; each slider also doubles as a TikTok/IG post.
+  - *Pattern source:* GoLive's 'Recent Client Launches' (verified) and the highest-performing social-designer content both center on before/after transformations. m3mm.net's case studies show the client's 3D-renders-vs-photos, but never the old site next to the shipped site — the one comparison that sells a redesign.
+- [ ] **[high/M] (positioning)** Ship 2-3 trade landing pages (/for/outdoor-living, /for/construction, /for/home-services): matching case study, trade-specific headline ('Websites that get outdoor living contractors booked'), same review form. Use them as the deep-link targets for trade-specific TikTok/IG videos so message match holds end-to-end — this is the multiplier for the site's only traffic channel.
+  - *Pattern source:* Footbridge names 15 trade verticals with trade-specific messaging (verified: roofing, HVAC, plumbing, landscaping…); Hook targets roofing/HVAC explicitly. m3mm.net's proof is already contractors (outdoor living, construction) but the copy sells to a generic 'business'.
+- [ ] **[high/M] (flow)** Make the $500 Basic tier directly buyable: Stripe Payment Link (full or deposit) on the card, build-week slot picker, intake form shown after payment. New /start page in Astro + Payment Link + n8n webhook into the existing lead OS. Keep quote flow for Business/Premium.
+  - *Pattern source:* Designjoy sends buyers straight to Stripe from the pricing card — payment before intake (verified live). GoLive sells a bookable $1,200 one-day build with fixed 9am start slots (verified). m3mm.net's $500 tier still ends in a quote form — friction on the tier least needing negotiation.
+- [ ] **[high/M] (visuals)** Ship the reel: embed the best-performing 60-90s vertical TikTok clip above the pricing section — muted autoplay, poster frame, prefers-reduced-motion respected. Note Cloudflare Pages' 25MB per-file limit: serve the video from R2 or Cloudflare Stream, not the Pages bundle. Landing page then continues the exact video that sent the visitor.
+  - *Pattern source:* Hook embeds video on its pricing page (verified); winning TikTok/IG designer content is screen-recorded build/teardown video. m3mm.net is text-and-screenshot only — the site itself says 'Scroll reel · dropping soon', so the gap is acknowledged but unshipped.
+- [ ] **[medium/S] (trust)** Add a photo and TikTok/IG links to the existing founder line by the review form. Visitors arrive from his face on video; the site should close that loop with the same face. Copy + one image — the name is already there.
+  - *Pattern source:* Designjoy's page repeats that you hire Brett specifically ('run entirely by Brett… you'll work directly with me'). m3mm.net already names Michael Murillo-Martinez ('One engineer · reviewing personally') but shows no photo and no link back to the TikTok/IG accounts that sent the visitor.
+- [ ] **[medium/M] (flow)** Add a two-door chooser near the hero — 'Fast and cheap → SiteGuide setup' / 'Built for you → free site review' — pointing to a dedicated /siteguide page with template previews and its own CTA. Defer full self-serve checkout to a later phase; the routing alone catches sub-$500 traffic that currently leaves.
+  - *Pattern source:* GoLive splits traffic at the top: 'Shop Templates' (self-serve) vs 'Hire Our Team' (custom) — verified — so no one bounces for being the wrong budget. On m3mm.net, 'SiteGuide setup + customization — From $500' is card 3 of 4 in a flat list (verified), with only a footer link to templates.
+
+### Quick wins (<1 day each)
+
+- [ ] Rewrite the free-review offer on the form page as a concrete artifact — 'a 5-minute recorded video teardown of your site within 24 hours, no sales call' — copying Footbridge's audit-with-deliverable framing; copy-only, ~1 hour.
+- [ ] Add a guarantee badge to the $500 and $1k-2k cards ('Full refund any time before launch') — the site currently has zero risk-reversal vs Footbridge's 90-day and Designjoy's week-one guarantees; one Astro component + copy, ~2 hours.
+- [ ] Build the Aries before/after slider: pull the old site from the Wayback Machine, one pure CSS/JS Astro component, ~half a day — and the same asset becomes a TikTok post.
