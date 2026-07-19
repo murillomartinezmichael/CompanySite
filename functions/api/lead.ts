@@ -222,7 +222,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const replyHtml = `
     <div style="font-family:Georgia,serif;max-width:560px;color:#111;line-height:1.55;">
       <h2 style="margin:0 0 14px;font-size:22px;">Got it, ${esc(lead.name)}.</h2>
-      <p style="margin:0 0 14px;">I'll actually look at your site and reply with a plain-English review &mdash; what's working, what's costing you customers, and whether it needs a rebuild or just a fix. If it turns out you don't need me, I'll tell you that too.</p>
+      <p style="margin:0 0 14px;">I'll actually look at your site and reply with a 5-minute recorded video teardown &mdash; what's working, what's costing you customers, and whether it needs a rebuild or just a fix. If it turns out you don't need me, I'll tell you that too.</p>
       <p style="margin:0 0 20px;font-size:14px;color:#555;">
         <b style="color:#111;">Deadline:</b> you'll hear back from me before ${esc(deadlineStr)}.
       </p>
