@@ -35,6 +35,9 @@ const UTM_KEYS = ['utm_source=m3mm', 'utm_medium=', 'utm_campaign=downshift', 'u
 
 const SOURCES: Array<{ file: string; medium: string; content: string }> = [
   { file: 'src/components/Footer.astro',   medium: 'footer',   content: 'footer-link' },
+  // Two-door chooser under the Hero (2026-07-19) — the above-the-fold
+  // downshift lane, so sub-$500 traffic forks before it can bounce.
+  { file: 'src/components/TwoDoor.astro',  medium: 'two-door', content: 'hero-two-door' },
   { file: 'src/components/Faq.astro',      medium: 'faq',      content: 'faq-under-500' },
   { file: 'src/components/Services.astro', medium: 'services', content: 'services-under-500' },
   { file: 'src/pages/audit.astro',         medium: 'audit',    content: 'audit-under-500' },

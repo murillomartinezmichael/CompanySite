@@ -1,0 +1,55 @@
+---
+// Two-door chooser — competitor research 2026-07-19 (medium/M flow):
+// GoLive splits traffic at the top ('Shop Templates' vs 'Hire Our Team')
+// so no one bounces for being the wrong budget. Our SiteGuide downshift
+// only appeared far below the fold (Services card 3, FAQ, Footer) — this
+// puts the fork one scroll from the Hero. The dedicated /siteguide page
+// with template previews is deferred until real preview assets exist
+// (SiteGuide lane owns the screenshot capture); the door links out to the
+// live demo storefront instead, on its own UTM lane.
+---
+
+<section class="relative py-10 sm:py-14" aria-label="Two ways to get a site">
+  <div class="container-page">
+    <div class="reveal mb-6 flex items-center gap-3">
+      <span class="hairline"></span>
+      <p class="kicker mono">Two ways in</p>
+    </div>
+
+    <div class="reveal grid gap-4 sm:grid-cols-2">
+      <!-- Door 1 — custom build lane, lands in the on-page intake -->
+      <a
+        href="#intake"
+        class="group panel flex flex-col gap-2 p-6 transition-colors hover:bg-ink-soft/60"
+        data-cta="door-custom"
+        data-section="two-door"
+        data-intent="book:free-review"
+      >
+        <span class="mono text-[10px] uppercase tracking-[0.22em] text-clay/80">→ Built for you</span>
+        <p class="font-medium text-bone">Custom site, one engineer, from $500</p>
+        <p class="text-sm text-bone-dim">
+          Scoped, shipped, and handed off — no agency middlemen. Starts with the
+          free video teardown below.
+        </p>
+      </a>
+
+      <!-- Door 2 — sub-$500 template lane, routes to SiteGuide instead of bouncing -->
+      <a
+        href="https://siteguide-production.up.railway.app/demos?utm_source=m3mm&utm_medium=two-door&utm_campaign=downshift&utm_content=hero-two-door"
+        target="_blank"
+        rel="noopener"
+        class="group panel flex flex-col gap-2 p-6 transition-colors hover:bg-ink-soft/60"
+        data-cta="door-siteguide"
+        data-section="two-door"
+        data-intent="product:siteguide"
+      >
+        <span class="mono text-[10px] uppercase tracking-[0.22em] text-cyber/80">→ Fast and cheap</span>
+        <p class="font-medium text-bone">Off-the-shelf template, under $500</p>
+        <p class="text-sm text-bone-dim">
+          Twelve one-page SiteGuide templates you can preview + buy today, with a
+          clean upgrade path into a custom M3 site later.
+        </p>
+      </a>
+    </div>
+  </div>
+</section>
