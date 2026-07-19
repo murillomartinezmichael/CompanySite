@@ -16,6 +16,11 @@ const services = [
     ],
     accent: 'clay',
     cta: 'Get a quote',
+    // Competitor research 2026-07-19 (high/S trust): Footbridge/Designjoy
+    // both lead with verified refund guarantees; we had zero risk-reversal
+    // language. Exact copy from the vetted research — no date-based penalty
+    // until build-time data supports one.
+    guarantee: 'Full refund any time before launch.',
   },
   {
     key: 'business-website',
@@ -33,6 +38,7 @@ const services = [
     ],
     accent: 'neon',
     cta: 'Get a quote',
+    guarantee: 'Full refund any time before launch.',
   },
   {
     key: 'siteguide-setup',
@@ -50,6 +56,8 @@ const services = [
     ],
     accent: 'cyber',
     cta: 'Customize SiteGuide',
+    // No refund badge — the template itself is SiteGuide's product/policy.
+    guarantee: '',
   },
   {
     key: 'custom-builds',
@@ -67,6 +75,8 @@ const services = [
     ],
     accent: 'clay',
     cta: 'Scope a project',
+    // No badge — quote-only work sets refund terms in the contract.
+    guarantee: '',
   },
 ] as const;
 
@@ -156,6 +166,18 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
                     </li>
                   ))}
                 </ul>
+
+                <!-- Risk-reversal badge — mirrors the price-chip styling so the
+                     guarantee reads as part of the offer, not a disclaimer. -->
+                {s.guarantee && (
+                  <p class={`mono mt-5 inline-flex items-center gap-2 rounded-sm border border-current/40 px-2 py-0.5 text-xs font-semibold uppercase tracking-[0.14em] ${a.text}`}>
+                    <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <path d="M8 1.5l5 2v4c0 3.2-2.1 5.6-5 7-2.9-1.4-5-3.8-5-7v-4l5-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                      <path d="M5.75 8l1.5 1.5 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    {s.guarantee}
+                  </p>
+                )}
               </div>
 
               <!-- CTA arrow -->
