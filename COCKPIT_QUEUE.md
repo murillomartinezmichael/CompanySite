@@ -7,6 +7,45 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-19 · CompanySite · Competitor-research implementation (4 vetted upgrades)
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** The four agent-actionable upgrades from the
+2026-07-19 competitor research (Hook / Footbridge / GoLive / Designjoy),
+in impact order, one commit each:
+
+1. `ee00fbf` — free review repositioned as a concrete deliverable:
+   "a 5-minute recorded video teardown within 24 hours, no sales call"
+   on all six promise surfaces (Intake rail + step 03, /audit hero +
+   bullets + meta, FAQ answer, /thanks checkpoint + meta, lead
+   auto-reply email). Pin test keeps the surfaces from drifting apart.
+2. `7c4f5bd` — "Full refund any time before launch." risk-reversal
+   badge on the $500 + $1k-2k build-lane cards only (research-vetted
+   safe wording, no date penalty). Pin test locks copy + placement.
+3. `533ca72` — /for/outdoor-living, /for/construction,
+   /for/home-services trade landing pages via a shared TradeLanding
+   component: trade headline, matching verified client proof only
+   (Aries / Big 7, no cross-contamination), unique intake `source` per
+   vertical, sitemap entries, hasIntakeOnPage extended to /for/*
+   (intake-cta test updated deliberately, same commit).
+4. `245ef70` — two-door chooser under the Hero: "Built for you"
+   (#intake) vs "Fast and cheap" (SiteGuide demos on new
+   utm_medium=two-door lane, registered in the outbound-utm contract).
+
+**Verified:** `npm test` 211 → **239/239 green** · `npm run build`
+clean, **7 pages** · `npx astro check` clean · dist spot-checks:
+canonical + sticky same-page #intake + trade CTAs + badge x2 rendered.
+
+**Gated on Mike (PENDING_MANUAL § competitor-research gates):** OBS/Loom
+teardown delivery + n8n teardown-delivered step + auto-reply copy sync,
+refund-policy confirm before push, Stripe $500 payment link, reel clip +
+R2/Stream, founder photo + social URLs, Aries before/after client OK,
+trade deep-link videos. Push deferred to main-session review per brief.
+
+---
+
 ## 2026-07-12 · CompanySite · CTA-intent coverage invariant (tick 20-auto continued)
 
 **Card:** CompanySite conversion pass
