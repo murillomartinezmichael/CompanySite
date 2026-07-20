@@ -5,6 +5,7 @@
 **Definition of Done:** bio link → page → form submission works end to end and looks expensive.
 **DoD hit:** 2026-07-05 (local, wrangler pages dev verified).
 **Deploy-ready:** 2026-07-06 (58/58 tests, `dist/` 22.5 KB gz, RUNBOOK § 3 paste-ready — waiting only on Mike's `wrangler login` + first-time project create).
+**Policy update (2026-07-20):** Owner-confirmed 20% down before work; down payment non-refundable, all other payments refundable before launch. Source/test/build/mobile+desktop visual checks green (239/239 tests, Astro 0/0/0, 7 pages).
 **Session 9 (2026-07-07):** Rung IV RE-STRIKE on mobile — PSI 87→97 / LCP −603 ms shipped in commits `d620884`+`90c95b4`. Ledger + raw JSONs in `docs/lighthouse-baseline.md` + `perf/psi-mobile-after-3fonts-2026-07-07_084044.json`. 3 commits (`5c19929`, `7d8a18d`, `7748a3d`) waiting on `scripts/auto-improve/GUARDS_ACTIVE` lift before push.
 
 ---

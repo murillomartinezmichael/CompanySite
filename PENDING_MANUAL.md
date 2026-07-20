@@ -12,14 +12,13 @@
   - **Why blocked on him:** The live lead workflow was verified end-to-end 2026-07-19 (execution #1144); editing a verified money-path workflow can't be safely re-verified without firing real emails at Mike — the real-write smoke is deliberately manual (TODO § Manual/data follow-ups #4).
   - **Resumes:** Teardown-delivery SLA becomes measurable; auto-reply and site promises stop drifting.
 
-- [ ] **Confirm the refund guarantee before the push deploys.**
-  - **What to do:** Read the badge on the $500 + $1k-2k Services cards — "Full refund any time before launch." (commit `7c4f5bd`) — and confirm you'll honor it, or reword/drop it in review.
-  - **Why blocked on him:** Refund policy is a money/pricing POLICY commitment only Mike can make; the copy is the research-vetted safe version (no date-based penalty), but honoring it is his.
-  - **Resumes:** Main-session review can push CompanySite with the badge in, or strip it in one revert of `7c4f5bd`.
+- [x] **Refund/down-payment policy confirmed 2026-07-20.**
+  - **Decision:** Require 20% down before work starts. The down payment is non-refundable; all other payments are refundable before launch.
+  - **Implemented:** Replaced the superseded full-refund badge on the $500 + $1k-$2k Services cards and added regression coverage.
 
 - [ ] **Stripe Payment Link for the directly-buyable $500 Basic tier.**
-  - **What to do:** Create a Stripe Payment Link (full $500 or deposit — his call), then hand the URL to a session to build the /start page + n8n webhook into the lead OS.
-  - **Why blocked on him:** Needs the Stripe dashboard (login), plus a full-vs-deposit pricing policy decision.
+  - **What to do:** Create a Stripe Payment Link for the $100 down payment (20% of the $500 Basic tier), label it non-refundable, then hand the URL to a session to build the /start page + n8n webhook into the lead OS.
+  - **Why blocked on him:** Needs Mike's authenticated Stripe dashboard; the pricing policy itself was confirmed 2026-07-20.
   - **Resumes:** High/M research item "make the $500 tier directly buyable" becomes agent-actionable end-to-end.
 
 - [ ] **Pick + upload the reel clip for the pricing-section video embed.**

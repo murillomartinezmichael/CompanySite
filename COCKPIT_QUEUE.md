@@ -7,6 +7,24 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-07-20 · CompanySite · Down-payment/refund policy corrected
+
+**Card:** CompanySite conversion pass
+**Move to:** Done
+
+**What shipped:** Replaced the pricing-card promise “Full refund any time
+before launch” with the owner-confirmed terms on the two M3 build lanes:
+20% down before work starts; the down payment is non-refundable; all other
+payments are refundable before launch. Renamed the offer field to
+`paymentPolicy`, pinned the exact terms and tier placement in regression
+coverage, and cleared the manual policy gate.
+
+**Verified:** targeted policy test **3/3** · full suite **239/239** · Astro
+check **0 errors / 0 warnings / 0 hints** · production build clean (**7
+pages**) · visual wrap/readability at **375x812** and **1440x900**.
+
+---
+
 ## 2026-07-19 · CompanySite · Competitor-research implementation (4 vetted upgrades)
 
 **Card:** CompanySite conversion pass
