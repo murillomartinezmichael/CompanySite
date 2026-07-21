@@ -1,0 +1,134 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import Intake from '@/components/Intake.astro';
+import { BASIC_SITE } from '@/config/offers';
+---
+
+<Layout
+  title="Start your $500 business site — M³"
+  description="Reserve an M³ basic business-site build with a $100 non-refundable down payment, then send the project intake."
+  path="/start"
+  breadcrumbs={[
+    { name: 'M³', url: '/' },
+    { name: 'Start a basic site', url: '/start' },
+  ]}
+>
+  <Header slot="header" minimal={true} path="/start" />
+
+  <div>
+    <section id="deposit-step" class="relative isolate overflow-hidden pb-20 pt-14 sm:pb-28 sm:pt-20">
+      <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[680px] bg-gradient-to-b from-clay/[0.10] via-cyber/[0.025] to-transparent"></div>
+      <div class="container-page">
+        <div class="grid gap-12 lg:grid-cols-[1.1fr,0.9fr] lg:items-start lg:gap-20">
+          <div class="max-w-3xl">
+            <div class="mb-6 flex items-center gap-3">
+              <span class="hairline"></span>
+              <p class="kicker mono">Basic site · reserve the build</p>
+            </div>
+
+            <h1 class="text-display-lg">
+              Start your <span class="highlight-yellow"><span class="fg">$500 site</span></span> with $100 down.
+            </h1>
+            <p class="mt-6 max-w-2xl text-lg text-bone-dim">
+              Pay the 20% down payment to reserve your project, then complete the project intake. I review the scope and confirm your actual build week before work begins.
+            </p>
+
+            <ul class="mt-9 grid gap-3 text-sm text-bone-dim sm:grid-cols-2">
+              <li class="flex gap-3"><span class="text-clay">●</span><span>One-page business site or focused refresh</span></li>
+              <li class="flex gap-3"><span class="text-neon">●</span><span>Mobile-first layout and clear customer action</span></li>
+              <li class="flex gap-3"><span class="text-cyber">●</span><span>Contact path, starter SEO, and share preview</span></li>
+              <li class="flex gap-3"><span class="text-clay">●</span><span>You own the finished code</span></li>
+            </ul>
+          </div>
+
+          <aside class="panel relative overflow-hidden p-6 sm:p-8" aria-label="Payment summary">
+            <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-clay to-transparent"></div>
+            <p class="mono text-[11px] uppercase tracking-[0.22em] text-bone-muted">Project ledger</p>
+
+            <div class="mt-7 border-y border-ink-line/70 py-6">
+              <div class="flex items-end justify-between gap-5">
+                <div>
+                  <p class="text-sm text-bone-muted">Due today</p>
+                  <p class="mt-1 font-display text-5xl font-medium text-bone">${BASIC_SITE.depositUsd}</p>
+                </div>
+                <span class="mono mb-1 rounded-sm border border-clay/50 bg-clay/10 px-2 py-1 text-xs uppercase tracking-[0.16em] text-clay">{BASIC_SITE.depositPercent}% down</span>
+              </div>
+              <div class="mt-6 flex items-center justify-between text-sm">
+                <span class="text-bone-muted">Full package</span>
+                <span class="mono text-bone">${BASIC_SITE.priceUsd}</span>
+              </div>
+              <div class="mt-2 flex items-center justify-between text-sm">
+                <span class="text-bone-muted">Balance after down payment</span>
+                <span class="mono text-bone">${BASIC_SITE.priceUsd - BASIC_SITE.depositUsd}</span>
+              </div>
+            </div>
+
+            <p class="mt-5 text-sm leading-relaxed text-bone-dim">
+              The $100 down payment is non-refundable. All other payments are refundable before launch.
+            </p>
+
+            <a
+              href={BASIC_SITE.paymentLink}
+              class="btn-primary mt-7 flex w-full items-center justify-center"
+              data-cta="start-pay-deposit"
+              data-section="start-payment"
+              data-intent="checkout:basic-deposit"
+            >
+              <span class="relative z-10 flex items-center gap-2.5">
+                Pay $100 securely
+                <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </a>
+            <p class="mt-3 text-center mono text-[10px] uppercase tracking-[0.16em] text-bone-muted">Secure checkout hosted by Stripe</p>
+
+            <a href="#intake" class="mt-5 block text-center text-sm text-bone-dim underline decoration-clay/50 underline-offset-4" data-paid-intake-link>
+              Already paid? Open the project intake
+            </a>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <div id="project-intake" hidden>
+      <div class="container-page pt-10">
+        <div class="panel border-neon/30 bg-neon/[0.04] p-5 text-sm text-bone-dim" role="status">
+          <span class="font-medium text-bone">Checkout complete.</span> Send the project details below so I can confirm scope and your build week.
+        </div>
+      </div>
+      <Intake
+        eyebrow="Step 2 · Project intake"
+        headline="Deposit handled. Tell me what we’re building."
+        sub="Share the business, current site, main problem, and preferred timing. I’ll confirm the scope before work begins."
+        source="basic-deposit"
+        defaultIntent="checkout:basic-deposit"
+        mode="project"
+        submitLabel="Send project intake"
+        successPath="/start/thanks"
+        showStartWindow={true}
+      />
+    </div>
+
+    <noscript>
+      <div class="container-page pb-16 text-sm text-bone-dim">JavaScript is required to reveal the post-payment project intake. Email through the footer if you need help.</div>
+    </noscript>
+  </div>
+
+  <Footer slot="footer" path="/start" />
+</Layout>
+
+<script>
+  const query = new URLSearchParams(window.location.search);
+  const intake = document.getElementById('project-intake');
+  const deposit = document.getElementById('deposit-step');
+  const showIntake = () => {
+    if (!intake) return;
+    intake.hidden = false;
+    deposit?.setAttribute('hidden', '');
+    requestAnimationFrame(() => document.getElementById('intake')?.focus({ preventScroll: true }));
+  };
+
+  if (query.get('checkout') === 'complete') showIntake();
+  document.querySelector('[data-paid-intake-link]')?.addEventListener('click', showIntake);
+</script>

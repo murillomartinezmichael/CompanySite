@@ -9,7 +9,7 @@ const { minimal = false, path = '/' } = Astro.props;
 // and the `/for/*` trade pages render <Intake>, so `#intake` on any other
 // page scrolls to the top — a broken promise. Route those clicks to
 // `/audit#intake` instead so the CTA actually lands the visitor in the form.
-const hasIntakeOnPage = path === '/' || path === '/audit' || path.startsWith('/for/');
+const hasIntakeOnPage = path === '/' || path === '/audit' || path === '/start' || path.startsWith('/for/');
 const intakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
 ---
 

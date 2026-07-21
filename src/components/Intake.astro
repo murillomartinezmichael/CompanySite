@@ -5,6 +5,10 @@ interface Props {
   sub?: string;
   source?: string;
   defaultIntent?: string;
+  mode?: 'review' | 'project';
+  submitLabel?: string;
+  successPath?: string;
+  showStartWindow?: boolean;
 }
 const {
   eyebrow = 'Free site review',
@@ -17,6 +21,10 @@ const {
   // with intent=undefined. Any [data-intent] click still overrides via
   // wirePrefill() before submit.
   defaultIntent = 'book:free-review',
+  mode = 'review',
+  submitLabel = 'Send my free review',
+  successPath = '/thanks',
+  showStartWindow = false,
 } = Astro.props;
 ---
 
@@ -48,15 +56,15 @@ const {
         <li class="flex gap-4">
           <span class="mono flex h-9 w-9 flex-none items-center justify-center rounded-full border border-neon/40 bg-neon/[0.08] text-xs text-neon">02</span>
           <div>
-            <p class="font-medium text-bone">I actually look</p>
-            <p class="mt-1 text-sm text-bone-dim">Lighthouse, mobile, funnel, copy — all of it.</p>
+            <p class="font-medium text-bone">{mode === 'project' ? 'I confirm the scope' : 'I actually look'}</p>
+            <p class="mt-1 text-sm text-bone-dim">{mode === 'project' ? 'I review the intake and confirm the build plan before work begins.' : 'Lighthouse, mobile, funnel, copy — all of it.'}</p>
           </div>
         </li>
         <li class="flex gap-4">
           <span class="mono flex h-9 w-9 flex-none items-center justify-center rounded-full border border-cyber/40 bg-cyber/[0.08] text-xs text-cyber">03</span>
           <div>
-            <p class="font-medium text-bone">Video teardown + rough scope</p>
-            <p class="mt-1 text-sm text-bone-dim">A 5-minute recorded walkthrough, emailed within 24 hours. Plain English, no jargon.</p>
+            <p class="font-medium text-bone">{mode === 'project' ? 'We start the build' : 'Video teardown + rough scope'}</p>
+            <p class="mt-1 text-sm text-bone-dim">{mode === 'project' ? 'Your $100 down payment reserves the next confirmed build window.' : 'A 5-minute recorded walkthrough, emailed within 24 hours. Plain English, no jargon.'}</p>
           </div>
         </li>
       </ol>
@@ -90,6 +98,7 @@ const {
       method="POST"
       action="/api/lead"
       data-source={source}
+      data-success-path={successPath}
       novalidate
     >
       <!-- Corner marks — editorial polish -->
@@ -176,6 +185,22 @@ const {
         </span>
       </label>
 
+      {showStartWindow && (
+        <label class="flex flex-col gap-2">
+          <span class="field-label"><span>Preferred start window</span><span class="text-clay/60 mono">05</span></span>
+          <select name="preferredStart" required class="field-input">
+            <option value="">Choose a window</option>
+            <option value="Next available build week">Next available build week</option>
+            <option value="Within 2 weeks">Within 2 weeks</option>
+            <option value="Within 30 days">Within 30 days</option>
+            <option value="No rush">No rush</option>
+          </select>
+          <span class="mono text-[10px] uppercase tracking-[0.18em] text-bone-muted">
+            This is a preference. I confirm the actual build week before work starts.
+          </span>
+        </label>
+      )}
+
       <!-- honeypot — bots will fill it, humans can't see it -->
       <label class="hidden" aria-hidden="true">
         <span>Company website (leave blank)</span>
@@ -193,7 +218,7 @@ const {
           data-section="intake"
         >
           <span class="relative z-10 flex items-center gap-2.5">
-            Send my free review
+            {submitLabel}
             <svg class="h-4 w-4 transition-transform" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </span>
         </button>
@@ -283,7 +308,8 @@ const {
         // Redirect to the real thank-you page for a stronger conversion story
         // (24h reply promise, next-step CTAs, urgency escape hatch). setTimeout
         // gives the analytics beacon a beat to flush before navigation.
-        setTimeout(() => { window.location.href = '/thanks'; }, 450);
+        const destination = form.dataset.successPath || '/thanks';
+        setTimeout(() => { window.location.href = destination; }, 450);
       } catch {
         track({
           name: 'intake_error',

@@ -36,7 +36,7 @@ const canonical = new URL(path, Astro.site ?? 'https://m3mm.net').toString();
 // the review page and leaves the promise ("Free review") one scroll short
 // of the form. Cross-navigate to `/audit#intake` — same pattern as
 // Header/Footer's intakeHref (tick-20), pinned by tests/build/intake-cta.test.ts.
-const hasIntakeOnPage = path === '/' || path === '/audit' || path.startsWith('/for/');
+const hasIntakeOnPage = path === '/' || path === '/audit' || path === '/start' || path.startsWith('/for/');
 const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
 ---
 
@@ -154,7 +154,7 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
               minPrice: 500,
             },
             availability: 'https://schema.org/InStock',
-            url: 'https://m3mm.net/#services',
+            url: 'https://m3mm.net/start',
           },
           {
             '@type': 'Offer',

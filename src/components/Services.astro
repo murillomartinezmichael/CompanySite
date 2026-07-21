@@ -15,7 +15,8 @@ const services = [
       'Starter SEO and share preview cleaned up',
     ],
     accent: 'clay',
-    cta: 'Get a quote',
+    cta: 'Start with $100 down',
+    href: '/start',
     // Owner-confirmed policy (2026-07-20): work starts after 20% down. That
     // payment is retained on cancellation; later payments remain refundable
     // until launch.
@@ -37,6 +38,7 @@ const services = [
     ],
     accent: 'neon',
     cta: 'Get a quote',
+    href: '#intake',
     paymentPolicy: '20% down to start. The down payment is non-refundable; all other payments are refundable before launch.',
   },
   {
@@ -55,6 +57,7 @@ const services = [
     ],
     accent: 'cyber',
     cta: 'Customize SiteGuide',
+    href: '#intake',
     // No payment-policy badge — SiteGuide owns its product/payment policy.
     paymentPolicy: '',
   },
@@ -74,6 +77,7 @@ const services = [
     ],
     accent: 'clay',
     cta: 'Scope a project',
+    href: '#intake',
     // No badge — quote-only work sets payment terms in the contract.
     paymentPolicy: '',
   },
@@ -127,7 +131,7 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
         const a = accentClasses[s.accent];
         return (
           <a
-            href="#intake"
+            href={s.href}
             class="group relative block py-10 transition-colors duration-500 hover:bg-ink-soft/40 sm:py-14"
             data-cta={`service-${s.key}`}
             data-section="services"

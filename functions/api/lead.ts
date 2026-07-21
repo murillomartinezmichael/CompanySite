@@ -157,6 +157,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       businessType: params.get('businessType') || undefined,
       currentUrl: params.get('currentUrl') || undefined,
       frustration: params.get('frustration') || undefined,
+      preferredStart: params.get('preferredStart') || undefined,
       source: params.get('source') || undefined,
       company_website: params.get('company_website') || undefined,
       intent: params.get('intent') || undefined,
@@ -209,6 +210,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     <p><b>Current URL:</b> ${lead.currentUrl ? `<a href="${esc(lead.currentUrl)}">${esc(lead.currentUrl)}</a>` : '&mdash;'}</p>
     <p><b>Frustration:</b></p>
     <blockquote style="border-left:3px solid #FF3B5C;margin:0;padding:8px 14px;color:#333;">${esc(lead.frustration)}</blockquote>
+    ${lead.preferredStart ? `<p><b>Preferred start:</b> ${esc(lead.preferredStart)}</p>` : ''}
     ${attributionHtml}
     <p style="color:#888;font-size:12px;">IP: ${esc(ip)} &middot; Source: ${esc(lead.source)}</p>
   `;
@@ -218,11 +220,18 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   // "before {date}" phrasing avoids any implication of a specific hour.
   const deadlineDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
   const deadlineStr = deadlineDate.toUTCString().replace(/^[A-Z][a-z]{2}, /, '');
+  const isProjectIntake = lead.intent === 'checkout:basic-deposit';
+  const replyIntro = isProjectIntake
+    ? `I have your project intake. I'll review the scope and your preferred timing, then confirm the build week before work begins.`
+    : `I'll actually look at your site and reply with a 5-minute recorded video teardown &mdash; what's working, what's costing you customers, and whether it needs a rebuild or just a fix. If it turns out you don't need me, I'll tell you that too.`;
+  const replySubject = isProjectIntake
+    ? 'Your M³ project intake is in'
+    : 'Got your review request — M³';
 
   const replyHtml = `
     <div style="font-family:Georgia,serif;max-width:560px;color:#111;line-height:1.55;">
       <h2 style="margin:0 0 14px;font-size:22px;">Got it, ${esc(lead.name)}.</h2>
-      <p style="margin:0 0 14px;">I'll actually look at your site and reply with a 5-minute recorded video teardown &mdash; what's working, what's costing you customers, and whether it needs a rebuild or just a fix. If it turns out you don't need me, I'll tell you that too.</p>
+      <p style="margin:0 0 14px;">${replyIntro}</p>
       <p style="margin:0 0 20px;font-size:14px;color:#555;">
         <b style="color:#111;">Deadline:</b> you'll hear back from me before ${esc(deadlineStr)}.
       </p>
@@ -234,7 +243,9 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       </div>
 
       <p style="margin:18px 0 6px;font-size:13px;color:#555;">
-        Want to browse while you wait? <a href="https://siteguide-production.up.railway.app/demos?utm_source=m3mm&utm_medium=email&utm_campaign=downshift&utm_content=intake-reply" style="color:#FF3B5C;">See the 12 SiteGuide starter templates</a>.
+        ${isProjectIntake
+          ? 'Keep your Stripe receipt for your records. The $100 down payment is non-refundable; all other payments are refundable before launch.'
+          : 'Want to browse while you wait? <a href="https://siteguide-production.up.railway.app/demos?utm_source=m3mm&utm_medium=email&utm_campaign=downshift&utm_content=intake-reply" style="color:#FF3B5C;">See the 12 SiteGuide starter templates</a>.'}
       </p>
 
       <p style="margin:24px 0 0;">&mdash; Michael<br/><span style="color:#888;font-size:13px;">M³ &middot; Atlanta, GA &middot; m3mm.net</span></p>
@@ -242,7 +253,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   `;
 
   const adminResult = await sendEmail(env, to, `M³ intake · ${lead.name} (${lead.businessType})`, adminHtml, lead.email);
-  const replyResult = await sendEmail(env, lead.email, 'Got your review request — M³', replyHtml);
+  const replyResult = await sendEmail(env, lead.email, replySubject, replyHtml);
 
   // Fleet bond — forward to CockpitCloud kanban if configured. Env-gated,
   // never blocks the visitor's 200. Idempotency key is deterministic on

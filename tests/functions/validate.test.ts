@@ -76,6 +76,7 @@ describe('validateLead — happy path', () => {
       currentUrl: 'https://ariesoutdoorliving.com',
       frustration: 'My site does not book jobs at all.',
       source: 'homepage',
+      preferredStart: '  Within 2 weeks  ',
     });
     if (!result.ok) throw new Error('expected ok');
     expect(result.lead.name).toBe('David Serrano');
@@ -83,6 +84,7 @@ describe('validateLead — happy path', () => {
     expect(result.lead.businessType).toBe('deck builder');
     expect(result.lead.currentUrl).toBe('https://ariesoutdoorliving.com');
     expect(result.lead.source).toBe('homepage');
+    expect(result.lead.preferredStart).toBe('Within 2 weeks');
   });
 
   it('defaults source to "unknown" when missing', () => {

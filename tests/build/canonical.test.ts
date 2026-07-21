@@ -39,6 +39,7 @@ const PAGE_EXPECTATIONS: ReadonlyArray<{
 }> = [
   { file: 'src/pages/index.astro', path: '/' },
   { file: 'src/pages/audit.astro', path: '/audit' },
+  { file: 'src/pages/start.astro', path: '/start' },
   { file: 'src/pages/thanks.astro', path: '/thanks', noindex: true },
   { file: 'src/pages/accessibility.astro', path: '/accessibility' },
 ];

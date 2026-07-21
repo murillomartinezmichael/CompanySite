@@ -1,0 +1,26 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+---
+
+<Layout
+  title="Project intake received — M³"
+  description="Your M³ basic-site project intake was received."
+  path="/start/thanks"
+  noindex={true}
+>
+  <Header slot="header" minimal={true} path="/start/thanks" />
+  <div class="container-page py-20 sm:py-28">
+    <section class="panel mx-auto max-w-2xl p-8 sm:p-12">
+      <p class="kicker mono">Intake received</p>
+      <h1 class="mt-5 text-display-lg">Your project is in the queue.</h1>
+      <p class="mt-6 text-lg text-bone-dim">I’ll review the scope and your preferred timing, then email you to confirm the build week before work begins.</p>
+      <div class="mt-8 border-l-2 border-clay pl-5 text-sm text-bone-dim">
+        Keep your Stripe receipt for your records. The $100 down payment is non-refundable; all other payments are refundable before launch.
+      </div>
+      <a href="/" class="btn-secondary mt-10 inline-flex" data-cta="start-thanks-home" data-section="start-thanks" data-intent="book:free-review">Back to M³</a>
+    </section>
+  </div>
+  <Footer slot="footer" path="/start/thanks" />
+</Layout>

@@ -29,6 +29,7 @@ export function scoreLead(lead: Lead): number {
   if (frustration.length >= 120) score += 10;
   if (lead.currentUrl) score += 20;
   const intent = (lead.intent || '').toLowerCase();
+  if (intent.startsWith('checkout:')) score += 40;
   if (intent.includes('website') || intent.includes('business') || intent.includes('custom')) {
     score += 20;
   }
@@ -66,6 +67,7 @@ export function buildN8nLeadPayload(
       businessType: lead.businessType,
       currentUrl: lead.currentUrl || null,
       frustration: lead.frustration,
+      preferredStart: lead.preferredStart || null,
       source: lead.source,
       intent: lead.intent || null,
       utm_source: lead.utm_source || null,
@@ -76,13 +78,15 @@ export function buildN8nLeadPayload(
     },
     ip,
     receivedAt: new Date().toISOString(),
-    replyHint: [
-      `Hey ${lead.name.split(/\s+/)[0] || lead.name} — got your note about ${lead.businessType}.`,
-      lead.currentUrl
-        ? `I peeked at ${lead.currentUrl} and have 2–3 concrete fixes that would help.`
-        : `Send me the site URL (or a screenshot) and I’ll give you a blunt 3-bullet take.`,
-      `Want a 5-min review this week, or should I just email the notes?`,
-    ].join(' '),
+    replyHint: lead.intent?.startsWith('checkout:')
+      ? `Verify the Stripe payment, then reply: Hey ${lead.name.split(/\s+/)[0] || lead.name} — I have your project intake and preferred start window (${lead.preferredStart || 'not specified'}). I’ll confirm the scope and actual build week before work begins.`
+      : [
+        `Hey ${lead.name.split(/\s+/)[0] || lead.name} — got your note about ${lead.businessType}.`,
+        lead.currentUrl
+          ? `I peeked at ${lead.currentUrl} and have 2–3 concrete fixes that would help.`
+          : `Send me the site URL (or a screenshot) and I’ll give you a blunt 3-bullet take.`,
+        `Want a 5-min review this week, or should I just email the notes?`,
+      ].join(' '),
   };
 }
 
