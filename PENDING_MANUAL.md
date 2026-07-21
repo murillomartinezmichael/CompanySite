@@ -26,10 +26,12 @@
   - **Why blocked on him:** The clip is his content (LAW 8/9); R2/Stream setup needs his Cloudflare dashboard.
   - **Resumes:** High/M research item "ship the reel above pricing" — the embed itself (muted autoplay, poster, prefers-reduced-motion) is a one-session build once the asset URL exists.
 
-- [ ] **Founder photo + real TikTok/IG profile URLs for the intake signature card.**
-  - **What to do:** Drop a headshot (square, ~500px) into `public/` and write the exact TikTok + Instagram profile URLs here.
-  - **Why blocked on him:** No photo exists in the repo and the handles are documented nowhere in the fleet — guessing profile URLs would be fabrication (LAW 6).
-  - **Resumes:** Medium/S research item "close the face loop by the review form" (the name + signature card already exist in `Intake.astro`).
+- [~] **Founder photo + real TikTok/IG profile URLs for the intake signature card — PARTIAL 2026-07-20.**
+  - **TikTok confirmed (Mike):** `https://www.tiktok.com/@m3mm_dev`
+  - **Still needed:** Instagram profile URL, and the headshot itself (Mike said "later" — not ready yet, not blocked on anything technical, just hasn't been taken/picked).
+  - **What to do:** wire the TikTok URL into the intake signature card now (agent-doable, no fabrication risk); add Instagram + swap in the real headshot once both exist.
+  - **Why blocked on him:** headshot + IG handle are his to provide; TikTok is now unblocked.
+  - **Resumes:** Medium/S research item "close the face loop by the review form" (the name + signature card already exist in `Intake.astro`) — can partially ship now with TikTok only.
 
 - [ ] **Approve the Aries before/after slider (old site vs shipped site).**
   - **What to do:** (a) OK showing Aries' pre-rebuild site publicly with David Serrano (client conversation), then (b) pick the Wayback Machine capture of the old ariesoutdoorliving.com to use.
