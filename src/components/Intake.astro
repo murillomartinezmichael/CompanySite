@@ -32,14 +32,13 @@ const {
   <!-- Ambient glow -->
   <div class="pointer-events-none absolute inset-x-0 top-16 -z-10 h-[400px]">
     <div class="absolute left-1/4 top-0 h-[300px] w-[300px] rounded-full bg-clay/[0.06] blur-3xl"></div>
-    <div class="absolute right-1/4 top-32 h-[280px] w-[280px] rounded-full bg-neon/[0.04] blur-3xl"></div>
   </div>
 
   <div class="container-page grid gap-14 lg:grid-cols-[1fr,1.15fr] lg:gap-20">
     <!-- Left rail -->
     <div class="reveal lg:sticky lg:top-24 lg:h-fit">
       <div class="mb-6 flex items-center gap-3">
-        <span class="hairline-neon"></span>
+        <span class="hairline"></span>
         <p class="kicker mono">{eyebrow}</p>
       </div>
       <h2 class="text-display-lg">{headline}</h2>
@@ -54,14 +53,14 @@ const {
           </div>
         </li>
         <li class="flex gap-4">
-          <span class="mono flex h-9 w-9 flex-none items-center justify-center rounded-full border border-neon/40 bg-neon/[0.08] text-xs text-neon">02</span>
+          <span class="mono flex h-9 w-9 flex-none items-center justify-center rounded-full border border-clay/40 bg-clay/10 text-xs text-clay">02</span>
           <div>
             <p class="font-medium text-bone">{mode === 'project' ? 'I confirm the scope' : 'I actually look'}</p>
             <p class="mt-1 text-sm text-bone-dim">{mode === 'project' ? 'I review the intake and confirm the build plan before work begins.' : 'Lighthouse, mobile, funnel, copy — all of it.'}</p>
           </div>
         </li>
         <li class="flex gap-4">
-          <span class="mono flex h-9 w-9 flex-none items-center justify-center rounded-full border border-cyber/40 bg-cyber/[0.08] text-xs text-cyber">03</span>
+          <span class="mono flex h-9 w-9 flex-none items-center justify-center rounded-full border border-clay/40 bg-clay/10 text-xs text-clay">03</span>
           <div>
             <p class="font-medium text-bone">{mode === 'project' ? 'We start the build' : 'Video teardown + rough scope'}</p>
             <p class="mt-1 text-sm text-bone-dim">{mode === 'project' ? 'Your $100 down payment reserves the next confirmed build window.' : 'A 5-minute recorded walkthrough, emailed within 24 hours. Plain English, no jargon.'}</p>
