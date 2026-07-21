@@ -108,6 +108,12 @@ describe('outbound SiteGuide downshift links carry UTM attribution', () => {
       const rel = relative(root, abs).replace(/\\/g, '/');
       const src = readFileSync(abs, 'utf8');
       for (const url of src.match(rx) || []) {
+        // /widget.js is the SiteGuide AI guide widget's <script src> resource
+        // load (dogfood embed, opportunity #11, wired in Layout.astro) — a
+        // page asset fetch, not an outbound click-through a visitor
+        // navigates away on. The downshift UTM attribution contract below
+        // was built for anchor hrefs; it doesn't apply to a script tag.
+        if (/\/widget\.js(\?.*)?$/.test(url)) continue;
         const missing: string[] = [];
         if (!url.includes('utm_source=m3mm')) missing.push('utm_source=m3mm');
         if (!url.includes('utm_campaign=downshift')) missing.push('utm_campaign=downshift');

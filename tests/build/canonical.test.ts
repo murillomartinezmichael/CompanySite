@@ -173,7 +173,13 @@ describe('canonical URL wiring', () => {
     // Semantic namespace identifiers (not content URLs) — allowlisted.
     const isNamespace = (u: string) =>
       u.startsWith('https://schema.org') || u.startsWith('http://www.w3.org');
-    const content = urls.filter((u) => !isNamespace(u));
+    // SiteGuide widget `<script src>` (opportunity #11 dogfood embed) is a
+    // cross-origin resource load, not a schema.org/breadcrumb content URL —
+    // it doesn't compete with canonical as an SEO origin signal, so exempt
+    // it the same way as the namespace identifiers above.
+    const isWidgetAsset = (u: string) =>
+      u.startsWith('https://siteguide-production.up.railway.app/widget.js');
+    const content = urls.filter((u) => !isNamespace(u) && !isWidgetAsset(u));
     expect(content.length, 'Layout must contain at least one content URL').toBeGreaterThan(0);
     const originRe = new RegExp(`^${PROD_ORIGIN.replace(/[.]/g, '\\.')}(/|#|$)`);
     for (const url of content) {

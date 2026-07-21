@@ -323,5 +323,18 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
         if (inline) inline.addEventListener('click', toggle);
       })();
     </script>
+
+    <!-- SiteGuide AI guide widget — dogfood embed (opportunity #11). Same
+         product M3 sells to clients, running live here as our own proof of
+         point. Config lives in SiteGuide's sites/companysite.json (origin
+         allowlisted there); CSP allowance for this origin is in
+         public/_headers. Not a `[data-cta]` element — the tracker in
+         wireCTAs() only wires elements with that attribute, so this widget's
+         own open/close/send interactions are intentionally untracked here. -->
+    <script
+      src="https://siteguide-production.up.railway.app/widget.js"
+      data-site="companysite"
+      data-title="Ask M³"
+      defer></script>
   </body>
 </html>
