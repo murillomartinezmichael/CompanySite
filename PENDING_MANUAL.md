@@ -17,9 +17,10 @@
   - **Implemented:** Replaced the superseded full-refund badge on the $500 + $1k-$2k Services cards and added regression coverage.
 
 - [ ] **Stripe Payment Link for the directly-buyable $500 Basic tier.**
-  - **What to do:** Create a Stripe Payment Link for the $100 down payment (20% of the $500 Basic tier), label it non-refundable, then hand the URL to a session to build the /start page + n8n webhook into the lead OS.
+  - **Status 2026-07-21:** The `/start` page + `/start/thanks` + lead-capture wiring are already built and committed (`a81a7c1`) — this is now the ONLY remaining gap. `tests/build/start-checkout.test.ts` deliberately fails on the placeholder as a guard rail so it can't ship unnoticed; every other test is green (245/246).
+  - **What to do:** Create a Stripe Payment Link for the $100 down payment (20% of the $500 Basic tier), label it non-refundable, then paste the real URL into `src/config/offers.ts`'s `BASIC_SITE.paymentLink` (replacing `'https://buy.stripe.com/REPLACE_AFTER_SIGN_IN'`).
   - **Why blocked on him:** Needs Mike's authenticated Stripe dashboard; the pricing policy itself was confirmed 2026-07-20.
-  - **Resumes:** High/M research item "make the $500 tier directly buyable" becomes agent-actionable end-to-end.
+  - **Resumes:** Once the real link is in, `npm test` goes 246/246 and `/start` is ready to push live.
 
 - [ ] **Pick + upload the reel clip for the pricing-section video embed.**
   - **What to do:** Choose the best-performing 60-90s vertical TikTok clip, export it, and upload to Cloudflare R2 or Stream (NOT the Pages bundle — 25MB per-file limit); drop the URL + a poster frame in the repo or this file.
