@@ -588,3 +588,14 @@ against live sites). Full fleet report:
 - [ ] **[high if built well — biggest.../high — needs an actual generation...] ()** Longer-term, replace the 24h-turnaround free review on /audit with an instant AI-generated homepage mockup (enter business name/type/colors, get a live preview immediately), collapsing the DIY-vs-hire decision the way Wix's ADI/Aria and WebsiteDesignFor99's digitu.app do — this is a bigger build than the others, so flag it as a Rung 6/7 candidate rather than a quick win.
   - *Pattern source:* Wix — AI-generated first draft (ADI/Aria) collapsing the DIY-vs-hire decision; WebsiteDesignFor99 — free interactive lead-magnet tool (digitu.app) capturing intent before the sales call
   - *Anchor:* src/pages/audit.astro (current 24h-teardown promise, lines 33-42); src/components/Intake.astro (`mode='review'` intake flow this would sit in front of)
+
+## PARKED — astro 5->7 major upgrade (security-motivated, 2026-07-23)
+
+npm audit wants astro@7.1.3 (breaking) to clear: astro define:vars XSS
+(GHSA/1117141 — define:vars is UNUSED in this codebase, not reachable),
+sharp/libvips CVEs (build-time only, repo-owned images), esbuild dev-server
+file read (dev-only), miniflare/wrangler transitive (dev-only). None hot in
+production today; fast-uri (the one runtime-reachable high) was patched
+non-breakingly 2026-07-23. Do the major bump as its own session with full
+test+build+deploy verification — not as a drive-by. Resurrection: next
+CompanySite feature session, or immediately if define:vars ever gets used.
