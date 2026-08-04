@@ -17,6 +17,7 @@ import { LIMITS, validateLead, esc, UTM_FIELDS, type Lead } from '../_lib/valida
 import { checkRate } from '../_lib/rate';
 import { sendToCockpit, leadIdempotencyKey } from '../_lib/cockpit-sink';
 import { sendToN8n } from '../_lib/n8n-sink';
+import { referralOffer, referralShareUrl, REFERRAL_FIELD_LABEL } from '../_lib/referral';
 
 type Env = {
   RESEND_API_KEY?: string;
@@ -159,6 +160,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       frustration: params.get('frustration') || undefined,
       preferredStart: params.get('preferredStart') || undefined,
       source: params.get('source') || undefined,
+      referredBy: params.get('referredBy') || undefined,
       company_website: params.get('company_website') || undefined,
       intent: params.get('intent') || undefined,
       utm_source: params.get('utm_source') || undefined,
@@ -192,10 +194,17 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     .filter(([, v]) => Boolean(v))
     .map(([k, v]) => `<p style="margin:2px 0;"><b>${esc(k)}:</b> ${esc(v as string)}</p>`)
     .join('');
-  const attributionHtml = (lead.intent || utmRows)
+  // Referral row sits at the TOP of the attribution block: a named referrer
+  // outranks every UTM as a reason to reply fast, and it's the row Michael
+  // reads to know who gets paid.
+  const referralRow = lead.referredBy
+    ? `<p style="margin:2px 0;font-size:14px;"><b>${esc(REFERRAL_FIELD_LABEL)}:</b> ${esc(lead.referredBy)}</p>`
+    : '';
+  const attributionHtml = (lead.intent || utmRows || referralRow)
     ? `
     <div style="margin:16px 0;padding:10px 14px;background:#f4f4f0;border-left:3px solid #9AA;font-size:13px;">
       <p style="margin:0 0 6px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#888;">Attribution</p>
+      ${referralRow}
       ${lead.intent ? `<p style="margin:2px 0;"><b>Intent:</b> ${esc(lead.intent)}</p>` : ''}
       ${utmRows}
     </div>
@@ -228,6 +237,14 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     ? 'Your M³ project intake is in'
     : 'Got your review request — M³';
 
+  // Referral CTA in the closing block — every reply turns the lead into a
+  // potential referrer. Terms come from one config (functions/_lib/referral.ts)
+  // so the email can't promise something the site doesn't.
+  const referral = referralOffer();
+  // Personal share link — the referrer's name is already in the URL, so the
+  // person they send never has to know it and the credit can't be lost.
+  const referralLink = referralShareUrl(lead.name);
+
   const replyHtml = `
     <div style="font-family:Georgia,serif;max-width:560px;color:#111;line-height:1.55;">
       <h2 style="margin:0 0 14px;font-size:22px;">Got it, ${esc(lead.name)}.</h2>
@@ -247,6 +264,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
           ? 'Keep your Stripe receipt for your records. The $100 down payment is non-refundable; all other payments are refundable before launch.'
           : 'Want to browse while you wait? <a href="https://siteguide-production.up.railway.app/demos?utm_source=m3mm&utm_medium=email&utm_campaign=downshift&utm_content=intake-reply" style="color:#FF3B5C;">See the 12 SiteGuide starter templates</a>.'}
       </p>
+
+      <div style="margin:20px 0 0;padding-top:14px;border-top:1px solid #e8e4dc;font-size:13px;color:#555;">
+        <b style="color:#111;">${esc(referral.headline)}</b><br/>
+        ${esc(referral.body)}<br/>
+        <a href="${esc(referralLink)}" style="color:#FF3B5C;">Your share link: ${esc(referralLink)}</a>
+      </div>
 
       <p style="margin:24px 0 0;">&mdash; Michael<br/><span style="color:#888;font-size:13px;">M³ &middot; Atlanta, GA &middot; m3mm.net</span></p>
     </div>
@@ -269,6 +292,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     business: lead.businessType,
     hasUrl: Boolean(lead.currentUrl),
     frustrationLength: lead.frustration.length,
+    referredBy: lead.referredBy || undefined,
     intent: lead.intent || undefined,
     utm_source: lead.utm_source || undefined,
     utm_medium: lead.utm_medium || undefined,

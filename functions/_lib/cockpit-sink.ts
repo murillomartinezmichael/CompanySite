@@ -62,6 +62,7 @@ export function buildCockpitLeadCard(_id: string, lead: Lead, ip: string): Recor
     `Email: ${lead.email}`,
     lead.currentUrl ? `Their site: ${lead.currentUrl}` : null,
     lead.preferredStart ? `Preferred start: ${lead.preferredStart}` : null,
+    lead.referredBy ? `Referred by: ${lead.referredBy} — credit the referrer if this closes.` : null,
     ``,
     `Frustration:`,
     lead.frustration,
