@@ -6,7 +6,16 @@
 
 ## NEXT ACTION
 
-**NEXT ACTION (2026-07-21):** Two things unpushed, both need Mike before going live: (1) the $500-tier Stripe checkout flow (`/start` — code complete, 245/246 tests, blocked only on a real Stripe Payment Link replacing the `REPLACE_AFTER_SIGN_IN` placeholder — see `PENDING_MANUAL.md`), and (2) the full design-system redesign (see SHIPPED below) — verified at build/test level but NOT screenshot-checked (Chrome automation was down all session), so Mike should preview locally (`npm run dev` or `npm run preview`) before either lands on m3mm.net. Once both are eyeballed, push in one go.
+**NEXT ACTION (2026-08-03):** Nothing is half-done — pick one of these three, in this order.
+1. **Push.** Four local commits are queued and unpushed (`77c57e8` design system → `27e670c` deps). Mike still owes the visual eyeball on the redesign + `/start` (see the 2026-07-21 note below) before they hit m3mm.net; once he's looked, one push ships all four.
+2. **Set the referral bounty** — one line in `functions/_lib/referral.ts` (`bountyUsd: null` → a real number), which flips the intake hint, `/thanks`, `/start/thanks`, and the auto-reply email from capture-only to "get $X". Needs Mike's number (`PENDING_MANUAL.md § Referral program gate`), then update the one guard expectation in `tests/build/referral-program.test.ts`.
+3. **The astro 5→7 major** — no longer speculative: a full spike ran this session and the entire change set is five files, enumerated with real error output in `## PARKED — astro 5→7` below. Budget one session.
+
+**SHIPPED (2026-08-03 — cash referral program, capture path live, `a28e64d`):** Top item off the 2026-07-23 competitor-research list (zero-CAC lead source: every past client becomes a sales rep). `referredBy` is now an optional intake field prefilled from `?ref=<name>`, so a past client's share link credits them without the prospect typing anything. Threaded end-to-end: `Lead` type + `validateLead()` (120-char cap, trimmed, escaped), the no-JS urlencoded branch of `/api/lead`, the **top row** of the admin email's attribution block (a named referrer outranks every UTM), the structured log line, the CockpitCloud triage card, and the n8n payload — where a referred lead now scores **+15**. Referral CTA added to `/thanks`, `/start/thanks`, and the auto-reply email, which also carries a personal `?ref=` share link built from the lead's own name. All copy renders from one config (`functions/_lib/referral.ts`) so the site and the inbox can't drift apart. **The cash amount is deliberately unset** — `bountyUsd: null` publishes the capture-only wording and a test fails if any payout figure reaches a public surface before Mike confirms one (LAW 6; gate in `PENDING_MANUAL.md`). Verified: `npm test` **276/277** (+31 new tests, all green; the one failure is the pre-existing Stripe placeholder guard), `npm run build` clean (**9 pages**), `npx astro check` **0 errors**, `dist/` grepped (field renders on `/`, `/audit`, all three `/for/*`; referral copy on both thank-you pages; zero invented payout figures anywhere), and a live **`wrangler pages dev` money-path smoke**: JSON POST **200** and no-JS urlencoded POST **200** with the referrer intact in the `lead_received` log line, a 1000-char referrer truncated to 120, no real emails fired (RESEND unset → documented graceful degrade).
+
+**SHIPPED (2026-08-03 — non-breaking dependency patch, `27e670c`):** `npm audit fix` (no `--force`) cleared **fast-uri GHSA-7p8r-x3mc-p8w7 (high)** and **postcss GHSA-fxqj-rqcc-2cmp (moderate)**. 9 vulnerabilities → 7. Note fast-uri regressed since the 2026-07-23 patch and now reaches the repo only via `@astrojs/check` → yaml-language-server → ajv (type-check tooling, never the Worker). Everything left needs a major — see the astro plan below.
+
+**NEXT ACTION (2026-07-21, still open — Mike's eyeball):** Two things unpushed, both need Mike before going live: (1) the $500-tier Stripe checkout flow (`/start` — code complete, 245/246 tests, blocked only on a real Stripe Payment Link replacing the `REPLACE_AFTER_SIGN_IN` placeholder — see `PENDING_MANUAL.md`), and (2) the full design-system redesign (see SHIPPED below) — verified at build/test level but NOT screenshot-checked (Chrome automation was down all session), so Mike should preview locally (`npm run dev` or `npm run preview`) before either lands on m3mm.net. Once both are eyeballed, push in one go.
 
 **SHIPPED (2026-07-21 — design system replaced, "Cyberpunk Edgerunners" → "Confident Studio"):** Mike said he didn't like the design and asked for it to look "legit." Investigation (not guessing): the old theme was explicitly built per its own code comments for "TikTok-scroll-stopping character" (glitch bars, halftone swarms, RGB-split headline text, a violet triangle, plus a photosensitivity disclaimer and a DIM-mode toggle to soften it all) — but `BRD.md`'s own positioning section names the actual audience as wanting "a credible custom website... not a DIY template." Confirmed the new direction with Mike (kept dark mode, dropped the neon/anime decoration, one restrained accent) before executing. Swept `tailwind.config.mjs`, `global.css`, and every component/page referencing the old multi-hue accent system (Hero, Services, Intake, Header, Faq, TradeLanding, TwoDoor, audit.astro, thanks.astro, start.astro) down to a single accent; removed the DIM toggle + photosensitivity note from `Layout.astro` entirely (nothing left to soften). Copy/IA untouched — this was a visual-only pass. See `DECISIONS.md § D-CS-010` for the full before/after and rationale. Verified: `npm run build` clean (9 pages), `npm test` **245/246** (same single pre-existing failure as baseline, zero regressions from the redesign), `npx astro check` **0 errors**, grepped `dist/` post-build for zero leftover cyber/neon/glitch/halftone/dim-toggle references. **Not pushed** — holding for Mike's visual sign-off since I couldn't screenshot-verify it myself (browser tooling down all session).
 
@@ -570,7 +579,7 @@ Adversarial research pass (researcher + verifier per competitor, claims checked
 against live sites). Full fleet report:
 `../docs/research/COMPETITOR_RESEARCH_2026-07-23.md`.
 
-- [ ] **[high — zero-CAC lead source, plugs.../low — one new field end-to-end, no...] ()** Add a cash referral program: past clients (Aries, Big7) get paid per successful referral. Concretely: add a `referredBy` free-text field to the intake form, thread it through `Lead` type and `validateLead()`, surface it in the admin email's attribution block, and add a 'Know someone who needs a site? Get $X' line to the /thanks page and the Resend reply email's closing CTA (where the SiteGuide downshift link currently sits). Every past client (2 case studies today, growing) becomes an unpaid sales rep with zero ad spend.
+- [x] **[high — zero-CAC lead source, plugs.../low — one new field end-to-end, no...] ()** **DONE 2026-08-03 `a28e64d`** — capture path shipped end-to-end (field + `?ref=` prefill + admin attribution + /thanks + /start/thanks + auto-reply CTA + personal share link + n8n/Cockpit threading, 31 tests). The only unshipped half is the dollar amount, which is Mike's call → `PENDING_MANUAL.md § Referral program gate`. Original item: Add a cash referral program: past clients (Aries, Big7) get paid per successful referral. Concretely: add a `referredBy` free-text field to the intake form, thread it through `Lead` type and `validateLead()`, surface it in the admin email's attribution block, and add a 'Know someone who needs a site? Get $X' line to the /thanks page and the Resend reply email's closing CTA (where the SiteGuide downshift link currently sits). Every past client (2 case studies today, growing) becomes an unpaid sales rep with zero ad spend.
   - *Pattern source:* WebsiteDesignFor99 — cash referral program ($100/referral) turning past clients into unpaid sales reps
   - *Anchor:* src/components/Intake.astro (form fields + honeypot block, lines ~122-207); functions/_lib/validate.ts (Lead type + UTM_FIELDS, lines 25-46); functions/api/lead.ts (replyHtml closing CTA, lines 231-253); src/pages/thanks.astro
 - [ ] **[medium-high — reduces the anxiety.../low — one new array entry + FAQ line...] ()** Close the quote-only cliff between the $1k-$2k bounded package and 'quote-only above $2k' with one more public flat-fee tier (e.g. $2,500-$3,500 'corporate site' band covering 2-3 extra service lines or a light integration) before the manual-quote gate kicks in, mirroring how Duck.Design keeps three transparent tiers ($1,199/$1,899/$1,999) and only gates 'Book a call' right at the ceiling.
@@ -589,13 +598,90 @@ against live sites). Full fleet report:
   - *Pattern source:* Wix — AI-generated first draft (ADI/Aria) collapsing the DIY-vs-hire decision; WebsiteDesignFor99 — free interactive lead-magnet tool (digitu.app) capturing intent before the sales call
   - *Anchor:* src/pages/audit.astro (current 24h-teardown promise, lines 33-42); src/components/Intake.astro (`mode='review'` intake flow this would sit in front of)
 
-## PARKED — astro 5->7 major upgrade (security-motivated, 2026-07-23)
+## PARKED — astro 5→7 major upgrade (RE-TRIAGED 2026-08-03 against Node 22.23.1)
 
-npm audit wants astro@7.1.3 (breaking) to clear: astro define:vars XSS
-(GHSA/1117141 — define:vars is UNUSED in this codebase, not reachable),
-sharp/libvips CVEs (build-time only, repo-owned images), esbuild dev-server
-file read (dev-only), miniflare/wrangler transitive (dev-only). None hot in
-production today; fast-uri (the one runtime-reachable high) was patched
-non-breakingly 2026-07-23. Do the major bump as its own session with full
-test+build+deploy verification — not as a drive-by. Resurrection: next
-CompanySite feature session, or immediately if define:vars ever gets used.
+**Still parked, but no longer unknown.** A full throwaway spike ran this
+session (clean `git archive` copy in a temp dir, real installs, real builds —
+the repo itself was never touched). Everything below is measured output, not
+estimation.
+
+### What the spike proved
+
+- **The Node blocker is gone.** `astro@7.1.6` declares `engines.node >=22.12.0`;
+  this machine is on **22.23.1 LTS**. Nothing else in the tree objects.
+- **Astro 7 builds this site: 9 pages, clean**, after the five changes listed
+  below. `npx astro check` ends at **0 errors / 0 warnings / 18 hints**
+  (the hints are new-in-7 advisory noise, not failures).
+- **Tailwind keeps working — for now.** `@astrojs/tailwind@6.0.2` peers at
+  `astro ^3 || ^4 || ^5`, so npm emits an ERESOLVE peer warning under 7, but
+  the CSS still compiles correctly (`.container-page` and every responsive
+  utility present in the built HTML; 86.9 KB index vs 91.0 KB under astro 5).
+  We are running an unsupported peer combination, not a broken one. The
+  supported path is `@tailwindcss/vite` + Tailwind 4, which rewrites the
+  config model — **that migration is NOT required to land astro 7 and should
+  be its own separate session** (design tokens live in `tailwind.config.mjs`
+  per `CLAUDE.md`; Tailwind 4 moves them into CSS `@theme`).
+- **The dangerous part is a silent one.** A naive bump builds green *and
+  emits broken markup*: the content-loader API renames `entry.slug` → `entry.id`,
+  so `CaseStudy.astro` rendered `product:undefined`, `casestudy-undefined-visit`,
+  and `utm_content=undefined` — with `npm test` still reporting 276/277.
+  Verified by grepping the spike's `dist/`. Do not trust a green build alone.
+
+### The exact change set (5 files, all verified sufficient)
+
+1. `src/content/config.ts` → **`src/content.config.ts`**, rewritten to the
+   loader API (`loader: glob({ base: './src/content/caseStudies', pattern: '**/*.md' })`,
+   drop `type: 'content'`). Without it the build dies immediately:
+   `[LegacyContentConfigError] Found legacy content config file`.
+2. `src/components/CaseStudyArt.astro` — remove the two HTML comments that sit
+   as the first node inside `{slug === '…' && ( … )}` (lines ~18 and ~63). The
+   new compiler rejects them: `[CompilerError] Unexpected token` at 18:5.
+3. `src/components/CaseStudy.astro` — `entry.slug` → `entry.id`, **4
+   occurrences** (lines 23, 47, 91, 93). This is the silent-breakage fix.
+4. `tests/build/casestudy-outbound-utm.test.ts` — two source-text assertions
+   pin `entry.slug`; update them in the same commit or the suite goes 274/277.
+5. `package.json` — `astro ^5.18.2` → `^7.1.6`. Expect the `@astrojs/tailwind`
+   peer warning; do not "fix" it by forcing Tailwind 4 in the same session.
+
+### Security payoff, measured
+
+`npm audit` in the spike after the bump: **7 → 5 high**, with every astro and
+esbuild advisory cleared (8 astro CVEs incl. the two new 2026-08 ones —
+`GHSA-f48w-9m4c-m7f5` spread-attribute XSS and `GHSA-7pw4-f3q4-r2p2`
+`transition:*` XSS — plus `GHSA-g7r4-m6w7-qqqr`, the Windows dev-server
+arbitrary-file-read, which *does* apply to Mike's machine while `astro dev`
+runs). What remains after the bump is sharp + undici/miniflare/wrangler only.
+
+**Reachability re-check (why this is still not an emergency):** grepped `src/`
+for every advisory's trigger — `define:vars` **0 uses**, spread props `{...}`
+in markup **0**, `transition:*` directives **0** (only CSS `transition:`),
+`ViewTransitions`/`ClientRouter` **0**, `server:defer` islands **0**, `client:*`
+islands **0**, and the only `<slot>`s carry literal names (`header`, `footer`),
+never visitor input. `output: 'static'` with no adapter, so the SSR error-page
+SSRF has no server to hit. None of the eight astro CVEs is reachable in
+production today.
+
+**Do NOT run `npm audit fix --force`.** Dry-run says it would install
+`astro@7.1.6` *and* **downgrade `wrangler@4.113.0` → `4.35.0`** to dodge the
+undici advisory — a downgrade of a dev-only tool. No fixed wrangler exists
+yet; wait for miniflare to ship the undici bump.
+
+### Scoped plan for the dedicated session (~1 focused session)
+
+1. Branch. Apply the 5 changes above in one commit.
+2. Gates in order: `npm run build` (expect 9 pages) → `npx astro check`
+   (expect 0 errors) → `npm test` (expect 276/277, same single Stripe
+   placeholder failure).
+3. **Add the regression the spike exposed:** a `dist/`-level test asserting
+   `product:aries` / `product:big7` / `utm_content=aries` / `utm_content=big7`
+   are present and that `undefined` appears in no `data-intent`, `data-cta`,
+   or `utm_content` value. This is the only gate that would have caught the
+   silent breakage; nothing in the current 277 does.
+4. `wrangler pages dev dist` smoke on `/api/lead` (JSON + urlencoded, expect
+   200s) — functions are untouched by the bump, so this is a confirmation.
+5. Deploy, then fetch m3mm.net and re-grep the case-study markers live.
+6. Log the outcome in `DECISIONS.md`.
+
+Resurrection: next dedicated session, or immediately if any of `define:vars`,
+spread props, `transition:*`, view transitions, or server islands ever gets
+used in `src/`.

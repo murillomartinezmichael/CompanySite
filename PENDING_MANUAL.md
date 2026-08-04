@@ -48,3 +48,10 @@
 
 - [x] ~~Set `N8N_LEAD_WEBHOOK_URL` in Cloudflare Pages + redeploy~~ **DONE 2026-07-19** — Mike set the var and retried the deployment; verified end-to-end with a marker lead through live m3mm.net → n8n execution #1144 all-green (scored, stored as leads row id 3, notify + auto-reply Gmail both sent). Marker row cleanup tracked in root `PENDING_MANUAL.md` P0 item 3.
 
+
+## Referral program gate (2026-08-03)
+
+- [ ] **Set the referral bounty amount (and when it's paid).**
+  - **What to do:** Decide the cash paid per successful referral and the payout trigger, then set them in `functions/_lib/referral.ts` — `REFERRAL_PROGRAM.bountyUsd` (currently `null`) and `payoutTrigger` (currently `'when their build starts'`). That one edit lights up all four surfaces at once: the intake hint, `/thanks`, `/start/thanks`, and the auto-reply email. The research pattern (WebsiteDesignFor99) uses $100/referral; the field, the `?ref=` share links, and the admin-email attribution row are already live and capturing referrers today.
+  - **Why blocked on him:** It is a cash commitment published on a live money-path site. Guessing the number would be fabrication (LAW 6), so the code deliberately ships in capture-only mode and `tests/build/referral-program.test.ts` fails if any payout figure reaches a public surface while `bountyUsd` is null.
+  - **Resumes:** The program stops being "tell me who sent you" and becomes "get $X for sending someone" — the actual conversion mechanic. Also update the expectation in `tests/build/referral-program.test.ts` ("keeps the bounty unset until the owner confirms it") in the same commit as the decision.
