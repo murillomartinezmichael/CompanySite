@@ -6,7 +6,7 @@
 
 ## NEXT ACTION
 
-**NEXT ACTION (2026-08-04):** **Push the four unpushed commits** — `a28e64d` referral, `27e670c` deps, `59c51d6`+`e792aba` docs, and today's `fix(api)` CORS preflight commit. Nothing is half-done. After the push the queue is unchanged: set the referral bounty (blocked on Mike's number), then the astro 5→7 major.
+**NEXT ACTION (2026-08-04):** **Push `751b3e6`** — after a real `git fetch`, that CORS-preflight commit is the *only* unpushed one (`main` is ahead of `origin/main` by exactly 1; the referral `a28e64d`, deps `27e670c`, and docs `59c51d6`/`e792aba` commits are already on the remote, so the "three unpushed" note dated 2026-08-03 below is stale). Nothing is half-done. After the push the queue is unchanged: set the referral bounty (blocked on Mike's number), then the astro 5→7 major.
 
 **KNOWN-EXPECTED FAILURE — do not re-diagnose:** `scripts/verify-cors-preflight.py` will keep reporting **FAIL for CompanySite** even now that the preflight is fixed. Reason (Codex, 2026-08-03): `GET https://m3mm.net/` returns `Access-Control-Allow-Origin: *`, and that header comes from **Cloudflare Pages' static-asset default, not from `public/_headers`** (which sets no CORS header at all — checked). Harmless for public marketing HTML: the content is public and `*` can never be combined with credentials. The checker probes the site root instead of `/api/*`, so it is measuring Cloudflare's default rather than our policy. The fix belongs in the checker (scope the probe to `/api/*`), which lives in root `scripts/` — another agent's lane, not a CompanySite change. Until that lands, treat the CompanySite line in that report as expected noise.
 
