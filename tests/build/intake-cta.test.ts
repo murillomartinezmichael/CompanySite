@@ -14,6 +14,11 @@ const read = (p: string) => readFileSync(root + p, 'utf8');
 // etc.) cannot silently regress into a dead-end by forgetting the prop.
 
 describe('Header + Footer thread `path` so intake CTAs never dead-end', () => {
+  it('contains the intake glow so it cannot create horizontal mobile scroll', () => {
+    const src = read('src/components/Intake.astro');
+    expect(src).toMatch(/<section id="intake" class="[^"]*\boverflow-hidden\b/);
+  });
+
   it('Header derives an intakeHref from the current path', () => {
     const src = read('src/components/Header.astro');
     expect(src).toMatch(/path\?:\s*string/);

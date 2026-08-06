@@ -1,8 +1,8 @@
 # CompanySite — m3mm.net
 
 **Status:** 🟢 LIVE at [https://m3mm.net](https://m3mm.net) (Cloudflare Pages, since 2026-07-06).
-**Aesthetic:** Cyberpunk 2055 · Edgerunners palette (Lucy cyan primary, magenta rare punch, yellow CTA hover, David-lime accent).
-**Perf:** Lighthouse desktop = 98/96/93/91. Measurement + strike ledger at [`docs/lighthouse-baseline.md`](docs/lighthouse-baseline.md).
+**Design:** "Confident Studio" — dark, restrained, single clay accent (replaced the cyberpunk theme 2026-07-21, see `DECISIONS.md § D-CS-010`; the old single-file site is preserved read-only in `legacy/`).
+**Perf:** Lighthouse desktop = 98/96/93/91 (2026-07-07 measurement). Measurement + strike ledger at [`docs/lighthouse-baseline.md`](docs/lighthouse-baseline.md).
 
 M³'s marketing site. Turns TikTok/Instagram traffic into DMs and quote requests.
 Visitors arrive already half-sold from a video; this site's only job is to close the loop.
@@ -21,11 +21,11 @@ SiteGuide handles the DIY starter-company lane: templates, widgets, and bundles.
 
 ## Stack
 
-- **Astro 4** — static output, zero runtime JS by default
-- **Tailwind 3** — utility-first, cyberpunk design system in `tailwind.config.mjs`
+- **Astro 5** — static output, zero runtime JS by default
+- **Tailwind 3** — utility-first, design tokens in `tailwind.config.mjs`
 - **Cloudflare Pages** — build + host + edge functions
 - **Cloudflare Pages Functions** (`functions/api/*.ts`) — serverless intake (`/api/lead` via Resend) + analytics beacon (`/api/track`)
-- **Fonts:** Space Grotesk (display) + Inter (body) + JetBrains Mono (labels), Google Fonts loaded async (preload+onload swap — Rung IV strike)
+- **Fonts:** Space Grotesk (display) + Inter (body) — self-hosted variable WOFF2 served same-origin (no Google Fonts request at runtime); mono labels fall back to the system stack
 
 ## Structure
 
@@ -43,14 +43,20 @@ CompanySite/
 │   ├── content/
 │   │   ├── config.ts              ← case-study schema
 │   │   └── caseStudies/*.md       ← drop a .md file = new case study
+│   ├── assets/                    ← case-study screenshots (optimized at build)
 │   ├── lib/track.ts               ← CTA tracking helper (data-cta attribute)
 │   ├── pages/
 │   │   ├── index.astro            ← home
-│   │   └── audit.astro            ← /audit — TikTok bio link target
+│   │   ├── audit.astro            ← /audit — TikTok bio link target
+│   │   ├── start.astro            ← /start — $500 tier: deposit + project intake
+│   │   ├── thanks.astro / start/thanks.astro / accessibility.astro
+│   │   └── for/*.astro            ← trade landing pages (outdoor-living, construction, home-services)
 │   └── styles/global.css          ← Tailwind + design tokens
-├── functions/api/
-│   ├── lead.ts                    ← POST → validate → Resend email + auto-reply
-│   └── track.ts                   ← POST → log CTA event (204)
+├── functions/
+│   ├── _lib/                      ← pure, unit-tested helpers (validate, rate, cors, referral, sinks)
+│   └── api/
+│       ├── lead.ts                ← POST → validate → Resend email + auto-reply
+│       └── track.ts               ← POST → log CTA event (204)
 ├── public/
 │   ├── _headers                   ← CSP + HSTS + cache rules
 │   ├── _redirects                 ← /review, /free-review → /audit
@@ -128,11 +134,11 @@ curl -sS -X POST https://m3mm.net/api/lead \
 ## Content — adding a case study
 
 1. Drop a new `.md` file in `src/content/caseStudies/`.
-2. Fill in the frontmatter (see `aries.md` as reference).
-3. Drop a scroll `.mp4` + poster `.jpg` in `public/videos/` matching the `video` and `poster` fields.
+2. Fill in the frontmatter (see `aries.md` for the video variant, `big7.md` for the screenshot variant).
+3. Media, in order of preference: a scroll `.mp4` + poster `.jpg` in `public/videos/` (`video`/`poster` fields), or a real screenshot in `src/assets/` (`image` field — `imageAlt` is schema-required alongside it, and astro:assets optimizes it at build).
 4. `npm run build` — case study appears automatically in `#proof`, ordered by `order`.
 
-Missing media falls back to a "coming soon" tile so the site never breaks on missing files.
+Missing media falls back to a "coming soon" art tile so the site never breaks on missing files.
 
 ## Adding a CTA
 
@@ -142,12 +148,17 @@ Add `data-section="<section>"` to tag which section it lives in. That's the whol
 ## Test
 
 ```bash
-npm test                    # vitest — 68 tests across 6 files
-                            # covers /api/lead + /api/track validators,
-                            # rate limiter, HTML escape, prefill helpers
+npm run build               # build FIRST — the suite asserts the built
+                            # dist/start/index.html (checkout-gate fence)
+                            # and skips those checks if dist/ is absent
+npm test                    # vitest — 337 tests across 28 files (as of 2026-08-05)
+                            # expect 335 passed + 2 skipped: the skips are the
+                            # dormant live-Stripe-link branch (source + built
+                            # HTML), active once a real Payment Link replaces
+                            # the placeholder in src/config/offers.ts
 ```
 
-Suite hits every money-path function pure helper (validate, rate, track-parse, prefill catalog) without needing a Cloudflare runtime — extracted from the function bodies exactly so they'd be unit-testable.
+Suite hits every money-path function pure helper (validate, rate, cors, referral, track-parse, prefill catalog) without needing a Cloudflare runtime, plus build-level guards that pin CTA/intent coverage, canonical URLs, UTM attribution, and the /start checkout gate.
 
 ## Perf
 

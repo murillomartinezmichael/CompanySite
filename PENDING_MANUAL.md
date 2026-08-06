@@ -17,10 +17,10 @@
   - **Implemented:** Replaced the superseded full-refund badge on the $500 + $1k-$2k Services cards and added regression coverage.
 
 - [ ] **Stripe Payment Link for the directly-buyable $500 Basic tier.**
-  - **Status 2026-07-21:** The `/start` page + `/start/thanks` + lead-capture wiring are already built and committed (`a81a7c1`) — this is now the ONLY remaining gap. `tests/build/start-checkout.test.ts` deliberately fails on the placeholder as a guard rail so it can't ship unnoticed; every other test is green (245/246).
-  - **What to do:** Create a Stripe Payment Link for the $100 down payment (20% of the $500 Basic tier), label it non-refundable, then paste the real URL into `src/config/offers.ts`'s `BASIC_SITE.paymentLink` (replacing `'https://buy.stripe.com/REPLACE_AFTER_SIGN_IN'`).
+  - **Status 2026-08-05 (supersedes 2026-07-21):** The `/start` page + `/start/thanks` + lead-capture wiring are built (`a81a7c1`). The placeholder no longer fails the suite OR renders a dead buy button: `checkoutReady` in `src/config/offers.ts` semantically validates the link (only a well-formed LIVE `https://buy.stripe.com/<slug>` passes; placeholder, `test_`-mode, and malformed values all fail closed) and /start gates to the free-review intake with honest "checkout opening soon" copy while it's false. `tests/build/start-checkout.test.ts` pins the validator (table of good/bad links), the source structure, and the built `dist/start/index.html`.
+  - **What to do:** Create a **live-mode** Stripe Payment Link for the $100 down payment (20% of the $500 Basic tier), label it non-refundable, paste the real URL into `src/config/offers.ts`'s `BASIC_SITE.paymentLink` (replacing `'https://buy.stripe.com/REPLACE_AFTER_SIGN_IN'` — a `test_` link will NOT unlock the gate), then **rebuild + redeploy** (`npm run build` && push or wrangler deploy — the site is static, so pasting the link alone changes nothing in production) and run RUNBOOK § 3.3's /start smoke.
   - **Why blocked on him:** Needs Mike's authenticated Stripe dashboard; the pricing policy itself was confirmed 2026-07-20.
-  - **Resumes:** Once the real link is in, `npm test` goes 246/246 and `/start` is ready to push live.
+  - **Resumes:** After paste + rebuild + redeploy, the paid CTA replaces the gated fallback on /start, the suite's dormant live-link tests activate, and the $500 tier is directly buyable.
 
 - [ ] **Pick + upload the reel clip for the pricing-section video embed.**
   - **What to do:** Choose the best-performing 60-90s vertical TikTok clip, export it, and upload to Cloudflare R2 or Stream (NOT the Pages bundle — 25MB per-file limit); drop the URL + a poster frame in the repo or this file.
