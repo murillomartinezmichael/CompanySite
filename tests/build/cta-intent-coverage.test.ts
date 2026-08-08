@@ -41,10 +41,12 @@ function walkAstro(dir: string): string[] {
 // these lists with a written reason. This is the fence.
 
 const NAV_ONLY_CTAS: ReadonlySet<string> = new Set([
-  'logo',           // Header: brand mark → /
-  'nav-proof',      // Header: in-page anchor → #proof
-  'nav-services',   // Header: in-page anchor → #services
-  'footer-a11y',    // Footer: nav → /accessibility statement page
+  'logo',              // Header: brand mark → /
+  'nav-proof',         // Header: in-page anchor → #proof
+  'nav-services',      // Header: in-page anchor → #services
+  'footer-a11y',       // Footer: nav → /accessibility statement page
+  'signature-tiktok',  // Intake signature card: outbound nav to founder's
+                       // TikTok profile — no conversion outcome to intent-tag.
 ]);
 
 const FORM_SUBMIT_CTAS: ReadonlySet<string> = new Set([

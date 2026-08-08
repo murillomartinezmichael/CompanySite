@@ -1,15 +1,21 @@
 ---
+import { REFERRAL_FIELD_LABEL } from '../../functions/_lib/referral';
+
 interface Props {
   eyebrow?: string;
   headline?: string;
   sub?: string;
   source?: string;
   defaultIntent?: string;
+  mode?: 'review' | 'project';
+  submitLabel?: string;
+  successPath?: string;
+  showStartWindow?: boolean;
 }
 const {
   eyebrow = 'Free site review',
   headline = 'Tell me what\'s broken. I\'ll tell you what to fix.',
-  sub = 'Two minutes. No sales call. I reply within 24 hours with a plain-English write-up: what\'s working, what\'s costing you customers, and whether it needs a rebuild or just a fix.',
+  sub = 'Two minutes. No sales call. Within 24 hours you get a 5-minute recorded video teardown of your site: what\'s working, what\'s costing you customers, and whether it needs a rebuild or just a fix.',
   source = 'homepage',
   // CONVERSION_STANDARDS.md § 4 — every intake_submit must carry intent.
   // Visitors who scroll straight to the form without touching a CTA
@@ -17,21 +23,28 @@ const {
   // with intent=undefined. Any [data-intent] click still overrides via
   // wirePrefill() before submit.
   defaultIntent = 'book:free-review',
+  mode = 'review',
+  submitLabel = 'Send my free review',
+  successPath = '/thanks',
+  showStartWindow = false,
 } = Astro.props;
+
+// One source of truth for the label so the intake, /thanks, and the
+// auto-reply email all name the same field.
+const referralFieldLabel = REFERRAL_FIELD_LABEL;
 ---
 
-<section id="intake" class="relative py-24 sm:py-32">
+<section id="intake" class="relative overflow-hidden py-24 sm:py-32">
   <!-- Ambient glow -->
   <div class="pointer-events-none absolute inset-x-0 top-16 -z-10 h-[400px]">
     <div class="absolute left-1/4 top-0 h-[300px] w-[300px] rounded-full bg-clay/[0.06] blur-3xl"></div>
-    <div class="absolute right-1/4 top-32 h-[280px] w-[280px] rounded-full bg-neon/[0.04] blur-3xl"></div>
   </div>
 
   <div class="container-page grid gap-14 lg:grid-cols-[1fr,1.15fr] lg:gap-20">
     <!-- Left rail -->
     <div class="reveal lg:sticky lg:top-24 lg:h-fit">
       <div class="mb-6 flex items-center gap-3">
-        <span class="hairline-neon"></span>
+        <span class="hairline"></span>
         <p class="kicker mono">{eyebrow}</p>
       </div>
       <h2 class="text-display-lg">{headline}</h2>
@@ -46,17 +59,17 @@ const {
           </div>
         </li>
         <li class="flex gap-4">
-          <span class="mono flex h-9 w-9 flex-none items-center justify-center rounded-full border border-neon/40 bg-neon/[0.08] text-xs text-neon">02</span>
+          <span class="mono flex h-9 w-9 flex-none items-center justify-center rounded-full border border-clay/40 bg-clay/10 text-xs text-clay">02</span>
           <div>
-            <p class="font-medium text-bone">I actually look</p>
-            <p class="mt-1 text-sm text-bone-dim">Lighthouse, mobile, funnel, copy — all of it.</p>
+            <p class="font-medium text-bone">{mode === 'project' ? 'I confirm the scope' : 'I actually look'}</p>
+            <p class="mt-1 text-sm text-bone-dim">{mode === 'project' ? 'I review the intake and confirm the build plan before work begins.' : 'Lighthouse, mobile, funnel, copy — all of it.'}</p>
           </div>
         </li>
         <li class="flex gap-4">
-          <span class="mono flex h-9 w-9 flex-none items-center justify-center rounded-full border border-cyber/40 bg-cyber/[0.08] text-xs text-cyber">03</span>
+          <span class="mono flex h-9 w-9 flex-none items-center justify-center rounded-full border border-clay/40 bg-clay/10 text-xs text-clay">03</span>
           <div>
-            <p class="font-medium text-bone">Written review + rough scope</p>
-            <p class="mt-1 text-sm text-bone-dim">Emailed within 24 hours. Plain English, no jargon.</p>
+            <p class="font-medium text-bone">{mode === 'project' ? 'We start the build' : 'Video teardown + rough scope'}</p>
+            <p class="mt-1 text-sm text-bone-dim">{mode === 'project' ? 'Your $100 down payment reserves the next confirmed build window.' : 'A 5-minute recorded walkthrough, emailed within 24 hours. Plain English, no jargon.'}</p>
           </div>
         </li>
       </ol>
@@ -69,6 +82,16 @@ const {
         <div class="text-sm">
           <p class="font-medium text-bone">Michael Murillo-Martinez</p>
           <p class="mt-0.5 text-xs text-bone-muted mono">One engineer · reviewing personally</p>
+          <a
+            href="https://www.tiktok.com/@m3mm_dev"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-1 inline-block text-xs text-clay hover:text-bone transition-colors"
+            data-cta="signature-tiktok"
+            data-section="intake"
+          >
+            @m3mm_dev on TikTok
+          </a>
         </div>
       </div>
     </div>
@@ -80,6 +103,7 @@ const {
       method="POST"
       action="/api/lead"
       data-source={source}
+      data-success-path={successPath}
       novalidate
     >
       <!-- Corner marks — editorial polish -->
@@ -166,6 +190,46 @@ const {
         </span>
       </label>
 
+      {showStartWindow && (
+        <label class="flex flex-col gap-2">
+          <span class="field-label"><span>Preferred start window</span><span class="text-clay/60 mono">05</span></span>
+          <select name="preferredStart" required class="field-input">
+            <option value="">Choose a window</option>
+            <option value="Next available build week">Next available build week</option>
+            <option value="Within 2 weeks">Within 2 weeks</option>
+            <option value="Within 30 days">Within 30 days</option>
+            <option value="No rush">No rush</option>
+          </select>
+          <span class="mono text-[10px] uppercase tracking-[0.18em] text-bone-muted">
+            This is a preference. I confirm the actual build week before work starts.
+          </span>
+        </label>
+      )}
+
+      <!-- Referral capture (2026-08-03). Optional, last, and deliberately
+           quiet so it adds zero friction to the required path. Prefilled
+           from `?ref=<name>` (src/lib/prefill.ts) when a past client shares
+           their own link, so the referrer gets credited without the visitor
+           typing anything. -->
+      <label class="flex flex-col gap-2">
+        <span class="field-label">
+          <span>{referralFieldLabel}</span>
+          <span class="text-bone-muted mono">optional</span>
+        </span>
+        <input
+          name="referredBy"
+          type="text"
+          maxlength="120"
+          autocomplete="off"
+          class="field-input"
+          placeholder="Name of the person or business who sent you"
+          aria-describedby="referred-by-hint"
+        />
+        <span id="referred-by-hint" class="mono text-[10px] uppercase tracking-[0.18em] text-bone-muted">
+          Someone send you here? Put their name down so they get the credit.
+        </span>
+      </label>
+
       <!-- honeypot — bots will fill it, humans can't see it -->
       <label class="hidden" aria-hidden="true">
         <span>Company website (leave blank)</span>
@@ -183,7 +247,7 @@ const {
           data-section="intake"
         >
           <span class="relative z-10 flex items-center gap-2.5">
-            Send my free review
+            {submitLabel}
             <svg class="h-4 w-4 transition-transform" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </span>
         </button>
@@ -273,7 +337,8 @@ const {
         // Redirect to the real thank-you page for a stronger conversion story
         // (24h reply promise, next-step CTAs, urgency escape hatch). setTimeout
         // gives the analytics beacon a beat to flush before navigation.
-        setTimeout(() => { window.location.href = '/thanks'; }, 450);
+        const destination = form.dataset.successPath || '/thanks';
+        setTimeout(() => { window.location.href = destination; }, 450);
       } catch {
         track({
           name: 'intake_error',

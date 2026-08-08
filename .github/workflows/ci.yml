@@ -20,12 +20,15 @@ jobs:
           cache: 'npm'
       - name: Install
         run: npm ci
+      # Build BEFORE tests: tests/build/start-checkout.test.ts asserts the
+      # built dist/start/index.html (checkout-gate fence) and skips when
+      # dist/ is absent — building first makes CI actually exercise it.
+      - name: Build
+        run: npm run build
       - name: Unit tests
         run: npm test
         env:
           CI: 'true'
-      - name: Build
-        run: npm run build
       - name: Upload dist
         uses: actions/upload-artifact@v7
         with:

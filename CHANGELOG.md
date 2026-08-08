@@ -11,6 +11,7 @@ Adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - test: `functions/_lib/track-parse.ts` extracted from `functions/api/track.ts` as a pure helper with 14 unit tests (`tests/functions/track-parse.test.ts`). Suite grew 44 → **58 passed / 58 total** in 347ms. Behavior-preserving — no runtime change to `/api/track`.
 
 ### Changed
+- Replaced the full-refund pricing-card promise with the owner-confirmed policy: 20% down before work starts; the down payment is non-refundable, while all other payments remain refundable before launch. The badge remains limited to the $500 and $1k-$2k M3 build lanes and is regression-tested.
 - docs: `RUNBOOK.md § 3 Deploy` rewritten as paste-ready — split into 3.1 first-time (`wrangler login` → project create → first upload → dashboard env + custom domain), 3.2 subsequent (auto Path A / direct Path B), 3.3 post-deploy smoke, 3.4 pre-deploy readiness. Deploy is now a 5-line block Mike pastes, not a dashboard walkthrough from scratch.
 - docs: `STATUS.md` — new **Deploy-ready** marker for 2026-07-06 with the pre-deploy verification snapshot (58/58 tests, `dist/` 22.5 KB gz, RUNBOOK § 3 paste-ready).
 

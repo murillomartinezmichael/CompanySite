@@ -1,0 +1,52 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import TradeLanding from '@/components/TradeLanding.astro';
+import Intake from '@/components/Intake.astro';
+---
+
+<Layout
+  title="Websites for home-service pros — M³"
+  description="Contractors, crews, and home-service companies. Sites that turn visitors into booked jobs — free 5-minute video teardown of your site within 24 hours."
+  path="/for/home-services"
+  breadcrumbs={[
+    { name: 'M³', url: '/' },
+    { name: 'For home-service pros', url: '/for/home-services' },
+  ]}
+>
+  <Header slot="header" minimal={true} path="/for/home-services" />
+
+  <TradeLanding
+    trade="home-services"
+    kicker="For home-service pros"
+    headline="Websites that get home-service pros"
+    headlineDim="booked."
+    sub="If your work happens at someone's house, your site has one job: turn the homeowner who found you into a booked job. That's the site I build — and the proof below is two home-service companies it already worked for."
+    proofs={[
+      {
+        name: 'Aries Outdoor Living',
+        accent: 'cyber',
+        pre: 'Same intake, same 24h review.',
+        strong: 'Sold at handoff',
+        post: ' · first quote request 3 days after launch.',
+      },
+      {
+        name: 'Big 7 Construction',
+        accent: 'neon',
+        pre: 'Same intake.',
+        strong: 'Build + Repair lanes live',
+        post: ' at big7construction.com — one intake owning both funnels.',
+      },
+    ]}
+  />
+
+  <Intake
+    eyebrow="Step 1 · Tell me what to look at"
+    headline="What's on your site and what's frustrating you about it?"
+    sub="The more specific you are, the more useful the teardown. If you don't have a site yet, say that — I'll review the funnel you have (Instagram, phone-only, etc.) and tell you what a site would change."
+    source="for-home-services"
+  />
+
+  <Footer slot="footer" path="/for/home-services" />
+</Layout>

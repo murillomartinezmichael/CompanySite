@@ -9,9 +9,11 @@ export const LIMITS = {
   currentUrl: 2048,
   frustration: 4000,
   frustrationMin: 10,
+  preferredStart: 80,
   source: 64,
   intent: 64,                  // matches functions/api/track.ts INTENT_MAX
   utm: 240,                    // matches MAX_PARAM_LEN in src/lib/prefill.ts
+  referredBy: 120,             // a person or business name — same ceiling as `name`
 } as const;
 
 // Real-world-tolerant email pattern. Not RFC-strict; RFC-strict rejects
@@ -27,7 +29,13 @@ export type Lead = {
   businessType?: string;
   currentUrl?: string;
   frustration?: string;
+  preferredStart?: string;
   source?: string;
+  // Referral program (2026-08-03) — free text, always optional. Who sent
+  // this visitor. Self-declared, so it is never trusted for anything but
+  // human triage: it lands in the admin email + lead OS so Michael can pay
+  // the referrer, and nowhere else.
+  referredBy?: string;
   company_website?: string; // honeypot
   // Attribution — CONVERSION_STANDARDS.md § 4. All optional; blank is fine.
   intent?: string;
@@ -73,7 +81,9 @@ export function validateLead(input: Lead): { ok: true; lead: Required<Omit<Lead,
   const businessType = clean(input.businessType, LIMITS.businessType);
   const currentUrl = clean(input.currentUrl, LIMITS.currentUrl);
   const frustration = clean(input.frustration, LIMITS.frustration);
+  const preferredStart = clean(input.preferredStart, LIMITS.preferredStart);
   const source = clean(input.source, LIMITS.source) || 'unknown';
+  const referredBy = clean(input.referredBy, LIMITS.referredBy);
   const intent = clean(input.intent, LIMITS.intent);
   const utm_source = clean(input.utm_source, LIMITS.utm);
   const utm_medium = clean(input.utm_medium, LIMITS.utm);
@@ -95,7 +105,8 @@ export function validateLead(input: Lead): { ok: true; lead: Required<Omit<Lead,
   return {
     ok: true,
     lead: {
-      name, email, businessType, currentUrl, frustration, source,
+      name, email, businessType, currentUrl, frustration, preferredStart, source,
+      referredBy,
       intent, utm_source, utm_medium, utm_campaign, utm_content, utm_term,
     },
   };
