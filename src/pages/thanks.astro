@@ -63,8 +63,7 @@ const referral = referralOffer();
           </li>
         </ol>
 
-        <!-- Client proof — mirrors Hero outcomes so /thanks reinforces trust
-             during the 24h wait. Same verifiable data, no invented numbers. -->
+        <!-- Client proof — same named outcomes rendered on the Hero. -->
         <div class="mt-16 border-t border-ink-line/60 pt-10">
           <p class="kicker mono mb-6">// Same review, real clients</p>
           <div class="grid gap-6 sm:grid-cols-2">
@@ -83,7 +82,7 @@ const referral = referralOffer();
           </div>
         </div>
 
-        <!-- Escape hatches while they wait — real conversion is here. -->
+        <!-- While-you-wait links -->
         <div class="mt-16 border-t border-ink-line/60 pt-10">
           <p class="kicker mono mb-6">// While you wait</p>
           <div class="grid gap-6 sm:grid-cols-2">
@@ -114,8 +113,7 @@ const referral = referralOffer();
           </div>
         </div>
 
-        <!-- Referral program — the visitor is warm right now; this is the
-             cheapest lead source on the site (zero CAC, past-client trust). -->
+        <!-- Referral block -->
         <div class="mt-14 rounded-2xl border border-ink-line bg-ink-soft/40 p-6 sm:p-8">
           <p class="kicker mono mb-3">// Referrals</p>
           <p class="text-lg font-medium text-bone">{referral.headline}</p>
@@ -132,7 +130,7 @@ const referral = referralOffer();
           </a>
         </div>
 
-        <!-- Urgency path — TikTok/IG DMers who need it faster than 24h -->
+        <!-- Same-day path -->
         <div class="mt-14 rounded-2xl border border-clay/30 bg-ink-soft/40 p-6 sm:p-8">
           <p class="kicker mono mb-3 text-clay/80">// If it's actually urgent</p>
           <p class="text-bone-dim">
@@ -157,14 +155,12 @@ const referral = referralOffer();
 
   <script is:inline>
     // Hydrate the urgent-email link to a real mailto: without leaving the
-    // address in HTML source. Same mechanism as Footer + Accessibility:
-    // a raw mailto: in server HTML triggers Cloudflare's Email Address
-    // Obfuscation, which injects cdn-cgi/scripts/…/email-decode.min.js —
-    // ~200 ms of render-blocking JS in the LCP critical chain (killed for
-    // Footer in perf strike #5 tick-10; this closes the /thanks regression).
-    // Without JS the link falls through to /audit#intake, so the CTA is
-    // never a dead-end. Visible link text stays "email me directly" so the
-    // surrounding sentence still reads naturally after hydration.
+    // address in HTML source. Same mechanism as Footer + Accessibility: a raw
+    // mailto: in server HTML trips Cloudflare's Email Address Obfuscation,
+    // which injects a render-blocking email-decode script (~200 ms in the LCP
+    // critical chain). Without JS the link falls through to /audit#intake, so
+    // the CTA is never a dead end. Visible link text stays "email me
+    // directly" so the sentence still reads naturally after hydration.
     (function () {
       var a = document.querySelector('a[data-cta="thanks-urgent-email"]');
       if (!a || !a.dataset.emU || !a.dataset.emH) return;

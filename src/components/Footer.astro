@@ -57,10 +57,9 @@ const EMAIL_BODY = "Hey Mike,\n\nBusiness: \nCurrent site: \nWhat's frustrating 
 
 <script is:inline>
   // Hydrate the footer email link to a real mailto: without leaving the
-  // address in HTML source. Raw emails trigger Cloudflare's Email Address
-  // Obfuscation, which injects a render-blocking cdn-cgi email-decode
-  // script on every page (~200ms wasted in the LCP critical chain, per
-  // perf/lh-mobile-baseline-tick10-…json → render-blocking-insight).
+  // address in HTML source. A raw address trips Cloudflare's Email Address
+  // Obfuscation, which injects a render-blocking cdn-cgi email-decode script
+  // on every page (~200 ms in the LCP critical chain).
   (function () {
     var a = document.querySelector('a[data-em-u][data-em-h]');
     if (!a) return;

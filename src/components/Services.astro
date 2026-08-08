@@ -156,8 +156,7 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
                   ))}
                 </ul>
 
-                <!-- Payment-policy badge — mirrors the price-chip styling so the
-                     terms read as part of the offer, not a hidden disclaimer. -->
+                <!-- Payment-policy badge — mirrors the price-chip styling -->
                 {s.paymentPolicy && (
                   <p class={`mono mt-5 inline-flex items-center gap-2 rounded-sm border border-current/40 px-2 py-0.5 text-xs font-semibold uppercase tracking-[0.14em] ${a.text}`}>
                     <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -189,8 +188,7 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
       I'll tell you that too.
     </p>
 
-    <!-- Downshift: budget under $500 -> SiteGuide off-the-shelf templates. Keeps low-budget visitors
-         from bouncing and hands them a warm path to the M³ template store instead. -->
+    <!-- Under-$500 template link -->
     <div class="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-bone-muted">
       <span class="mono text-[11px] uppercase tracking-[0.2em] text-clay/80">Budget under $500?</span>
       <a

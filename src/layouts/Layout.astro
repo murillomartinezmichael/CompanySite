@@ -78,12 +78,10 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <!--
-      Self-hosted fonts (tick-16e). Google Fonts CSS + preconnects dropped:
-      Inter (400/500/600) and Space Grotesk (300–700) each ship as ONE variable
-      woff2 (latin subset) served by GF for every weight, so 2 files cover all 8
-      declared weights. Same-origin removes the fonts.googleapis.com CSS RTT
-      (626 ms in tick-16d preview trace) and both gstatic/googleapis handshakes.
-      JetBrains Mono was dropped in tick-16d; font-mono falls back to
+      Self-hosted fonts. Inter (400/500/600) and Space Grotesk (300–700) each
+      ship as ONE variable woff2 (latin subset), so 2 files cover all 8
+      declared weights. Same-origin, so there is no Google Fonts CSS round
+      trip and no gstatic/googleapis handshakes. font-mono falls back to
       ui-monospace.
     -->
     <link rel="preload" as="font" type="font/woff2" href="/fonts/space-grotesk-latin.woff2" crossorigin />
@@ -218,10 +216,7 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
 
     <slot name="footer" />
 
-    <!-- Sticky mobile CTA — TikTok/IG traffic converts on the button they can
-         reach with their thumb. Hidden on desktop (Header nav already covers it)
-         and hidden on /audit (visitor is already in the intake). Fades in
-         after 260px scroll so it doesn't compete with the Hero CTA. -->
+    <!-- Sticky mobile CTA. Mobile-only; the Header nav covers desktop. -->
     <a
       id="sticky-cta"
       href={stickyIntakeHref}
@@ -238,9 +233,8 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
     </a>
 
     <script is:inline>
-      // Sticky mobile CTA — reveal on scroll past the hero fold, hide near
-      // the intake so it doesn't overlap the actual form. LocalStorage-persist
-      // dismissed state so the visitor can hide it if they want.
+      // Reveal past the hero fold; hide again once the intake is within one
+      // viewport of the top so the button never overlaps the form itself.
       (function () {
         var el = document.getElementById('sticky-cta');
         if (!el) return;
@@ -273,13 +267,8 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
       wireLazyVideos();
     </script>
 
-    <!-- SiteGuide AI guide widget — dogfood embed (opportunity #11). Same
-         product M3 sells to clients, running live here as our own proof of
-         point. Config lives in SiteGuide's sites/companysite.json (origin
-         allowlisted there); CSP allowance for this origin is in
-         public/_headers. Not a `[data-cta]` element — the tracker in
-         wireCTAs() only wires elements with that attribute, so this widget's
-         own open/close/send interactions are intentionally untracked here. -->
+    <!-- SiteGuide AI guide widget. Deliberately carries no `[data-cta]`
+         attribute, so the CTA tracker leaves its interactions alone. -->
     <script
       src="https://siteguide-production.up.railway.app/widget.js"
       data-site="companysite"

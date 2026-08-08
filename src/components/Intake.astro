@@ -114,11 +114,8 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
 
       <input type="hidden" name="source" value={source} />
       <input type="hidden" name="intent" value={defaultIntent} />
-      <!-- UTM capture — CONVERSION_STANDARDS.md § 4. Bio-link UTMs must
-           travel with the lead POST so the admin email/log show which
-           TikTok video sourced the lead. applyUrlPrefill() populates these
-           from window.location.search on load; unset params stay empty
-           and validate cleanly. -->
+      <!-- UTM capture. Populated from window.location.search on load; unset
+           params stay empty and validate cleanly. -->
       <input type="hidden" name="utm_source" value="" />
       <input type="hidden" name="utm_medium" value="" />
       <input type="hidden" name="utm_campaign" value="" />
@@ -206,11 +203,7 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
         </label>
       )}
 
-      <!-- Referral capture (2026-08-03). Optional, last, and deliberately
-           quiet so it adds zero friction to the required path. Prefilled
-           from `?ref=<name>` (src/lib/prefill.ts) when a past client shares
-           their own link, so the referrer gets credited without the visitor
-           typing anything. -->
+      <!-- Referral capture. Optional; prefilled from `?ref=<name>`. -->
       <label class="flex flex-col gap-2">
         <span class="field-label">
           <span>{referralFieldLabel}</span>
@@ -230,7 +223,6 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
         </span>
       </label>
 
-      <!-- honeypot — bots will fill it, humans can't see it -->
       <label class="hidden" aria-hidden="true">
         <span>Company website (leave blank)</span>
         <input type="text" name="company_website" tabindex="-1" autocomplete="off" />
