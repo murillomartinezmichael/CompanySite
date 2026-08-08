@@ -1,5 +1,21 @@
 # Pending manual
 
+## www.m3mm.net returns 522 — Cloudflare zone fix (2026-08-07)
+
+- [ ] **Bind or redirect `www.m3mm.net` in the Cloudflare dashboard (zone changes are Mike-only).**
+  - **Diagnosis (VERIFIED 2026-08-07, read-only):** `https://m3mm.net/` returns 200 with the site's own `_headers` (CSP/HSTS present). `https://www.m3mm.net/` returns **522** with generic Cloudflare error headers. DNS for `www` resolves to the same proxied Cloudflare anycast IPs as the apex (104.21.76.226 / 172.67.201.235 via 1.1.1.1), so the record exists and is orange-clouded — but Cloudflare's edge has no origin for that hostname. The repo has **no** `wrangler.jsonc`/`wrangler.toml` (Pages project is dashboard-configured), and nothing in `dist` (canonical, og:url, sitemap.xml) or `dist/_redirects` references www — no content drift. **Likely cause (INFERRED, classic shape):** the `www` DNS record is proxied into the zone but `www.m3mm.net` is not attached as a custom domain on the Pages project, so no route/origin answers → 522.
+  - **Fix — Option A (recommended, matches canonical URLs which are all apex): zone-level 301 www → apex.**
+    Cloudflare dashboard → zone **m3mm.net** → **Rules** → **Redirect Rules** → **Create rule**:
+    - Rule name: `www to apex`
+    - If: Custom filter expression → Field **Hostname** equals `www.m3mm.net`
+    - Then: **Dynamic** redirect, expression `concat("https://m3mm.net", http.request.uri.path)`, status **301**, check **Preserve query string**
+    - Deploy. (Requires the `www` DNS record to stay **Proxied** — it already is.)
+  - **Fix — Option B (alternative): bind www to the Pages project.**
+    Dashboard → **Workers & Pages** → the CompanySite Pages project → **Custom domains** → **Set up a custom domain** → enter `www.m3mm.net` → Activate. Note: this serves the full site at www too; canonical tags already point at apex, so SEO is safe, but Option A keeps one URL per page.
+  - **Verify after either fix:** `curl -sI https://www.m3mm.net/` → Option A: `301` + `location: https://m3mm.net/`; Option B: `200` with the site CSP header.
+  - **Why blocked on him:** DNS/zone/Pages-domain changes are owner-gated this session (no dashboard access; zone changes are Mike-only by contract).
+  - **Resumes:** Anyone typing `www.m3mm.net` (or old links) reaches the site instead of a Cloudflare error page.
+
 ## Competitor-research implementation gates (2026-07-19)
 
 - [ ] **Be ready to deliver recorded video teardowns (OBS/Loom).**
