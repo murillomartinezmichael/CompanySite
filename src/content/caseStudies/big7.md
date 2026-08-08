@@ -3,9 +3,15 @@ client: Big 7 Construction
 kind: Home construction + repair
 location: Atlanta, GA
 year: 2026
-# Drop /public/videos/big7-scroll.mp4 + big7-poster.jpg, then uncomment:
+# When the ClipForge scroll reel lands, drop /public/videos/big7-scroll.mp4 +
+# big7-poster.jpg and uncomment — video outranks the still image below:
 # video: /videos/big7-scroll.mp4
 # poster: /videos/big7-poster.jpg
+image: ../../assets/big7-live-site.jpg
+imageAlt: >-
+  Cropped view of the live Big 7 Construction homepage hero — dark panel reading
+  "Commercial framing. Residential precision. Every trade, under one
+  contract." beside an aerial photo of an active job site.
 liveUrl: https://big7construction.com
 problem: >-
   Big 7 does high-end custom builds AND the small repair jobs no one wants to

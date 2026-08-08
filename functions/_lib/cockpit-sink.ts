@@ -58,9 +58,11 @@ export function buildCockpitLeadCard(_id: string, lead: Lead, ip: string): Recor
   // next_step — the human-actionable summary. Mike glances this and knows
   // whether to reply now or later. Truncated at 4000 to satisfy the schema.
   const parts = [
-    `Reply within 24h.`,
+    lead.intent?.startsWith('checkout:') ? `Checkout intake — verify Stripe payment, then confirm scope and build week.` : `Reply within 24h.`,
     `Email: ${lead.email}`,
     lead.currentUrl ? `Their site: ${lead.currentUrl}` : null,
+    lead.preferredStart ? `Preferred start: ${lead.preferredStart}` : null,
+    lead.referredBy ? `Referred by: ${lead.referredBy} — credit the referrer if this closes.` : null,
     ``,
     `Frustration:`,
     lead.frustration,

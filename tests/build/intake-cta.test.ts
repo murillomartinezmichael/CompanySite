@@ -14,6 +14,11 @@ const read = (p: string) => readFileSync(root + p, 'utf8');
 // etc.) cannot silently regress into a dead-end by forgetting the prop.
 
 describe('Header + Footer thread `path` so intake CTAs never dead-end', () => {
+  it('contains the intake glow so it cannot create horizontal mobile scroll', () => {
+    const src = read('src/components/Intake.astro');
+    expect(src).toMatch(/<section id="intake" class="[^"]*\boverflow-hidden\b/);
+  });
+
   it('Header derives an intakeHref from the current path', () => {
     const src = read('src/components/Header.astro');
     expect(src).toMatch(/path\?:\s*string/);
@@ -37,8 +42,16 @@ describe('Header + Footer thread `path` so intake CTAs never dead-end', () => {
     const pages: Array<{ file: string; expected: string }> = [
       { file: 'src/pages/index.astro', expected: '/' },
       { file: 'src/pages/audit.astro', expected: '/audit' },
+      { file: 'src/pages/start.astro', expected: '/start' },
       { file: 'src/pages/thanks.astro', expected: '/thanks' },
       { file: 'src/pages/accessibility.astro', expected: '/accessibility' },
+      // Trade landing pages (2026-07-19) — each mounts <Intake>, and
+      // Header/Footer/Layout's hasIntakeOnPage now includes `/for/*` so
+      // their CTAs stay same-page anchors instead of bouncing the visitor
+      // to /audit mid-funnel.
+      { file: 'src/pages/for/outdoor-living.astro', expected: '/for/outdoor-living' },
+      { file: 'src/pages/for/construction.astro', expected: '/for/construction' },
+      { file: 'src/pages/for/home-services.astro', expected: '/for/home-services' },
     ];
     for (const { file, expected } of pages) {
       const src = read(file);
@@ -75,7 +88,7 @@ describe('Header + Footer thread `path` so intake CTAs never dead-end', () => {
     // hasIntakeOnPage / intakeHref shape so the fallback lands the
     // visitor directly in the form.
     const src = read('src/layouts/Layout.astro');
-    expect(src).toMatch(/const\s+hasIntakeOnPage\s*=\s*path\s*===\s*['"]\/['"]\s*\|\|\s*path\s*===\s*['"]\/audit['"]/);
+    expect(src).toMatch(/const\s+hasIntakeOnPage\s*=\s*path\s*===\s*['"]\/['"]\s*\|\|\s*path\s*===\s*['"]\/audit['"]\s*\|\|\s*path\s*===\s*['"]\/start['"]/);
     expect(src).toMatch(/const\s+stickyIntakeHref\s*=\s*hasIntakeOnPage\s*\?\s*['"]#intake['"]\s*:\s*['"]\/audit#intake['"]/);
     // The sticky anchor now uses the derived href — the literal bare
     // `/audit` fallback shape must be gone.

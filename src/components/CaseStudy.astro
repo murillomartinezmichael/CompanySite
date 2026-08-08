@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 import CaseStudyArt from './CaseStudyArt.astro';
 
 interface Props {
@@ -10,6 +11,7 @@ interface Props {
 const { entry, index } = Astro.props;
 const d = entry.data;
 const flip = index % 2 === 1;
+const hideLiveHeader = entry.slug === 'big7';
 
 // Attribution on outbound case-study visits so referral traffic from m3mm.net
 // is legible in the client site's analytics.
@@ -30,7 +32,7 @@ if (d.liveUrl) {
 
 <article class={`panel group relative overflow-hidden p-6 sm:p-10 ${flip ? 'lg:flex-row-reverse' : ''} lg:flex lg:items-center lg:gap-14`}>
   <!-- Media -->
-  <div class="relative isolate mb-8 aspect-[16/10] w-full overflow-hidden rounded-xl bg-ink-panel ring-1 ring-ink-line lg:mb-0 lg:w-1/2">
+  <div class={`relative isolate mb-8 ${hideLiveHeader ? 'aspect-video' : 'aspect-[16/10]'} w-full overflow-hidden rounded-xl bg-ink-panel ring-1 ring-ink-line lg:mb-0 lg:w-1/2`}>
     {d.video ? (
       <video
         class="h-full w-full object-cover"
@@ -43,6 +45,16 @@ if (d.liveUrl) {
       >
         <source data-src={d.video} type="video/mp4" />
       </video>
+    ) : d.image ? (
+      <Image
+        src={d.image}
+        alt={d.imageAlt ?? ''}
+        class={`h-full w-full object-cover ${hideLiveHeader ? 'object-bottom' : 'object-top'}`}
+        widths={[640, 960, 1280]}
+        sizes="(min-width: 1024px) 50vw, 100vw"
+        loading="lazy"
+        decoding="async"
+      />
     ) : (
       <CaseStudyArt slug={entry.slug} client={d.client} />
     )}

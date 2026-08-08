@@ -2,11 +2,16 @@
 import Layout from '@/layouts/Layout.astro';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
+import { referralOffer } from '../../functions/_lib/referral';
+
+// Referral program — same config the auto-reply email renders from, so the
+// page and the inbox never state different terms.
+const referral = referralOffer();
 ---
 
 <Layout
   title="Thanks — I'll reply within 24 hours · M³"
-  description="Your intake landed. What happens next: a personal review from Michael, within 24 hours, no template reply."
+  description="Your intake landed. What happens next: a recorded video teardown from Michael, within 24 hours, no template reply."
   path="/thanks"
   noindex={true}
   breadcrumbs={[
@@ -23,7 +28,7 @@ import Footer from '@/components/Footer.astro';
     <div class="container-page relative pb-24 pt-14 sm:pt-24">
       <div class="max-w-3xl">
         <div class="mb-6 flex items-center gap-3">
-          <span class="hairline-neon"></span>
+          <span class="hairline"></span>
           <p class="kicker mono">// Sent · queued for personal review</p>
         </div>
 
@@ -34,8 +39,9 @@ import Footer from '@/components/Footer.astro';
 
         <p class="mt-6 max-w-2xl text-lg text-bone-dim">
           Real reply, not a template. I'll actually pull your site up — Lighthouse,
-          mobile, funnel, copy — and email back with what's costing you DMs and
-          quote requests. One engineer. Same guy who quotes it builds it.
+          mobile, funnel, copy — and email back a 5-minute recorded video teardown
+          of what's costing you DMs and quote requests. One engineer. Same guy who
+          quotes it builds it.
         </p>
 
         <!-- What happens next — three checkpoint cards -->
@@ -46,14 +52,14 @@ import Footer from '@/components/Footer.astro';
             <p class="text-sm text-bone-dim">Sitting in my inbox. Nothing on your side.</p>
           </li>
           <li class="panel flex flex-col gap-2 p-6">
-            <span class="mono text-[10px] uppercase tracking-[0.22em] text-neon/80">Next 24h</span>
+            <span class="mono text-[10px] uppercase tracking-[0.22em] text-clay/80">Next 24h</span>
             <p class="font-medium text-bone">Personal review</p>
             <p class="text-sm text-bone-dim">I pull up your site or funnel and read it carefully.</p>
           </li>
           <li class="panel flex flex-col gap-2 p-6">
-            <span class="mono text-[10px] uppercase tracking-[0.22em] text-cyber/80">Email back</span>
-            <p class="font-medium text-bone">Written review</p>
-            <p class="text-sm text-bone-dim">What's working, what's leaking customers, rough scope if a rebuild fits.</p>
+            <span class="mono text-[10px] uppercase tracking-[0.22em] text-clay/80">Email back</span>
+            <p class="font-medium text-bone">Video teardown</p>
+            <p class="text-sm text-bone-dim">A 5-minute recorded walkthrough: what's working, what's leaking customers, rough scope if a rebuild fits.</p>
           </li>
         </ol>
 
@@ -63,13 +69,13 @@ import Footer from '@/components/Footer.astro';
           <p class="kicker mono mb-6">// Same review, real clients</p>
           <div class="grid gap-6 sm:grid-cols-2">
             <div class="panel flex flex-col gap-2 p-6">
-              <span class="mono text-[10px] uppercase tracking-[0.22em] text-cyber/80">Aries Outdoor Living</span>
+              <span class="mono text-[10px] uppercase tracking-[0.22em] text-clay/80">Aries Outdoor Living</span>
               <p class="text-sm leading-snug text-bone-dim">
                 Same intake, same 24h review. <span class="text-bone">Sold at handoff</span> · first quote request 3 days after launch.
               </p>
             </div>
             <div class="panel flex flex-col gap-2 p-6">
-              <span class="mono text-[10px] uppercase tracking-[0.22em] text-neon/80">Big 7 Construction</span>
+              <span class="mono text-[10px] uppercase tracking-[0.22em] text-clay/80">Big 7 Construction</span>
               <p class="text-sm leading-snug text-bone-dim">
                 Same intake. <span class="text-bone">Build + Repair lanes live</span> at big7construction.com — one intake owning both funnels.
               </p>
@@ -101,21 +107,39 @@ import Footer from '@/components/Footer.astro';
               data-section="thanks"
               data-intent="product:siteguide"
             >
-              <span class="mono text-[10px] uppercase tracking-[0.22em] text-cyber/80">→ Off-the-shelf templates</span>
+              <span class="mono text-[10px] uppercase tracking-[0.22em] text-clay/80">→ Off-the-shelf templates</span>
               <p class="font-medium text-bone">SiteGuide storefront</p>
               <p class="text-sm text-bone-dim">Twelve one-page templates you can preview + buy today.</p>
             </a>
           </div>
         </div>
 
+        <!-- Referral program — the visitor is warm right now; this is the
+             cheapest lead source on the site (zero CAC, past-client trust). -->
+        <div class="mt-14 rounded-2xl border border-ink-line bg-ink-soft/40 p-6 sm:p-8">
+          <p class="kicker mono mb-3">// Referrals</p>
+          <p class="text-lg font-medium text-bone">{referral.headline}</p>
+          <p class="mt-2 text-bone-dim">{referral.body}</p>
+          <a
+            href="/audit#intake"
+            class="mt-5 inline-flex items-center gap-2 text-sm text-clay underline decoration-clay/50 decoration-1 underline-offset-[6px] hover:text-bone"
+            data-cta="thanks-referral"
+            data-section="thanks"
+            data-intent="book:free-review"
+          >
+            Send them the review form
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+
         <!-- Urgency path — TikTok/IG DMers who need it faster than 24h -->
-        <div class="mt-14 rounded-2xl border border-neon/30 bg-ink-soft/40 p-6 sm:p-8">
-          <p class="kicker mono mb-3 text-neon/80">// If it's actually urgent</p>
+        <div class="mt-14 rounded-2xl border border-clay/30 bg-ink-soft/40 p-6 sm:p-8">
+          <p class="kicker mono mb-3 text-clay/80">// If it's actually urgent</p>
           <p class="text-bone-dim">
             You saw me on TikTok or IG and this can't wait a day —
             <a
               href="/audit?intent=book:urgent-review#intake"
-              class="underline decoration-neon/60 decoration-1 underline-offset-[6px] text-bone hover:text-neon"
+              class="underline decoration-clay/60 decoration-1 underline-offset-[6px] text-bone hover:text-clay"
               data-cta="thanks-urgent-email"
               data-section="thanks"
               data-intent="book:urgent-review"

@@ -17,7 +17,8 @@ CompanySite is the M3 custom business-site sales floor, not the starter-template
 
 ## Stack
 
-- **Astro 4** static output on **Cloudflare Pages**
+- **Astro 5** static output on **Cloudflare Pages** (`astro@^5.18.2`; the 5→7
+  major is triaged and scoped in `TODO.md`, not yet taken)
 - **Tailwind 3** utility CSS
 - **Cloudflare Pages Functions** in `functions/api/*.ts` for the intake + analytics endpoints
 - No JS framework beyond Astro's built-in islands
@@ -34,6 +35,10 @@ Do not resurrect it — the current site is a deliberate reset.
 - `src/content/caseStudies/*.md` — one file per case study (Aries first)
 - `src/lib/track.ts` — CTA tracker (fires on any `[data-cta]` click)
 - `functions/api/lead.ts` — POST intake, emails via Resend
+- `functions/_lib/referral.ts` — referral program config + copy. **One source
+  of truth** for the payout terms; the intake, `/thanks`, `/start/thanks`, and
+  the auto-reply email all render from it. `bountyUsd` stays `null` until Mike
+  confirms an amount, and a test enforces that.
 - `functions/api/track.ts` — POST analytics beacon
 - `public/_headers` — CSP + HSTS + long-cache assets
 - `astro.config.mjs`, `tailwind.config.mjs`, `tsconfig.json`

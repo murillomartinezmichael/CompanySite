@@ -126,14 +126,25 @@ curl -sS -X POST https://m3mm.net/api/lead \
   -H "Content-Type: application/json" \
   -d '{"name":"smoke","email":"smoke@example.com","businessType":"test","frustration":"local smoke test that is at least ten chars"}'
 # {"ok":true}
+
+# /start checkout state — MUST match src/config/offers.ts's checkoutReady:
+curl -sSL https://m3mm.net/start | grep -c 'data-cta="start-pay-deposit"'
+# 1 once a live Payment Link is deployed; 0 while checkout is gated
+curl -sSL https://m3mm.net/start | grep -c 'Checkout opening soon'
+# 0 once live; 1 while gated
+curl -sSL https://m3mm.net/start | grep -c 'REPLACE_AFTER_SIGN_IN'
+# 0 ALWAYS — a non-zero here means the placeholder shipped; roll back (§ 4)
 ```
 
 ### 3.4 Pre-deploy readiness (this runs every time before you paste)
 
 ```bash
 cd C:/Users/Michael/Documents/GitHub/CompanySite
-npm test                # expect 58/58 green (as of 2026-07-06)
-npm run build           # expect "2 page(s) built" · <60 KB gz total
+npm run build           # expect "9 page(s) built" — build FIRST: the test
+                        # suite asserts the built dist/start/index.html
+npm test                # as of 2026-08-05: expect 337 total = 335 passed + 2 skipped
+                        # (the dormant live-Stripe-link branches, source + built-HTML;
+                        # they activate, and the gated branches skip, once a real link lands)
 ls -la dist/index.html dist/audit/index.html dist/_headers dist/_redirects
 # 4 files present; if any is missing, do NOT deploy.
 ```

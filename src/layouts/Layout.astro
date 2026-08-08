@@ -29,14 +29,14 @@ const {
 
 const canonical = new URL(path, Astro.site ?? 'https://m3mm.net').toString();
 
-// CONVERSION_STANDARDS.md § 1 — no dead-end CTAs. Only `/` and `/audit`
-// mount <Intake>; on those pages the sticky CTA is a same-page anchor.
-// On any other page (`/thanks`, `/accessibility`, future pages) the bare
-// `/audit` fallback lands the visitor at the top of the review page and
-// leaves the promise ("Free review") one scroll short of the form.
-// Cross-navigate to `/audit#intake` — same pattern as Header/Footer's
-// intakeHref (tick-20), pinned by tests/build/intake-cta.test.ts.
-const hasIntakeOnPage = path === '/' || path === '/audit';
+// CONVERSION_STANDARDS.md § 1 — no dead-end CTAs. Only `/`, `/audit`, and
+// the `/for/*` trade pages mount <Intake>; on those pages the sticky CTA is
+// a same-page anchor. On any other page (`/thanks`, `/accessibility`,
+// future pages) the bare `/audit` fallback lands the visitor at the top of
+// the review page and leaves the promise ("Free review") one scroll short
+// of the form. Cross-navigate to `/audit#intake` — same pattern as
+// Header/Footer's intakeHref (tick-20), pinned by tests/build/intake-cta.test.ts.
+const hasIntakeOnPage = path === '/' || path === '/audit' || path === '/start' || path.startsWith('/for/');
 const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
 ---
 
@@ -154,7 +154,7 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
               minPrice: 500,
             },
             availability: 'https://schema.org/InStock',
-            url: 'https://m3mm.net/#services',
+            url: 'https://m3mm.net/start',
           },
           {
             '@type': 'Offer',
@@ -218,27 +218,6 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
 
     <slot name="footer" />
 
-    <!-- Photosensitivity disclaimer — informs about neon/motion + how to dim -->
-    <aside class="a11y-note" role="note">
-      <b>// A11Y NOTE.</b> This page uses low-intensity neon glow, a faint
-      scanline overlay, and one subtle glitch cycle on the hero heading.
-      It respects your system's <code>prefers-reduced-motion</code>
-      automatically. If neon or motion still bothers you, hit
-      <button type="button" class="inline" data-dim-inline>DIM</button>
-      (button lives bottom-left) — kills every glow, animation, and
-      text-shadow. Choice is remembered in your browser.
-    </aside>
-
-    <!-- Floating DIM toggle — softens the whole cyberpunk layer -->
-    <button
-      id="dim-toggle"
-      class="dim-toggle"
-      type="button"
-      aria-label="Toggle dimmed / softened neon mode"
-    >
-      <span class="led"></span><span id="dim-label">NEON</span>
-    </button>
-
     <!-- Sticky mobile CTA — TikTok/IG traffic converts on the button they can
          reach with their thumb. Hidden on desktop (Header nav already covers it)
          and hidden on /audit (visitor is already in the intake). Fades in
@@ -294,34 +273,17 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
       wireLazyVideos();
     </script>
 
-    <script is:inline>
-      // DIM mode — user-persistable toggle that soft-boots the neon layer
-      // off. Honors prefers-reduced-motion on first load. Persists to
-      // localStorage so returning visitors keep their choice.
-      (function () {
-        var KEY = 'm3_companysite_dim';
-        var body = document.body;
-        var btn = document.getElementById('dim-toggle');
-        var lbl = document.getElementById('dim-label');
-        if (!body || !btn || !lbl) return;
-        function apply(on) {
-          body.classList.toggle('dim', on);
-          lbl.textContent = on ? 'DIM' : 'NEON';
-        }
-        var stored = null;
-        try { stored = localStorage.getItem(KEY); } catch (e) {}
-        var prefersReduced = window.matchMedia
-          && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        apply(stored === '1' || (stored === null && prefersReduced));
-        function toggle() {
-          var next = !body.classList.contains('dim');
-          apply(next);
-          try { localStorage.setItem(KEY, next ? '1' : '0'); } catch (e) {}
-        }
-        btn.addEventListener('click', toggle);
-        var inline = document.querySelector('[data-dim-inline]');
-        if (inline) inline.addEventListener('click', toggle);
-      })();
-    </script>
+    <!-- SiteGuide AI guide widget — dogfood embed (opportunity #11). Same
+         product M3 sells to clients, running live here as our own proof of
+         point. Config lives in SiteGuide's sites/companysite.json (origin
+         allowlisted there); CSP allowance for this origin is in
+         public/_headers. Not a `[data-cta]` element — the tracker in
+         wireCTAs() only wires elements with that attribute, so this widget's
+         own open/close/send interactions are intentionally untracked here. -->
+    <script
+      src="https://siteguide-production.up.railway.app/widget.js"
+      data-site="companysite"
+      data-title="M³"
+      defer></script>
   </body>
 </html>

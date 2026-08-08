@@ -15,7 +15,12 @@ const services = [
       'Starter SEO and share preview cleaned up',
     ],
     accent: 'clay',
-    cta: 'Get a quote',
+    cta: 'Start with $100 down',
+    href: '/start',
+    // Owner-confirmed policy (2026-07-20): work starts after 20% down. That
+    // payment is retained on cancellation; later payments remain refundable
+    // until launch.
+    paymentPolicy: '20% down to start. The down payment is non-refundable; all other payments are refundable before launch.',
   },
   {
     key: 'business-website',
@@ -33,6 +38,8 @@ const services = [
     ],
     accent: 'neon',
     cta: 'Get a quote',
+    href: '#intake',
+    paymentPolicy: '20% down to start. The down payment is non-refundable; all other payments are refundable before launch.',
   },
   {
     key: 'siteguide-setup',
@@ -50,6 +57,9 @@ const services = [
     ],
     accent: 'cyber',
     cta: 'Customize SiteGuide',
+    href: '#intake',
+    // No payment-policy badge — SiteGuide owns its product/payment policy.
+    paymentPolicy: '',
   },
   {
     key: 'custom-builds',
@@ -67,36 +77,25 @@ const services = [
     ],
     accent: 'clay',
     cta: 'Scope a project',
+    href: '#intake',
+    // No badge — quote-only work sets payment terms in the contract.
+    paymentPolicy: '',
   },
 ] as const;
 
+// Single restrained accent for every row — a per-row hue rotation read as
+// busy/inconsistent for a "one accent" design system (2026-07-21 redesign).
 const accentClasses: Record<string, { line: string; text: string; hover: string }> = {
-  clay:  { line: 'via-clay/70',  text: 'text-clay',  hover: 'group-hover:text-clay-glow' },
-  neon:  { line: 'via-neon/60',  text: 'text-neon',  hover: 'group-hover:text-neon' },
-  cyber: { line: 'via-cyber/60', text: 'text-cyber', hover: 'group-hover:text-cyber' },
+  clay:  { line: 'via-clay/70', text: 'text-clay', hover: 'group-hover:text-clay-glow' },
+  neon:  { line: 'via-clay/70', text: 'text-clay', hover: 'group-hover:text-clay-glow' },
+  cyber: { line: 'via-clay/70', text: 'text-clay', hover: 'group-hover:text-clay-glow' },
 };
 ---
 
 <section id="services" class="relative overflow-hidden py-24 sm:py-32">
-  <!-- Character layers — pastel-Lucy poster energy, matches Hero.
-       Section-level accents (spec: max one hero accent per section
-       here read as "one primary anchor" — the violet triangle serves
-       as the single dominant motif; halftone + glitch bar are texture,
-       not accent). -->
   <div class="pointer-events-none absolute inset-0 -z-10">
-    <div class="absolute inset-x-0 top-1/3 mx-auto h-64 max-w-4xl bg-cyber/[0.03] blur-3xl"></div>
+    <div class="absolute inset-x-0 top-1/3 mx-auto h-64 max-w-4xl bg-clay/[0.03] blur-3xl"></div>
   </div>
-
-  <!-- Violet triangle top-left, mirrors Hero's top-right anchor -->
-  <div class="triangle-violet pointer-events-none absolute left-0 top-8 h-[340px] w-[340px] -z-10 hidden sm:block" style="transform: scaleX(-1);" aria-hidden="true"></div>
-
-  <!-- Halftone dot swarm — cyan at bottom-right, yellow at top-right stagger -->
-  <div class="halftone-dots-cyan pointer-events-none absolute -right-8 bottom-8 h-[240px] w-[300px] -z-10 hidden sm:block" aria-hidden="true"></div>
-  <div class="halftone-dots pointer-events-none absolute right-16 top-24 h-[140px] w-[200px] -z-10 hidden md:block" aria-hidden="true" style="opacity: 0.55;"></div>
-
-  <!-- Tri-stripe glitch bars framing the section -->
-  <div class="glitch-bar pointer-events-none absolute inset-x-12 top-[18%] -z-10" aria-hidden="true"></div>
-  <div class="glitch-bar pointer-events-none absolute inset-x-24 bottom-[14%] -z-10" aria-hidden="true" style="opacity: 0.55;"></div>
 
   <div class="container-page">
     <div class="reveal max-w-2xl">
@@ -118,7 +117,7 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
         const a = accentClasses[s.accent];
         return (
           <a
-            href="#intake"
+            href={s.href}
             class="group relative block py-10 transition-colors duration-500 hover:bg-ink-soft/40 sm:py-14"
             data-cta={`service-${s.key}`}
             data-section="services"
@@ -156,6 +155,18 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
                     </li>
                   ))}
                 </ul>
+
+                <!-- Payment-policy badge — mirrors the price-chip styling so the
+                     terms read as part of the offer, not a hidden disclaimer. -->
+                {s.paymentPolicy && (
+                  <p class={`mono mt-5 inline-flex items-center gap-2 rounded-sm border border-current/40 px-2 py-0.5 text-xs font-semibold uppercase tracking-[0.14em] ${a.text}`}>
+                    <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <path d="M8 1.5l5 2v4c0 3.2-2.1 5.6-5 7-2.9-1.4-5-3.8-5-7v-4l5-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                      <path d="M5.75 8l1.5 1.5 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    {s.paymentPolicy}
+                  </p>
+                )}
               </div>
 
               <!-- CTA arrow -->
@@ -181,10 +192,10 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
     <!-- Downshift: budget under $500 -> SiteGuide off-the-shelf templates. Keeps low-budget visitors
          from bouncing and hands them a warm path to the M³ template store instead. -->
     <div class="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-bone-muted">
-      <span class="mono text-[11px] uppercase tracking-[0.2em] text-cyber/80">Budget under $500?</span>
+      <span class="mono text-[11px] uppercase tracking-[0.2em] text-clay/80">Budget under $500?</span>
       <a
         href="https://siteguide-production.up.railway.app/demos?utm_source=m3mm&utm_medium=services&utm_campaign=downshift&utm_content=services-under-500"
-        class="group inline-flex items-center gap-1.5 text-bone-dim underline decoration-cyber/50 decoration-1 underline-offset-[6px] transition-colors hover:text-cyber"
+        class="group inline-flex items-center gap-1.5 text-bone-dim underline decoration-clay/50 decoration-1 underline-offset-[6px] transition-colors hover:text-clay"
         data-cta="downshift-siteguide"
         data-section="services"
         data-intent="product:siteguide"

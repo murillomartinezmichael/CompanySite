@@ -1,0 +1,45 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import TradeLanding from '@/components/TradeLanding.astro';
+import Intake from '@/components/Intake.astro';
+---
+
+<Layout
+  title="Websites for construction companies — M³"
+  description="New builds, repairs, service lines. Company sites that turn visitors into quote requests — free 5-minute video teardown of your site within 24 hours."
+  path="/for/construction"
+  breadcrumbs={[
+    { name: 'M³', url: '/' },
+    { name: 'For construction companies', url: '/for/construction' },
+  ]}
+>
+  <Header slot="header" minimal={true} path="/for/construction" />
+
+  <TradeLanding
+    trade="construction"
+    kicker="For construction companies"
+    headline="Websites that get construction companies"
+    headlineDim="booked."
+    sub="General contractor, builder, or repair crew — the job is the same: a company site that routes every visitor into a quote request. Big 7 Construction runs Build and Repair lanes through one intake at big7construction.com."
+    proofs={[
+      {
+        name: 'Big 7 Construction',
+        accent: 'neon',
+        pre: 'Same intake.',
+        strong: 'Build + Repair lanes live',
+        post: ' at big7construction.com — one intake owning both funnels.',
+      },
+    ]}
+  />
+
+  <Intake
+    eyebrow="Step 1 · Tell me what to look at"
+    headline="What's on your site and what's frustrating you about it?"
+    sub="The more specific you are, the more useful the teardown. If you don't have a site yet, say that — I'll review the funnel you have (Instagram, phone-only, etc.) and tell you what a site would change."
+    source="for-construction"
+  />
+
+  <Footer slot="footer" path="/for/construction" />
+</Layout>

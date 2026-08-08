@@ -3,17 +3,14 @@
 @tailwind utilities;
 
 /* ─────────────────────────────────────────────────────────────────
-   CYBERPUNK EDGERUNNERS — design system v3
-   Applied per Mike's paste spec (2026-07-06):
-     - 90% dark. Neon is thin + rare (1px borders, tiny glows).
-     - Cyan = primary accent. Yellow = CTAs + hover only.
-     - Magenta = rare punch (max 2 uses per page).
-     - Never all three accents in the same component.
-     - Hover glow cap: 12px, ~0.3 alpha.
-     - Grid/scanline texture <5% opacity.
-     - Transitions 120–180ms.
-   Class names stay stable across component code — the token file does
-   the heavy lifting; this layer covers what can't live in tokens.
+   CONFIDENT STUDIO — design system v4 (2026-07-21)
+   Replaces the v3 "Cyberpunk Edgerunners" theme (see tailwind.config.mjs
+   for the full rationale). Dark mode kept — it still reads modern/premium
+   — but the neon-HUD decoration (scanlines, grid lattice, glitch, halftone
+   swarms, multi-hue accent rotation) is gone. One accent, used sparingly.
+   Transitions 120–180ms. Class names stay stable across component code
+   where the class still makes sense; removed classes are deleted below
+   with a note on where their markup usage went.
    ───────────────────────────────────────────────────────────────── */
 
 @layer base {
@@ -23,51 +20,16 @@
   }
   body {
     @apply bg-ink text-bone font-sans antialiased;
-    /* Spec: no gradients heavier than a subtle two-stop dark. Two tiny
-       radial hints only, both under 8% alpha, both dark-toned. */
+    /* One quiet radial hint, well under 10% alpha — no second hue. */
     background-image:
-      radial-gradient(80% 60% at 50% 0%,   rgba(125, 249, 255, 0.05), transparent 70%),
-      radial-gradient(80% 60% at 100% 100%, rgba(255,  46, 136, 0.03), transparent 65%);
+      radial-gradient(80% 60% at 50% 0%, rgba(79, 184, 199, 0.05), transparent 70%);
     background-attachment: fixed;
     min-height: 100vh;
     position: relative;
   }
 
-  /* Scanlines — fixed overlay, well under 5% opacity per spec */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 100;
-    opacity: 0.35;
-    mix-blend-mode: overlay;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent 0px,
-      transparent 2px,
-      rgba(255, 255, 255, 0.012) 2px,
-      rgba(255, 255, 255, 0.012) 3px
-    );
-  }
-
-  /* Grid lattice — cyan hairlines at ~4% alpha, 48px cells */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: -1;
-    background-image:
-      linear-gradient(rgba(125, 249, 255, 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(125, 249, 255, 0.035) 1px, transparent 1px);
-    background-size: 48px 48px;
-  }
-
   h1, h2, h3, h4 {
     @apply font-display font-medium;
-    /* Body text always #E8ECF2 — headings inherit unless a single accent
-       word overrides. Never neon body text. */
     color: theme('colors.bone.DEFAULT');
     text-wrap: balance;
   }
@@ -91,17 +53,6 @@
       scroll-behavior: auto !important;
     }
   }
-
-  /* DIM mode — user-toggleable, softens every neon effect */
-  body.dim::before { opacity: 0.2; }
-  body.dim::after  { opacity: 0.4; }
-  body.dim *,
-  body.dim *::before,
-  body.dim *::after {
-    animation: none !important;
-    text-shadow: none !important;
-    box-shadow: none !important;
-  }
 }
 
 @layer components {
@@ -109,18 +60,17 @@
     @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
   }
 
-  /* Primary CTA — spec: transparent bg, 1px cyan border, cyan text.
-     Hover: fills yellow with dark text + 12px cyan glow. 150ms. */
+  /* Primary CTA — solid accent fill, confident and simple. Hover deepens
+     the fill slightly rather than swapping hue. 150ms. */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2.5 border border-clay bg-transparent px-7 py-3.5 text-base font-semibold text-clay transition-all duration-150;
-    border-radius: 2px;
-    letter-spacing: 0.03em;
+    @apply inline-flex items-center justify-center gap-2.5 border border-clay bg-clay px-7 py-3.5 text-base font-semibold text-ink transition-all duration-150;
+    border-radius: 6px;
+    letter-spacing: 0.01em;
   }
   .btn-primary:hover {
-    background-color: theme('colors.cyber');
-    border-color: theme('colors.cyber');
-    color: theme('colors.ink.DEFAULT');
-    box-shadow: 0 0 12px rgba(125, 249, 255, 0.30);
+    background-color: theme('colors.clay.glow');
+    border-color: theme('colors.clay.glow');
+    box-shadow: 0 0 12px rgba(79, 184, 199, 0.30);
   }
   .btn-primary:active {
     transform: scale(0.99);
@@ -129,7 +79,7 @@
   /* Ghost CTA — thinner, more restrained */
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2 border px-7 py-3.5 text-base font-medium text-bone transition-all duration-150;
-    border-radius: 2px;
+    border-radius: 6px;
     border-color: theme('colors.ink.line');
   }
   .btn-ghost:hover {
@@ -137,24 +87,20 @@
     color: theme('colors.clay.DEFAULT');
   }
 
-  /* Card / panel — surface navy with a 1px cyan-15% border, sharp corners */
+  /* Card / panel — surface navy with a 1px accent-15% border */
   .panel {
     background-color: theme('colors.ink.soft');
-    border: 1px solid rgba(125, 249, 255, 0.15);
-    border-radius: 4px;
+    border: 1px solid rgba(79, 184, 199, 0.15);
+    border-radius: 10px;
     box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset;
   }
 
   .kicker {
     @apply font-mono text-[11px] font-medium uppercase tracking-[0.24em] text-bone-muted;
   }
-  .kicker-neon {
-    @apply font-mono text-[11px] font-medium uppercase tracking-[0.24em] text-clay/90;
-  }
 
-  /* Thin cyan hairline — used as section-open markers */
-  .hairline,
-  .hairline-neon {
+  /* Thin accent hairline — used as section-open markers */
+  .hairline {
     @apply block h-px w-12 bg-clay/70;
   }
 
@@ -169,13 +115,13 @@
   .field-input {
     @apply w-full border bg-ink/60 px-4 py-3 text-bone placeholder:text-bone-muted/60 transition-all duration-150;
     border-color: theme('colors.ink.line');
-    border-radius: 2px;
+    border-radius: 6px;
   }
   .field-input:focus {
     outline: none;
     border-color: theme('colors.clay.DEFAULT');
     background: theme('colors.ink.DEFAULT');
-    box-shadow: 0 0 12px rgba(125, 249, 255, 0.30);
+    box-shadow: 0 0 12px rgba(79, 184, 199, 0.30);
   }
 
   .reveal {
@@ -193,165 +139,22 @@
   .reveal-delay-3 { transition-delay: 180ms; }
   .reveal-delay-4 { transition-delay: 240ms; }
 
-  /* Hero accent word — full RGB channel-split with slow drift animation.
-     Cyan behind, magenta ahead, 8s glitch cycle that reduced-motion
-     shuts off. This is the LUCY-POSTER vibe: the site is Mike's main —
-     restraint gets dropped so the hero reads at TikTok-scroll speed. */
-  .glitch-em {
-    display: inline-block;
-    color: theme('colors.clay.DEFAULT');
-    text-shadow:
-       3px 0 0 rgba(255,  46, 136, 0.70),
-      -3px 0 0 rgba(125, 249, 255, 0.70),
-       0   0 16px rgba(125, 249, 255, 0.35);
-    animation: rgbDrift 8s ease-in-out infinite;
-  }
-  @keyframes rgbDrift {
-    0%, 100% {
-      text-shadow:
-         3px 0 0 rgba(255,  46, 136, 0.70),
-        -3px 0 0 rgba(125, 249, 255, 0.70),
-         0   0 16px rgba(125, 249, 255, 0.35);
-    }
-    48% {
-      text-shadow:
-         2px 1px 0 rgba(255,  46, 136, 0.60),
-        -2px -1px 0 rgba(125, 249, 255, 0.60),
-         0   0 16px rgba(125, 249, 255, 0.35);
-    }
-    52% {
-      text-shadow:
-        -3px -1px 0 rgba(255,  46, 136, 0.90),
-         3px  1px 0 rgba(125, 249, 255, 0.90),
-         0    0  22px rgba(245, 217, 10, 0.40);
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .glitch-em {
-      animation: none;
-      text-shadow: 0 0 14px rgba(125, 249, 255, 0.35);
-    }
-  }
-
-  /* Sharpie-yellow highlight — full saturation, covers the middle band
-     of the em text like a marker stroke. Ref: the yellow background
-     zones behind Lucy's face in the poster. */
+  /* Hero/headline accent word — plain accent color + weight, no
+     background box or glitch. Restrained; the SVG underline drawn in
+     Hero.astro does the reinforcing, not a marker-highlight effect. */
   .highlight-yellow {
-    position: relative;
-    display: inline-block;
-  }
-  .highlight-yellow::before {
-    content: '';
-    position: absolute;
-    left: -0.15em; right: -0.15em;
-    top: 22%; bottom: 12%;
-    background: theme('colors.cyber');
-    z-index: -1;
-    transform: skewY(-2deg);
-    opacity: 0.95;
-    box-shadow:
-       6px 0 0 rgba(255,  46, 136, 0.35),
-      -6px 0 0 rgba(125, 249, 255, 0.35);
-  }
-  .highlight-yellow .fg {
-    color: theme('colors.ink.DEFAULT');
-    text-shadow: none !important;
+    color: theme('colors.clay.DEFAULT');
     font-weight: 700;
   }
-
-  /* Halftone dot — bigger, denser, more visible. Ref: the polka-dot
-     zone in the bottom-left of the Lucy poster. */
-  .halftone-dots {
-    background-image: radial-gradient(theme('colors.cyber') 1.5px, transparent 2px);
-    background-size: 10px 10px;
-    background-position: 0 0;
-    opacity: 0.85;
-    mask-image: radial-gradient(ellipse at bottom left, black 35%, transparent 75%);
-    -webkit-mask-image: radial-gradient(ellipse at bottom left, black 35%, transparent 75%);
-  }
-  .halftone-dots-cyan {
-    background-image: radial-gradient(theme('colors.clay.DEFAULT') 1.5px, transparent 2px);
-    background-size: 10px 10px;
-    opacity: 0.7;
-    mask-image: radial-gradient(ellipse at top right, black 30%, transparent 75%);
-    -webkit-mask-image: radial-gradient(ellipse at top right, black 30%, transparent 75%);
+  .highlight-yellow .fg {
+    color: inherit;
+    font-weight: inherit;
   }
 
-  /* Violet geometric triangle — bigger, more saturated */
-  .triangle-violet {
-    position: absolute;
-    background: linear-gradient(135deg, rgba(168, 123, 255, 0.55), rgba(168, 123, 255, 0.10));
-    clip-path: polygon(100% 0, 100% 100%, 0 100%);
-    opacity: 0.75;
-    pointer-events: none;
-  }
-
-  /* RGB-glitch bar — thicker, brighter, three-stripe split */
-  .glitch-bar {
-    height: 6px;
-    background: linear-gradient(90deg,
-      rgba(125, 249, 255, 0.85) 0 33%,
-      rgba(255, 46, 136, 0.85) 33% 66%,
-      rgba(245, 217, 10, 0.85) 66% 100%);
-    opacity: 0.75;
-    filter: drop-shadow(0 0 8px rgba(125, 249, 255, 0.4));
-  }
-
-  /* Pastel Lucy-hair gradient — pink + mint + silver, decorative zone */
-  .lucy-hair-band {
-    background: linear-gradient(90deg,
-      rgba(255, 182, 217, 0.35) 0%,
-      rgba(178, 244, 235, 0.35) 50%,
-      rgba(190, 208, 235, 0.30) 100%);
-    filter: blur(1px);
-  }
-
-  /* DIM toggle — cyan-outlined chip, bottom-left, out of widget path */
-  .dim-toggle {
-    position: fixed;
-    left: 16px; bottom: 16px;
-    z-index: 40;
-    background: rgba(13, 11, 20, 0.85);
-    border: 1px solid theme('colors.clay.DEFAULT');
-    color: theme('colors.clay.DEFAULT');
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    padding: 8px 12px;
-    cursor: pointer;
-    backdrop-filter: blur(6px);
-    border-radius: 2px;
-    transition: color 0.15s, border-color 0.15s, box-shadow 0.15s;
-  }
-  .dim-toggle:hover {
-    color: theme('colors.ink.DEFAULT');
-    background: theme('colors.cyber');
-    border-color: theme('colors.cyber');
-    box-shadow: 0 0 12px rgba(125, 249, 255, 0.30);
-  }
-  .dim-toggle .led {
-    display: inline-block;
-    width: 6px; height: 6px; border-radius: 50%;
-    background: theme('colors.clay.DEFAULT');
-    box-shadow: 0 0 4px theme('colors.clay.DEFAULT');
-    margin-right: 6px;
-    vertical-align: middle;
-  }
-  body.dim .dim-toggle .led {
-    background: theme('colors.bone.muted');
-    box-shadow: none;
-  }
-  body.dim .dim-toggle {
-    color: theme('colors.bone.muted');
-    border-color: theme('colors.ink.line');
-  }
-
-  /* Sticky mobile CTA — TikTok/IG thumb-reachable "Free review" pill. Bottom-right
-     anchor keeps it clear of the DIM toggle (bottom-left). Fades in when the
-     visitor scrolls past the hero fold; script hides it near the Intake so it
-     never overlaps the actual form. Desktop hides it via lg:hidden (Header
-     nav is always reachable there). */
+  /* Sticky mobile CTA — thumb-reachable "Free review" pill on mobile.
+     Fades in when the visitor scrolls past the hero fold; script hides it
+     near the Intake so it never overlaps the actual form. Desktop hides
+     it via lg:hidden (Header nav is always reachable there). */
   .sticky-cta {
     position: fixed;
     right: 16px;
@@ -362,16 +165,16 @@
     gap: 8px;
     padding: 12px 18px;
     padding-bottom: calc(12px + env(safe-area-inset-bottom, 0));
-    background: theme('colors.cyber');
+    background: theme('colors.clay.DEFAULT');
     color: theme('colors.ink.DEFAULT');
-    font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    border: 1px solid theme('colors.cyber');
+    border: 1px solid theme('colors.clay.DEFAULT');
     border-radius: 999px;
-    box-shadow: 0 0 12px rgba(125, 249, 255, 0.30), 0 8px 24px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
     opacity: 0;
     transform: translateY(8px);
     pointer-events: none;
@@ -384,59 +187,21 @@
   }
   .sticky-cta:hover,
   .sticky-cta:focus-visible {
-    background: theme('colors.clay.DEFAULT');
-    border-color: theme('colors.clay.DEFAULT');
-    color: theme('colors.ink.DEFAULT');
-    box-shadow: 0 0 12px rgba(125, 249, 255, 0.32), 0 8px 24px rgba(0, 0, 0, 0.45);
+    background: theme('colors.clay.glow');
+    border-color: theme('colors.clay.glow');
   }
   .sticky-cta svg {
     width: 14px;
     height: 14px;
-  }
-  body.dim .sticky-cta {
-    background: theme('colors.ink.soft');
-    color: theme('colors.bone.DEFAULT');
-    border-color: theme('colors.ink.line');
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
   }
   @media (prefers-reduced-motion: reduce) {
     .sticky-cta { transition: opacity 120ms ease; transform: none; }
     .sticky-cta.is-visible { transform: none; }
   }
 
-  /* Photosensitivity disclaimer above footer — thin magenta hairline */
-  .a11y-note {
-    @apply mx-auto max-w-4xl mt-16 mb-6 px-6 py-4 text-xs text-bone-muted;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    letter-spacing: 0.02em;
-    border-left: 1px solid rgba(255, 46, 136, 0.35);
-    background: transparent;
-  }
-  .a11y-note b {
-    color: theme('colors.neon');
-    font-weight: 600;
-  }
-  .a11y-note button.inline {
-    background: transparent;
-    color: theme('colors.clay.DEFAULT');
-    border: none;
-    font: inherit;
-    padding: 0;
-    cursor: pointer;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-  .a11y-note button.inline:hover {
-    color: theme('colors.cyber');
-  }
-
-  /* Section divider — 1px cyan hairline, thin as spec */
+  /* Section divider — 1px accent hairline */
   .rule-cyan {
     @apply block h-px w-full;
-    background: rgba(125, 249, 255, 0.25);
-  }
-  .rule-magenta {
-    @apply block h-px w-full;
-    background: rgba(255, 46, 136, 0.25);
+    background: rgba(79, 184, 199, 0.25);
   }
 }
