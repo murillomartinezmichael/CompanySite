@@ -2,6 +2,11 @@
 import Layout from '@/layouts/Layout.astro';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
+import { referralOffer } from '../../functions/_lib/referral';
+
+// Referral program — same config the auto-reply email renders from, so the
+// page and the inbox never state different terms.
+const referral = referralOffer();
 ---
 
 <Layout
@@ -107,6 +112,24 @@ import Footer from '@/components/Footer.astro';
               <p class="text-sm text-bone-dim">Twelve one-page templates you can preview + buy today.</p>
             </a>
           </div>
+        </div>
+
+        <!-- Referral program — the visitor is warm right now; this is the
+             cheapest lead source on the site (zero CAC, past-client trust). -->
+        <div class="mt-14 rounded-2xl border border-ink-line bg-ink-soft/40 p-6 sm:p-8">
+          <p class="kicker mono mb-3">// Referrals</p>
+          <p class="text-lg font-medium text-bone">{referral.headline}</p>
+          <p class="mt-2 text-bone-dim">{referral.body}</p>
+          <a
+            href="/audit#intake"
+            class="mt-5 inline-flex items-center gap-2 text-sm text-clay underline decoration-clay/50 decoration-1 underline-offset-[6px] hover:text-bone"
+            data-cta="thanks-referral"
+            data-section="thanks"
+            data-intent="book:free-review"
+          >
+            Send them the review form
+            <span aria-hidden="true">→</span>
+          </a>
         </div>
 
         <!-- Urgency path — TikTok/IG DMers who need it faster than 24h -->

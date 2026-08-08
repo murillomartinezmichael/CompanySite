@@ -1,4 +1,6 @@
 ---
+import { REFERRAL_FIELD_LABEL } from '../../functions/_lib/referral';
+
 interface Props {
   eyebrow?: string;
   headline?: string;
@@ -26,9 +28,13 @@ const {
   successPath = '/thanks',
   showStartWindow = false,
 } = Astro.props;
+
+// One source of truth for the label so the intake, /thanks, and the
+// auto-reply email all name the same field.
+const referralFieldLabel = REFERRAL_FIELD_LABEL;
 ---
 
-<section id="intake" class="relative py-24 sm:py-32">
+<section id="intake" class="relative overflow-hidden py-24 sm:py-32">
   <!-- Ambient glow -->
   <div class="pointer-events-none absolute inset-x-0 top-16 -z-10 h-[400px]">
     <div class="absolute left-1/4 top-0 h-[300px] w-[300px] rounded-full bg-clay/[0.06] blur-3xl"></div>
@@ -199,6 +205,30 @@ const {
           </span>
         </label>
       )}
+
+      <!-- Referral capture (2026-08-03). Optional, last, and deliberately
+           quiet so it adds zero friction to the required path. Prefilled
+           from `?ref=<name>` (src/lib/prefill.ts) when a past client shares
+           their own link, so the referrer gets credited without the visitor
+           typing anything. -->
+      <label class="flex flex-col gap-2">
+        <span class="field-label">
+          <span>{referralFieldLabel}</span>
+          <span class="text-bone-muted mono">optional</span>
+        </span>
+        <input
+          name="referredBy"
+          type="text"
+          maxlength="120"
+          autocomplete="off"
+          class="field-input"
+          placeholder="Name of the person or business who sent you"
+          aria-describedby="referred-by-hint"
+        />
+        <span id="referred-by-hint" class="mono text-[10px] uppercase tracking-[0.18em] text-bone-muted">
+          Someone send you here? Put their name down so they get the credit.
+        </span>
+      </label>
 
       <!-- honeypot — bots will fill it, humans can't see it -->
       <label class="hidden" aria-hidden="true">

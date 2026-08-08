@@ -39,6 +39,10 @@ export function scoreLead(lead: Lead): number {
   if (intent.includes('audit') || intent.includes('review') || intent.includes('free')) {
     score += 15;
   }
+  // Referred leads arrive pre-trusted by a past client — the highest-quality
+  // non-checkout signal we capture. Worth the same bump as a warm social source
+  // plus a bit, and it makes referral volume measurable in the lead OS.
+  if ((lead.referredBy || '').trim()) score += 15;
   const src = (lead.utm_source || lead.source || '').toLowerCase();
   if (src.includes('tiktok') || src.includes('instagram') || src.includes('ig')) {
     score += 10;
@@ -69,6 +73,7 @@ export function buildN8nLeadPayload(
       frustration: lead.frustration,
       preferredStart: lead.preferredStart || null,
       source: lead.source,
+      referredBy: lead.referredBy || null,
       intent: lead.intent || null,
       utm_source: lead.utm_source || null,
       utm_medium: lead.utm_medium || null,

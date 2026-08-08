@@ -17,6 +17,8 @@ import { LIMITS, validateLead, esc, UTM_FIELDS, type Lead } from '../_lib/valida
 import { checkRate } from '../_lib/rate';
 import { sendToCockpit, leadIdempotencyKey } from '../_lib/cockpit-sink';
 import { sendToN8n } from '../_lib/n8n-sink';
+import { referralOffer, referralShareUrl, REFERRAL_FIELD_LABEL } from '../_lib/referral';
+import { originAllowed, corsResponseHeaders, preflightResponse } from '../_lib/cors';
 
 type Env = {
   RESEND_API_KEY?: string;
@@ -35,17 +37,9 @@ type Env = {
   N8N_LEAD_WEBHOOK_SECRET?: string;
 };
 
-const DEFAULT_ORIGINS = [
-  'https://m3mm.net',
-  'https://www.m3mm.net',
-  // dev
-  'http://localhost:4321',
-  'http://127.0.0.1:4321',
-  'http://localhost:8788',
-  'http://127.0.0.1:8788',
-  'http://localhost:8789',
-  'http://127.0.0.1:8789',
-];
+// Origin allowlist + preflight policy live in ../_lib/cors.ts so they can be
+// unit-tested without a Cloudflare runtime (see that file's header for the
+// reflected-Origin defect this replaced).
 
 const RATE_MAX = 5;
 const RATE_WINDOW_S = 60;
@@ -60,12 +54,6 @@ function jsonResponse(status: number, body: unknown, extraHeaders: Record<string
       ...extraHeaders,
     },
   });
-}
-
-function originAllowed(env: Env, origin: string | null): boolean {
-  if (!origin) return true; // same-origin fetch or curl — allow
-  const list = (env.ALLOWED_ORIGINS?.split(',').map((s) => s.trim()).filter(Boolean)) || DEFAULT_ORIGINS;
-  return list.includes(origin);
 }
 
 async function sendEmail(
@@ -102,26 +90,34 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const origin = request.headers.get('Origin');
   const contentType = request.headers.get('Content-Type') || '';
 
+  // Every response off this handler carries Vary: Origin, and an allowlisted
+  // cross-origin caller also gets a matching Access-Control-Allow-Origin — the
+  // preflight now grants it, so hiding the result from it afterwards would be
+  // the same mismatch in the other direction. No credentials are ever allowed.
+  const cors = corsResponseHeaders(env, origin);
+  const reply = (status: number, body: unknown, extraHeaders: Record<string, string> = {}) =>
+    jsonResponse(status, body, { ...cors, ...extraHeaders });
+
   if (!originAllowed(env, origin)) {
-    return jsonResponse(403, { ok: false, error: 'origin_not_allowed' });
+    return reply(403, { ok: false, error: 'origin_not_allowed' });
   }
 
   const ct = contentType.toLowerCase();
   const isJson = ct.includes('application/json');
   const isForm = ct.includes('application/x-www-form-urlencoded') || ct.includes('multipart/form-data');
   if (!isJson && !isForm) {
-    return jsonResponse(415, { ok: false, error: 'unsupported_media_type' });
+    return reply(415, { ok: false, error: 'unsupported_media_type' });
   }
 
   const contentLengthRaw = request.headers.get('Content-Length');
   const contentLength = contentLengthRaw ? Number(contentLengthRaw) : NaN;
   if (Number.isFinite(contentLength) && contentLength > LIMITS.bodyBytes) {
-    return jsonResponse(413, { ok: false, error: 'payload_too_large', limit: LIMITS.bodyBytes });
+    return reply(413, { ok: false, error: 'payload_too_large', limit: LIMITS.bodyBytes });
   }
 
   const rate = checkRate(ip, RATE_MAX, RATE_WINDOW_S);
   if (!rate.ok) {
-    return jsonResponse(
+    return reply(
       429,
       { ok: false, error: 'rate_limited', retryAfter: rate.retryAfter },
       { 'Retry-After': String(rate.retryAfter) },
@@ -133,11 +129,11 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   try {
     const text = await request.text();
     if (text.length > LIMITS.bodyBytes) {
-      return jsonResponse(413, { ok: false, error: 'payload_too_large', limit: LIMITS.bodyBytes });
+      return reply(413, { ok: false, error: 'payload_too_large', limit: LIMITS.bodyBytes });
     }
     raw = text;
   } catch {
-    return jsonResponse(400, { ok: false, error: 'body_unreadable' });
+    return reply(400, { ok: false, error: 'body_unreadable' });
   }
 
   let body: Lead;
@@ -145,7 +141,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     try {
       body = raw ? JSON.parse(raw) : {};
     } catch {
-      return jsonResponse(400, { ok: false, error: 'invalid_json' });
+      return reply(400, { ok: false, error: 'invalid_json' });
     }
   } else {
     // No-JS fallback: the <form> POSTs as URL-encoded when the client
@@ -159,6 +155,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       frustration: params.get('frustration') || undefined,
       preferredStart: params.get('preferredStart') || undefined,
       source: params.get('source') || undefined,
+      referredBy: params.get('referredBy') || undefined,
       company_website: params.get('company_website') || undefined,
       intent: params.get('intent') || undefined,
       utm_source: params.get('utm_source') || undefined,
@@ -172,12 +169,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   // Honeypot: bots gleefully fill the hidden field. Silent 200 so they
   // don't know they were caught.
   if (body.company_website) {
-    return jsonResponse(200, { ok: true });
+    return reply(200, { ok: true });
   }
 
   const result = validateLead(body);
   if (!result.ok) {
-    return jsonResponse(400, { ok: false, error: 'validation', errors: result.errors });
+    return reply(400, { ok: false, error: 'validation', errors: result.errors });
   }
   const lead = result.lead;
 
@@ -192,10 +189,17 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     .filter(([, v]) => Boolean(v))
     .map(([k, v]) => `<p style="margin:2px 0;"><b>${esc(k)}:</b> ${esc(v as string)}</p>`)
     .join('');
-  const attributionHtml = (lead.intent || utmRows)
+  // Referral row sits at the TOP of the attribution block: a named referrer
+  // outranks every UTM as a reason to reply fast, and it's the row Michael
+  // reads to know who gets paid.
+  const referralRow = lead.referredBy
+    ? `<p style="margin:2px 0;font-size:14px;"><b>${esc(REFERRAL_FIELD_LABEL)}:</b> ${esc(lead.referredBy)}</p>`
+    : '';
+  const attributionHtml = (lead.intent || utmRows || referralRow)
     ? `
     <div style="margin:16px 0;padding:10px 14px;background:#f4f4f0;border-left:3px solid #9AA;font-size:13px;">
       <p style="margin:0 0 6px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#888;">Attribution</p>
+      ${referralRow}
       ${lead.intent ? `<p style="margin:2px 0;"><b>Intent:</b> ${esc(lead.intent)}</p>` : ''}
       ${utmRows}
     </div>
@@ -228,6 +232,14 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     ? 'Your M³ project intake is in'
     : 'Got your review request — M³';
 
+  // Referral CTA in the closing block — every reply turns the lead into a
+  // potential referrer. Terms come from one config (functions/_lib/referral.ts)
+  // so the email can't promise something the site doesn't.
+  const referral = referralOffer();
+  // Personal share link — the referrer's name is already in the URL, so the
+  // person they send never has to know it and the credit can't be lost.
+  const referralLink = referralShareUrl(lead.name);
+
   const replyHtml = `
     <div style="font-family:Georgia,serif;max-width:560px;color:#111;line-height:1.55;">
       <h2 style="margin:0 0 14px;font-size:22px;">Got it, ${esc(lead.name)}.</h2>
@@ -247,6 +259,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
           ? 'Keep your Stripe receipt for your records. The $100 down payment is non-refundable; all other payments are refundable before launch.'
           : 'Want to browse while you wait? <a href="https://siteguide-production.up.railway.app/demos?utm_source=m3mm&utm_medium=email&utm_campaign=downshift&utm_content=intake-reply" style="color:#FF3B5C;">See the 12 SiteGuide starter templates</a>.'}
       </p>
+
+      <div style="margin:20px 0 0;padding-top:14px;border-top:1px solid #e8e4dc;font-size:13px;color:#555;">
+        <b style="color:#111;">${esc(referral.headline)}</b><br/>
+        ${esc(referral.body)}<br/>
+        <a href="${esc(referralLink)}" style="color:#FF3B5C;">Your share link: ${esc(referralLink)}</a>
+      </div>
 
       <p style="margin:24px 0 0;">&mdash; Michael<br/><span style="color:#888;font-size:13px;">M³ &middot; Atlanta, GA &middot; m3mm.net</span></p>
     </div>
@@ -269,6 +287,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     business: lead.businessType,
     hasUrl: Boolean(lead.currentUrl),
     frustrationLength: lead.frustration.length,
+    referredBy: lead.referredBy || undefined,
     intent: lead.intent || undefined,
     utm_source: lead.utm_source || undefined,
     utm_medium: lead.utm_medium || undefined,
@@ -283,22 +302,14 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     ts: Date.now(),
   }));
 
-  return jsonResponse(200, { ok: true });
+  return reply(200, { ok: true });
 };
 
-export const onRequest: PagesFunction<Env> = async ({ request }) => {
+// Catch-all for every method except POST (Pages routes POST to onRequestPost).
+// Needs `env` as well as `request`: the preflight decision reads ALLOWED_ORIGINS.
+export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
   if (request.method === 'OPTIONS') {
-    const origin = request.headers.get('Origin') || '';
-    return new Response(null, {
-      status: 204,
-      headers: {
-        'Allow': 'POST, OPTIONS',
-        'Access-Control-Allow-Origin': origin,
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Max-Age': '86400',
-      },
-    });
+    return preflightResponse(env, request);
   }
   return new Response('Method Not Allowed', {
     status: 405,

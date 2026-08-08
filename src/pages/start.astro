@@ -3,7 +3,7 @@ import Layout from '@/layouts/Layout.astro';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import Intake from '@/components/Intake.astro';
-import { BASIC_SITE } from '@/config/offers';
+import { BASIC_SITE, checkoutReady } from '@/config/offers';
 ---
 
 <Layout
@@ -32,7 +32,9 @@ import { BASIC_SITE } from '@/config/offers';
               Start your <span class="highlight-yellow"><span class="fg">$500 site</span></span> with $100 down.
             </h1>
             <p class="mt-6 max-w-2xl text-lg text-bone-dim">
-              Pay the 20% down payment to reserve your project, then complete the project intake. I review the scope and confirm your actual build week before work begins.
+              {checkoutReady
+                ? 'Pay the 20% down payment to reserve your project, then complete the project intake. I review the scope and confirm your actual build week before work begins.'
+                : 'Stripe checkout for the down payment opens soon. Start with the free site review below — I review the scope, confirm your build week, and send you the payment link the moment checkout is live.'}
             </p>
 
             <ul class="mt-9 grid gap-3 text-sm text-bone-dim sm:grid-cols-2">
@@ -69,50 +71,81 @@ import { BASIC_SITE } from '@/config/offers';
               The $100 down payment is non-refundable. All other payments are refundable before launch.
             </p>
 
-            <a
-              href={BASIC_SITE.paymentLink}
-              class="btn-primary mt-7 flex w-full items-center justify-center"
-              data-cta="start-pay-deposit"
-              data-section="start-payment"
-              data-intent="checkout:basic-deposit"
-            >
-              <span class="relative z-10 flex items-center gap-2.5">
-                Pay $100 securely
-                <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </span>
-            </a>
-            <p class="mt-3 text-center mono text-[10px] uppercase tracking-[0.16em] text-bone-muted">Secure checkout hosted by Stripe</p>
+            {checkoutReady ? (
+              <>
+                <a
+                  href={BASIC_SITE.paymentLink}
+                  class="btn-primary mt-7 flex w-full items-center justify-center"
+                  data-cta="start-pay-deposit"
+                  data-section="start-payment"
+                  data-intent="checkout:basic-deposit"
+                >
+                  <span class="relative z-10 flex items-center gap-2.5">
+                    Pay $100 securely
+                    <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                </a>
+                <p class="mt-3 text-center mono text-[10px] uppercase tracking-[0.16em] text-bone-muted">Secure checkout hosted by Stripe</p>
 
-            <a href="#intake" class="mt-5 block text-center text-sm text-bone-dim underline decoration-clay/50 underline-offset-4" data-paid-intake-link>
-              Already paid? Open the project intake
-            </a>
+                <a href="#intake" class="mt-5 block text-center text-sm text-bone-dim underline decoration-clay/50 underline-offset-4" data-paid-intake-link>
+                  Already paid? Open the project intake
+                </a>
+              </>
+            ) : (
+              <>
+                <div class="mt-7 rounded-sm border border-ink-line bg-ink-soft/60 px-4 py-3">
+                  <p class="mono text-[11px] uppercase tracking-[0.18em] text-bone-muted">Checkout opening soon</p>
+                  <p class="mt-2 text-sm leading-relaxed text-bone-dim">
+                    Online payment isn&rsquo;t wired up yet. The offer stands exactly as listed — start with the free review below and I&rsquo;ll send you the payment link directly once checkout is live.
+                  </p>
+                </div>
+                <a
+                  href="#intake"
+                  class="btn-primary mt-5 flex w-full items-center justify-center"
+                  data-cta="start-free-review"
+                  data-section="start-payment"
+                  data-intent="book:free-review"
+                >
+                  <span class="relative z-10 flex items-center gap-2.5">
+                    Start with the free review
+                    <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                </a>
+              </>
+            )}
           </aside>
         </div>
       </div>
     </section>
 
-    <div id="project-intake" hidden>
-      <div class="container-page pt-10">
-        <div class="panel border-clay/30 bg-clay/[0.04] p-5 text-sm text-bone-dim" role="status">
-          <span class="font-medium text-bone">Checkout complete.</span> Send the project details below so I can confirm scope and your build week.
+    {checkoutReady ? (
+      <div id="project-intake" hidden>
+        <div class="container-page pt-10">
+          <div class="panel border-clay/30 bg-clay/[0.04] p-5 text-sm text-bone-dim" role="status">
+            <span class="font-medium text-bone">Checkout complete.</span> Send the project details below so I can confirm scope and your build week.
+          </div>
         </div>
+        <Intake
+          eyebrow="Step 2 · Project intake"
+          headline="Deposit handled. Tell me what we’re building."
+          sub="Share the business, current site, main problem, and preferred timing. I’ll confirm the scope before work begins."
+          source="basic-deposit"
+          defaultIntent="checkout:basic-deposit"
+          mode="project"
+          submitLabel="Send project intake"
+          successPath="/start/thanks"
+          showStartWindow={true}
+        />
       </div>
-      <Intake
-        eyebrow="Step 2 · Project intake"
-        headline="Deposit handled. Tell me what we’re building."
-        sub="Share the business, current site, main problem, and preferred timing. I’ll confirm the scope before work begins."
-        source="basic-deposit"
-        defaultIntent="checkout:basic-deposit"
-        mode="project"
-        submitLabel="Send project intake"
-        successPath="/start/thanks"
-        showStartWindow={true}
-      />
-    </div>
+    ) : (
+      <Intake source="start" />
+    )}
 
-    <noscript>
-      <div class="container-page pb-16 text-sm text-bone-dim">JavaScript is required to reveal the post-payment project intake. Email through the footer if you need help.</div>
-    </noscript>
+    {checkoutReady && (
+      <noscript>
+        <div class="container-page pb-16 text-sm text-bone-dim">JavaScript is required to reveal the post-payment project intake. Email through the footer if you need help.</div>
+      </noscript>
+    )}
   </div>
 
   <Footer slot="footer" path="/start" />

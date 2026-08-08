@@ -105,6 +105,13 @@ export const PARAM_TO_FIELD: Readonly<Record<string, string>> = {
   url: 'currentUrl',
   currenturl: 'currentUrl',
   site: 'currentUrl',
+  // Referral program (2026-08-03). A past client shares
+  // `m3mm.net/audit?ref=David+Serrano#intake`; the prospect never has to
+  // know the referrer's exact name for the credit to land. Self-declared
+  // and human-triaged only — it never influences pricing or routing, so a
+  // fabricated `?ref=` costs nothing but a wrong name in one email.
+  ref: 'referredBy',
+  referredby: 'referredBy',
 };
 
 // Cap each URL-seeded value so a malicious bio link can't push a
