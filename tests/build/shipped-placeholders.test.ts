@@ -61,6 +61,7 @@ describe('placeholder scanner — does not false-positive on real page content',
     expect(isScannableFile('index.html')).toBe(true);
     expect(isScannableFile('_headers')).toBe(true);
     expect(isScannableFile('sitemap.xml')).toBe(true);
+    expect(isScannableFile('lead.ts')).toBe(true); // Pages Functions ship too
     expect(isScannableFile('hero.webp')).toBe(false);
     expect(isScannableFile('inter-latin.woff2')).toBe(false);
   });
@@ -79,5 +80,11 @@ describe('placeholder scanner — does not false-positive on real page content',
 describe.skipIf(!existsSync(root + 'dist'))('built dist/ (needs `npm run build` first)', () => {
   it('ships zero placeholders of any kind', () => {
     expect(scanDir(root + 'dist')).toEqual([]);
+  });
+});
+
+describe('shipped Pages Functions', () => {
+  it('ship zero placeholders of any kind', () => {
+    expect(scanDir(root + 'functions')).toEqual([]);
   });
 });

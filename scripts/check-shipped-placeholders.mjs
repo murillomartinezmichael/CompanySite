@@ -16,14 +16,17 @@
  * REPLACE/CHANGEME markers, placeholder analytics ids, example.com contact
  * targets, 555-01xx phone numbers, and any Stripe key material.
  *
- * Usage:  node scripts/check-shipped-placeholders.mjs [dir]   (default: dist)
+ * Usage:  node scripts/check-shipped-placeholders.mjs [dir...]   (default: dist)
+ *
+ * `npm run verify:dist` scans BOTH shipped surfaces: `dist/` (the static site)
+ * and `functions/` (the Pages Functions that ship as Workers alongside it).
  */
 import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
 import { join, extname, relative } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 /** Files worth scanning: shipped text. Binary assets are skipped. */
-const TEXT_EXT = new Set(['.html', '.htm', '.js', '.mjs', '.css', '.json', '.xml', '.txt', '.svg', '.webmanifest']);
+const TEXT_EXT = new Set(['.html', '.htm', '.js', '.mjs', '.ts', '.css', '.json', '.xml', '.txt', '.svg', '.webmanifest']);
 const TEXT_NAMES = new Set(['_headers', '_redirects', 'robots.txt']);
 
 export const isScannableFile = (name) => TEXT_EXT.has(extname(name).toLowerCase()) || TEXT_NAMES.has(name);
@@ -104,17 +107,20 @@ export function scanDir(dir) {
 // ---------------------------------------------------------------- CLI ----
 const invokedDirectly = process.argv[1] !== undefined && import.meta.url === pathToFileURL(process.argv[1]).href;
 if (invokedDirectly) {
-  const dir = process.argv[2] ?? 'dist';
-  if (!existsSync(dir)) {
-    console.error(`check-shipped-placeholders: '${dir}' not found — run \`npm run build\` first.`);
-    process.exit(1);
+  const dirs = process.argv.slice(2).length > 0 ? process.argv.slice(2) : ['dist'];
+  const results = [];
+  for (const dir of dirs) {
+    if (!existsSync(dir)) {
+      console.error(`check-shipped-placeholders: '${dir}' not found — run \`npm run build\` first.`);
+      process.exit(1);
+    }
+    results.push(...scanDir(dir).map((r) => ({ ...r, file: `${dir}/${r.file}` })));
   }
-  const results = scanDir(dir);
   if (results.length === 0) {
-    console.log(`check-shipped-placeholders: clean — no placeholders in ${dir}/`);
+    console.log(`check-shipped-placeholders: clean — no placeholders in ${dirs.join('/, ')}/`);
     process.exit(0);
   }
-  console.error(`\ncheck-shipped-placeholders: BUILD BLOCKED — placeholder content in ${dir}/\n`);
+  console.error(`\ncheck-shipped-placeholders: BUILD BLOCKED — placeholder content shipped\n`);
   for (const { file, findings } of results) {
     for (const f of findings) {
       console.error(`  ${file}\n    [${f.rule}] ${f.message}\n    e.g. ${f.samples.join(' , ')}`);

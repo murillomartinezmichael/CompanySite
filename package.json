@@ -8,7 +8,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build && npm run verify:dist",
-    "verify:dist": "node scripts/check-shipped-placeholders.mjs dist",
+    "verify:dist": "node scripts/check-shipped-placeholders.mjs dist functions",
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest run",
