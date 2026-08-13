@@ -2,6 +2,26 @@
 
 **Cold-start rule:** a fresh session should read this file and be productive in 60 seconds.
 
+## Deferred from the 2026-08-12 Codex API-security review
+
+**Move the API security headers into `functions/api/_middleware.ts`.** Codex's
+"what I would do differently": one middleware boundary would harden all current
+AND future `/api/*` responses, and convert thrown exceptions into hardened 500s,
+instead of each handler applying `withSecurityHeaders` itself.
+
+Not done under the review, deliberately: it is a refactor of working, tested
+code on the live lead path, and it does NOT achieve the stated motive — a
+middleware still cannot touch Cloudflare's platform-generated 1101/1102/1027
+responses, which are produced outside the Worker. The per-handler wrap committed
+in `2015ba2` already closes the ordinary throw funnel. Do this when a THIRD
+`/api/*` route appears; two handlers do not justify the churn.
+
+*Also known, not a defect:* `scripts/verify-security-headers.py` stays RED on
+CompanySite until a Pages deploy. The header fix is committed locally only and
+production still ships bare. Do not suppress or ACK that finding to make the
+board green — it is correctly reporting reality.
+
+
 ---
 
 ## NEXT ACTION
