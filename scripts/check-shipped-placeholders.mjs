@@ -41,8 +41,16 @@ export const RULES = [
   {
     id: 'dead-stripe-link',
     // Any buy.stripe.com URL that is not a well-formed LIVE payment link.
+    //
+    // The finder must consume the WHOLE URL, not just the leading id-shaped
+    // run. An earlier `[A-Za-z0-9_-]*` finder stopped at the first `?` or `/`,
+    // so it handed the validator a truncated-but-valid-looking base and
+    // `…/<valid-id>?x`, `…/<valid-id>/`, and `…/<valid-id>/extra` all passed
+    // the fence. Consume up to the first character that cannot appear in a URL
+    // in shipped text (whitespace, quote, angle bracket, backslash, closing
+    // paren/brace) so the validator judges the real thing.
     test: (text) => {
-      const found = text.match(/https?:\/\/buy\.stripe\.com\/[A-Za-z0-9_-]*/g) ?? [];
+      const found = text.match(/https?:\/\/buy\.stripe\.com\/[^\s"'`<>)\]}\\]*/g) ?? [];
       return found.filter((u) => !/^https:\/\/buy\.stripe\.com\/[A-Za-z0-9]{10,64}$/.test(u) || u.includes('test_'));
     },
     message: 'dead or test-mode Stripe payment link shipped',
@@ -61,6 +69,11 @@ export const RULES = [
     id: 'stripe-key-material',
     test: (text) => text.match(/\b(sk|rk)_(live|test)_[A-Za-z0-9]{6,}|\bpk_test_[A-Za-z0-9]{6,}/g) ?? [],
     message: 'Stripe key material in shipped output (secret keys must never leave the server; pk_test is a wrong-mode key)',
+    // This rule's samples ARE the secret. Build logs (Cloudflare Pages, GitHub
+    // Actions) are retained and widely readable, so echoing the match verbatim
+    // would copy a leaked live key into a second place every time the fence
+    // fires. Print only enough to locate it.
+    redact: true,
   },
   {
     id: 'example-contact-target',
@@ -75,13 +88,29 @@ export const RULES = [
   },
 ];
 
-/** Scan one file's text. Returns [{ rule, message, sample }]. */
+/**
+ * Mask a secret down to a locatable fingerprint: keep the mode-bearing prefix
+ * (`sk_live_`, `pk_test_`, …) so the reader knows what leaked and how bad it
+ * is, drop the entropy, and state the length so it can be matched against the
+ * real key without reproducing it.
+ */
+export const redactSecret = (value) => {
+  const prefix = value.match(/^(?:sk|rk|pk)_(?:live|test)_/)?.[0] ?? '';
+  return `${prefix}…[redacted, ${value.length} chars]`;
+};
+
+/** Scan one file's text. Returns [{ rule, message, samples }]. */
 export function scanText(text) {
   const findings = [];
   for (const rule of RULES) {
     const hits = rule.test(text);
     if (hits.length > 0) {
-      findings.push({ rule: rule.id, message: rule.message, samples: [...new Set(hits)].slice(0, 3) });
+      const samples = [...new Set(hits)].slice(0, 3);
+      findings.push({
+        rule: rule.id,
+        message: rule.message,
+        samples: rule.redact ? samples.map(redactSecret) : samples,
+      });
     }
   }
   return findings;

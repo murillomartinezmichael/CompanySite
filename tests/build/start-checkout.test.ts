@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import {
   BASIC_SITE,
+  InvalidPaymentLinkError,
   PLACEHOLDER_PAYMENT_LINK,
   checkoutReady,
   isLiveStripePaymentLink,
@@ -67,24 +68,60 @@ describe('resolvePaymentLink — env var is the source, and it fails closed', ()
     expect(resolvePaymentLink(`  ${live}\n`)).toBe(live);
   });
 
+  // UNSET is the supported "not selling yet" state and must stay silent — every
+  // build that has never touched the variable keeps working.
   it.each([
     ['undefined (env var never set)', undefined],
     ['empty string', ''],
     ['whitespace only', '   '],
+  ])('falls back to the placeholder, silently, for %s', (_label, value) => {
+    expect(resolvePaymentLink(value as string | undefined)).toBe(PLACEHOLDER_PAYMENT_LINK);
+    expect(isLiveStripePaymentLink(resolvePaymentLink(value as string | undefined))).toBe(false);
+  });
+
+  // SET-but-invalid is a different failure and must be LOUD. Mike pastes this
+  // once from the Stripe dashboard; a silent fallback means he sets it,
+  // redeploys, sees no pay button, and has nothing to diagnose from. Safe to
+  // throw: astro.config.mjs is `output: 'static'` with no adapter, so this
+  // module only ever runs during `astro build`.
+  it.each([
     ['the placeholder itself', 'https://buy.stripe.com/REPLACE_AFTER_SIGN_IN'],
     ['a Stripe test-mode link', 'https://buy.stripe.com/test_bIYdRbc5C6pk0mA144'],
     ['a truncated paste', 'https://buy.stripe.com/bIY'],
     ['a dashboard URL pasted by mistake', 'https://dashboard.stripe.com/payment-links/plink_123456789'],
     ['a lookalike host', 'https://buy.stripe.evil.com/bIYdRbc5C6pk0mA144'],
     ['a secret key pasted by mistake', 'sk_live_abcdefghijklmnop'],
-  ])('falls back to the placeholder (gated page, never a dead checkout) for %s', (_label, value) => {
-    expect(resolvePaymentLink(value as string | undefined)).toBe(PLACEHOLDER_PAYMENT_LINK);
-    expect(isLiveStripePaymentLink(resolvePaymentLink(value as string | undefined))).toBe(false);
+    ['a trailing slash', 'https://buy.stripe.com/bIYdRbc5C6pk0mA144/'],
+    ['a query string', 'https://buy.stripe.com/bIYdRbc5C6pk0mA144?client_reference_id=x'],
+    ['an extra path segment', 'https://buy.stripe.com/bIYdRbc5C6pk0mA144/extra'],
+    ['an http:// link', 'http://buy.stripe.com/bIYdRbc5C6pk0mA144'],
+  ])('throws a build-stopping error for %s', (_label, value) => {
+    expect(() => resolvePaymentLink(value)).toThrow(InvalidPaymentLinkError);
+  });
+
+  it('names the offending value, the reason, and the fix in the error', () => {
+    let message = '';
+    try {
+      resolvePaymentLink('https://buy.stripe.com/test_bIYdRbc5C6pk0mA144');
+    } catch (error) {
+      message = (error as Error).message;
+    }
+    expect(message).toContain('PUBLIC_STRIPE_PAYMENT_LINK');
+    expect(message).toContain('https://buy.stripe.com/test_bIYdRbc5C6pk0mA144'); // the value he pasted
+    expect(message).toContain('TEST-mode'); // why it was rejected
+    expect(message).toContain('Cloudflare Pages'); // where to fix it
+    expect(message).toContain('unset the variable'); // how to get back to the gated state
+  });
+
+  it('explains a trailing slash specifically, rather than generically', () => {
+    expect(() => resolvePaymentLink('https://buy.stripe.com/bIYdRbc5C6pk0mA144/')).toThrow(
+      /trailing slash/,
+    );
   });
 
   it('never returns a link that would render as a live CTA unless it is live', () => {
     // The gate reads only this function's output, so this is the whole contract.
-    const inputs = [undefined, '', 'https://buy.stripe.com/REPLACE_AFTER_SIGN_IN', live];
+    const inputs = [undefined, '', live];
     for (const input of inputs) {
       const resolved = resolvePaymentLink(input);
       expect(isLiveStripePaymentLink(resolved)).toBe(input === live);

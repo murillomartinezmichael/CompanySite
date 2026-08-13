@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 // @ts-expect-error — plain .mjs build script, no type declarations by design
-import { RULES, isScannableFile, scanDir, scanText } from '../../scripts/check-shipped-placeholders.mjs';
+import { RULES, isScannableFile, redactSecret, scanDir, scanText } from '../../scripts/check-shipped-placeholders.mjs';
 
 // The build-time fence against the placeholder-shipped-to-production class.
 // Cloudflare Pages runs `npm run build`, never `npm test` — so the checkout
@@ -41,6 +41,53 @@ describe('placeholder scanner — catches the class', () => {
     const [finding] = scanText('<a href="https://buy.stripe.com/REPLACE_AFTER_SIGN_IN">Pay</a>');
     expect(finding.samples[0]).toBe('https://buy.stripe.com/REPLACE_AFTER_SIGN_IN');
     expect(finding.message).toMatch(/stripe/i);
+  });
+});
+
+// Codex money-path review 2026-08-12 (job 20260812-214326-codex-4a959c).
+// The finder previously stopped at the first `?` or `/`, so it validated a
+// TRUNCATED base and waved through malformed suffixes on an otherwise
+// live-shaped id. Confirmed against the real scanner before fixing.
+describe('placeholder scanner — malformed suffixes cannot evade the finder', () => {
+  const liveId = 'bIYdRbc5C6pk0mA144';
+
+  it.each([
+    ['a trailing slash', `<a href="https://buy.stripe.com/${liveId}/">Pay</a>`],
+    ['extra path segments', `<a href="https://buy.stripe.com/${liveId}/extra">Pay</a>`],
+    ['a query string', `<a href="https://buy.stripe.com/${liveId}?utm_campaign=x">Pay</a>`],
+    ['a test_ marker hidden in the query', `<a href="https://buy.stripe.com/${liveId}?c=test_launch">Pay</a>`],
+  ])('flags %s on an otherwise live-shaped link', (_label, text) => {
+    expect(findingIds(text)).toContain('dead-stripe-link');
+  });
+
+  it('still accepts the bare live link it is modelled on', () => {
+    expect(scanText(`<a href="https://buy.stripe.com/${liveId}">Pay</a>`)).toEqual([]);
+  });
+});
+
+// Build logs on Cloudflare Pages and GitHub Actions are retained and broadly
+// readable. A fence that echoes a leaked key verbatim copies the secret into a
+// second place every time it fires.
+describe('placeholder scanner — never echoes a detected secret', () => {
+  it.each([
+    ['a live secret key', 'const s = "sk_live_51AbCdEfGhIjKlMnOp";', 'sk_live_51AbCdEfGhIjKlMnOp'],
+    ['a restricted key', 'const s = "rk_live_51AbCdEfGhIjKlMnOp";', 'rk_live_51AbCdEfGhIjKlMnOp'],
+    ['a wrong-mode publishable key', 'Stripe("pk_test_51AbCdEfGhIjKlMnOp")', 'pk_test_51AbCdEfGhIjKlMnOp'],
+  ])('redacts %s out of the reported samples', (_label, text, secret) => {
+    const [finding] = scanText(text);
+    expect(finding.rule).toBe('stripe-key-material');
+    expect(JSON.stringify(finding)).not.toContain(secret);
+  });
+
+  it('keeps the mode-bearing prefix and the length so the leak is still identifiable', () => {
+    const [finding] = scanText('const s = "sk_live_51AbCdEfGhIjKlMnOp";');
+    expect(finding.samples[0]).toBe('sk_live_…[redacted, 26 chars]');
+  });
+
+  it('redacts only secret findings, leaving other rules actionable', () => {
+    const [finding] = scanText('<a href="https://buy.stripe.com/REPLACE_AFTER_SIGN_IN">Pay</a>');
+    expect(finding.samples[0]).toBe('https://buy.stripe.com/REPLACE_AFTER_SIGN_IN');
+    expect(redactSecret('sk_live_abcdef123456')).toMatch(/^sk_live_…\[redacted, \d+ chars\]$/);
   });
 });
 

@@ -24,22 +24,76 @@ export function isLiveStripePaymentLink(link: string): boolean {
   return /^https:\/\/buy\.stripe\.com\/[A-Za-z0-9]{10,64}$/.test(link);
 }
 
+/** Thrown at BUILD time when `PUBLIC_STRIPE_PAYMENT_LINK` is set but unusable. */
+export class InvalidPaymentLinkError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'InvalidPaymentLinkError';
+  }
+}
+
+/**
+ * Why a candidate link was rejected, in words Mike can act on. Returns null
+ * when the link is a well-formed live link.
+ */
+function explainRejection(link: string): string | null {
+  if (isLiveStripePaymentLink(link)) return null;
+  if (link.includes('REPLACE')) return 'it is still the REPLACE_AFTER_SIGN_IN placeholder';
+  if (link.includes('test_')) return 'it is a Stripe TEST-mode link (contains "test_") — copy the link from the LIVE dashboard toggle';
+  if (link.startsWith('http://')) return 'it uses http:// — Stripe Payment Links are https://';
+  if (!link.startsWith('https://')) return 'it does not start with https://';
+  if (!link.startsWith('https://buy.stripe.com/')) return `its host is not buy.stripe.com (custom-domain payment links are not supported by this gate yet)`;
+  const slug = link.slice('https://buy.stripe.com/'.length);
+  if (slug.includes('?')) return 'it has a query string — paste the bare link, without ?utm_/?prefilled_/?client_reference_id parameters';
+  if (slug.endsWith('/')) return 'it has a trailing slash — remove it';
+  if (slug.includes('/')) return 'it has extra path segments after the link id';
+  if (slug.length < 10) return `its link id is too short (${slug.length} chars, expected 10-64)`;
+  if (slug.length > 64) return `its link id is too long (${slug.length} chars, expected 10-64)`;
+  return 'its link id contains characters outside A-Z a-z 0-9';
+}
+
 /**
  * Resolve the payment link from build-time config, env var first.
  *
  * `PUBLIC_STRIPE_PAYMENT_LINK` (Cloudflare Pages → Settings → Environment
  * variables, Production) is the intended way to set this: Mike pastes the real
- * Payment Link there and redeploys, no code edit. An env value that is missing,
- * blank, or not a well-formed LIVE link is ignored entirely and the placeholder
- * is returned — a typo'd or test-mode env var can never become a live buy
- * button, it just leaves the page in its gated free-review state.
+ * Payment Link there and redeploys, no code edit.
+ *
+ * Two distinct cases, deliberately handled differently:
+ *
+ *   UNSET or blank  → return the placeholder, no error. This is the shipped
+ *                     default; /start gates to the free-review intake. Every
+ *                     build that has never touched the var must keep working.
+ *
+ *   SET but invalid → THROW. Mike pastes this value from the Stripe dashboard
+ *                     exactly once. Silently falling back would mean he sets
+ *                     it, redeploys, sees no pay button, and has nothing to
+ *                     diagnose from — the same silent-absorption failure that
+ *                     shipped 1,219 broken image URLs in AriesOutdoorLiving-V2
+ *                     from a one-character env typo. A build that goes red
+ *                     with the reason is the only signal that actually reaches
+ *                     him. Safe to throw: `output: 'static'` in
+ *                     astro.config.mjs with no adapter and no prerender
+ *                     opt-out, so this module is evaluated only during
+ *                     `astro build` — it can fail a deploy, never a request.
+ *
+ * A test-mode or typo'd value therefore still never becomes a live buy button.
  */
 export function resolvePaymentLink(
   envValue: string | undefined,
   fallback: string = PLACEHOLDER_PAYMENT_LINK,
 ): string {
   const candidate = (envValue ?? '').trim();
-  return isLiveStripePaymentLink(candidate) ? candidate : fallback;
+  if (candidate === '') return fallback;
+  const reason = explainRejection(candidate);
+  if (reason === null) return candidate;
+  throw new InvalidPaymentLinkError(
+    `PUBLIC_STRIPE_PAYMENT_LINK is set but is not a usable LIVE Stripe Payment Link: ${reason}.\n` +
+      `  Got:      ${candidate}\n` +
+      `  Expected: https://buy.stripe.com/<10-64 alphanumeric chars>\n` +
+      `  Fix it in Cloudflare Pages → Settings → Environment variables → Production, then redeploy.\n` +
+      `  To ship the free-review gate instead, unset the variable entirely (blank/unset is the supported "not selling yet" state).`,
+  );
 }
 
 export const BASIC_SITE = {
