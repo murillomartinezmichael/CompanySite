@@ -57,7 +57,16 @@ npm run preview
 
 Cloudflare Pages, connected to GitHub. Build cmd `npm run build`, output `dist`,
 functions dir `functions` (auto). Env vars in dashboard: `RESEND_API_KEY`
-(required for real emails), `LEAD_TO`, `LEAD_FROM` (optional).
+(required for real emails), `LEAD_TO`, `LEAD_FROM` (optional),
+`PUBLIC_STRIPE_PAYMENT_LINK` (build-time; the live Stripe Payment Link for the
+$500 tier's $100 down payment — unset/invalid means /start gates to the free
+review instead of showing a checkout button).
+
+`npm run build` ends in `scripts/check-shipped-placeholders.mjs`, which fails the
+build if a placeholder reaches `dist/` (dead Stripe link, `REPLACE_*` marker,
+placeholder analytics id, `example.com` contact target, 555-01xx phone, Stripe
+key material). Pages runs the build but never `npm test`, so that fence — not the
+suite — is what stops a placeholder from reaching production.
 
 ## Rules
 

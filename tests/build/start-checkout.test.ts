@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { BASIC_SITE, checkoutReady, isLiveStripePaymentLink } from '../../src/config/offers';
+import {
+  BASIC_SITE,
+  PLACEHOLDER_PAYMENT_LINK,
+  checkoutReady,
+  isLiveStripePaymentLink,
+  resolvePaymentLink,
+} from '../../src/config/offers';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const read = (path: string) => readFileSync(root + path, 'utf8');
@@ -50,6 +56,42 @@ describe('isLiveStripePaymentLink — fails closed on everything but a live link
   });
 });
 
+describe('resolvePaymentLink — env var is the source, and it fails closed', () => {
+  const live = 'https://buy.stripe.com/bIYdRbc5C6pk0mA144';
+
+  it('uses PUBLIC_STRIPE_PAYMENT_LINK when it is a well-formed live link', () => {
+    expect(resolvePaymentLink(live)).toBe(live);
+  });
+
+  it('tolerates surrounding whitespace from a dashboard paste', () => {
+    expect(resolvePaymentLink(`  ${live}\n`)).toBe(live);
+  });
+
+  it.each([
+    ['undefined (env var never set)', undefined],
+    ['empty string', ''],
+    ['whitespace only', '   '],
+    ['the placeholder itself', 'https://buy.stripe.com/REPLACE_AFTER_SIGN_IN'],
+    ['a Stripe test-mode link', 'https://buy.stripe.com/test_bIYdRbc5C6pk0mA144'],
+    ['a truncated paste', 'https://buy.stripe.com/bIY'],
+    ['a dashboard URL pasted by mistake', 'https://dashboard.stripe.com/payment-links/plink_123456789'],
+    ['a lookalike host', 'https://buy.stripe.evil.com/bIYdRbc5C6pk0mA144'],
+    ['a secret key pasted by mistake', 'sk_live_abcdefghijklmnop'],
+  ])('falls back to the placeholder (gated page, never a dead checkout) for %s', (_label, value) => {
+    expect(resolvePaymentLink(value as string | undefined)).toBe(PLACEHOLDER_PAYMENT_LINK);
+    expect(isLiveStripePaymentLink(resolvePaymentLink(value as string | undefined))).toBe(false);
+  });
+
+  it('never returns a link that would render as a live CTA unless it is live', () => {
+    // The gate reads only this function's output, so this is the whole contract.
+    const inputs = [undefined, '', 'https://buy.stripe.com/REPLACE_AFTER_SIGN_IN', live];
+    for (const input of inputs) {
+      const resolved = resolvePaymentLink(input);
+      expect(isLiveStripePaymentLink(resolved)).toBe(input === live);
+    }
+  });
+});
+
 describe('$500 basic-site checkout', () => {
   const start = read('src/pages/start.astro');
   const offers = read('src/config/offers.ts');
@@ -74,6 +116,13 @@ describe('$500 basic-site checkout', () => {
     // test-mode link) is live, this fails.
     expect(offers).toMatch(/export const checkoutReady = isLiveStripePaymentLink\(BASIC_SITE\.paymentLink\)/);
     expect(checkoutReady).toBe(isLiveStripePaymentLink(BASIC_SITE.paymentLink));
+  });
+
+  it('sources the link from the env var, validated — not a hardcoded literal', () => {
+    // Mike sets PUBLIC_STRIPE_PAYMENT_LINK in Cloudflare Pages and redeploys;
+    // no code edit. A bad value there resolves to the placeholder, so the page
+    // stays gated rather than shipping a dead checkout.
+    expect(offers).toMatch(/paymentLink: resolvePaymentLink\(import\.meta\.env\.PUBLIC_STRIPE_PAYMENT_LINK\)/);
   });
 
   it('renders the payment link as an href ONLY inside the checkoutReady branch', () => {

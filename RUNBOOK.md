@@ -140,9 +140,14 @@ curl -sSL https://m3mm.net/start | grep -c 'REPLACE_AFTER_SIGN_IN'
 
 ```bash
 cd C:/Users/Michael/Documents/GitHub/CompanySite
-npm run build           # expect "9 page(s) built" — build FIRST: the test
-                        # suite asserts the built dist/start/index.html
-npm test                # as of 2026-08-05: expect 337 total = 335 passed + 2 skipped
+npm run build           # expect "9 page(s) built" then
+                        # "check-shipped-placeholders: clean" — build FIRST: the
+                        # test suite asserts the built dist/. The build FAILS if a
+                        # placeholder (dead Stripe link, REPLACE marker, placeholder
+                        # analytics id, example.com contact target) reaches dist/ —
+                        # that fence also guards the Cloudflare Pages build, which
+                        # never runs npm test.
+npm test                # as of 2026-08-12: expect 379 total = 377 passed + 2 skipped
                         # (the dormant live-Stripe-link branches, source + built-HTML;
                         # they activate, and the gated branches skip, once a real link lands)
 ls -la dist/index.html dist/audit/index.html dist/_headers dist/_redirects
