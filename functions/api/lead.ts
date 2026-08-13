@@ -19,6 +19,7 @@ import { sendToCockpit, leadIdempotencyKey } from '../_lib/cockpit-sink';
 import { sendToN8n } from '../_lib/n8n-sink';
 import { referralOffer, referralShareUrl, REFERRAL_FIELD_LABEL } from '../_lib/referral';
 import { originAllowed, corsResponseHeaders, preflightResponse } from '../_lib/cors';
+import { withSecurityHeaders, secureResponse } from '../_lib/security-headers';
 
 type Env = {
   RESEND_API_KEY?: string;
@@ -48,11 +49,14 @@ const RESEND_TIMEOUT_MS = 6_000;
 function jsonResponse(status: number, body: unknown, extraHeaders: Record<string, string> = {}): Response {
   return new Response(JSON.stringify(body), {
     status,
-    headers: {
+    // `public/_headers` does NOT reach Pages Functions responses — see
+    // ../_lib/security-headers.ts. Every reply off this route, including the
+    // 4xx ones, carries the five security headers explicitly.
+    headers: withSecurityHeaders({
       'Content-Type': 'application/json',
       'Cache-Control': 'no-store',
       ...extraHeaders,
-    },
+    }),
   });
 }
 
@@ -309,10 +313,13 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 // Needs `env` as well as `request`: the preflight decision reads ALLOWED_ORIGINS.
 export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
   if (request.method === 'OPTIONS') {
-    return preflightResponse(env, request);
+    // `secureResponse` (not `withSecurityHeaders`) because the CORS module owns
+    // the preflight's construction — the grant/deny decision stays entirely in
+    // cors.ts and this only layers headers on top of whatever it returned.
+    return secureResponse(preflightResponse(env, request));
   }
   return new Response('Method Not Allowed', {
     status: 405,
-    headers: { Allow: 'POST', 'Cache-Control': 'no-store' },
+    headers: withSecurityHeaders({ Allow: 'POST', 'Cache-Control': 'no-store' }),
   });
 };

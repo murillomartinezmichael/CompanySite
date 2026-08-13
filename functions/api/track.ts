@@ -13,6 +13,7 @@
 
 import { checkRate } from '../_lib/rate';
 import { clean } from '../_lib/validate';
+import { withSecurityHeaders } from '../_lib/security-headers';
 
 type Env = {};
 
@@ -36,7 +37,10 @@ type CTAEvent = {
   ts?: number;
 };
 
-const noContent = () => new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store' } });
+// `public/_headers` does NOT reach Pages Functions responses — see
+// ../_lib/security-headers.ts. Every reply off this beacon sets them itself.
+const noContent = () =>
+  new Response(null, { status: 204, headers: withSecurityHeaders({ 'Cache-Control': 'no-store' }) });
 
 export const onRequestPost: PagesFunction<Env> = async ({ request }) => {
   const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
@@ -86,7 +90,10 @@ export const onRequestPost: PagesFunction<Env> = async ({ request }) => {
 
 export const onRequest: PagesFunction<Env> = async ({ request }) => {
   if (request.method === 'OPTIONS') {
-    return new Response(null, { status: 204, headers: { Allow: 'POST, OPTIONS' } });
+    return new Response(null, { status: 204, headers: withSecurityHeaders({ Allow: 'POST, OPTIONS' }) });
   }
-  return new Response('Method Not Allowed', { status: 405, headers: { Allow: 'POST', 'Cache-Control': 'no-store' } });
+  return new Response('Method Not Allowed', {
+    status: 405,
+    headers: withSecurityHeaders({ Allow: 'POST', 'Cache-Control': 'no-store' }),
+  });
 };
