@@ -50,7 +50,20 @@ export const API_SECURITY_HEADERS: Readonly<Record<string, string>> = Object.fre
 export function withSecurityHeaders(
   headers: Record<string, string> = {},
 ): Record<string, string> {
-  return { ...API_SECURITY_HEADERS, ...headers };
+  // Case-INSENSITIVE, deliberately. A plain object spread is case-sensitive, so
+  // `{...API, 'x-frame-options': 'SAMEORIGIN'}` keeps BOTH keys and the Headers
+  // constructor combines them into `DENY, SAMEORIGIN` — a malformed security
+  // header rather than the override the caller meant. `secureResponse` uses
+  // `Headers.has`, which IS case-insensitive, so the two helpers disagreed on
+  // the same input. Verified 2026-08-12 and flagged by the Codex review; no
+  // current caller collides, but the helpers must not differ on the one
+  // question they both exist to answer.
+  const overridden = new Set(Object.keys(headers).map((k) => k.toLowerCase()));
+  const merged: Record<string, string> = {};
+  for (const [name, value] of Object.entries(API_SECURITY_HEADERS)) {
+    if (!overridden.has(name.toLowerCase())) merged[name] = value;
+  }
+  return { ...merged, ...headers };
 }
 
 /**

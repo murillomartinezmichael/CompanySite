@@ -42,7 +42,19 @@ type CTAEvent = {
 const noContent = () =>
   new Response(null, { status: 204, headers: withSecurityHeaders({ 'Cache-Control': 'no-store' }) });
 
-export const onRequestPost: PagesFunction<Env> = async ({ request }) => {
+// Same last-resort funnel as lead.ts: an unhandled throw would be answered by
+// Cloudflare's own error page, which carries none of these headers. A beacon
+// has nothing to report back, so the safe answer is the hardened 204 it would
+// have returned anyway.
+export const onRequestPost: PagesFunction<Env> = async (ctx) => {
+  try {
+    return await trackPost(ctx);
+  } catch {
+    return noContent();
+  }
+};
+
+const trackPost: PagesFunction<Env> = async ({ request }) => {
   const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
 
   // Soft rate — even a hostile client can't drown the tail.
@@ -62,7 +74,14 @@ export const onRequestPost: PagesFunction<Env> = async ({ request }) => {
 
   let body: CTAEvent = {};
   try {
-    body = text ? JSON.parse(text) : {};
+    const parsed: unknown = text ? JSON.parse(text) : {};
+    // `null` is valid JSON and used to survive this parse, then throw on the
+    // first property read below — an unhandled throw the beacon answers with
+    // Cloudflare's own error page instead of the hardened 204. Anything that
+    // is not a plain object simply carries no fields worth reading.
+    if (parsed !== null && typeof parsed === 'object' && !Array.isArray(parsed)) {
+      body = parsed as CTAEvent;
+    }
   } catch {
     // sendBeacon sometimes delivers as text; try URLSearchParams as fallback.
     try {

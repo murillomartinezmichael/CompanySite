@@ -156,3 +156,96 @@ describe('/api/track ships the headers on every response shape', () => {
     expectHardened(res, 'track 405');
   });
 });
+
+// ---------------------------------------------------------------------------
+// Codex money-path review 2026-08-12 (fleet job 20260812-221943-codex-b0bea9).
+//
+// The commit's claim is "every response funnel carries the headers". These are
+// the funnels it did not carry — reproduced against the real handlers before
+// being fixed.
+// ---------------------------------------------------------------------------
+
+describe('the unhandled-throw funnel — Cloudflare answers those, and it strips everything', () => {
+  // `null`, `[]`, `"x"`, `1` are all VALID JSON, so they pass the JSON.parse
+  // try/catch. `null` then threw on the first property read, so the handler
+  // died and Pages served its own error page: no security headers, no CORS,
+  // no JSON body. Reachable by anyone with curl.
+  const NON_OBJECT_JSON = ['null', '[]', '"a string"', '123', 'true'] as const;
+
+  for (const raw of NON_OBJECT_JSON) {
+    it(`/api/lead answers ${raw} with a hardened 400 instead of throwing`, async () => {
+      const req = new Request('https://m3mm.net/api/lead', {
+        method: 'POST',
+        // RATE_MAX is 5/min per IP and the limiter holds module-level state
+        // across tests, so each case needs its own IP or later cases 429.
+        headers: {
+          'Content-Type': 'application/json',
+          Origin: ALLOWED_ORIGIN,
+          'CF-Connecting-IP': `203.0.113.${NON_OBJECT_JSON.indexOf(raw) + 1}`,
+        },
+        body: raw,
+      });
+      const res = await leadOnRequestPost(ctx(req));
+      expect(res.status).toBe(400);
+      expectHardened(res, `/api/lead POST ${raw}`);
+      expect(await res.json()).toEqual({ ok: false, error: 'invalid_json' });
+    });
+
+    it(`/api/track answers ${raw} with a hardened 204 instead of throwing`, async () => {
+      const req = new Request('https://m3mm.net/api/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: raw,
+      });
+      const res = await trackOnRequestPost(ctx(req));
+      expect(res.status).toBe(204);
+      expectHardened(res, `/api/track POST ${raw}`);
+    });
+  }
+
+  it('a genuinely valid lead body still succeeds — the guard is not over-broad', async () => {
+    const req = new Request('https://m3mm.net/api/lead', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Origin: ALLOWED_ORIGIN,
+        'CF-Connecting-IP': '203.0.113.200',
+      },
+      body: JSON.stringify({ company_website: 'bot-trap' }), // honeypot → silent 200
+    });
+    const res = await leadOnRequestPost(ctx(req));
+    expect(res.status).toBe(200);
+    expectHardened(res, '/api/lead honeypot 200');
+  });
+});
+
+describe('withSecurityHeaders and secureResponse must agree on an override', () => {
+  // A plain object spread is case-SENSITIVE, so the two helpers disagreed:
+  // withSecurityHeaders kept BOTH keys and the Headers constructor combined
+  // them into "DENY, SAMEORIGIN" — a malformed header — while secureResponse
+  // used Headers.has (case-insensitive) and correctly returned SAMEORIGIN.
+  it('a differently-cased override replaces, never combines', () => {
+    const merged = withSecurityHeaders({ 'x-frame-options': 'SAMEORIGIN' });
+    const res = new Response(null, { status: 204, headers: merged });
+    expect(res.headers.get('X-Frame-Options')).toBe('SAMEORIGIN');
+    expect(res.headers.get('X-Frame-Options')).not.toContain(',');
+  });
+
+  it('both helpers produce the same answer for the same override', () => {
+    const viaMerge = new Response(null, {
+      status: 204,
+      headers: withSecurityHeaders({ 'content-security-policy': "default-src 'self'" }),
+    });
+    const viaResponse = secureResponse(
+      new Response(null, { status: 204, headers: { 'content-security-policy': "default-src 'self'" } }),
+    );
+    expect(viaMerge.headers.get('Content-Security-Policy')).toBe("default-src 'self'");
+    expect(viaResponse.headers.get('Content-Security-Policy')).toBe("default-src 'self'");
+  });
+
+  it('an exact-case override still wins, and the untouched headers survive', () => {
+    const merged = withSecurityHeaders({ 'X-Frame-Options': 'SAMEORIGIN' });
+    expect(merged['X-Frame-Options']).toBe('SAMEORIGIN');
+    expect(merged['X-Content-Type-Options']).toBe('nosniff');
+  });
+});

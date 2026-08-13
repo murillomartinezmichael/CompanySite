@@ -89,7 +89,36 @@ async function sendEmail(
   }
 }
 
-export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
+/**
+ * Last-resort funnel. Cloudflare answers an unhandled throw with ITS OWN error
+ * page — no security headers, no CORS, no JSON shape — which is the one
+ * response off this route we do not control. Wrapping the handler converts any
+ * future bug into a hardened 500 the browser can actually read, and keeps the
+ * "every funnel carries the headers" claim true by construction rather than by
+ * inspection. Added 2026-08-12 after the Codex review found a live example
+ * (a JSON `null` body).
+ */
+const handlePost: PagesFunction<Env> = async (ctx) => {
+  const origin = ctx.request.headers.get('Origin');
+  try {
+    return await leadPost(ctx);
+  } catch (e) {
+    console.log(JSON.stringify({
+      event: 'lead_unhandled_error',
+      error: e instanceof Error ? `${e.name}: ${e.message}` : 'unknown_error',
+      ts: Date.now(),
+    }));
+    return jsonResponse(
+      500,
+      { ok: false, error: 'internal_error' },
+      corsResponseHeaders(ctx.env, origin),
+    );
+  }
+};
+
+export const onRequestPost = handlePost;
+
+const leadPost: PagesFunction<Env> = async ({ request, env }) => {
   const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
   const origin = request.headers.get('Origin');
   const contentType = request.headers.get('Content-Type') || '';
@@ -142,11 +171,23 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   let body: Lead;
   if (isJson) {
+    let parsed: unknown;
     try {
-      body = raw ? JSON.parse(raw) : {};
+      parsed = raw ? JSON.parse(raw) : {};
     } catch {
       return reply(400, { ok: false, error: 'invalid_json' });
     }
+    // `null`, `[]`, `"x"` and `1` are all VALID JSON, so they sail past the
+    // catch above — and `null` then threw on the first property read below,
+    // taking the whole handler down. An unhandled throw here is answered by
+    // Cloudflare's own error page, which carries none of the security headers
+    // this route sets and is not a funnel we control. Reject non-objects as the
+    // 400 they always were. (Codex review 2026-08-12; reproduced with
+    // `-d 'null' -H 'Content-Type: application/json'` before fixing.)
+    if (parsed === null || typeof parsed !== 'object' || Array.isArray(parsed)) {
+      return reply(400, { ok: false, error: 'invalid_json' });
+    }
+    body = parsed as Lead;
   } else {
     // No-JS fallback: the <form> POSTs as URL-encoded when the client
     // has JS disabled. Parse into the same shape validateLead accepts.
