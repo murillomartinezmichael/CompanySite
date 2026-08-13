@@ -14,7 +14,7 @@
 // and logs the lead. Documented, not faked (LAW 6).
 
 import { LIMITS, validateLead, esc, UTM_FIELDS, type Lead } from '../_lib/validate';
-import { checkRate } from '../_lib/rate';
+import { checkRate, rateKey } from '../_lib/rate';
 import { sendToCockpit, leadIdempotencyKey } from '../_lib/cockpit-sink';
 import { sendToN8n } from '../_lib/n8n-sink';
 import { referralOffer, referralShareUrl, REFERRAL_FIELD_LABEL } from '../_lib/referral';
@@ -148,7 +148,7 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
     return reply(413, { ok: false, error: 'payload_too_large', limit: LIMITS.bodyBytes });
   }
 
-  const rate = checkRate(ip, RATE_MAX, RATE_WINDOW_S);
+  const rate = checkRate(rateKey('lead', ip), RATE_MAX, RATE_WINDOW_S);
   if (!rate.ok) {
     return reply(
       429,

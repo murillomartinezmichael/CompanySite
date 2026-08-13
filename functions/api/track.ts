@@ -11,7 +11,7 @@
 // - Fields trim + cap; no downstream ingestion so this is defense in
 //   depth against absurd log-line lengths.
 
-import { checkRate } from '../_lib/rate';
+import { checkRate, rateKey } from '../_lib/rate';
 import { clean } from '../_lib/validate';
 import { withSecurityHeaders } from '../_lib/security-headers';
 
@@ -58,7 +58,7 @@ const trackPost: PagesFunction<Env> = async ({ request }) => {
   const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
 
   // Soft rate — even a hostile client can't drown the tail.
-  if (!checkRate(ip, RATE_MAX, RATE_WINDOW_S).ok) return noContent();
+  if (!checkRate(rateKey('track', ip), RATE_MAX, RATE_WINDOW_S).ok) return noContent();
 
   const contentLengthRaw = request.headers.get('Content-Length');
   const contentLength = contentLengthRaw ? Number(contentLengthRaw) : NaN;
