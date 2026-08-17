@@ -113,6 +113,47 @@ describe('resolvePaymentLink — env var is the source, and it fails closed', ()
     expect(message).toContain('unset the variable'); // how to get back to the gated state
   });
 
+  // The value above is echoed verbatim on purpose — for a typo'd URL the paste
+  // IS the diagnosis. But this env var is filled by hand from the same Stripe
+  // dashboard that issues secret keys, so the plausible slip is pasting one in.
+  // Build logs (Cloudflare Pages, GitHub Actions) are retained and widely
+  // readable; echoing a live key there would copy it into a second place, and
+  // the dist/ fence would never catch it because this throws before any HTML is
+  // written. Same policy as the fence's own `redact: true` on this rule.
+  // Assembled at runtime rather than written as literals: spelled out in full
+  // these match GitHub's Stripe secret-key pattern, and push protection blocks
+  // the branch on sight -- correctly, since a scanner cannot tell a fake
+  // fixture from a real key. Concatenation keeps the runtime value identical
+  // and the assertions unchanged.
+  const fixtureKey = (prefix: string) => `${prefix}_` + 'abcdefghijklmnopqrstuvwx';
+  it.each([
+    ['a live secret key', fixtureKey('sk_live')],
+    ['a restricted live key', fixtureKey('rk_live')],
+    ['a test secret key', fixtureKey('sk_test')],
+  ])('redacts %s instead of echoing it into the build log', (_label, secret) => {
+    let message = '';
+    try {
+      resolvePaymentLink(secret);
+    } catch (error) {
+      message = (error as Error).message;
+    }
+    expect(message).not.toContain(secret); // the whole point
+    expect(message).toContain('[redacted,'); // and it says so, rather than going quiet
+    expect(message).toContain(secret.slice(0, 8)); // prefix kept: which key, and how bad
+  });
+
+  it('still echoes a non-secret value verbatim, so a typo stays diagnosable', () => {
+    const typo = 'https://buy.stripe.com/bIY';
+    let message = '';
+    try {
+      resolvePaymentLink(typo);
+    } catch (error) {
+      message = (error as Error).message;
+    }
+    expect(message).toContain(typo);
+    expect(message).not.toContain('[redacted,');
+  });
+
   it('explains a trailing slash specifically, rather than generically', () => {
     expect(() => resolvePaymentLink('https://buy.stripe.com/bIYdRbc5C6pk0mA144/')).toThrow(
       /trailing slash/,

@@ -1,5 +1,39 @@
 /** Public offer links only. Never put Stripe secret keys in browser code. */
 
+// @ts-expect-error — .mjs build script, no type declarations; the shape used
+// here (RULES[].id/.test, redactSecret) is pinned by shipped-placeholders.test.ts.
+import { RULES, redactSecret } from '../../scripts/check-shipped-placeholders.mjs';
+
+/**
+ * The one rule from the shipped-source fence that recognizes Stripe key
+ * material. Imported rather than re-expressed: two copies of a secret-detection
+ * regex drift, and the copy that drifts is the one that stops redacting.
+ */
+const KEY_MATERIAL_RULE = (RULES as Array<{ id: string; test: (t: string) => string[] }>).find(
+  (rule) => rule.id === 'stripe-key-material',
+);
+
+/**
+ * Echo a rejected env value back to the operator without copying a secret into
+ * a build log.
+ *
+ * The rejection message below exists so Mike can see what he actually pasted —
+ * for the common case (a typo'd or test-mode URL) the literal value IS the
+ * diagnosis and must be shown. But `PUBLIC_STRIPE_PAYMENT_LINK` is pasted by
+ * hand from the same Stripe dashboard that issues secret keys, so the plausible
+ * mistake is pasting a secret key into it. Cloudflare Pages and GitHub Actions
+ * build logs are retained and widely readable, so echoing that verbatim would
+ * copy a live key into a second place, and the fence that catches key material
+ * in `dist/` would never see it — this throws before any HTML is written.
+ *
+ * Same policy as the fence's own `redact: true` on this rule.
+ */
+export function redactIfSecret(value: string): string {
+  return KEY_MATERIAL_RULE && KEY_MATERIAL_RULE.test(value).length > 0
+    ? redactSecret(value)
+    : value;
+}
+
 /**
  * The link the site ships with until a real one exists. Kept as a loud
  * placeholder on purpose: `isLiveStripePaymentLink` rejects it, so /start
@@ -89,7 +123,7 @@ export function resolvePaymentLink(
   if (reason === null) return candidate;
   throw new InvalidPaymentLinkError(
     `PUBLIC_STRIPE_PAYMENT_LINK is set but is not a usable LIVE Stripe Payment Link: ${reason}.\n` +
-      `  Got:      ${candidate}\n` +
+      `  Got:      ${redactIfSecret(candidate)}\n` +
       `  Expected: https://buy.stripe.com/<10-64 alphanumeric chars>\n` +
       `  Fix it in Cloudflare Pages → Settings → Environment variables → Production, then redeploy.\n` +
       `  To ship the free-review gate instead, unset the variable entirely (blank/unset is the supported "not selling yet" state).`,
