@@ -219,3 +219,137 @@ That is the complete AA remediation. Everything else already passes.
 ---
 
 *Audit performed read-only against the `fix/checkout-placeholder-fence` build. No source file modified, no branch switched, no commit, no deploy, no lead submitted, preview server left running.*
+
+---
+
+# Remediation pass — 2026-08-17 (branch `design/a11y-2026-08-17`)
+
+## Fixed
+
+### 1. Contrast — findings 8, 9, 10 (the complete AA debt)
+
+`--ink-mute` raised **`#55555f` → `#8a8a99`** in `src/pages/roadmap.astro` and
+`src/pages/hub.astro`. Verified rendered in Chrome against **every** background
+the token actually paints text on, not just the two the audit named:
+
+| Element | fg → bg | Before | After | Need |
+|---|---|---|---|---|
+| `.fine` (roadmap) | `#55555f` → `#191922` (`--card`) | **2.37:1** | **5.13:1** | 4.5 |
+| `.tile-date` (hub) | `#55555f` → `#191922` | **2.37:1** | **5.13:1** | 4.5 |
+| `.foot-note` (both) | `#55555f` → `#0D0E14` (ground) | **2.62:1** | **5.67:1** | 4.5 |
+| Intake step numbers `01`–`05` | `#387986` → `#161A24` | **3.52:1** | **7.47:1** (`#4FB8C7`) | 4.5 |
+
+`#8a8a99` verified, adopted. It is **the dimmest grey this palette can carry**:
+the binding constraint is `--card #191922`, which needs L ≥ 0.2208 for 4.5:1.
+`#8a8a99` sits at L = 0.2588 (5.13:1); one step down, `#808090` (L = 0.2204),
+measures **4.49:1** and fails. That is why `--ink-mute` now equals `--ink-dim` — the two
+tokens are kept separate for intent, not because a compliant gap exists between
+them. The remaining hierarchy is carried by size (12px/10px vs 14px), which was
+already true.
+
+Intake step numbers: `text-clay/60` → `text-clay` on all five labels
+(`Intake.astro` 127/139/154/177/192). The `optional` labels next to them use
+`text-bone-muted` at 4.87:1 and were left alone. `Hero.astro:42`'s `text-clay/60`
+is an SVG underline, not text — untouched.
+
+Full-page rescan in Chrome after the change: **0 contrast failures** across `/`,
+`/roadmap`, `/hub`, `/start`, `/audit`, `/for/construction`, `/thanks`.
+Pinned by `tests/build/muted-text-contrast.test.ts`.
+
+### 2. `it\'s` — finding 5
+
+`hub.astro:40` unescaped. The apostrophe sat in HTML template text, where Astro
+has nothing to escape; the backslash rendered literally. (Note the same
+`\'` **is** correct inside the `<script>` blocks — that is JS string escaping,
+and `Intake.astro:341` relies on it. Only the markup one was wrong.)
+
+### 3. `/roadmap` signup dead-end — finding 1
+
+The audit found no submit handler and no redirect. A second, worse defect sat
+underneath it: the endpoint requires `frustration` with a 10-character floor
+(`functions/_lib/validate.ts:99–100`), and the form's only free-text box was
+optional with no minimum. **The form could not have produced a successful lead
+at all** — a bare email submit answered `400 {"error":"validation"}`, rendered
+as raw JSON. Both halves are fixed:
+
+- **`roadmap.astro`** — the form gets an id, a `submit` handler mirroring
+  `Intake.astro:283` (JSON POST → `/thanks`, `role="status"` live region on
+  failure with the manual-email escape hatch), and a hidden `frustration`
+  default so a JS-less native POST is still a complete lead. The visible box is
+  renamed `topics` and folded into the note field by the handler, which also
+  clears the 10-char floor. `novalidate` removed so the browser enforces the
+  email field on both paths.
+- **`functions/api/lead.ts`** — successful **urlencoded** submits now answer
+  **`303 → /thanks`** instead of JSON, which hardens the documented no-JS path
+  for every form on the site, not just this one. The destination is a
+  hard-coded same-site constant, never read from the request, so the route
+  cannot become an open redirect. JSON callers are byte-identical to before.
+  The honeypot's silent success redirects too, so bots cannot distinguish it.
+
+**Verified without submitting anything.** `/api/lead` was exercised in-process
+by vitest with an empty `env` (Resend / n8n / Cockpit sinks all no-op), and the
+browser path was driven in real Chrome with `/api/lead` intercepted at the
+network layer — the request never left the browser. Confirmed: status region
+reveals, payload is
+`{"frustration":"Roadmap subscriber wants: AIMA", …}`, navigation lands on
+`/thanks` rendering "Got it. Reply within 24 hours." **No production lead row
+was created.**
+
+Method note: `functions/api/lead.ts` keeps `params.get('referredBy')` verbatim —
+`tests/build/referral-program.test.ts:59` pins that exact string, so the
+urlencoded parser was deliberately left alone.
+
+New tests: `tests/functions/lead-form-redirect.test.ts` (6),
+`tests/build/roadmap-signup.test.ts` (6), `tests/build/muted-text-contrast.test.ts` (4).
+Suite **431 → 447 passed / 2 skipped / 449**, 35 files. `npm run build` clean,
+placeholder fence clean.
+
+## Deferred — needs Michael's factual answer, not an agent's guess
+
+### D1. Roadmap vs. home page: which is lying about Aries and Big7? **(decide first)**
+
+Exact contradiction, both live on `m3mm.net` today:
+
+| Surface | Aries Outdoor Living | Big 7 Construction | Headline count |
+|---|---|---|---|
+| `src/components/Hero.astro:88–102` | "Sold at handoff · first quote request 3 days after launch." | "Build + Repair lanes live at big7construction.com." | "**12.** Client sites shipped, every one still live." |
+| `src/config/roadmap.ts:54` / `:83` → `/roadmap`, `/hub` | `status: 'next'`, ships **SEP 15 2026** | `status: 'upcoming'`, ships **OCT 27 2026**, and carries **no `url`** | `LAUNCH_STATS.live` = **1** (1 live / 1 next / 19 upcoming) |
+
+`functions/api/lead.ts:298–299` also puts both in the automated reply to every
+lead, phrased as completed work.
+
+**Recommendation: the roadmap data is the wrong one.** Root `MONEY_LADDER.md:14`
+records Aries V1 as "client-owned V1 is **live+sold**" with V2 as the
+client-approved rebuild in progress, and rung 3 tracks Big7 as a live client
+reference (PR #12 open against a redirect-parity branch, not an unbuilt site).
+The concrete edit would be `status: 'live'` on both entries with their real ship
+dates and `url: 'https://big7construction.com'` added, then `LAUNCH_STATS.live`
+reconciled against the "12 shipped" claim — the roadmap counts *drops*, the hero
+counts *client sites*, and the two numbers are not the same quantity, so
+whichever way this lands the page should say which it is counting.
+
+**Not changed here.** These are published claims about paying clients' delivered
+work; correcting them in the wrong direction misrepresents a client either way.
+Michael's call.
+
+### D2. "Code that already runs" vs. 19 × red UPCOMING
+
+`roadmap.astro:44–49` promises *"Each drop is code that already runs. No
+vaporware."* `src/config/roadmap.ts` renders **19 of 21** entries as red
+`UPCOMING` with "Notify me" buttons, in the same screenful. Depends entirely on
+D1: if the roadmap is a *release* schedule for existing code, most statuses are
+wrong; if it is a *build* schedule, the lede is wrong. One of the two has to
+give. See the "credibility call" section above for the full reasoning.
+
+### D3. "Dates target Mondays" — all 21 dates are Tuesdays
+
+`roadmap.astro:133`. Re-verified 2026-08-17 against `src/config/roadmap.ts`:
+every ISO date from `2026-09-01` to `2027-06-08` is a Tuesday, on a clean +14d
+cadence. Two mutually exclusive fixes and no way to tell which was meant:
+
+- **The word is wrong** → change "Mondays" to "Tuesdays". Zero schedule impact.
+- **The dates are wrong** → shift all 21 by −1 day. Changes the first ship date
+  to Mon 2026-08-31, which is *before* the roadmap's own launch month framing
+  and moves a date that is now two weeks out.
+
+Left as-is. Flagged, not guessed.
