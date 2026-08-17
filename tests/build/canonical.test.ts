@@ -42,8 +42,8 @@ const PAGE_EXPECTATIONS: ReadonlyArray<{
   { file: 'src/pages/start.astro', path: '/start' },
   { file: 'src/pages/thanks.astro', path: '/thanks', noindex: true },
   { file: 'src/pages/accessibility.astro', path: '/accessibility' },
-  { file: 'src/pages/roadmap.astro', path: '/roadmap' },
-  { file: 'src/pages/hub.astro', path: '/hub' },
+  // roadmap.astro and hub.astro ship on feat/roadmap-hub, not this branch —
+  // see tests/build/muted-text-contrast.test.ts for the split rationale.
 ];
 
 describe('canonical URL wiring', () => {
