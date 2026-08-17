@@ -85,11 +85,26 @@ const intakePost = '/api/lead';
         <h2 id="signup-heading" class="section-head">Get the drops</h2>
         <p class="signup-copy">One email per drop. Never anything else. Unsubscribe on any send.</p>
 
-        <form action={intakePost} method="POST" class="signup-form" novalidate>
+        <form
+          id="roadmap-signup"
+          action={intakePost}
+          method="POST"
+          class="signup-form"
+          data-success-path="/thanks"
+        >
           <input type="hidden" name="source" value="roadmap" />
           <input type="hidden" name="intent" value="book:roadmap-subscribe" />
           <input type="hidden" name="name" value="Roadmap subscriber" />
           <input type="hidden" name="businessType" value="roadmap-subscriber" />
+          <!-- The endpoint requires a note field. With JS the submit handler
+               folds the "only tell me about" box into it; without JS this
+               default ships as-is, so a native POST is always a complete,
+               valid lead rather than a validation error. -->
+          <input
+            type="hidden"
+            name="frustration"
+            value="Roadmap subscriber — notify me on every drop."
+          />
 
           <label class="field">
             <span class="field-label"><span>Email</span></span>
@@ -106,7 +121,7 @@ const intakePost = '/api/lead';
             <span class="field-label"><span>Only tell me about</span></span>
             <input
               type="text"
-              name="frustration"
+              name="topics"
               maxlength="200"
               placeholder="e.g. AIMA, SiteGuide, everything"
             />
@@ -123,6 +138,8 @@ const intakePost = '/api/lead';
           </button>
         </form>
 
+        <p id="roadmap-status" class="signup-status" role="status" aria-live="polite" hidden></p>
+
         <p class="fine">
           Rules: no upsells, no drip sequences, no "here's a case study" filler.
           If a drop slips, you'll hear about that too.
@@ -138,6 +155,81 @@ const intakePost = '/api/lead';
   <Footer slot="footer" path="/roadmap" />
 </Layout>
 
+<script>
+  import { track } from '@/lib/track';
+
+  const form = document.getElementById('roadmap-signup') as HTMLFormElement | null;
+  const status = document.getElementById('roadmap-status') as HTMLParagraphElement | null;
+
+  const DEFAULT_NOTE = 'Roadmap subscriber — notify me on every drop.';
+
+  if (form && status) {
+    const show = (text: string, kind: 'pending' | 'ok' | 'error') => {
+      status.textContent = text;
+      status.classList.remove('is-ok', 'is-error');
+      if (kind !== 'pending') status.classList.add(kind === 'ok' ? 'is-ok' : 'is-error');
+      status.hidden = false;
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = form.querySelector<HTMLButtonElement>('button[type=submit]');
+      const originalLabel = submitBtn?.textContent;
+      const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+
+      if (data.company_website) {
+        show('Sent — check your inbox.', 'ok');
+        return;
+      }
+
+      // The endpoint's note field has a 10-character floor, so the optional
+      // "only tell me about" box is folded into a sentence rather than sent raw.
+      const topics = String(data.topics || '').trim();
+      delete data.topics;
+      data.frustration = topics ? `Roadmap subscriber wants: ${topics}` : DEFAULT_NOTE;
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending…';
+      }
+      show('Sending…', 'pending');
+
+      try {
+        const res = await fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        track({
+          name: 'intake_submit',
+          section: 'roadmap',
+          intent: 'book:roadmap-subscribe',
+          meta: { source: 'roadmap', has_prefill: false, message_length: topics.length },
+        });
+        show('Got it. Redirecting…', 'ok');
+        form.reset();
+        const destination = form.dataset.successPath || '/thanks';
+        setTimeout(() => { window.location.href = destination; }, 450);
+      } catch {
+        track({
+          name: 'intake_error',
+          section: 'roadmap',
+          intent: 'book:roadmap-subscribe',
+          meta: { source: 'roadmap', has_prefill: false, message_length: topics.length },
+        });
+        show('Something broke on send. Email murillomartinezmichael@gmail.com and I\'ll pick it up manually.', 'error');
+      } finally {
+        if (submitBtn && originalLabel) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalLabel;
+        }
+      }
+    });
+  }
+</script>
+
 <style>
   /* Roadmap-scoped visual language: red accent + LED pulse + subtle scanlines.
      Isolated under .roadmap-scope so the rest of the site's clay/teal accent
@@ -148,7 +240,12 @@ const intakePost = '/api/lead';
     --amber: #ffb020;
     --green: #22ff66;
     --ink-dim: #8a8a99;
-    --ink-mute: #55555f;
+    /* #55555f measured 2.37:1 on --card and 2.62:1 on the page ground — both
+       below the WCAG 1.4.3 AA floor of 4.5:1 for body copy. #8a8a99 measures
+       5.12:1 on --card and 5.61:1 on the ground. It is the dimmest grey in
+       this palette that still clears 4.5:1 against --card, which is why it
+       lands on the same value as --ink-dim. */
+    --ink-mute: #8a8a99;
     --line: #24242f;
     --card: #191922;
     position: relative;
@@ -409,6 +506,20 @@ const intakePost = '/api/lead';
     outline: 2px solid var(--red);
     outline-offset: 2px;
   }
+  .roadmap-scope .signup-status {
+    margin: 12px 0 0;
+    padding: 10px 12px;
+    border: 1px solid var(--ink-dim);
+    border-radius: 4px;
+    font-size: 14px;
+    color: #e8e8ee;
+    background: #0D0E14;
+  }
+  .roadmap-scope .signup-status[hidden] { display: none; }
+  .roadmap-scope .signup-status.is-ok { border-color: var(--green); }
+  .roadmap-scope .signup-status.is-error { border-color: var(--red); }
+  .roadmap-scope .signup-status a { color: var(--green); }
+
   .roadmap-scope .fine {
     font-size: 12px;
     color: var(--ink-mute);

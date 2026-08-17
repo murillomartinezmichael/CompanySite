@@ -46,6 +46,25 @@ const RATE_MAX = 5;
 const RATE_WINDOW_S = 60;
 const RESEND_TIMEOUT_MS = 6_000;
 
+// A native (no-JS) <form> POST navigates the browser to this route, so a JSON
+// body is rendered to the visitor as raw text — a dead-end CTA. Every
+// successful urlencoded submit answers 303 to the thank-you page instead. The
+// destination is a hard-coded same-site path, never read from the request, so
+// the route can't be turned into an open redirect. JSON callers (the fetch
+// handlers on every page) are unaffected and still receive `{"ok":true}`.
+const FORM_SUCCESS_PATH = '/thanks';
+
+function redirectResponse(location: string, extraHeaders: Record<string, string> = {}): Response {
+  return new Response(null, {
+    status: 303,
+    headers: withSecurityHeaders({
+      Location: location,
+      'Cache-Control': 'no-store',
+      ...extraHeaders,
+    }),
+  });
+}
+
 function jsonResponse(status: number, body: unknown, extraHeaders: Record<string, string> = {}): Response {
   return new Response(JSON.stringify(body), {
     status,
@@ -142,6 +161,11 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
     return reply(415, { ok: false, error: 'unsupported_media_type' });
   }
 
+  // Success funnel. A fetch caller gets the JSON it parses; a native form POST
+  // gets a 303 to the thank-you page so the visitor never sees raw JSON.
+  const succeed = () =>
+    isForm ? redirectResponse(FORM_SUCCESS_PATH, cors) : reply(200, { ok: true });
+
   const contentLengthRaw = request.headers.get('Content-Length');
   const contentLength = contentLengthRaw ? Number(contentLengthRaw) : NaN;
   if (Number.isFinite(contentLength) && contentLength > LIMITS.bodyBytes) {
@@ -214,7 +238,7 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
   // Honeypot: bots gleefully fill the hidden field. Silent 200 so they
   // don't know they were caught.
   if (body.company_website) {
-    return reply(200, { ok: true });
+    return succeed();
   }
 
   const result = validateLead(body);
@@ -347,7 +371,7 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
     ts: Date.now(),
   }));
 
-  return reply(200, { ok: true });
+  return succeed();
 };
 
 // Catch-all for every method except POST (Pages routes POST to onRequestPost).

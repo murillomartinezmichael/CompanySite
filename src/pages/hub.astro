@@ -37,7 +37,7 @@ function statusLabel(s: string) {
       </h1>
 
       <p class="lede">
-        Every M³ product and tool, in one place. Green means it\'s live right now — click to
+        Every M³ product and tool, in one place. Green means it's live right now — click to
         launch. Amber is the next drop. Red is the queue. See the full shipping schedule on the
         <a href="/roadmap" class="lede-link">roadmap</a>.
       </p>
@@ -108,7 +108,12 @@ function statusLabel(s: string) {
     --amber: #ffb020;
     --green: #22ff66;
     --ink-dim: #8a8a99;
-    --ink-mute: #55555f;
+    /* #55555f measured 2.37:1 on --card and 2.62:1 on the page ground — both
+       below the WCAG 1.4.3 AA floor of 4.5:1 for body copy. #8a8a99 measures
+       5.12:1 on --card and 5.61:1 on the ground. It is the dimmest grey in
+       this palette that still clears 4.5:1 against --card, which is why it
+       lands on the same value as --ink-dim. */
+    --ink-mute: #8a8a99;
     --line: #24242f;
     --card: #191922;
     position: relative;
