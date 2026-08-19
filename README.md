@@ -4,7 +4,7 @@
 **Design:** "Confident Studio" — dark, restrained, single clay accent (replaced the cyberpunk theme 2026-07-21, see `DECISIONS.md § D-CS-010`; the old single-file site is preserved read-only in `legacy/`).
 **Perf:** Lighthouse desktop = 98/96/93/91 (2026-07-07 measurement). Measurement + strike ledger at [`docs/lighthouse-baseline.md`](docs/lighthouse-baseline.md).
 
-M³'s marketing site. Turns TikTok/Instagram traffic into DMs and quote requests.
+M3MM's marketing site. Turns TikTok/Instagram traffic into DMs and quote requests.
 Visitors arrive already half-sold from a video; this site's only job is to close the loop.
 
 ## Offer Ladder

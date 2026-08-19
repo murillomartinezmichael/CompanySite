@@ -15,13 +15,17 @@ const intakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
 
 <header class="relative z-30">
   <div class="container-page flex items-center justify-between py-6">
-    <a href="/" class="group flex items-center gap-2.5" aria-label="M³ home" data-cta="logo" data-section="header">
+    <a href="/" class="group flex items-center gap-2.5" aria-label="M3MM home" data-cta="logo" data-section="header">
       <span
         class="grid h-9 w-9 place-items-center overflow-hidden bg-ink-soft ring-1 ring-ink-line transition-all group-hover:ring-clay/60"
         style="border-radius: 2px;"
       >
+        <!-- mark-light.png, not brand-mark.svg: the SVG paints #0a0a0a on this
+             #161A24 tile (~1.13:1) so it renders as an empty square, and
+             docs/brand-ownership.md calls it the rough vector draft. This is the
+             light-on-dark master, the same file Footer and Intake already use. -->
         <img
-          src="/brand-mark.svg"
+          src="/mark-light.png"
           alt=""
           width="28"
           height="28"
@@ -29,7 +33,7 @@ const intakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
           decoding="async"
         />
       </span>
-      <span class="hidden font-mono text-xs uppercase tracking-[0.18em] text-bone-muted sm:inline">Websites that get you customers</span>
+      <span class="hidden font-mono text-[11px] uppercase tracking-[0.16em] text-bone-muted sm:inline">Modernize. Mobilize. Multiply.</span>
     </a>
 
     {!minimal && (

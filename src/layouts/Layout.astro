@@ -19,7 +19,7 @@ interface Props {
 // TikTok DMs — even though Twitter, Discord, and Slack render them fine.
 // Ship PNG as the source of truth; SVG stays in /public as a fallback.
 const {
-  title = 'M³ — Websites that get you customers',
+  title = 'M3MM — Websites that get you customers',
   description = 'One engineer in Atlanta. I build websites that book jobs, plus the automations that back them. Free site review — takes two minutes.',
   path = '/',
   ogImage = '/og.png',
@@ -108,7 +108,8 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
     <script is:inline type="application/ld+json" set:html={JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'ProfessionalService',
-      name: 'M³',
+      name: 'M3MM',
+      logo: 'https://m3mm.net/brand-mark.png',
       url: 'https://m3mm.net/',
       description,
       areaServed: 'United States',
@@ -133,13 +134,13 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
       },
       knowsAbout: ['Web development', 'Automation', 'Small business websites', 'Lead generation'],
       // Structured pricing so Google can show tiered offers in search
-      // results ("M³ Atlanta website cost" queries). Mirrors the four
+      // results ("Atlanta website cost" queries). Mirrors the four
       // Service.astro tiers verbatim; keep this in sync whenever pricing
       // changes there. Quote-only tier omits price per Google's guidance
       // that missing price is preferable to placeholder 0.
       hasOfferCatalog: {
         '@type': 'OfferCatalog',
-        name: 'M³ website services',
+        name: 'M3MM website services',
         itemListElement: [
           {
             '@type': 'Offer',
@@ -270,9 +271,10 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
     <!-- SiteGuide AI guide widget. Deliberately carries no `[data-cta]`
          attribute, so the CTA tracker leaves its interactions alone. -->
     <script
+      is:inline
       src="https://siteguide-production.up.railway.app/widget.js"
       data-site="companysite"
-      data-title="M³"
+      data-title="M3MM"
       defer></script>
   </body>
 </html>

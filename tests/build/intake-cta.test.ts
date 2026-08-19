@@ -45,6 +45,7 @@ describe('Header + Footer thread `path` so intake CTAs never dead-end', () => {
       { file: 'src/pages/start.astro', expected: '/start' },
       { file: 'src/pages/thanks.astro', expected: '/thanks' },
       { file: 'src/pages/accessibility.astro', expected: '/accessibility' },
+      { file: 'src/pages/policies.astro', expected: '/policies' },
       // Trade landing pages (2026-07-19) — each mounts <Intake>, and
       // Header/Footer/Layout's hasIntakeOnPage now includes `/for/*` so
       // their CTAs stay same-page anchors instead of bouncing the visitor

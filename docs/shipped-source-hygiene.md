@@ -97,7 +97,7 @@ value of the trap. The field is asserted by the validation tests.
 
 ### SiteGuide widget embed (`Layout.astro`)
 
-The AI guide widget on this site is the same product M³ sells to clients,
+The AI guide widget on this site is the same product M3MM sells to clients,
 running live as our own proof point. Its per-site config lives in the
 SiteGuide repo (`sites/companysite.json`, which is where this origin is
 allowlisted), and the CSP allowance for the widget origin lives in this repo's

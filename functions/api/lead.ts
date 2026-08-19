@@ -87,7 +87,7 @@ async function sendEmail(
   replyTo?: string,
 ): Promise<{ ok: boolean; skipped?: true; status?: number; error?: string }> {
   if (!env.RESEND_API_KEY) return { ok: false, skipped: true };
-  const from = env.LEAD_FROM || 'M³ Leads <onboarding@resend.dev>';
+  const from = env.LEAD_FROM || 'M3MM Leads <onboarding@resend.dev>';
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), RESEND_TIMEOUT_MS);
   try {
@@ -276,7 +276,7 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
     : '';
 
   const adminHtml = `
-    <h2 style="font-family:Georgia,serif;">New M³ intake — ${esc(lead.source)}</h2>
+    <h2 style="font-family:Georgia,serif;">New M3MM intake — ${esc(lead.source)}</h2>
     <p><b>Name:</b> ${esc(lead.name)}</p>
     <p><b>Email:</b> <a href="mailto:${esc(lead.email)}">${esc(lead.email)}</a></p>
     <p><b>Business:</b> ${esc(lead.businessType)}</p>
@@ -298,8 +298,8 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
     ? `I have your project intake. I'll review the scope and your preferred timing, then confirm the build week before work begins.`
     : `I'll actually look at your site and reply with a 5-minute recorded video teardown &mdash; what's working, what's costing you customers, and whether it needs a rebuild or just a fix. If it turns out you don't need me, I'll tell you that too.`;
   const replySubject = isProjectIntake
-    ? 'Your M³ project intake is in'
-    : 'Got your review request — M³';
+    ? 'Your M3MM project intake is in'
+    : 'Got your review request — M3MM';
 
   // Referral CTA in the closing block — every reply turns the lead into a
   // potential referrer. Terms come from one config (functions/_lib/referral.ts)
@@ -335,11 +335,11 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
         <a href="${esc(referralLink)}" style="color:#FF3B5C;">Your share link: ${esc(referralLink)}</a>
       </div>
 
-      <p style="margin:24px 0 0;">&mdash; Michael<br/><span style="color:#888;font-size:13px;">M³ &middot; Atlanta, GA &middot; m3mm.net</span></p>
+      <p style="margin:24px 0 0;">&mdash; Michael<br/><span style="color:#888;font-size:13px;">M3MM &middot; Atlanta, GA &middot; m3mm.net</span></p>
     </div>
   `;
 
-  const adminResult = await sendEmail(env, to, `M³ intake · ${lead.name} (${lead.businessType})`, adminHtml, lead.email);
+  const adminResult = await sendEmail(env, to, `M3MM intake · ${lead.name} (${lead.businessType})`, adminHtml, lead.email);
   const replyResult = await sendEmail(env, lead.email, replySubject, replyHtml);
 
   // Fleet bond — forward to CockpitCloud kanban if configured. Env-gated,

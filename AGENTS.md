@@ -2,7 +2,7 @@
 
 ## What This Is
 
-M³ marketing site at **m3mm.net**. Only job: convert TikTok / Instagram traffic
+M3MM marketing site at **m3mm.net**. Only job: convert TikTok / Instagram traffic
 into DMs and quote requests. Visitors arrive already half-sold from a video —
 this site closes the loop.
 

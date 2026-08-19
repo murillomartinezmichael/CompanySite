@@ -1,7 +1,5 @@
 /** Public offer links only. Never put Stripe secret keys in browser code. */
 
-// @ts-expect-error — .mjs build script, no type declarations; the shape used
-// here (RULES[].id/.test, redactSecret) is pinned by shipped-placeholders.test.ts.
 import { RULES, redactSecret } from '../../scripts/check-shipped-placeholders.mjs';
 
 /**

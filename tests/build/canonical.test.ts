@@ -42,6 +42,7 @@ const PAGE_EXPECTATIONS: ReadonlyArray<{
   { file: 'src/pages/start.astro', path: '/start' },
   { file: 'src/pages/thanks.astro', path: '/thanks', noindex: true },
   { file: 'src/pages/accessibility.astro', path: '/accessibility' },
+  { file: 'src/pages/policies.astro', path: '/policies' },
   { file: 'src/pages/roadmap.astro', path: '/roadmap' },
   { file: 'src/pages/hub.astro', path: '/hub' },
 ];
@@ -72,6 +73,7 @@ describe('canonical URL wiring', () => {
       'src/pages/audit.astro',
       'src/pages/thanks.astro',
       'src/pages/accessibility.astro',
+      'src/pages/policies.astro',
       'public/_headers',
       'public/_redirects',
       'public/robots.txt',

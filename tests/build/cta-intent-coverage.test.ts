@@ -45,6 +45,8 @@ const NAV_ONLY_CTAS: ReadonlySet<string> = new Set([
   'nav-proof',         // Header: in-page anchor → #proof
   'nav-services',      // Header: in-page anchor → #services
   'footer-a11y',       // Footer: nav → /accessibility statement page
+  'footer-policies',   // Footer: nav → /policies company-policy library
+  'policies-accessibility', // Policies: cross-link → accessibility statement
   'signature-tiktok',  // Intake signature card: outbound nav to founder's
                        // TikTok profile — no conversion outcome to intent-tag.
 ]);

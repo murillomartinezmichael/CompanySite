@@ -17,11 +17,11 @@ const intakePost = '/api/lead';
 ---
 
 <Layout
-  title="Roadmap — M³"
-  description="M³ shipping schedule. New product or tool goes live every two weeks. No vaporware — every rung on this list is code that already runs."
+  title="Roadmap — M3MM"
+  description="M3MM shipping schedule. New product or tool goes live every two weeks. No vaporware — every rung on this list is code that already runs."
   path="/roadmap"
   breadcrumbs={[
-    { name: 'M³', url: '/' },
+    { name: 'M3MM', url: '/' },
     { name: 'Roadmap', url: '/roadmap' },
   ]}
 >
@@ -37,9 +37,11 @@ const intakePost = '/api/lead';
         <p class="kicker mono">One drop · every two weeks · public receipts</p>
       </div>
 
-      <h1 class="brand-display">
-        M<span class="red">³</span> ROADMAP
-      </h1>
+      <div class="brand-heading">
+        <img src="/mark-light.png" alt="M3MM" width="96" height="96" class="brand-mark" decoding="async" />
+        <h1 class="brand-display">ROADMAP</h1>
+      </div>
+      <p class="brand-meaning">Modernize. Mobilize. Multiply.</p>
 
       <p class="lede">
         <strong>{LAUNCH_STATS.live} are already live.</strong> You can click them right now — two
@@ -233,7 +235,7 @@ const intakePost = '/api/lead';
 <style>
   /* Roadmap-scoped visual language: red accent + LED pulse + subtle scanlines.
      Isolated under .roadmap-scope so the rest of the site's clay/teal accent
-     stays untouched. Matches the M3_Roadmap_DRAFT.html visual spec. */
+     stays untouched. Matches the original roadmap draft's visual spec. */
   .roadmap-scope {
     --red: #ff2d3d;
     --red-glow: rgba(255, 45, 61, 0.25);
@@ -269,16 +271,37 @@ const intakePost = '/api/lead';
 
   .roadmap-scope .hairline-red { background: var(--red); }
 
+  .roadmap-scope .brand-heading {
+    display: flex;
+    align-items: center;
+    gap: clamp(14px, 2.4vw, 28px);
+    margin-top: 8px;
+  }
+  .roadmap-scope .brand-mark {
+    width: clamp(52px, 8vw, 82px);
+    height: clamp(52px, 8vw, 82px);
+    flex: none;
+    object-fit: contain;
+  }
+
   .roadmap-scope .brand-display {
     font-family: 'Impact', 'Bebas Neue', 'Arial Black', var(--tw-font-display, sans-serif);
     font-size: clamp(48px, 8vw, 88px);
     line-height: 0.95;
     letter-spacing: -0.02em;
-    margin: 8px 0 0;
+    margin: 0;
     text-transform: uppercase;
     color: #e8e8ee;
   }
-  .roadmap-scope .brand-display .red { color: var(--red); }
+  .roadmap-scope .brand-meaning {
+    margin: 14px 0 0;
+    color: var(--ink-dim);
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
 
   .roadmap-scope .lede {
     max-width: 640px;

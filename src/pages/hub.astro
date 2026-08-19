@@ -13,11 +13,11 @@ function statusLabel(s: string) {
 ---
 
 <Layout
-  title="The Hub — M³"
-  description="Live dashboard for every M³ product and tool. Tiles light up green the day each drop goes live."
+  title="The Hub — M3MM"
+  description="Live dashboard for every M3MM product and tool. Tiles light up green the day each drop goes live."
   path="/hub"
   breadcrumbs={[
-    { name: 'M³', url: '/' },
+    { name: 'M3MM', url: '/' },
     { name: 'Hub', url: '/hub' },
   ]}
 >
@@ -32,12 +32,14 @@ function statusLabel(s: string) {
         <p class="kicker mono">Live product dashboard · updates the day a drop ships</p>
       </div>
 
-      <h1 class="brand-display">
-        THE <span class="red">HUB</span>
-      </h1>
+      <div class="brand-heading">
+        <img src="/mark-light.png" alt="M3MM" width="96" height="96" class="brand-mark" decoding="async" />
+        <h1 class="brand-display">THE <span class="red">HUB</span></h1>
+      </div>
+      <p class="brand-meaning">Modernize. Mobilize. Multiply.</p>
 
       <p class="lede">
-        Every M³ product and tool, in one place. Green means it's live right now — click to
+        Every M3MM product and tool, in one place. Green means it's live right now — click to
         launch. Amber is the next drop. Red is the queue. See the full shipping schedule on the
         <a href="/roadmap" class="lede-link">roadmap</a>.
       </p>
@@ -49,7 +51,7 @@ function statusLabel(s: string) {
         <li class="stat"><b>{LAUNCH_STATS.total}</b><span>Total drops</span></li>
       </ul>
 
-      <ul class="grid" role="list" aria-label="M³ product tiles">
+      <ul class="grid" role="list" aria-label="Product tiles">
         {tiles.map((t) => (
           <li class={`tile tile-${t.status}`}>
             <div class="tile-head">
@@ -137,16 +139,38 @@ function statusLabel(s: string) {
 
   .hub-scope .hairline-red { background: var(--red); }
 
+  .hub-scope .brand-heading {
+    display: flex;
+    align-items: center;
+    gap: clamp(14px, 2.4vw, 28px);
+    margin-top: 8px;
+  }
+  .hub-scope .brand-mark {
+    width: clamp(52px, 8vw, 82px);
+    height: clamp(52px, 8vw, 82px);
+    flex: none;
+    object-fit: contain;
+  }
+
   .hub-scope .brand-display {
     font-family: 'Impact', 'Bebas Neue', 'Arial Black', sans-serif;
     font-size: clamp(48px, 8vw, 88px);
     line-height: 0.95;
     letter-spacing: -0.02em;
-    margin: 8px 0 0;
+    margin: 0;
     text-transform: uppercase;
     color: #e8e8ee;
   }
   .hub-scope .brand-display .red { color: var(--red); }
+  .hub-scope .brand-meaning {
+    margin: 14px 0 0;
+    color: var(--ink-dim);
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
 
   .hub-scope .lede {
     max-width: 640px;

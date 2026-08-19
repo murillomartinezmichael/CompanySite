@@ -2,6 +2,14 @@
 
 **Cold-start rule:** a fresh session should read this file and be productive in 60 seconds.
 
+## SHIPPED (2026-08-18 — M3MM brand, hub/roadmap, and company policies live)
+
+- Standardized the public and operational brand on `M3MM`, the supplied three-fold logo, and `Modernize. Mobilize. Multiply.` across pages, docs, lead email copy, n8n assets, and service materials.
+- Expanded `/hub` and `/roadmap`, added the indexed `/policies` library with voluntary COVID-19 vaccination and accessibility policies, and linked the new surface through navigation and sitemap coverage.
+- Replaced the retired Docker-era deploy checker with an Astro + Cloudflare Pages preflight that verifies built routes, Pages Functions, security headers, placeholder fences, retired URLs, M3MM-only public branding, and live release signatures.
+- Release gates: 12 pages built, placeholder fence clean, **447 passed / 2 skipped**, Astro **0/0/0**, preflight READY. Live checks passed for `/`, `/hub`, `/roadmap`, `/policies`, `/accessibility`, sitemap, and the `/api/lead` function boundary.
+- Production deployment: Cloudflare Pages deployment `39e1993a.m3-companysite.pages.dev`, serving through `https://m3mm.net`.
+
 ## Deferred from the 2026-08-12 Codex API-security review
 
 **Move the API security headers into `functions/api/_middleware.ts`.** Codex's
@@ -26,7 +34,7 @@ board green — it is correctly reporting reality.
 
 ## NEXT ACTION
 
-**NEXT ACTION (2026-08-17) — branch `design/a11y-2026-08-17`, pushed, no PR:** Mike answers the three factual questions in `docs/DESIGN_AUDIT_2026-08-16.md § Deferred` — D1 first (the roadmap says Aries ships SEP 15 and Big7 OCT 27 while the home page sells both as delivered; `MONEY_LADDER.md:14` says the roadmap is the wrong one, but they are published claims about client work so an agent must not flip them), then D2 ("code that already runs" vs 19/21 rendered UPCOMING, which follows from D1) and D3 ("Dates target Mondays" — all 21 dates are Tuesdays; either the word or the dates move). Once D1 lands it is a data-only edit to `src/config/roadmap.ts`. The lead-endpoint change on this branch is money-path code and **has not had its Codex second opinion yet** (root `CLAUDE.md § MULTI-AI ROOM` hard trigger) — run that before it merges.
+**NEXT ACTION (2026-08-18):** complete the m3mm.net umbrella migration without breaking the live sales floor. Move the custom-site department to a stable department route, make the hub the root experience, attach the ResumeSite career surface at its final route/subdomain, then update canonicals and redirects only after every old and new URL is smoke-tested. Until that release exists, keep the current root and Worker URL live.
 
 **SHIPPED (2026-08-17 — accessibility retrofit + `/roadmap` signup dead-end):** Three fixes off the 2026-08-16 design audit, full method and measured pairs appended to `docs/DESIGN_AUDIT_2026-08-16.md § Remediation pass`.
 1. **Contrast (the complete WCAG AA debt on the site).** `--ink-mute` `#55555f` → `#8a8a99` on `/roadmap` + `/hub`: `.fine`/`.tile-date` **2.37:1 → 5.13:1** on `--card #191922`, `.foot-note` **2.62:1 → 5.67:1** on ground `#0D0E14`. Intake step numbers `text-clay/60` → `text-clay`: **3.52:1 → 7.47:1** on `#161A24`, which touches `/`, `/start`, `/audit`, `/for/*`. `#8a8a99` is the palette's floor, not a preference — `#808090` measures 4.49:1 and fails. Re-measured in real Chrome after the change: **0 failures on all 7 pages scanned**.
@@ -141,7 +149,7 @@ speculative).
 
 - **CONVERSION_STANDARDS.md § 2 gap closed.** CTA sweep across `src/` found 6 CTAs using intent namespaces not in the reserved set (`tier:` / `product:` / `feature:` / `plan:` / `book:` / `checkout:`) — `browse:`, `downshift:`, and `urgent:` were silently invented and violated the § 2 "don't invent new namespaces silently" rule.
 - **Remapped to reserved namespaces** (tick constraint bans shared-doc edits, so extending the reserved list at `../docs/CONVERSION_STANDARDS.md` was off-table):
-  - `downshift:siteguide-templates` → `product:siteguide` (4× — Services / Footer / audit / thanks). SiteGuide is an M³ product.
+  - `downshift:siteguide-templates` → `product:siteguide` (4× — Services / Footer / audit / thanks). SiteGuide is an M3MM product.
   - `browse:case-studies` → `product:case-studies` (thanks). Aggregate portfolio browse.
   - `urgent:direct-email` → `book:urgent-review` (thanks). Booking action, direct-email variant.
 - **Regression pinned by `tests/build/reserved-intent-namespaces.test.ts` (9 tests).** Walks every `.astro/.ts/.tsx/.html` in `src/`, extracts literal `data-intent` values, asserts each starts with a reserved namespace. Pins the two files allowed to use template-literal intents (`CaseStudy.astro` `product:${slug}` and `Services.astro` `{s.intent}`) so a future silent drift into interpolated intents fails CI. Also asserts `Services.astro`'s tier CATALOG intents remain reserved.

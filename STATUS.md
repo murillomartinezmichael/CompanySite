@@ -1,12 +1,19 @@
 # CompanySite — STATUS
 
 **Live URL:** `https://m3mm.net` (deployed via Cloudflare Pages, GitHub-connect auto-deploy)
-**Stack:** Astro 4 + Tailwind 3 + Cloudflare Pages + Pages Functions (Resend)
+**Stack:** Astro 5 + Tailwind 3 + Cloudflare Pages + Pages Functions (Resend/n8n)
+**Current release:** 2026-08-18 — M3MM brand, expanded hub/roadmap, and `/policies` deployed and live-verified.
 **Definition of Done:** bio link → page → form submission works end to end and looks expensive.
 **DoD hit:** 2026-07-05 (local, wrangler pages dev verified).
 **Deploy-ready:** 2026-07-06 (58/58 tests, `dist/` 22.5 KB gz, RUNBOOK § 3 paste-ready — waiting only on Mike's `wrangler login` + first-time project create).
 **Policy update (2026-07-20):** Owner-confirmed 20% down before work; down payment non-refundable, all other payments refundable before launch. Source/test/build/mobile+desktop visual checks green (239/239 tests, Astro 0/0/0, 7 pages).
 **Session 9 (2026-07-07):** Rung IV RE-STRIKE on mobile — PSI 87→97 / LCP −603 ms shipped in commits `d620884`+`90c95b4`. Ledger + raw JSONs in `docs/lighthouse-baseline.md` + `perf/psi-mobile-after-3fonts-2026-07-07_084044.json`. 3 commits (`5c19929`, `7d8a18d`, `7748a3d`) waiting on `scripts/auto-improve/GUARDS_ACTIVE` lift before push.
+
+## Current production evidence — 2026-08-18
+
+- Cloudflare Pages deployment: `39e1993a.m3-companysite.pages.dev`, mapped to `m3mm.net`.
+- HTTP 200 with release markers on `/`, `/hub`, `/roadmap`, `/policies`, `/accessibility`, and `/sitemap.xml`; `/api/lead` returns the expected 405 for GET, confirming the Function boundary is mounted without sending a test lead.
+- Local release gates: 12 pages built; shipped-placeholder scan clean; 447 tests passed, 2 dormant payment-link tests skipped; Astro check 0 errors/warnings/hints; Cloudflare Pages preflight READY with live signatures.
 
 ---
 

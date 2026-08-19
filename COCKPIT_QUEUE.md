@@ -626,7 +626,7 @@ covers the semantic:
 
 - **`downshift:siteguide-templates` → `product:siteguide`** — 4
   outbound SiteGuide CTAs (Services / Footer / audit / thanks).
-  SiteGuide *is* an M³ product; the reserved `product:` namespace
+  SiteGuide *is* an M3MM product; the reserved `product:` namespace
   covers it exactly.
 - **`browse:case-studies` → `product:case-studies`** — thanks-page
   "See recent work" panel. Aggregate portfolio surface.

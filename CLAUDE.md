@@ -2,9 +2,17 @@
 
 ## What This Is
 
-M³ marketing site at **m3mm.net**. Only job: convert TikTok / Instagram traffic
+M3MM marketing site at **m3mm.net**. Only job: convert TikTok / Instagram traffic
 into DMs and quote requests. Visitors arrive already half-sold from a video —
 this site closes the loop.
+
+## Brand and hub direction
+
+- The written brand is **M3MM**, never `M³` or standalone `M3`.
+- The three Ms mean **Modernize. Mobilize. Multiply.** Keep that punctuation and order.
+- Use the supplied three-fold logo (`public/mark-light.png` on dark surfaces) wherever a visual wordmark/mark is shown; do not rebuild the old typed M³ mark.
+- `m3mm.net` is the intended umbrella hub. This repository is still the current production deploy unit and contains the custom-site sales department plus `/hub`, `/roadmap`, and `/policies`; preserve the sales floor while the hub architecture is completed incrementally.
+- `/policies` is the public company-policy library. Its COVID-19 policy keeps vaccination voluntary, protects medical privacy, prohibits retaliation, and yields to applicable law or client-controlled worksite requirements.
 
 ## Product Positioning (2026-07-09)
 
@@ -31,6 +39,9 @@ Do not resurrect it — the current site is a deliberate reset.
 
 - `src/pages/index.astro` — home
 - `src/pages/audit.astro` — `/audit`, the TikTok bio link target
+- `src/pages/hub.astro` — umbrella dashboard view
+- `src/pages/roadmap.astro` — public product roadmap
+- `src/pages/policies.astro` — company policies, including voluntary COVID-19 vaccination
 - `src/components/*.astro` — Hero, Proof (case studies), Services, Intake, Header, Footer
 - `src/content/caseStudies/*.md` — one file per case study (Aries first)
 - `src/lib/track.ts` — CTA tracker (fires on any `[data-cta]` click)

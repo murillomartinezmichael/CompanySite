@@ -1,5 +1,5 @@
 /**
- * roadmap.ts — single source of truth for the 21-drop M³ launch schedule.
+ * roadmap.ts — single source of truth for the 21-drop launch schedule.
  *
  * /roadmap renders the timeline, /hub renders the live product dashboard,
  * both read the same DROPS array. To light up a tile as products go live,
@@ -34,7 +34,7 @@ export interface Drop {
 export const DROPS: Drop[] = [
   {
     name: 'AriesOutdoorLiving',
-    blurb: 'First M³ client shipped and paid — David Serrano\'s outdoor-living crew. Sold at handoff; first quote request came in three days after launch. This is what an M³ site looks like in the wild.',
+    blurb: 'First M3MM client site shipped and paid — David Serrano\'s outdoor-living crew. Sold at handoff; first quote request came in three days after launch. This is what an M3MM custom build looks like in the wild.',
     quarter: 'Already shipped — live right now',
     dateLabel: 'LIVE',
     year: '2026',
@@ -44,7 +44,7 @@ export const DROPS: Drop[] = [
   },
   {
     name: 'The Hub',
-    blurb: 'One dashboard for every M³ product and tool. Live status, quick-launch links, "what\'s new" feed. As each drop below goes live, its tile lights up on The Hub the same day.',
+    blurb: 'One dashboard for every M3MM product and tool. Live status, quick-launch links, "what\'s new" feed. As each drop below goes live, its tile lights up on The Hub the same day.',
     quarter: 'Already shipped — live right now',
     dateLabel: 'LIVE',
     year: '2026',
@@ -54,7 +54,7 @@ export const DROPS: Drop[] = [
   },
   {
     name: 'CompanySite — m3mm.net',
-    blurb: 'M³\'s own front door. Custom-build inquiries, bounded pricing ($500 basic, $1k–$2k mid, quote-only over $2k), n8n Lead OS scoring every intake end-to-end. This is where every drop below eventually links back to.',
+    blurb: 'M3MM\'s own front door. Custom-build inquiries, bounded pricing ($500 basic, $1k–$2k mid, quote-only over $2k), n8n Lead OS scoring every intake end-to-end. This is where every drop below eventually links back to.',
     quarter: 'Already shipped — live right now',
     dateLabel: 'LIVE',
     year: '2026',
@@ -119,7 +119,7 @@ export const DROPS: Drop[] = [
   },
   {
     name: 'CockpitCloud',
-    blurb: 'Hosted, multi-user Cockpit — the M³ mission-control kanban that scans your GitHub org and turns commits into shipped-work receipts.',
+    blurb: 'Hosted, multi-user Cockpit — the M3MM mission-control kanban that scans your GitHub org and turns commits into shipped-work receipts.',
     quarter: 'Q4 2026',
     dateLabel: 'NOV 24',
     year: '2026',
@@ -128,7 +128,7 @@ export const DROPS: Drop[] = [
   },
   {
     name: 'AriesOutdoorLiving V2',
-    blurb: 'Client-approved Aries rebuild — Astro, R2-hosted photo CDN, contact + reviews flow. Reference implementation for the M³ "small-business site" tier.',
+    blurb: 'Client-approved Aries rebuild — Astro, R2-hosted photo CDN, contact + reviews flow. Reference implementation for the M3MM custom small-business-site tier.',
     quarter: 'Q4 2026',
     dateLabel: 'DEC 8',
     year: '2026',
@@ -155,7 +155,7 @@ export const DROPS: Drop[] = [
   },
   {
     name: 'Flowforge',
-    blurb: 'Workflow-automation glue for the M³ stack — the "connect these three tools" layer, n8n-adjacent but scoped to what M³ customers actually run.',
+    blurb: 'Workflow-automation glue for the M3MM product stack — the "connect these three tools" layer, n8n-adjacent but scoped to what M3MM customers actually run.',
     quarter: 'Q1 2027',
     dateLabel: 'JAN 19',
     year: '2027',
