@@ -40,3 +40,13 @@ entries:
       is the front door for the whole operation.
     url: https://m3mm.net
     public: true
+
+  - date: 2026-06-25
+    kind: shipped
+    title: Aries Outdoor Living — first client site sold and delivered
+    notes: >-
+      M3MM's first client build, for David Serrano's outdoor-living crew. Sold
+      at handoff; the first quote request came in three days after launch. This
+      is what an M3MM custom build looks like in the wild.
+    url: https://ariesoutdoorliving.com
+    public: true
