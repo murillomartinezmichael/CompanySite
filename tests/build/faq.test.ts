@@ -5,14 +5,14 @@ import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const read = (path: string) => readFileSync(root + path, 'utf8');
 
-describe('homepage objection-handling FAQ', () => {
+describe('website-department objection-handling FAQ', () => {
   const faq = read('src/components/Faq.astro');
-  const index = read('src/pages/index.astro');
+  const websites = read('src/pages/websites.astro');
 
-  it('renders between Services and Intake on the homepage', () => {
-    expect(index).toMatch(/import Faq from ['"]@\/components\/Faq\.astro['"]/);
-    expect(index.indexOf('<Services />')).toBeLessThan(index.indexOf('<Faq />'));
-    expect(index.indexOf('<Faq />')).toBeLessThan(index.indexOf('<Intake />'));
+  it('renders between Services and Intake in the website department', () => {
+    expect(websites).toMatch(/import Faq from ['"]@\/components\/Faq\.astro['"]/);
+    expect(websites.indexOf('<Services />')).toBeLessThan(websites.indexOf('<Faq />'));
+    expect(websites.indexOf('<Faq />')).toBeLessThan(websites.indexOf('<Intake />'));
   });
 
   it('uses native disclosure controls with an accessible section label and no custom script', () => {

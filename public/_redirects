@@ -5,3 +5,6 @@
 /review        /audit        301
 /free-review   /audit        301
 /site-review   /audit        301
+
+# The former standalone hub is now the primary homepage.
+/hub           /             301

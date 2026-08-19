@@ -6,7 +6,7 @@ const root = fileURLToPath(new URL('../../', import.meta.url));
 const read = (p: string) => readFileSync(root + p, 'utf8');
 
 // WCAG 1.4.3 AA — body copy needs 4.5:1. Three surfaces shipped below it:
-// the `--ink-mute` grey on /roadmap and /hub (2.37:1 on the card, 2.62:1 on
+// the muted greys on /roadmap and the M3MM homepage (2.37:1 on the card, 2.62:1 on
 // the page ground) and the intake step numbers, which were dimmed to 60%
 // alpha (3.51:1). This pins the measured pairs so the ratios cannot be
 // walked back by a later "that looks too bright" edit.
@@ -31,9 +31,9 @@ const AA_BODY = 4.5;
 // page ground.
 const BACKGROUNDS = ['#191922', '#0D0E14'];
 
-const inkMuteOf = (file: string) => {
-  const m = read(file).match(/--ink-mute:\s*(#[0-9a-fA-F]{6})/);
-  expect(m, `${file} no longer declares --ink-mute`).toBeTruthy();
+const mutedOf = (file: string, variable: string) => {
+  const m = read(file).match(new RegExp(`--${variable}:\\s*(#[0-9a-fA-F]{6})`));
+  expect(m, `${file} no longer declares --${variable}`).toBeTruthy();
   return m![1];
 };
 
@@ -45,9 +45,12 @@ describe('muted greys clear the AA body-copy floor', () => {
     expect(contrast('#4FB8C7', '#161A24')).toBeCloseTo(7.47, 2);
   });
 
-  for (const file of ['src/pages/roadmap.astro', 'src/pages/hub.astro']) {
-    it(`${file} --ink-mute clears 4.5:1 on every background it renders on`, () => {
-      const fg = inkMuteOf(file);
+  for (const { file, variable } of [
+    { file: 'src/pages/roadmap.astro', variable: 'ink-mute' },
+    { file: 'src/pages/index.astro', variable: 'hq-muted' },
+  ]) {
+    it(`${file} --${variable} clears 4.5:1 on every background it renders on`, () => {
+      const fg = mutedOf(file, variable);
       for (const bg of BACKGROUNDS) {
         expect(contrast(fg, bg), `${fg} on ${bg}`).toBeGreaterThanOrEqual(AA_BODY);
       }

@@ -2,21 +2,23 @@
 
 ## What This Is
 
-M3MM marketing site at **m3mm.net**. Only job: convert TikTok / Instagram traffic
-into DMs and quote requests. Visitors arrive already half-sold from a video —
-this site closes the loop.
+M3MM company headquarters at **m3mm.net**. The root is the public umbrella for
+released products, client work, company departments, policies, career proof,
+and the shipping roadmap. The website-services conversion floor lives at
+`/websites` and still closes TikTok / Instagram traffic into quote requests.
 
 ## Brand and hub direction
 
 - The written brand is **M3MM**, never `M³` or standalone `M3`.
 - The three Ms mean **Modernize. Mobilize. Multiply.** Keep that punctuation and order.
 - Use the supplied three-fold logo (`public/mark-light.png` on dark surfaces) wherever a visual wordmark/mark is shown; do not rebuild the old typed M³ mark.
-- `m3mm.net` is the intended umbrella hub. This repository is still the current production deploy unit and contains the custom-site sales department plus `/hub`, `/roadmap`, and `/policies`; preserve the sales floor while the hub architecture is completed incrementally.
+- `m3mm.net` is the umbrella hub. The root must keep separate Released and Roadmap sections and route visitors to every M3MM department. `/hub` permanently redirects to `/`.
+- `/websites` is the complete custom-site sales department. Preserve its Hero → TwoDoor → Proof → Services → FAQ → Intake funnel and its `#proof`, `#services`, and `#intake` anchors.
 - `/policies` is the public company-policy library. Its COVID-19 policy keeps vaccination voluntary, protects medical privacy, prohibits retaliation, and yields to applicable law or client-controlled worksite requirements.
 
 ## Product Positioning (2026-07-09)
 
-CompanySite is the M3 custom business-site sales floor, not the starter-template store.
+`/websites` is the M3MM custom business-site sales floor, not the starter-template store.
 
 - Audience: small businesses through corporate-style local/regional companies that need a custom site, proof, and a lead path.
 - Offer ladder: $500 basic starter/refresh; $1,000-$2,000 bounded business-site package; quote-only above $2,000.
@@ -30,17 +32,18 @@ CompanySite is the M3 custom business-site sales floor, not the starter-template
 - **Tailwind 3** utility CSS
 - **Cloudflare Pages Functions** in `functions/api/*.ts` for the intake + analytics endpoints
 - No JS framework beyond Astro's built-in islands
-- Fonts: Fraunces (display) + Inter (body)
+- Fonts: self-hosted Space Grotesk + Inter variable WOFF2 files
 
 Old cyberpunk single-file HTML is preserved at `legacy/2026-cyberpunk-index.html`.
 Do not resurrect it — the current site is a deliberate reset.
 
 ## Key files
 
-- `src/pages/index.astro` — home
+- `src/pages/index.astro` — M3MM umbrella hub, Released ledger, and Roadmap preview
+- `src/pages/websites.astro` — custom website-services sales floor
 - `src/pages/audit.astro` — `/audit`, the TikTok bio link target
-- `src/pages/hub.astro` — umbrella dashboard view
 - `src/pages/roadmap.astro` — public product roadmap
+- `src/config/roadmap.ts` — single source for the 21 tracked drops and homepage release state
 - `src/pages/policies.astro` — company policies, including voluntary COVID-19 vaccination
 - `src/components/*.astro` — Hero, Proof (case studies), Services, Intake, Header, Footer
 - `src/content/caseStudies/*.md` — one file per case study (Aries first)

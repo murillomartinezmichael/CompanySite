@@ -19,8 +19,8 @@ interface Props {
 // TikTok DMs — even though Twitter, Discord, and Slack render them fine.
 // Ship PNG as the source of truth; SVG stays in /public as a fallback.
 const {
-  title = 'M3MM — Websites that get you customers',
-  description = 'One engineer in Atlanta. I build websites that book jobs, plus the automations that back them. Free site review — takes two minutes.',
+  title = 'M3MM — Modernize. Mobilize. Multiply.',
+  description = 'M3MM is the public hub for Michael Murillo-Martinez\'s released work, products, client sites, company departments, policies, and roadmap.',
   path = '/',
   ogImage = '/og.png',
   noindex = false,
@@ -29,14 +29,14 @@ const {
 
 const canonical = new URL(path, Astro.site ?? 'https://m3mm.net').toString();
 
-// CONVERSION_STANDARDS.md § 1 — no dead-end CTAs. Only `/`, `/audit`, and
+// CONVERSION_STANDARDS.md § 1 — no dead-end CTAs. Only `/websites`, `/audit`, and
 // the `/for/*` trade pages mount <Intake>; on those pages the sticky CTA is
 // a same-page anchor. On any other page (`/thanks`, `/accessibility`,
 // future pages) the bare `/audit` fallback lands the visitor at the top of
 // the review page and leaves the promise ("Free review") one scroll short
 // of the form. Cross-navigate to `/audit#intake` — same pattern as
 // Header/Footer's intakeHref (tick-20), pinned by tests/build/intake-cta.test.ts.
-const hasIntakeOnPage = path === '/' || path === '/audit' || path === '/start' || path.startsWith('/for/');
+const hasIntakeOnPage = path === '/websites' || path === '/audit' || path === '/start' || path.startsWith('/for/');
 const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
 ---
 
@@ -167,7 +167,7 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
               maxPrice: 2000,
             },
             availability: 'https://schema.org/InStock',
-            url: 'https://m3mm.net/#services',
+            url: 'https://m3mm.net/websites#services',
           },
           {
             '@type': 'Offer',
@@ -180,14 +180,14 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
               minPrice: 500,
             },
             availability: 'https://schema.org/InStock',
-            url: 'https://m3mm.net/#services',
+            url: 'https://m3mm.net/websites#services',
           },
           {
             '@type': 'Offer',
             name: 'Premium custom company build',
             description: 'Large company site, multi-page service-line build, portal, or integration — quote-only.',
             availability: 'https://schema.org/InStock',
-            url: 'https://m3mm.net/#services',
+            url: 'https://m3mm.net/websites#services',
           },
         ],
       },

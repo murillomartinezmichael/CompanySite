@@ -53,10 +53,10 @@ REQUIRED_ROUTES = [
     "index.html",
     "accessibility/index.html",
     "audit/index.html",
-    "hub/index.html",
     "policies/index.html",
     "roadmap/index.html",
     "start/index.html",
+    "websites/index.html",
 ]
 
 

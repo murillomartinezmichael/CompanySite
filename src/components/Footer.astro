@@ -5,11 +5,11 @@ interface Props {
 const { path = '/' } = Astro.props;
 const year = new Date().getFullYear();
 
-// CONVERSION_STANDARDS.md § 1 — no dead-end CTAs. Only `/`, `/audit`, and
+// CONVERSION_STANDARDS.md § 1 — no dead-end CTAs. Only `/websites`, `/audit`, and
 // the `/for/*` trade pages render <Intake>, so `#intake` on any other page
 // silently scrolls to the top. Cross-navigate to `/audit#intake` on the
 // pages that lack it.
-const hasIntakeOnPage = path === '/' || path === '/audit' || path === '/start' || path.startsWith('/for/');
+const hasIntakeOnPage = path === '/websites' || path === '/audit' || path === '/start' || path.startsWith('/for/');
 const intakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
 
 // Split so CF's edge email regex can't match. Hydrated to a real mailto:
@@ -32,6 +32,9 @@ const EMAIL_BODY = "Hey Mike,\n\nBusiness: \nCurrent site: \nWhat's frustrating 
       </span>
     </div>
     <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+      <a href="/" class="transition-colors hover:text-bone" data-cta="footer-home" data-section="footer" data-intent="product:company-hub">Home</a>
+      <a href="/roadmap" class="transition-colors hover:text-bone" data-cta="footer-roadmap" data-section="footer" data-intent="product:roadmap">Roadmap</a>
+      <a href="/websites" class="transition-colors hover:text-bone" data-cta="footer-websites" data-section="footer" data-intent="product:website-services">Websites</a>
       <a
         href="/audit#intake"
         class="transition-colors hover:text-bone"

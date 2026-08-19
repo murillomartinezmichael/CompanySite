@@ -2,7 +2,16 @@
 
 **Cold-start rule:** a fresh session should read this file and be productive in 60 seconds.
 
-## SHIPPED (2026-08-18 — M3MM brand, hub/roadmap, and company policies live)
+## SHIPPED (2026-08-18 — m3mm.net umbrella hub live)
+
+- Replaced the single-department root with M3MM headquarters: company routing, a complete Released ledger, and a separate prominent Roadmap preview all live at `https://m3mm.net`.
+- Preserved the former website-sales homepage without reducing it: the complete Hero → TwoDoor → Proof → Services → FAQ → Intake funnel now lives at `https://m3mm.net/websites`.
+- Reconciled the 21-item launch source with public reality: seven verified live releases (M3MM Hub, M3MM Websites, Aries, Big7, SiteGuide, AIMA, and the career site), ClipForge marked next, and the root plus `/roadmap` driven from the same data.
+- Retired the duplicate `/hub` page with a permanent redirect to `/`; moved sales-floor anchor fallbacks, schema URLs, navigation, sitemap membership, and deployment preflight to `/websites`.
+- Release gates: 12 pages built; placeholder fence clean; **451 passed / 2 skipped**; Astro **0/0/0**; strict preflight READY locally and against production.
+- Production deployment: Cloudflare Pages `1cc09881.m3-companysite.pages.dev`, serving through `https://m3mm.net`. Live verification confirmed seven release rows, both homepage sections, the complete `/websites` funnel, M3MM-only branding, and the `/hub` 301.
+
+## PREVIOUSLY SHIPPED (2026-08-18 — M3MM brand, hub/roadmap, and company policies live)
 
 - Standardized the public and operational brand on `M3MM`, the supplied three-fold logo, and `Modernize. Mobilize. Multiply.` across pages, docs, lead email copy, n8n assets, and service materials.
 - Expanded `/hub` and `/roadmap`, added the indexed `/policies` library with voluntary COVID-19 vaccination and accessibility policies, and linked the new surface through navigation and sitemap coverage.
@@ -34,7 +43,7 @@ board green — it is correctly reporting reality.
 
 ## NEXT ACTION
 
-**NEXT ACTION (2026-08-18):** complete the m3mm.net umbrella migration without breaking the live sales floor. Move the custom-site department to a stable department route, make the hub the root experience, attach the ResumeSite career surface at its final route/subdomain, then update canonicals and redirects only after every old and new URL is smoke-tested. Until that release exists, keep the current root and Worker URL live.
+**NEXT ACTION (2026-08-18):** choose the final M3MM career route or subdomain, map the already-live ResumeSite Worker there, then replace its single external URL in `src/config/roadmap.ts`. The umbrella migration and `/websites` department move are complete; do not move the working career URL until DNS and the replacement route can be smoke-tested together.
 
 **SHIPPED (2026-08-17 — accessibility retrofit + `/roadmap` signup dead-end):** Three fixes off the 2026-08-16 design audit, full method and measured pairs appended to `docs/DESIGN_AUDIT_2026-08-16.md § Remediation pass`.
 1. **Contrast (the complete WCAG AA debt on the site).** `--ink-mute` `#55555f` → `#8a8a99` on `/roadmap` + `/hub`: `.fine`/`.tile-date` **2.37:1 → 5.13:1** on `--card #191922`, `.foot-note` **2.62:1 → 5.67:1** on ground `#0D0E14`. Intake step numbers `text-clay/60` → `text-clay`: **3.52:1 → 7.47:1** on `#161A24`, which touches `/`, `/start`, `/audit`, `/for/*`. `#8a8a99` is the palette's floor, not a preference — `#808090` measures 4.49:1 and fails. Re-measured in real Chrome after the change: **0 failures on all 7 pages scanned**.

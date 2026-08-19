@@ -1,8 +1,8 @@
 /**
  * roadmap.ts — single source of truth for the 21-drop launch schedule.
  *
- * /roadmap renders the timeline, /hub renders the live product dashboard,
- * both read the same DROPS array. To light up a tile as products go live,
+ * /roadmap renders the full timeline and / renders the public M3MM hub.
+ * Both read the same DROPS array. To light up a release as products go live,
  * only the `status` field on each entry changes.
  *
  * Status values:
@@ -29,6 +29,8 @@ export interface Drop {
   url?: string;
   /** Lifecycle status; drives pip color and Launch/Notify button. */
   status: DropStatus;
+  /** Plain-language lane used by the public release ledger. */
+  category?: 'Company' | 'Client work' | 'Product' | 'Career';
 }
 
 export const DROPS: Drop[] = [
@@ -41,45 +43,73 @@ export const DROPS: Drop[] = [
     date: '2026-06-25',
     url: 'https://ariesoutdoorliving.com',
     status: 'live',
+    category: 'Client work',
   },
   {
-    name: 'The Hub',
-    blurb: 'One dashboard for every M3MM product and tool. Live status, quick-launch links, "what\'s new" feed. As each drop below goes live, its tile lights up on The Hub the same day.',
+    name: 'Big7 Construction',
+    blurb: 'Public company website for a commercial and residential construction team serving metro Atlanta — another live M3MM client build with real services, proof, and contact paths.',
     quarter: 'Already shipped — live right now',
     dateLabel: 'LIVE',
     year: '2026',
-    date: '2026-08-17',
-    url: '/hub',
+    date: '2026-07-01',
+    url: 'https://big7construction.com',
     status: 'live',
+    category: 'Client work',
   },
   {
-    name: 'CompanySite — m3mm.net',
-    blurb: 'M3MM\'s own front door. Custom-build inquiries, bounded pricing ($500 basic, $1k–$2k mid, quote-only over $2k), n8n Lead OS scoring every intake end-to-end. This is where every drop below eventually links back to.',
+    name: 'M3MM Hub',
+    blurb: 'M3MM\'s main public front door: every released product, client build, department, policy, and upcoming drop in one living company dashboard.',
+    quarter: 'Already shipped — live right now',
+    dateLabel: 'LIVE',
+    year: '2026',
+    date: '2026-08-18',
+    url: '/',
+    status: 'live',
+    category: 'Company',
+  },
+  {
+    name: 'M3MM Websites',
+    blurb: 'The website-services department: client work, bounded pricing, SiteGuide templates, free site reviews, and the intake path for businesses ready to build.',
     quarter: 'Already shipped — live right now',
     dateLabel: 'LIVE',
     year: '2026',
     date: '2026-07-16',
-    url: 'https://m3mm.net',
+    url: '/websites',
     status: 'live',
+    category: 'Company',
+  },
+  {
+    name: 'Michael\'s Resume + Career Site',
+    blurb: 'The public career surface: current software-engineering experience, verified shipped work, case studies, and the fastest route to evaluate or contact Michael.',
+    quarter: 'Already shipped — live right now',
+    dateLabel: 'LIVE',
+    year: '2026',
+    date: '2026-07-19',
+    url: 'https://resumesite.murillomartinezmichael.workers.dev',
+    status: 'live',
+    category: 'Career',
   },
   {
     name: 'SiteGuide',
     blurb: 'Off-the-shelf template store — 19 sellable business templates plus an AI chat guide widget you drop in with one <script> tag. Per-tenant configuration, per-tenant origin lockdown.',
-    quarter: 'Next up',
-    dateLabel: 'SEP 1',
+    quarter: 'Already shipped — live right now',
+    dateLabel: 'LIVE',
     year: '2026',
-    date: '2026-09-01',
-    url: 'https://siteguide-production.up.railway.app',
-    status: 'next',
+    date: '2026-07-19',
+    url: 'https://siteguide-production.up.railway.app?utm_source=m3mm&utm_medium=hub&utm_campaign=downshift&utm_content=release-ledger',
+    status: 'live',
+    category: 'Product',
   },
   {
     name: 'AIMA — AI Manual Assistant',
-    blurb: 'Drop a product manual PDF, ask it questions, get citations back. RAG SaaS built for regulated industries where "the answer is in the manual" isn\'t good enough.',
-    quarter: 'Q3 2026',
-    dateLabel: 'SEP 15',
+    blurb: 'Drop a product manual PDF, ask it questions, get cited answers back. The public frontend proves the upload-to-answer experience while the product continues to mature.',
+    quarter: 'Already shipped — live right now',
+    dateLabel: 'LIVE',
     year: '2026',
-    date: '2026-09-15',
-    status: 'upcoming',
+    date: '2026-07-19',
+    url: 'https://peaceful-kashata-9599e5.netlify.app',
+    status: 'live',
+    category: 'Product',
   },
   {
     name: 'ClipForge',
@@ -88,7 +118,8 @@ export const DROPS: Drop[] = [
     dateLabel: 'SEP 29',
     year: '2026',
     date: '2026-09-29',
-    status: 'upcoming',
+    status: 'next',
+    category: 'Product',
   },
   {
     name: 'PhotoPicker',

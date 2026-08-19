@@ -15,13 +15,13 @@ const read = (path: string) => readFileSync(root + path, 'utf8');
 // pricing claim the Services ladder doesn't back).
 
 describe('two-door chooser under the Hero', () => {
-  const index = read('src/pages/index.astro');
+  const websites = read('src/pages/websites.astro');
   const twoDoor = read('src/components/TwoDoor.astro');
 
-  it('renders between Hero and Proof on the homepage', () => {
-    expect(index).toMatch(/import TwoDoor from ['"]@\/components\/TwoDoor\.astro['"]/);
-    expect(index.indexOf('<Hero />')).toBeLessThan(index.indexOf('<TwoDoor />'));
-    expect(index.indexOf('<TwoDoor />')).toBeLessThan(index.indexOf('<Proof />'));
+  it('renders between Hero and Proof in the website department', () => {
+    expect(websites).toMatch(/import TwoDoor from ['"]@\/components\/TwoDoor\.astro['"]/);
+    expect(websites.indexOf('<Hero />')).toBeLessThan(websites.indexOf('<TwoDoor />'));
+    expect(websites.indexOf('<TwoDoor />')).toBeLessThan(websites.indexOf('<Proof />'));
   });
 
   it('custom door lands in the on-page intake with funnel metadata', () => {

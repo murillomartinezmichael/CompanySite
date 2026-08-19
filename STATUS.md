@@ -2,7 +2,7 @@
 
 **Live URL:** `https://m3mm.net` (deployed via Cloudflare Pages, GitHub-connect auto-deploy)
 **Stack:** Astro 5 + Tailwind 3 + Cloudflare Pages + Pages Functions (Resend/n8n)
-**Current release:** 2026-08-18 — M3MM brand, expanded hub/roadmap, and `/policies` deployed and live-verified.
+**Current release:** 2026-08-18 — m3mm.net is the M3MM umbrella hub; website sales moved intact to `/websites`; Released and Roadmap are first-class homepage sections.
 **Definition of Done:** bio link → page → form submission works end to end and looks expensive.
 **DoD hit:** 2026-07-05 (local, wrangler pages dev verified).
 **Deploy-ready:** 2026-07-06 (58/58 tests, `dist/` 22.5 KB gz, RUNBOOK § 3 paste-ready — waiting only on Mike's `wrangler login` + first-time project create).
@@ -11,9 +11,10 @@
 
 ## Current production evidence — 2026-08-18
 
-- Cloudflare Pages deployment: `39e1993a.m3-companysite.pages.dev`, mapped to `m3mm.net`.
-- HTTP 200 with release markers on `/`, `/hub`, `/roadmap`, `/policies`, `/accessibility`, and `/sitemap.xml`; `/api/lead` returns the expected 405 for GET, confirming the Function boundary is mounted without sending a test lead.
-- Local release gates: 12 pages built; shipped-placeholder scan clean; 447 tests passed, 2 dormant payment-link tests skipped; Astro check 0 errors/warnings/hints; Cloudflare Pages preflight READY with live signatures.
+- Cloudflare Pages deployment: `1cc09881.m3-companysite.pages.dev`, mapped to `m3mm.net`.
+- HTTP 200 and release markers verified on `/`, `/websites`, `/roadmap`, and `/policies`; `/hub` returns 301 to `/`.
+- The live root contains seven Released rows, independent `#released` and `#roadmap` sections, `Modernize. Mobilize. Multiply.`, and zero legacy `M³` text. The live `/websites` route retains `#proof`, `#services`, and `#intake`.
+- Local release gates: 12 pages built; shipped-placeholder scan clean; 451 tests passed, 2 dormant payment-link tests skipped; Astro check 0 errors/warnings/hints; Cloudflare Pages preflight READY with all live checks enabled.
 
 ---
 
