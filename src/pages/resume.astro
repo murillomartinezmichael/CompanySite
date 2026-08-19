@@ -1,0 +1,176 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import resume from '@/data/resume.json';
+
+// ADR 0001 — the career story lands on the company hub instead of a second
+// property. Content is the verbatim résumé record; this page only supplies
+// the hub's chrome and design tokens around it. Do not edit dates, titles,
+// or claims here — they live in the résumé JSON and must stay in step with
+// the vendored PDF master that the same JSON's build step ships.
+//
+// Chrome notes:
+//  - Header mounts minimal={true}: the non-minimal nav renders #proof /
+//    #services anchors, and this page carries neither section.
+//  - The source site's accent token was a blue named `signal`; the hub's is
+//    the teal `clay`. Every accent class below is the hub's, not a port of
+//    the old palette.
+---
+
+<Layout
+  title={`Resume — ${resume.name} | M3MM`}
+  description={resume.summary}
+  path="/resume"
+  breadcrumbs={[
+    { name: 'M3MM', url: '/' },
+    { name: 'Resume', url: '/resume' },
+  ]}
+>
+  <Header slot="header" minimal={true} path="/resume" />
+
+  <article class="container-page max-w-3xl py-16 lg:py-24">
+    <p class="kicker">Career · Resume</p>
+
+    <div class="mt-4 flex flex-wrap items-start justify-between gap-6">
+      <div>
+        <h1 class="font-display text-4xl sm:text-5xl leading-[1.05] text-bone">{resume.name}</h1>
+        <p class="mt-3 text-bone-dim">{resume.title} · {resume.location}</p>
+      </div>
+      <a
+        href="/resume.pdf"
+        download
+        class="btn-ghost shrink-0 text-sm px-5 py-2.5"
+      >
+        Download PDF
+      </a>
+    </div>
+
+    <p class="mt-8 text-lg text-bone-muted leading-relaxed">{resume.summary}</p>
+
+    <section class="mt-14">
+      <h2 class="font-display text-2xl text-bone border-b border-ink-line pb-3">Experience</h2>
+      <div class="mt-8 space-y-10">
+        {resume.experience.map((job) => (
+          <div>
+            <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <h3 class="font-display text-lg text-bone">{job.role} — {job.company}</h3>
+              <p class="font-mono text-sm text-bone-muted">{job.start} – {job.end}</p>
+            </div>
+            <p class="text-sm text-bone-muted">{job.location}</p>
+            <ul class="mt-3 list-disc space-y-2 pl-5 leading-relaxed text-bone-dim">
+              {job.bullets.map((b) => <li>{b}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-14">
+      <h2 class="font-display text-2xl text-bone border-b border-ink-line pb-3">Selected Live Work</h2>
+      <div class="mt-8 grid gap-6 sm:grid-cols-2">
+        {resume.liveWork.map((work) => (
+          <article class="panel p-5">
+            <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-clay">{work.label}</p>
+            <h3 class="mt-2 font-display text-lg text-bone">{work.name}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-bone-dim">{work.detail}</p>
+            <a
+              class="mt-3 inline-block py-1 text-sm text-clay underline underline-offset-4 hover:text-clay-glow"
+              href={work.url}
+              target="_blank"
+              rel="noopener"
+            >
+              {work.url.replace('https://', '')}
+            </a>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-14">
+      <h2 class="font-display text-2xl text-bone border-b border-ink-line pb-3">Education</h2>
+      <div class="mt-8 space-y-4">
+        {resume.education.map((ed) => (
+          <div>
+            <h3 class="font-display text-lg text-bone">{ed.school}</h3>
+            <p class="text-bone-dim">{ed.degree}</p>
+            <p class="text-sm text-bone-muted">{ed.detail}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-14">
+      <h2 class="font-display text-2xl text-bone border-b border-ink-line pb-3">Skills</h2>
+      <dl class="mt-8 space-y-4">
+        <div>
+          <dt class="field-label justify-start">Production</dt>
+          <dd class="mt-1 text-bone-dim">{resume.skills.production.join(', ')}</dd>
+        </div>
+        <div>
+          <dt class="field-label justify-start">Working</dt>
+          <dd class="mt-1 text-bone-dim">{resume.skills.working.join(', ')}</dd>
+        </div>
+        <div>
+          <dt class="field-label justify-start">Learning</dt>
+          <dd class="mt-1 text-bone-dim">{resume.skills.learning.join(', ')}</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="mt-14">
+      <h2 class="font-display text-2xl text-bone border-b border-ink-line pb-3">Community &amp; Leadership</h2>
+      <div class="mt-8 space-y-4">
+        {resume.community.map((c) => (
+          <div>
+            <h3 class="font-display text-lg text-bone">{c.org}</h3>
+            <p class="text-sm text-bone-muted">{c.role} · {c.detail}</p>
+            <ul class="mt-3 list-disc space-y-2 pl-5 leading-relaxed text-bone-dim">
+              {c.bullets.map((b) => <li>{b}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-14">
+      <h2 class="font-display text-2xl text-bone border-b border-ink-line pb-3">Awards &amp; Credentials</h2>
+      <ul class="mt-8 list-disc space-y-2 pl-5 leading-relaxed text-bone-dim">
+        {resume.credentials.map((credential) => <li>{credential}</li>)}
+      </ul>
+    </section>
+
+    <section class="mt-14 text-sm text-bone-muted">
+      <p>
+        <a
+          id="resume-contact"
+          href="/audit#intake"
+          class="text-clay underline underline-offset-4 hover:text-clay-glow"
+          data-em-u={resume.email.split('@')[0]}
+          data-em-h={resume.email.split('@')[1]}
+          data-em-sub="Resume — m3mm.net"
+        >Email me →</a>
+        · {resume.linkedin} · {resume.github}
+      </p>
+    </section>
+  </article>
+
+  <script is:inline>
+    // Hydrate the contact link to a real mailto: without leaving the raw
+    // address in the HTML a crawler receives. A literal address triggers
+    // Cloudflare's Email Address Obfuscation, which injects a
+    // render-blocking cdn-cgi email-decode script on every page. Without
+    // JS the link still lands on a working contact path, so it is never a
+    // dead end.
+    (function () {
+      var a = document.getElementById('resume-contact');
+      if (!a || !a.dataset.emU || !a.dataset.emH) return;
+      var addr = a.dataset.emU + '@' + a.dataset.emH;
+      var sub = a.dataset.emSub || '';
+      a.href = 'mailto:' + addr + (sub ? '?subject=' + encodeURIComponent(sub) : '');
+      a.textContent = addr;
+    })();
+  </script>
+
+  <Footer slot="footer" path="/resume" />
+</Layout>

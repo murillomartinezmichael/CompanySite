@@ -45,6 +45,8 @@ const PAGE_EXPECTATIONS: ReadonlyArray<{
   { file: 'src/pages/policies.astro', path: '/policies' },
   { file: 'src/pages/roadmap.astro', path: '/roadmap' },
   { file: 'src/pages/websites.astro', path: '/websites' },
+  // ADR 0001 — the résumé moved onto the hub from its own Worker property.
+  { file: 'src/pages/resume.astro', path: '/resume' },
 ];
 
 describe('canonical URL wiring', () => {
