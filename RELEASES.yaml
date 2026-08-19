@@ -1,0 +1,42 @@
+# RELEASES.yaml — m3mm.net's own release ledger.
+# Collected by `python scripts/releases.py`; feeds this site's own /roadmap.
+
+project: CompanySite
+category: Company
+
+entries:
+  - date: 2026-08-19
+    kind: coming
+    title: Resume moves onto the hub
+    notes: >-
+      Career section lands at m3mm.net, folding in what was a standalone
+      ResumeSite Worker. One site instead of two, and no separate domain to buy.
+    public: false
+
+  - date: 2026-08-19
+    kind: coming
+    title: Website services spins out
+    notes: >-
+      The website-services department gets its own site rather than living as a
+      page on the company hub, so the hub reads as the company and the service
+      reads as the product.
+    public: false
+
+  - date: 2026-08-19
+    kind: blocked
+    title: Checkout waiting on a live Stripe link
+    notes: >-
+      Verified against the live Cloudflare API — PUBLIC_STRIPE_PAYMENT_LINK is
+      unset on the m3-companysite Pages project, so /start gates to the free
+      review instead of taking payment. It is a build-time variable, so the site
+      must be rebuilt after it is set.
+    public: false
+
+  - date: 2026-07-19
+    kind: shipped
+    title: Lead OS live end to end
+    notes: >-
+      Every intake is scored, logged, alerted on, and auto-replied to. m3mm.net
+      is the front door for the whole operation.
+    url: https://m3mm.net
+    public: true
