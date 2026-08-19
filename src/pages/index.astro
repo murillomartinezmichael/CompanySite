@@ -7,10 +7,15 @@ import { DROPS, LAUNCH_STATS } from '@/config/roadmap';
 const released = DROPS.filter((drop) => drop.status === 'live');
 const roadmapPreview = DROPS.filter((drop) => drop.status !== 'live').slice(0, 4);
 
+// 2026-08-19: department 01 was "Websites" -> /websites. m3mm.net is the main
+// COMPANY page, so the website-services department is no longer one of its
+// front doors; Resume takes the slot, which keeps this a four-card grid rather
+// than leaving a hole in a four-column layout. /websites still exists, still
+// builds, and is still reachable directly — restore the entry to bring it back.
 const departments = [
-  { number: '01', name: 'Websites', description: 'Client builds, pricing, templates, free site reviews, and the path to hire M3MM.', href: '/websites', action: 'Enter department' },
-  { number: '02', name: 'Released work', description: 'Every public product, client launch, and career surface that can be opened today.', href: '#released', action: 'Open the ledger' },
-  { number: '03', name: 'Roadmap', description: 'The shipping queue, launch order, dates, and signup for future product drops.', href: '/roadmap', action: 'View full roadmap' },
+  { number: '01', name: 'Released work', description: 'Every public product, client launch, and career surface that can be opened today.', href: '#released', action: 'Open the ledger' },
+  { number: '02', name: 'Roadmap', description: 'The shipping queue, launch order, dates, and signup for future product drops.', href: '/roadmap', action: 'View full roadmap' },
+  { number: '03', name: 'Resume', description: 'Career surface: experience, the work behind it, and a downloadable resume.', href: '/resume', action: 'Open resume' },
   { number: '04', name: 'Company policies', description: 'The public policy library, including workplace vaccination and accessibility.', href: '/policies', action: 'Read policies' },
 ];
 
@@ -165,7 +170,10 @@ const isExternal = (url?: string) => Boolean(url?.startsWith('http'));
         <p class="section-code">M3MM // BUILT IN PUBLIC</p>
         <h2 id="closing-heading">The hub grows when the work ships.</h2>
       </div>
-      <a href="/websites" data-cta="hq-websites-closing" data-section="closing" data-intent="book:website-services">Need a website? Start here <span aria-hidden="true">↗</span></a>
+      {/* 2026-08-19: was "Need a website? Start here" -> /websites. This is the
+          main company page, so it no longer closes on the website-services
+          department. /websites still exists and is still reachable directly. */}
+      <a href="/roadmap" data-cta="hq-roadmap-closing" data-section="closing" data-intent="product:roadmap">See what ships next <span aria-hidden="true">↗</span></a>
     </section>
   </div>
 

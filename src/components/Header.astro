@@ -41,6 +41,7 @@ const isHubHome = path === '/';
       <nav class="hidden items-center gap-8 text-sm text-bone-dim md:flex" aria-label="Primary">
         <a href="#released" class="transition-colors hover:text-bone" data-cta="nav-released" data-section="header" data-intent="product:released-work">Released</a>
         <a href="#roadmap" class="transition-colors hover:text-bone" data-cta="nav-roadmap" data-section="header" data-intent="product:roadmap">Roadmap</a>
+        <a href="/resume" class="transition-colors hover:text-bone" data-cta="nav-resume" data-section="header" data-intent="product:career">Resume</a>
         <a href="/policies" class="transition-colors hover:text-bone" data-cta="nav-policies" data-section="header" data-intent="product:company-policies">Policies</a>
       </nav>
     )}
@@ -53,18 +54,14 @@ const isHubHome = path === '/';
       </nav>
     )}
 
-    {isHubHome ? (
-      <a
-        href="/websites"
-        class="inline-flex items-center gap-1.5 border border-clay bg-clay px-4 py-2 text-sm font-semibold text-ink transition-all duration-150 hover:bg-clay-glow hover:border-clay-glow hover:shadow-glow-clay"
-        style="border-radius: 6px; letter-spacing: 0.01em;"
-        data-cta="header-websites"
-        data-section="header"
-        data-intent="product:website-services"
-      >
-        Website services ▸
-      </a>
-    ) : (
+    {/*
+      2026-08-19: the hub-home CTA used to be "Website services ▸" -> /websites.
+      m3mm.net is the main COMPANY page, so the website-services department no
+      longer advertises itself from the company chrome. Both branches now offer
+      the same free review. /websites still exists and still builds; it is only
+      unlinked from here. Restore by reinstating the isHubHome branch.
+    */}
+    {(
       <a
         href={intakeHref}
         class="inline-flex items-center gap-1.5 border border-clay bg-clay px-4 py-2 text-sm font-semibold text-ink transition-all duration-150 hover:bg-clay-glow hover:border-clay-glow hover:shadow-glow-clay"
