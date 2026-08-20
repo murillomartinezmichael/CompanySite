@@ -154,10 +154,14 @@
   /* Sticky mobile CTA — thumb-reachable "Free review" pill on mobile.
      Fades in when the visitor scrolls past the hero fold; script hides it
      near the Intake so it never overlaps the actual form. Desktop hides
-     it via lg:hidden (Header nav is always reachable there). */
+     it via lg:hidden (Header nav is always reachable there).
+     LEFT, not right: the SiteGuide chat widget (widget.js) is fixed at
+     bottom-right (22px desktop / 12px mobile) with z-index 2147483646 — far
+     above this element's z-index 45 — so a right-aligned CTA here would sit
+     permanently underneath it, unclickable. Confirmed live 2026-08-20. */
   .sticky-cta {
     position: fixed;
-    right: 16px;
+    left: 16px;
     bottom: 16px;
     z-index: 45;
     display: inline-flex;
