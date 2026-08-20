@@ -2,7 +2,18 @@
 
 **Cold-start rule:** a fresh session should read this file and be productive in 60 seconds.
 
-## SHIPPED (2026-08-18 — m3mm.net umbrella hub live)
+## SHIPPED (2026-08-19 — official releases separated from test deployments)
+
+- Corrected the public launch model: M3MM Hub is the only official release and AriesOutdoorLiving is the next hard launch.
+- Added a distinct Testing state and preview lab for M3MM Websites, the career site, SiteGuide, and AIMA. Their reachable deployments no longer inflate the official release count.
+- Moved Big7 Construction to the long-term end of the roadmap and made the dependency explicit: real jobsite photography is required before official launch.
+- The homepage Released ledger, preview lab, roadmap queue, `/roadmap`, counters, and `RELEASES.yaml` now use the same definition of release.
+
+## NEXT ACTION
+
+Prepare the AriesOutdoorLiving hard launch as the first client release after the Hub; keep Big7 parked until jobsite photography arrives and keep all test deployments labeled Preview/Testing until Michael explicitly promotes them.
+
+## PREVIOUSLY SHIPPED (2026-08-18 — m3mm.net umbrella hub live)
 
 - Replaced the single-department root with M3MM headquarters: company routing, a complete Released ledger, and a separate prominent Roadmap preview all live at `https://m3mm.net`.
 - Preserved the former website-sales homepage without reducing it: the complete Hero → TwoDoor → Proof → Services → FAQ → Intake funnel now lives at `https://m3mm.net/websites`.
@@ -41,7 +52,7 @@ board green — it is correctly reporting reality.
 
 ---
 
-## NEXT ACTION
+## PRIOR NEXT ACTION (superseded 2026-08-19)
 
 **NEXT ACTION (2026-08-18):** choose the final M3MM career route or subdomain, map the already-live ResumeSite Worker there, then replace its single external URL in `src/config/roadmap.ts`. The umbrella migration and `/websites` department move are complete; do not move the working career URL until DNS and the replacement route can be smoke-tested together.
 

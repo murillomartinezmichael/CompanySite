@@ -13,6 +13,7 @@ and the shipping roadmap. The website-services conversion floor lives at
 - The three Ms mean **Modernize. Mobilize. Multiply.** Keep that punctuation and order.
 - Use the supplied three-fold logo (`public/mark-light.png` on dark surfaces) wherever a visual wordmark/mark is shown; do not rebuild the old typed M³ mark.
 - `m3mm.net` is the umbrella hub. The root must keep separate Released and Roadmap sections and route visitors to every M3MM department. `/hub` permanently redirects to `/`.
+- Public reachability and official release are separate states. Only M3MM Hub is currently released; AriesOutdoorLiving is next; preview deployments stay labeled `testing`; Big7 is long-term pending real jobsite photography.
 - `/websites` is the complete custom-site sales department. Preserve its Hero → TwoDoor → Proof → Services → FAQ → Intake funnel and its `#proof`, `#services`, and `#intake` anchors.
 - `/policies` is the public company-policy library. Its COVID-19 policy keeps vaccination voluntary, protects medical privacy, prohibits retaliation, and yields to applicable law or client-controlled worksite requirements.
 

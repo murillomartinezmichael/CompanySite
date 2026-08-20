@@ -13,16 +13,35 @@ describe('m3mm.net is the umbrella hub', () => {
   it('gives Released and Roadmap separate, addressable homepage sections', () => {
     expect(home).toMatch(/<section id="released"[^>]*aria-labelledby="released-heading"/);
     expect(home).toMatch(/<section id="roadmap"[^>]*aria-labelledby="roadmap-heading"/);
-    expect(home).toContain('Released.<br />Live. Clickable.');
+    expect(home).toContain('Officially<br />released.');
+    expect(home).toContain('Reachable does not mean released.');
     expect(home).toContain('What ships next matters.');
   });
 
-  it('derives released inventory and the roadmap preview from one source of truth', () => {
+  it('separates official releases, test previews, and the roadmap queue in one source of truth', () => {
     expect(home).toMatch(/const released = DROPS\.filter\(\(drop\) => drop\.status === 'live'\)/);
-    expect(home).toMatch(/const roadmapPreview = DROPS\.filter\(\(drop\) => drop\.status !== 'live'\)\.slice\(0, 4\)/);
+    expect(home).toMatch(/const testing = DROPS\.filter\(\(drop\) => drop\.status === 'testing'\)/);
+    expect(home).toMatch(/drop\.status === 'next' \|\| drop\.status === 'upcoming'/);
     expect(DROPS).toHaveLength(21);
-    expect(LAUNCH_STATS.live).toBe(7);
+    expect(LAUNCH_STATS.live).toBe(1);
     expect(LAUNCH_STATS.next).toBe(1);
+    expect(LAUNCH_STATS.testing).toBe(4);
+  });
+
+  it('pins the public launch truth Michael chose', () => {
+    expect(DROPS.filter((drop) => drop.status === 'live').map((drop) => drop.name)).toEqual(['M3MM Hub']);
+    expect(DROPS.find((drop) => drop.status === 'next')?.name).toBe('AriesOutdoorLiving');
+    expect(DROPS.filter((drop) => drop.status === 'testing').map((drop) => drop.name)).toEqual([
+      'M3MM Websites',
+      "Michael's Resume + Career Site",
+      'SiteGuide',
+      'AIMA — AI Manual Assistant',
+    ]);
+
+    const big7 = DROPS.find((drop) => drop.name === 'Big7 Construction');
+    expect(big7?.status).toBe('upcoming');
+    expect(big7?.quarter).toMatch(/Long-term.*jobsite photography/i);
+    expect(big7?.url).toBeUndefined();
   });
 
   it('keeps the complete website-sales floor intact at /websites', () => {

@@ -10,6 +10,12 @@ const grouped = DROPS.reduce<Record<string, typeof DROPS>>((acc, d) => {
   return acc;
 }, {} as Record<string, typeof DROPS>);
 const quarterOrder = Array.from(new Set(DROPS.map((d) => d.quarter)));
+const statusLabels = {
+  live: 'Released',
+  next: 'Next',
+  testing: 'Testing',
+  upcoming: 'Planned',
+} as const;
 
 // Intake POST target. Reuses the site's existing lead endpoint so roadmap
 // subscribers flow through the same pipeline as any other intake.
@@ -44,17 +50,17 @@ const intakePost = '/api/lead';
       <p class="brand-meaning">Modernize. Mobilize. Multiply.</p>
 
       <p class="lede">
-        <strong>{LAUNCH_STATS.live} are already live.</strong> You can click them right now — including
-        client launches, products, the career surface, and M3MM's own departments. The remaining
-        queue is published below in shipping order. No vaporware: when a drop goes live, its status
-        and working link change here <em>that day</em>.
+        <strong>{LAUNCH_STATS.live} official release: the M3MM Hub.</strong> Aries Outdoor Living is
+        the next public hard launch. Some other builds have reachable test deployments; those stay
+        labeled <em>Testing</em> and do not count as releases. Big7 remains long-term while M3MM waits
+        for real jobsite photography.
       </p>
 
       <ul class="stats" role="list">
-        <li class="stat"><b>{LAUNCH_STATS.total}</b><span>Total drops</span></li>
-        <li class="stat"><b>{LAUNCH_STATS.live}</b><span>Live now</span></li>
-        <li class="stat"><b>2 wks</b><span>Cadence</span></li>
-        <li class="stat"><b>Mar 2027</b><span>Last drop</span></li>
+        <li class="stat"><b>{LAUNCH_STATS.total}</b><span>Tracked builds</span></li>
+        <li class="stat"><b>{LAUNCH_STATS.live}</b><span>Official release</span></li>
+        <li class="stat"><b>{LAUNCH_STATS.testing}</b><span>Test previews</span></li>
+        <li class="stat"><b>Aries</b><span>Next launch</span></li>
       </ul>
 
       {quarterOrder.map((q) => (
@@ -69,10 +75,10 @@ const intakePost = '/api/lead';
                 <div class="body">
                   <h3>
                     {d.url
-                      ? <a href={d.url} rel={d.url.startsWith('http') ? 'noopener' : undefined}>{d.name}</a>
+                      ? <a href={d.url} rel={d.url.startsWith('http') ? 'noopener' : undefined} data-cta="roadmap-drop-open" data-section="roadmap" data-intent="product:roadmap-drop" data-release-status={d.status}>{d.name}</a>
                       : d.name}
                     <span class={`status status-${d.status}`}>
-                      {d.status === 'live' ? 'Live' : d.status === 'next' ? 'Next' : 'Upcoming'}
+                      {statusLabels[d.status]}
                     </span>
                   </h3>
                   <p>{d.blurb}</p>
@@ -149,7 +155,7 @@ const intakePost = '/api/lead';
       </section>
 
       <p class="foot-note">
-        Upcoming drops land on Tuesdays, every other week. Slips get logged here, not hidden.
+        Public test deployments stay marked Testing until the official launch. Schedule changes get logged here, not hidden.
       </p>
     </div>
   </section>
@@ -241,6 +247,7 @@ const intakePost = '/api/lead';
     --red-glow: rgba(255, 45, 61, 0.25);
     --amber: #ffb020;
     --green: #22ff66;
+    --preview: #6ed0ff;
     --ink-dim: #8a8a99;
     /* #55555f measured 2.37:1 on --card and 2.62:1 on the page ground — both
        below the WCAG 1.4.3 AA floor of 4.5:1 for body copy. #8a8a99 measures
@@ -398,6 +405,10 @@ const intakePost = '/api/lead';
     background: var(--amber);
     box-shadow: 0 0 0 2px var(--line), 0 0 10px var(--amber);
   }
+  .roadmap-scope .item-testing::before {
+    background: var(--preview);
+    box-shadow: 0 0 0 2px var(--line), 0 0 10px var(--preview);
+  }
   .roadmap-scope .item-upcoming::before {
     background: var(--red);
     box-shadow: 0 0 0 2px var(--line);
@@ -462,6 +473,7 @@ const intakePost = '/api/lead';
   }
   .roadmap-scope .status-live { color: var(--green); }
   .roadmap-scope .status-next { color: var(--amber); }
+  .roadmap-scope .status-testing { color: var(--preview); }
   .roadmap-scope .status-upcoming { color: var(--red); }
 
   .roadmap-scope .signup {

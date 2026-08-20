@@ -5,6 +5,16 @@ project: CompanySite
 category: Company
 
 entries:
+  - date: 2026-08-18
+    kind: shipped
+    title: M3MM Hub — first official public release
+    notes: >-
+      The main m3mm.net company dashboard is the only officially released item
+      in the public launch sequence. Reachable preview deployments do not count
+      as releases.
+    url: https://m3mm.net
+    public: true
+
   - date: 2026-08-19
     kind: coming
     title: Resume moves onto the hub
@@ -34,19 +44,20 @@ entries:
 
   - date: 2026-07-19
     kind: shipped
-    title: Lead OS live end to end
+    title: Lead OS deployed and verified internally
     notes: >-
       Every intake is scored, logged, alerted on, and auto-replied to. m3mm.net
-      is the front door for the whole operation.
+      is the front door for the whole operation. This infrastructure milestone
+      is not a separate public product release.
     url: https://m3mm.net
-    public: true
+    public: false
 
   - date: 2026-06-25
-    kind: shipped
-    title: Aries Outdoor Living — first client site sold and delivered
+    kind: coming
+    title: Aries Outdoor Living — next official public launch
     notes: >-
-      M3MM's first client build, for David Serrano's outdoor-living crew. Sold
-      at handoff; the first quote request came in three days after launch. This
-      is what an M3MM custom build looks like in the wild.
+      M3MM's first client build is already deployed and was sold at handoff,
+      but its M3MM hard launch follows the Hub. Delivery proof and release
+      sequence are tracked separately.
     url: https://ariesoutdoorliving.com
-    public: true
+    public: false

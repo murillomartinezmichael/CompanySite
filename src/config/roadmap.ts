@@ -5,12 +5,16 @@
  * Both read the same DROPS array. To light up a release as products go live,
  * only the `status` field on each entry changes.
  *
+ * A deployment URL does not make a drop an official release. Preview builds
+ * stay `testing` until Michael declares the public launch.
+ *
  * Status values:
- *   'live'     — shipped, url resolves, green LED pulse
- *   'next'     — the upcoming drop, amber pip
- *   'upcoming' — future drop, red pip
+ *   'live'     — officially released by M3MM, green LED pulse
+ *   'next'     — the next official launch, amber pip
+ *   'testing'  — publicly reachable preview, not released
+ *   'upcoming' — planned or waiting on launch requirements
  */
-export type DropStatus = 'live' | 'next' | 'upcoming';
+export type DropStatus = 'live' | 'next' | 'testing' | 'upcoming';
 
 export interface Drop {
   /** Product name as it appears in the timeline heading. */
@@ -25,7 +29,7 @@ export interface Drop {
   year: string;
   /** ISO date for sorting + hub countdowns. */
   date: string;
-  /** Live product URL — required for status:'live', optional otherwise. */
+  /** Public release or preview URL, when one should be visitor-accessible. */
   url?: string;
   /** Lifecycle status; drives pip color and Launch/Notify button. */
   status: DropStatus;
@@ -35,32 +39,10 @@ export interface Drop {
 
 export const DROPS: Drop[] = [
   {
-    name: 'AriesOutdoorLiving',
-    blurb: 'First M3MM client site shipped and paid — David Serrano\'s outdoor-living crew. Sold at handoff; first quote request came in three days after launch. This is what an M3MM custom build looks like in the wild.',
-    quarter: 'Already shipped — live right now',
-    dateLabel: 'LIVE',
-    year: '2026',
-    date: '2026-06-25',
-    url: 'https://ariesoutdoorliving.com',
-    status: 'live',
-    category: 'Client work',
-  },
-  {
-    name: 'Big7 Construction',
-    blurb: 'Public company website for a commercial and residential construction team serving metro Atlanta — another live M3MM client build with real services, proof, and contact paths.',
-    quarter: 'Already shipped — live right now',
-    dateLabel: 'LIVE',
-    year: '2026',
-    date: '2026-07-01',
-    url: 'https://big7construction.com',
-    status: 'live',
-    category: 'Client work',
-  },
-  {
     name: 'M3MM Hub',
-    blurb: 'M3MM\'s main public front door: every released product, client build, department, policy, and upcoming drop in one living company dashboard.',
-    quarter: 'Already shipped — live right now',
-    dateLabel: 'LIVE',
+    blurb: 'M3MM\'s main public front door: the official release ledger, test previews, company departments, policies, career proof, and the launch roadmap in one living dashboard.',
+    quarter: 'Officially released',
+    dateLabel: 'RELEASED',
     year: '2026',
     date: '2026-08-18',
     url: '/',
@@ -68,47 +50,58 @@ export const DROPS: Drop[] = [
     category: 'Company',
   },
   {
+    name: 'AriesOutdoorLiving',
+    blurb: 'The client site is deployed and proven; its official M3MM public hard launch is next. This is the first client release after the Hub.',
+    quarter: 'Next official launch',
+    dateLabel: 'NEXT',
+    year: '2026',
+    date: '2026-06-25',
+    url: 'https://ariesoutdoorliving.com',
+    status: 'next',
+    category: 'Client work',
+  },
+  {
     name: 'M3MM Websites',
-    blurb: 'The website-services department: client work, bounded pricing, SiteGuide templates, free site reviews, and the intake path for businesses ready to build.',
-    quarter: 'Already shipped — live right now',
-    dateLabel: 'LIVE',
+    blurb: 'The website-services department is deployed for testing: client work, bounded pricing, free site reviews, and the intake path for businesses ready to build.',
+    quarter: 'Preview lab — deployed for testing',
+    dateLabel: 'TEST',
     year: '2026',
     date: '2026-07-16',
     url: '/websites',
-    status: 'live',
+    status: 'testing',
     category: 'Company',
   },
   {
     name: 'Michael\'s Resume + Career Site',
-    blurb: 'The public career surface: current software-engineering experience, verified shipped work, case studies, and the fastest route to evaluate or contact Michael.',
-    quarter: 'Already shipped — live right now',
-    dateLabel: 'LIVE',
+    blurb: 'The career surface is deployed for testing: current software-engineering experience, verified work, case studies, and a downloadable resume.',
+    quarter: 'Preview lab — deployed for testing',
+    dateLabel: 'TEST',
     year: '2026',
     date: '2026-07-19',
     url: 'https://resumesite.murillomartinezmichael.workers.dev',
-    status: 'live',
+    status: 'testing',
     category: 'Career',
   },
   {
     name: 'SiteGuide',
-    blurb: 'Off-the-shelf template store — 19 sellable business templates plus an AI chat guide widget you drop in with one <script> tag. Per-tenant configuration, per-tenant origin lockdown.',
-    quarter: 'Already shipped — live right now',
-    dateLabel: 'LIVE',
+    blurb: 'The template store and AI guide widget are deployed for product testing. The preview is usable, but M3MM has not declared its official release.',
+    quarter: 'Preview lab — deployed for testing',
+    dateLabel: 'TEST',
     year: '2026',
     date: '2026-07-19',
     url: 'https://siteguide-production.up.railway.app?utm_source=m3mm&utm_medium=hub&utm_campaign=downshift&utm_content=release-ledger',
-    status: 'live',
+    status: 'testing',
     category: 'Product',
   },
   {
     name: 'AIMA — AI Manual Assistant',
-    blurb: 'Drop a product manual PDF, ask it questions, get cited answers back. The public frontend proves the upload-to-answer experience while the product continues to mature.',
-    quarter: 'Already shipped — live right now',
-    dateLabel: 'LIVE',
+    blurb: 'The manual upload and cited-answer experience is deployed for testing while the product continues to mature. It is a preview, not an official release.',
+    quarter: 'Preview lab — deployed for testing',
+    dateLabel: 'TEST',
     year: '2026',
     date: '2026-07-19',
     url: 'https://peaceful-kashata-9599e5.netlify.app',
-    status: 'live',
+    status: 'testing',
     category: 'Product',
   },
   {
@@ -118,7 +111,7 @@ export const DROPS: Drop[] = [
     dateLabel: 'SEP 29',
     year: '2026',
     date: '2026-09-29',
-    status: 'next',
+    status: 'upcoming',
     category: 'Product',
   },
   {
@@ -238,11 +231,22 @@ export const DROPS: Drop[] = [
     date: '2027-03-30',
     status: 'upcoming',
   },
+  {
+    name: 'Big7 Construction',
+    blurb: 'A test deployment exists, but the official company-site release is long-term. The next real milestone is receiving and curating jobsite photography; it will not be presented as launched before that proof is ready.',
+    quarter: 'Long-term — waiting on jobsite photography',
+    dateLabel: 'WAITING',
+    year: 'CLIENT ASSETS',
+    date: '2026-07-01',
+    status: 'upcoming',
+    category: 'Client work',
+  },
 ];
 
 export const LAUNCH_STATS = {
   total: DROPS.length,
   live: DROPS.filter((d) => d.status === 'live').length,
   next: DROPS.filter((d) => d.status === 'next').length,
+  testing: DROPS.filter((d) => d.status === 'testing').length,
   upcoming: DROPS.filter((d) => d.status === 'upcoming').length,
 };
