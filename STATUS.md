@@ -11,7 +11,7 @@
 
 ## Current production evidence — 2026-08-19
 
-- Cloudflare Pages deployment: `35fe90a3.m3-companysite.pages.dev`, mapped to `m3mm.net`.
+- Cloudflare Pages production source: code commit `d0df34c` (Git deployment verified Active); independently verified immutable build: `35fe90a3.m3-companysite.pages.dev`; custom domain: `m3mm.net`.
 - HTTP 200 verified on `/`, `/roadmap`, `/resume`, `/resume.pdf`, `/websites`, `/audit`, and `/for/construction` at both the immutable deployment URL and `https://m3mm.net`.
 - The public release model is standardized across the root, roadmap, website-sales pages, case studies, lead auto-reply, HTML résumé, and downloadable résumé PDF: one official release, four Testing previews, AriesOutdoorLiving next, and Big7 waiting on jobsite photography.
 - Local release gates: 13 pages built; shipped-placeholder scan clean; 461 tests passed, 2 dormant payment-link tests skipped; Astro check 0 errors/warnings/hints.

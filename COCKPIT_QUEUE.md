@@ -21,10 +21,11 @@ long-term and waiting on real jobsite photography, with no public launch link.
 
 **Verified:** production build **13 pages** · placeholder fence clean · full
 suite **461 passed / 2 skipped** · Astro **0 errors / 0 warnings / 0 hints** ·
-Cloudflare Pages deployment `35fe90a3` · HTTP 200 across the Hub, roadmap,
-résumé, PDF download, website-sales pages, and trade proof · the exact 1
-released / 4 testing / Aries next / Big7 long-term markers confirmed on both
-the immutable deployment URL and `https://m3mm.net`.
+Cloudflare Pages code source `d0df34c` verified Active · immutable build
+`35fe90a3` independently verified · HTTP 200 across the Hub, roadmap, résumé,
+PDF download, website-sales pages, and trade proof · the exact 1 released / 4
+testing / Aries next / Big7 long-term markers confirmed on both the immutable
+deployment URL and `https://m3mm.net`.
 
 ---
 

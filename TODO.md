@@ -9,7 +9,7 @@
 - Moved Big7 Construction to the long-term end of the roadmap and made the dependency explicit: real jobsite photography is required before official launch.
 - The homepage Released ledger, preview lab, roadmap queue, `/roadmap`, counters, public sales/proof pages, lead auto-reply, HTML résumé, downloadable résumé PDF, and `RELEASES.yaml` now use the same definition of release.
 - Release gates: 13 pages built; placeholder fence clean; **461 passed / 2 skipped**; Astro **0/0/0**.
-- Production deployment: Cloudflare Pages `35fe90a3.m3-companysite.pages.dev`, serving through `https://m3mm.net`. Both hosts returned HTTP 200 across the Hub, roadmap, résumé, website-sales pages, trade proof, and PDF download. Production contains one official release, four test previews, Aries next, and Big7 long-term without a launch link.
+- Production deployment: Cloudflare Pages activated Git source `d0df34c`; the independently verified immutable build is `35fe90a3.m3-companysite.pages.dev`, and the same code serves through `https://m3mm.net`. Both hosts returned HTTP 200 across the Hub, roadmap, résumé, website-sales pages, trade proof, and PDF download. Production contains one official release, four test previews, Aries next, and Big7 long-term without a launch link.
 
 ## NEXT ACTION
 
