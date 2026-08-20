@@ -11,7 +11,7 @@ const grouped = DROPS.reduce<Record<string, typeof DROPS>>((acc, d) => {
 }, {} as Record<string, typeof DROPS>);
 const quarterOrder = Array.from(new Set(DROPS.map((d) => d.quarter)));
 const statusLabels = {
-  live: 'Released',
+  released: 'Released',
   next: 'Next',
   testing: 'Testing',
   upcoming: 'Planned',
@@ -24,7 +24,7 @@ const intakePost = '/api/lead';
 
 <Layout
   title="Roadmap — M3MM"
-  description="M3MM shipping schedule. New product or tool goes live every two weeks. No vaporware — every rung on this list is code that already runs."
+  description="M3MM's official release roadmap: the Hub is released, test deployments are labeled separately, Aries Outdoor Living is next, and Big7 is waiting on jobsite photography."
   path="/roadmap"
   breadcrumbs={[
     { name: 'M3MM', url: '/' },
@@ -50,7 +50,7 @@ const intakePost = '/api/lead';
       <p class="brand-meaning">Modernize. Mobilize. Multiply.</p>
 
       <p class="lede">
-        <strong>{LAUNCH_STATS.live} official release: the M3MM Hub.</strong> Aries Outdoor Living is
+        <strong>{LAUNCH_STATS.released} official release: the M3MM Hub.</strong> Aries Outdoor Living is
         the next public hard launch. Some other builds have reachable test deployments; those stay
         labeled <em>Testing</em> and do not count as releases. Big7 remains long-term while M3MM waits
         for real jobsite photography.
@@ -58,7 +58,7 @@ const intakePost = '/api/lead';
 
       <ul class="stats" role="list">
         <li class="stat"><b>{LAUNCH_STATS.total}</b><span>Tracked builds</span></li>
-        <li class="stat"><b>{LAUNCH_STATS.live}</b><span>Official release</span></li>
+        <li class="stat"><b>{LAUNCH_STATS.released}</b><span>Official release</span></li>
         <li class="stat"><b>{LAUNCH_STATS.testing}</b><span>Test previews</span></li>
         <li class="stat"><b>Aries</b><span>Next launch</span></li>
       </ul>
@@ -396,7 +396,7 @@ const intakePost = '/api/lead';
     border: 3px solid #0D0E14;
     box-shadow: 0 0 0 2px var(--line);
   }
-  .roadmap-scope .item-live::before {
+  .roadmap-scope .item-released::before {
     background: var(--green);
     box-shadow: 0 0 0 2px var(--line), 0 0 12px var(--green);
     animation: roadmap-pulse 2.4s ease-in-out infinite;
@@ -419,7 +419,7 @@ const intakePost = '/api/lead';
     50%      { box-shadow: 0 0 0 2px var(--line), 0 0 16px var(--green); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .roadmap-scope .item-live::before { animation: none; }
+    .roadmap-scope .item-released::before { animation: none; }
   }
 
   .roadmap-scope .date {
@@ -471,7 +471,7 @@ const intakePost = '/api/lead';
     position: relative;
     top: -3px;
   }
-  .roadmap-scope .status-live { color: var(--green); }
+  .roadmap-scope .status-released { color: var(--green); }
   .roadmap-scope .status-next { color: var(--amber); }
   .roadmap-scope .status-testing { color: var(--preview); }
   .roadmap-scope .status-upcoming { color: var(--red); }

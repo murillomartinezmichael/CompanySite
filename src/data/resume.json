@@ -30,13 +30,13 @@
       "start": "2026",
       "end": "Present",
       "url": "https://m3mm.net",
-      "summary": "Founded the studio, delivered live client sites including Big7 Construction, and shipped two production SaaS products — SiteGuide's storefront with a verified Stripe purchase flow and the AI Manual Assistant RAG service — plus an n8n lead-automation OS traced end to end in production.",
+      "summary": "Founded the studio, delivered client builds, and deployed verified test versions of SiteGuide and AI Manual Assistant — plus an n8n lead-automation OS traced end to end in production. M3MM Hub is the studio's first official public release.",
       "tech": ["Astro", "Cloudflare", "Python", "FastAPI", "Stripe", "Supabase", "Claude API", "React", "n8n"],
       "bullets": [
-        "Founded M3MM to design and ship production web and automation systems for small businesses; delivered live client work including Big7 Construction and a sold Aries Outdoor Living site.",
+        "Founded M3MM to design and deploy web and automation systems for small businesses; delivered a sold Aries Outdoor Living site and built Big7 Construction's test deployment, which is waiting on jobsite photography before official launch.",
         "Built m3mm.net on Astro and Cloudflare with an n8n Lead OS that scores, stores, alerts on, and auto-replies to inbound leads; traced the complete workflow successfully in production.",
-        "Built and operate SiteGuide, a production template storefront with 19 sellable products and a verified Stripe checkout → webhook → entitlement → ZIP download → confirmation-email flow.",
-        "Shipped AI Manual Assistant, a live RAG SaaS using FastAPI, Supabase/pgvector, Claude, React, Railway, and Netlify; verified the real PDF upload → question → cited-answer journey end to end."
+        "Built and tested SiteGuide, a template-storefront deployment with 19 sellable products and a verified Stripe checkout → webhook → entitlement → ZIP download → confirmation-email flow.",
+        "Built and tested AI Manual Assistant using FastAPI, Supabase/pgvector, Claude, React, Railway, and Netlify; verified the real PDF upload → question → cited-answer journey end to end."
       ]
     },
     {
@@ -58,37 +58,37 @@
     {
       "name": "M3MM Client & Automation Studio",
       "url": "https://m3mm.net",
-      "label": "Live business and lead platform",
-      "detail": "Accessible service funnel with production lead capture and n8n follow-through."
+      "label": "Official public release",
+      "detail": "M3MM's released company Hub with accessible lead capture and n8n follow-through."
     },
     {
       "name": "Aries Outdoor Living",
       "url": "https://ariesoutdoorliving.com",
-      "label": "Live client website — sold",
-      "detail": "Custom deck design-and-build site for a 4.8-star Metro Atlanta contractor. Sold at handoff; first quote request 3 days after launch."
+      "label": "Deployed client site — next official launch",
+      "detail": "Custom deck design-and-build site for a 4.8-star Metro Atlanta contractor. Sold at handoff; first quote request 3 days later."
     },
     {
       "name": "Big7 Construction",
       "url": "https://big7construction.com",
-      "label": "Live client website",
-      "detail": "Designed and delivered a multi-lane construction site for commercial, residential, and repair buyers."
+      "label": "Test deployment — waiting on jobsite photos",
+      "detail": "Multi-lane construction test deployment for commercial, residential, and repair buyers; not officially launched."
     },
     {
       "name": "SiteGuide",
       "url": "https://siteguide-production.up.railway.app",
-      "label": "Live SaaS storefront",
-      "detail": "19 sellable templates with production checkout, entitlement, download, and email delivery."
+      "label": "Test deployment — storefront",
+      "detail": "19 sellable templates with a verified checkout, entitlement, download, and email-delivery flow."
     },
     {
       "name": "AI Manual Assistant",
       "url": "https://peaceful-kashata-9599e5.netlify.app",
-      "label": "Live RAG SaaS",
+      "label": "Test deployment — RAG workflow",
       "detail": "PDF knowledge bases with cited answers across React, FastAPI, Supabase/pgvector, and Claude."
     },
     {
       "name": "QuoteMate AI",
       "url": "https://quotemateai-production-7d56.up.railway.app",
-      "label": "Live SaaS — job quoting for trade contractors",
+      "label": "Test deployment — contractor quoting",
       "detail": "Job form to branded PDF quote in 60 seconds for deck builders, landscapers, and painters. Deterministic pure-Python pricing engine owns every dollar; Claude drafts scope-of-work copy only. Stripe subscriptions, JWT auth."
     }
   ],

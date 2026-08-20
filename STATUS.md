@@ -11,10 +11,10 @@
 
 ## Current production evidence — 2026-08-19
 
-- Cloudflare Pages deployment: `247d1c2f.m3-companysite.pages.dev`, mapped to `m3mm.net`.
-- HTTP 200 verified on `/` and `/roadmap` at both the immutable deployment URL and `https://m3mm.net`.
-- The live root contains exactly one official release row, four Testing preview rows, the `01` release counter, and AriesOutdoorLiving as the next drop. The live roadmap places Big7 in `Long-term — waiting on jobsite photography` and exposes no Big7 launch link.
-- Local release gates: 13 pages built; shipped-placeholder scan clean; 460 tests passed, 2 dormant payment-link tests skipped; Astro check 0 errors/warnings/hints.
+- Cloudflare Pages deployment: `35fe90a3.m3-companysite.pages.dev`, mapped to `m3mm.net`.
+- HTTP 200 verified on `/`, `/roadmap`, `/resume`, `/resume.pdf`, `/websites`, `/audit`, and `/for/construction` at both the immutable deployment URL and `https://m3mm.net`.
+- The public release model is standardized across the root, roadmap, website-sales pages, case studies, lead auto-reply, HTML résumé, and downloadable résumé PDF: one official release, four Testing previews, AriesOutdoorLiving next, and Big7 waiting on jobsite photography.
+- Local release gates: 13 pages built; shipped-placeholder scan clean; 461 tests passed, 2 dormant payment-link tests skipped; Astro check 0 errors/warnings/hints.
 
 ---
 

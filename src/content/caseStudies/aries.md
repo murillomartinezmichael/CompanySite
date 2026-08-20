@@ -14,10 +14,10 @@ outcome: >-
   A gallery-first site that leads with the finished work — 3D renders paired
   with the real photo, a Contact page that actually converts, and reviews
   pulled straight from Google. Sold to David after the walkthrough. Now
-  live and generating quote requests.
+  deployed and generating quote requests. Its official M3MM hard launch is next.
 metrics:
   - label: Time to first contact request
-    value: 3 days after launch
+    value: 3 days after handoff
   - label: Client sale
     value: Closed at handoff
   - label: Pages

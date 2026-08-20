@@ -23,17 +23,17 @@ const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 const DIST = join(ROOT, 'dist');
 const PUBLIC_PDF = join(ROOT, 'public/resume.pdf');
 const DIST_PDF = join(DIST, 'resume.pdf');
-const VENDORED = join(ROOT, 'assets/resume/source.pdf');
+const MASTER = join(ROOT, 'assets/resume/source.pdf');
 
 /** A resume PDF smaller than this is a rendering failure, not a short resume. */
-const MIN_BYTES = 50_000;
+const MIN_BYTES = 8_000;
 
 const sha256 = (path: string) => createHash('sha256').update(readFileSync(path)).digest('hex');
 
 describe('resume.pdf builds', () => {
   it('the generator runs clean and writes public/resume.pdf', () => {
     // Runs the real build step, not a re-implementation of it. Non-zero exit
-    // (the vendored-source guard, malformed resume.json, a missing renderer)
+    // (malformed resume.json or a missing renderer)
     // fails here loudly instead of shipping a broken download.
     const before = existsSync(PUBLIC_PDF) ? sha256(PUBLIC_PDF) : null;
     const output = execFileSync(process.execPath, ['scripts/generate-resume-pdf.mjs'], {
@@ -43,18 +43,14 @@ describe('resume.pdf builds', () => {
     });
     expect(output).toMatch(/resume\.pdf/);
     expect(existsSync(PUBLIC_PDF), 'generator did not write public/resume.pdf').toBe(true);
-    // Generation is byte-reproducible on purpose (vendored copy, or a fixed
-    // PDF CreationDate/ModDate in the fallback) so a rebuild never churns
-    // the deployed bytes.
+    // Generation is byte-reproducible on purpose (fixed PDF metadata dates)
+    // so a rebuild never churns the deployed bytes.
     if (before) expect(sha256(PUBLIC_PDF), 'PDF generation is no longer byte-reproducible').toBe(before);
   });
 
-  it('serves the vendored master verbatim, not a re-render of it', () => {
-    // The vendored file IS Mike's real document. If public/resume.pdf ever
-    // diverges from it, the site is handing out a generated approximation
-    // of a résumé that is on live job applications.
-    expect(existsSync(VENDORED), 'vendored résumé master is missing').toBe(true);
-    expect(sha256(PUBLIC_PDF), 'shipped PDF differs from the vendored master').toBe(sha256(VENDORED));
+  it('keeps the generated repository master byte-identical to the public copy', () => {
+    expect(existsSync(MASTER), 'generated résumé master is missing').toBe(true);
+    expect(sha256(PUBLIC_PDF), 'shipped PDF differs from the generated master').toBe(sha256(MASTER));
   });
 
   it('is a structurally valid, non-trivially sized PDF', () => {

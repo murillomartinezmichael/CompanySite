@@ -2,19 +2,19 @@
  * roadmap.ts — single source of truth for the 21-drop launch schedule.
  *
  * /roadmap renders the full timeline and / renders the public M3MM hub.
- * Both read the same DROPS array. To light up a release as products go live,
- * only the `status` field on each entry changes.
+ * Both read the same DROPS array. To mark an official release, only the
+ * `status` field on each entry changes.
  *
  * A deployment URL does not make a drop an official release. Preview builds
  * stay `testing` until Michael declares the public launch.
  *
  * Status values:
- *   'live'     — officially released by M3MM, green LED pulse
+ *   'released' — officially released by M3MM, green LED pulse
  *   'next'     — the next official launch, amber pip
  *   'testing'  — publicly reachable preview, not released
  *   'upcoming' — planned or waiting on launch requirements
  */
-export type DropStatus = 'live' | 'next' | 'testing' | 'upcoming';
+export type DropStatus = 'released' | 'next' | 'testing' | 'upcoming';
 
 export interface Drop {
   /** Product name as it appears in the timeline heading. */
@@ -46,7 +46,7 @@ export const DROPS: Drop[] = [
     year: '2026',
     date: '2026-08-18',
     url: '/',
-    status: 'live',
+    status: 'released',
     category: 'Company',
   },
   {
@@ -245,7 +245,7 @@ export const DROPS: Drop[] = [
 
 export const LAUNCH_STATS = {
   total: DROPS.length,
-  live: DROPS.filter((d) => d.status === 'live').length,
+  released: DROPS.filter((d) => d.status === 'released').length,
   next: DROPS.filter((d) => d.status === 'next').length,
   testing: DROPS.filter((d) => d.status === 'testing').length,
   upcoming: DROPS.filter((d) => d.status === 'upcoming').length,

@@ -319,8 +319,8 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
 
       <div style="margin:22px 0;padding:14px 16px;background:#faf7f0;border-left:3px solid #FF3B5C;">
         <p style="margin:0 0 6px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#888;">Recent client outcomes</p>
-        <p style="margin:0 0 4px;font-size:14px;"><b>Aries Outdoor Living</b> &mdash; sold at handoff, first quote request 3 days after launch.</p>
-        <p style="margin:0;font-size:14px;"><b>Big 7 Construction</b> &mdash; Build + Repair lanes live at big7construction.com.</p>
+        <p style="margin:0 0 4px;font-size:14px;"><b>Aries Outdoor Living</b> &mdash; deployed and sold at handoff; first quote request 3 days later. Its official M3MM launch is next.</p>
+        <p style="margin:0;font-size:14px;"><b>Big 7 Construction</b> &mdash; test deployment complete; official launch waits on real jobsite photography.</p>
       </div>
 
       <p style="margin:18px 0 6px;font-size:13px;color:#555;">

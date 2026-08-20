@@ -7,9 +7,9 @@
 - Corrected the public launch model: M3MM Hub is the only official release and AriesOutdoorLiving is the next hard launch.
 - Added a distinct Testing state and preview lab for M3MM Websites, the career site, SiteGuide, and AIMA. Their reachable deployments no longer inflate the official release count.
 - Moved Big7 Construction to the long-term end of the roadmap and made the dependency explicit: real jobsite photography is required before official launch.
-- The homepage Released ledger, preview lab, roadmap queue, `/roadmap`, counters, and `RELEASES.yaml` now use the same definition of release.
-- Release gates: 13 pages built; placeholder fence clean; **460 passed / 2 skipped**; Astro **0/0/0**.
-- Production deployment: Cloudflare Pages `247d1c2f.m3-companysite.pages.dev`, serving through `https://m3mm.net`. Both hosts returned HTTP 200 with one official release, four test previews, Aries next, and Big7 long-term without a launch link.
+- The homepage Released ledger, preview lab, roadmap queue, `/roadmap`, counters, public sales/proof pages, lead auto-reply, HTML résumé, downloadable résumé PDF, and `RELEASES.yaml` now use the same definition of release.
+- Release gates: 13 pages built; placeholder fence clean; **461 passed / 2 skipped**; Astro **0/0/0**.
+- Production deployment: Cloudflare Pages `35fe90a3.m3-companysite.pages.dev`, serving through `https://m3mm.net`. Both hosts returned HTTP 200 across the Hub, roadmap, résumé, website-sales pages, trade proof, and PDF download. Production contains one official release, four test previews, Aries next, and Big7 long-term without a launch link.
 
 ## NEXT ACTION
 
@@ -19,10 +19,10 @@ Prepare the AriesOutdoorLiving hard launch as the first client release after the
 
 - Replaced the single-department root with M3MM headquarters: company routing, a complete Released ledger, and a separate prominent Roadmap preview all live at `https://m3mm.net`.
 - Preserved the former website-sales homepage without reducing it: the complete Hero → TwoDoor → Proof → Services → FAQ → Intake funnel now lives at `https://m3mm.net/websites`.
-- Reconciled the 21-item launch source with public reality: seven verified live releases (M3MM Hub, M3MM Websites, Aries, Big7, SiteGuide, AIMA, and the career site), ClipForge marked next, and the root plus `/roadmap` driven from the same data.
+- Historical classification: this rollout counted seven reachable deployments as live releases. The 2026-08-19 correction above supersedes that classification; only the M3MM Hub is an official release.
 - Retired the duplicate `/hub` page with a permanent redirect to `/`; moved sales-floor anchor fallbacks, schema URLs, navigation, sitemap membership, and deployment preflight to `/websites`.
 - Release gates: 12 pages built; placeholder fence clean; **451 passed / 2 skipped**; Astro **0/0/0**; strict preflight READY locally and against production.
-- Production deployment: Cloudflare Pages `1cc09881.m3-companysite.pages.dev`, serving through `https://m3mm.net`. Live verification confirmed seven release rows, both homepage sections, the complete `/websites` funnel, M3MM-only branding, and the `/hub` 301.
+- Production deployment: Cloudflare Pages `1cc09881.m3-companysite.pages.dev`, serving through `https://m3mm.net`. Historical verification confirmed the then-rendered seven rows; the release classification was superseded on 2026-08-19. The complete `/websites` funnel, M3MM-only branding, and `/hub` 301 were also confirmed.
 
 ## PREVIOUSLY SHIPPED (2026-08-18 — M3MM brand, hub/roadmap, and company policies live)
 

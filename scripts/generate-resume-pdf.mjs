@@ -1,21 +1,13 @@
 #!/usr/bin/env node
-// Produces public/resume.pdf. Two modes:
-//   1. Vendored (default): if assets/resume/source.pdf exists, it IS the
-//      resume — Mike's real document gets copied verbatim to public/ and
-//      output/pdf/. The site serves his exact resume, not a rendering of it.
-//   2. Generated (fallback): no vendored file → render from
-//      src/data/resume.json with pdfkit. The JSON still drives the /resume
-//      HTML page in both modes — keep it in sync with the vendored PDF.
+// Produces the downloadable resume from the same structured data that drives
+// the HTML resume. Keeping one source of truth prevents the PDF from drifting
+// away from the public release status shown on m3mm.net.
 //
 // Runs BEFORE `astro build` (see the `build` script in package.json). Astro
 // copies public/ into dist/, so a PDF written after that copy never ships.
 //
-// Ported from the standalone ResumeSite Worker per ADR 0001. One deliberate
-// change: `pdfkit` is imported lazily inside the fallback branch instead of
-// at module top level. The vendored path — the only one that runs today —
-// needs no third-party module at all, so the hub does not take on a build
-// dependency it never executes. If the vendored master is ever removed, the
-// fallback asks for the dependency by name instead of failing cryptically.
+// A byte-identical copy is also kept in assets/resume/source.pdf as the
+// repository master and in output/pdf/ as the reviewed artifact.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -28,29 +20,7 @@ const artifactDir = path.join(root, 'output/pdf');
 const artifactPath = path.join(artifactDir, 'michael-murillo-martinez-resume.pdf');
 const vendoredPath = path.join(root, 'assets/resume/source.pdf');
 
-if (fs.existsSync(vendoredPath)) {
-  const bytes = fs.readFileSync(vendoredPath);
-  if (bytes.length < 10_000 || !bytes.subarray(0, 5).equals(Buffer.from('%PDF-'))) {
-    console.error(`vendored resume at ${vendoredPath} is not a plausible PDF (${bytes.length} bytes) — aborting build`);
-    process.exit(1);
-  }
-  fs.writeFileSync(outPath, bytes);
-  fs.mkdirSync(artifactDir, { recursive: true });
-  fs.writeFileSync(artifactPath, bytes);
-  console.log(`resume.pdf: vendored copy (${bytes.length} bytes) → public/ + output/pdf/`);
-  process.exit(0);
-}
-
-let PDFDocument;
-try {
-  ({ default: PDFDocument } = await import('pdfkit'));
-} catch {
-  console.error(
-    'resume.pdf: no vendored master at assets/resume/source.pdf and `pdfkit` is not installed.\n' +
-      'Restore the vendored PDF (preferred — it is the real document) or run `npm i -D pdfkit` to render from src/data/resume.json.',
-  );
-  process.exit(1);
-}
+const { default: PDFDocument } = await import('pdfkit');
 
 const INK = '#111318';
 const MUTED = '#343B49';
@@ -107,7 +77,7 @@ for (const job of resume.experience) {
 }
 
 doc.addPage();
-sectionHeading('Selected Live Work');
+sectionHeading('Selected Deployed Work');
 for (const work of resume.liveWork) {
   doc.fillColor(INK).font('Helvetica-Bold').fontSize(10).text(pdfText(`${work.name} - ${work.label}`), { continued: false });
   doc.fillColor(ACCENT).font('Helvetica').fontSize(8.75).text(work.url, { link: work.url, underline: true });
@@ -153,7 +123,10 @@ doc.end();
 
 outputStream.on('finish', () => {
   fs.mkdirSync(artifactDir, { recursive: true });
+  fs.mkdirSync(path.dirname(vendoredPath), { recursive: true });
   fs.copyFileSync(outPath, artifactPath);
+  fs.copyFileSync(outPath, vendoredPath);
   console.log(`[resume:pdf] wrote ${outPath}`);
   console.log(`[resume:pdf] copied ${artifactPath}`);
+  console.log(`[resume:pdf] updated ${vendoredPath}`);
 });

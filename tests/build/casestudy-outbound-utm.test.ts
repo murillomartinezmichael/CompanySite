@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 // attribution; § outbound also requires UTM triplets on third-party
 // destinations so referral traffic is legible in the target site's
 // analytics. Companion to outbound-utm.test.ts (SiteGuide downshift):
-// this one pins the CaseStudy "Visit the live site" link, which is
+// this one pins the CaseStudy "Open the project deployment" link, which is
 // constructed at build time from the frontmatter `liveUrl` via
 // URL.searchParams.set(). A rename/drop of any setter call would ship
 // unattributed outbound clicks to Aries / Big7 / future case-study clients.
@@ -20,7 +20,7 @@ const read = (p: string) => readFileSync(root + p, 'utf8');
 
 const CASE_STUDY = 'src/components/CaseStudy.astro';
 
-describe('CaseStudy outbound "Visit the live site" carries UTM attribution', () => {
+describe('CaseStudy outbound deployment link carries UTM attribution', () => {
   const src = read(CASE_STUDY);
 
   it('constructs the outbound URL via new URL(d.liveUrl)', () => {

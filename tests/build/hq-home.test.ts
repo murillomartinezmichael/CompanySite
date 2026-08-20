@@ -19,17 +19,17 @@ describe('m3mm.net is the umbrella hub', () => {
   });
 
   it('separates official releases, test previews, and the roadmap queue in one source of truth', () => {
-    expect(home).toMatch(/const released = DROPS\.filter\(\(drop\) => drop\.status === 'live'\)/);
+    expect(home).toMatch(/const released = DROPS\.filter\(\(drop\) => drop\.status === 'released'\)/);
     expect(home).toMatch(/const testing = DROPS\.filter\(\(drop\) => drop\.status === 'testing'\)/);
     expect(home).toMatch(/drop\.status === 'next' \|\| drop\.status === 'upcoming'/);
     expect(DROPS).toHaveLength(21);
-    expect(LAUNCH_STATS.live).toBe(1);
+    expect(LAUNCH_STATS.released).toBe(1);
     expect(LAUNCH_STATS.next).toBe(1);
     expect(LAUNCH_STATS.testing).toBe(4);
   });
 
   it('pins the public launch truth Michael chose', () => {
-    expect(DROPS.filter((drop) => drop.status === 'live').map((drop) => drop.name)).toEqual(['M3MM Hub']);
+    expect(DROPS.filter((drop) => drop.status === 'released').map((drop) => drop.name)).toEqual(['M3MM Hub']);
     expect(DROPS.find((drop) => drop.status === 'next')?.name).toBe('AriesOutdoorLiving');
     expect(DROPS.filter((drop) => drop.status === 'testing').map((drop) => drop.name)).toEqual([
       'M3MM Websites',
@@ -42,6 +42,35 @@ describe('m3mm.net is the umbrella hub', () => {
     expect(big7?.status).toBe('upcoming');
     expect(big7?.quarter).toMatch(/Long-term.*jobsite photography/i);
     expect(big7?.url).toBeUndefined();
+  });
+
+  it('does not relabel test deployments as live or released on other public surfaces', () => {
+    const publicTruth = [
+      'src/components/Hero.astro',
+      'src/components/CaseStudy.astro',
+      'src/content/caseStudies/aries.md',
+      'src/content/caseStudies/big7.md',
+      'src/data/resume.json',
+      'functions/api/lead.ts',
+      'src/pages/audit.astro',
+      'src/pages/resume.astro',
+      'src/pages/thanks.astro',
+      'src/pages/for/construction.astro',
+      'src/pages/for/home-services.astro',
+      'src/pages/for/outdoor-living.astro',
+    ].map(read).join('\n');
+
+    for (const staleClaim of [
+      'Build + Repair lanes live',
+      'Live client website',
+      'Live SaaS storefront',
+      'Live RAG SaaS',
+      'Selected Live Work',
+      'Visit the live site',
+      'first quote request 3 days after launch',
+    ]) {
+      expect(publicTruth, `stale release claim: ${staleClaim}`).not.toContain(staleClaim);
+    }
   });
 
   it('keeps the complete website-sales floor intact at /websites', () => {

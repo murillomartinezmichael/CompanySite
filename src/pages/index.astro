@@ -4,7 +4,7 @@ import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import { DROPS, LAUNCH_STATS } from '@/config/roadmap';
 
-const released = DROPS.filter((drop) => drop.status === 'live');
+const released = DROPS.filter((drop) => drop.status === 'released');
 const testing = DROPS.filter((drop) => drop.status === 'testing');
 const roadmapPreview = DROPS.filter((drop) => drop.status === 'next' || drop.status === 'upcoming').slice(0, 4);
 
@@ -25,7 +25,7 @@ const isExternal = (url?: string) => Boolean(url?.startsWith('http'));
 
 <Layout
   title="M3MM — The hub for everything Michael is building"
-  description="M3MM is Michael Murillo-Martinez's main company hub: released products, client work, website services, career proof, company policies, and the public shipping roadmap."
+  description="M3MM is Michael Murillo-Martinez's main company hub: the official release, test deployments, client work, career proof, company policies, and the public roadmap."
   path="/"
 >
   <Header slot="header" path="/" />
@@ -61,7 +61,7 @@ const isExternal = (url?: string) => Boolean(url?.startsWith('http'));
         <div class="command-head"><span>PUBLIC BUILD STATUS</span><span class="system-live">● ONLINE</span></div>
         <div class="command-body">
           <p class="command-label">SHIPPING LEDGER</p>
-          <p class="command-number">{String(LAUNCH_STATS.live).padStart(2, '0')}</p>
+          <p class="command-number">{String(LAUNCH_STATS.released).padStart(2, '0')}</p>
           <p class="command-caption">officially released</p>
           <dl class="command-stats">
             <div><dt>Next drop</dt><dd>{DROPS.find((drop) => drop.status === 'next')?.name ?? 'In review'}</dd></div>
@@ -112,7 +112,7 @@ const isExternal = (url?: string) => Boolean(url?.startsWith('http'));
             <div class="release-main">
               <div class="release-meta">
                 <span class="live-pip" aria-hidden="true"></span>
-                <span>LIVE</span>
+                <span>RELEASED</span>
                 <span>{drop.category ?? 'M3MM build'}</span>
               </div>
               <h3>{drop.name}</h3>
