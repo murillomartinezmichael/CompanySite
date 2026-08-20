@@ -51,13 +51,13 @@ export const DROPS: Drop[] = [
   },
   {
     name: 'AriesOutdoorLiving',
-    blurb: 'The client site is deployed and proven; its official M3MM public hard launch is next. This is the first client release after the Hub.',
-    quarter: 'Next official launch',
-    dateLabel: 'NEXT',
+    blurb: 'First client site, sold at handoff and live at ariesoutdoorliving.com; the official M3MM public launch has not happened yet. Grouped with the reachable builds until then.',
+    quarter: 'Deployed — awaiting official launch',
+    dateLabel: 'LIVE',
     year: '2026',
     date: '2026-06-25',
     url: 'https://ariesoutdoorliving.com',
-    status: 'next',
+    status: 'testing',
     category: 'Client work',
   },
   {
@@ -111,7 +111,7 @@ export const DROPS: Drop[] = [
     dateLabel: 'SEP 29',
     year: '2026',
     date: '2026-09-29',
-    status: 'upcoming',
+    status: 'next',
     category: 'Product',
   },
   {
@@ -234,11 +234,11 @@ export const DROPS: Drop[] = [
   {
     name: 'Big7 Construction',
     blurb: 'A test deployment exists, but the official company-site release is long-term. The next real milestone is receiving and curating jobsite photography; it will not be presented as launched before that proof is ready.',
-    quarter: 'Long-term — waiting on jobsite photography',
-    dateLabel: 'WAITING',
-    year: 'CLIENT ASSETS',
+    quarter: 'Deployed for testing — waiting on jobsite photography',
+    dateLabel: 'TEST',
+    year: '2026',
     date: '2026-07-01',
-    status: 'upcoming',
+    status: 'testing',
     category: 'Client work',
   },
 ];
