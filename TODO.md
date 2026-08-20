@@ -8,6 +8,8 @@
 - Added a distinct Testing state and preview lab for M3MM Websites, the career site, SiteGuide, and AIMA. Their reachable deployments no longer inflate the official release count.
 - Moved Big7 Construction to the long-term end of the roadmap and made the dependency explicit: real jobsite photography is required before official launch.
 - The homepage Released ledger, preview lab, roadmap queue, `/roadmap`, counters, and `RELEASES.yaml` now use the same definition of release.
+- Release gates: 13 pages built; placeholder fence clean; **460 passed / 2 skipped**; Astro **0/0/0**.
+- Production deployment: Cloudflare Pages `247d1c2f.m3-companysite.pages.dev`, serving through `https://m3mm.net`. Both hosts returned HTTP 200 with one official release, four test previews, Aries next, and Big7 long-term without a launch link.
 
 ## NEXT ACTION
 

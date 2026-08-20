@@ -2,19 +2,19 @@
 
 **Live URL:** `https://m3mm.net` (deployed via Cloudflare Pages, GitHub-connect auto-deploy)
 **Stack:** Astro 5 + Tailwind 3 + Cloudflare Pages + Pages Functions (Resend/n8n)
-**Current release:** 2026-08-18 — m3mm.net is the M3MM umbrella hub; website sales moved intact to `/websites`; Released and Roadmap are first-class homepage sections.
+**Current release:** 2026-08-19 — release truth corrected: M3MM Hub is the sole official release, AriesOutdoorLiving is next, test deployments are previews, and Big7 is long-term pending jobsite photography.
 **Definition of Done:** bio link → page → form submission works end to end and looks expensive.
 **DoD hit:** 2026-07-05 (local, wrangler pages dev verified).
 **Deploy-ready:** 2026-07-06 (58/58 tests, `dist/` 22.5 KB gz, RUNBOOK § 3 paste-ready — waiting only on Mike's `wrangler login` + first-time project create).
 **Policy update (2026-07-20):** Owner-confirmed 20% down before work; down payment non-refundable, all other payments refundable before launch. Source/test/build/mobile+desktop visual checks green (239/239 tests, Astro 0/0/0, 7 pages).
 **Session 9 (2026-07-07):** Rung IV RE-STRIKE on mobile — PSI 87→97 / LCP −603 ms shipped in commits `d620884`+`90c95b4`. Ledger + raw JSONs in `docs/lighthouse-baseline.md` + `perf/psi-mobile-after-3fonts-2026-07-07_084044.json`. 3 commits (`5c19929`, `7d8a18d`, `7748a3d`) waiting on `scripts/auto-improve/GUARDS_ACTIVE` lift before push.
 
-## Current production evidence — 2026-08-18
+## Current production evidence — 2026-08-19
 
-- Cloudflare Pages deployment: `1cc09881.m3-companysite.pages.dev`, mapped to `m3mm.net`.
-- HTTP 200 and release markers verified on `/`, `/websites`, `/roadmap`, and `/policies`; `/hub` returns 301 to `/`.
-- The live root contains seven Released rows, independent `#released` and `#roadmap` sections, `Modernize. Mobilize. Multiply.`, and zero legacy `M³` text. The live `/websites` route retains `#proof`, `#services`, and `#intake`.
-- Local release gates: 12 pages built; shipped-placeholder scan clean; 451 tests passed, 2 dormant payment-link tests skipped; Astro check 0 errors/warnings/hints; Cloudflare Pages preflight READY with all live checks enabled.
+- Cloudflare Pages deployment: `247d1c2f.m3-companysite.pages.dev`, mapped to `m3mm.net`.
+- HTTP 200 verified on `/` and `/roadmap` at both the immutable deployment URL and `https://m3mm.net`.
+- The live root contains exactly one official release row, four Testing preview rows, the `01` release counter, and AriesOutdoorLiving as the next drop. The live roadmap places Big7 in `Long-term — waiting on jobsite photography` and exposes no Big7 launch link.
+- Local release gates: 13 pages built; shipped-placeholder scan clean; 460 tests passed, 2 dormant payment-link tests skipped; Astro check 0 errors/warnings/hints.
 
 ---
 

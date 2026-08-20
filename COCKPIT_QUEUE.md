@@ -7,6 +7,25 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-08-19 · CompanySite · Release truth corrected on m3mm.net
+
+**Card:** M3MM umbrella hub
+**Move to:** Done
+
+**What shipped:** Separated official launches from reachable test deployments
+across the homepage, full roadmap, counters, and release ledger. M3MM Hub is
+the only official release; AriesOutdoorLiving is next; M3MM Websites, the
+career site, SiteGuide, and AIMA are labeled Testing; Big7 is long-term and
+waiting on real jobsite photography, with no public launch link.
+
+**Verified:** production build **13 pages** · placeholder fence clean · full
+suite **460 passed / 2 skipped** · Astro **0 errors / 0 warnings / 0 hints** ·
+Cloudflare Pages deployment `247d1c2f` · HTTP 200 and the exact 1 released / 4
+testing / Aries next / Big7 long-term markers confirmed on both the immutable
+deployment URL and `https://m3mm.net`.
+
+---
+
 ## 2026-07-20 · CompanySite · Down-payment/refund policy corrected
 
 **Card:** CompanySite conversion pass
