@@ -63,3 +63,11 @@ env:
     from_env: LEAD_FROM
     secret: false
     required: true
+
+  # Runtime, used by functions/api/chat.ts (the assistant widget, replaced
+  # SiteGuide 2026-08-20). Unset => the endpoint answers 503, never a faked
+  # reply — see chat.ts's LAW 6 comment.
+  ANTHROPIC_API_KEY:
+    from_env: ANTHROPIC_API_KEY
+    secret: true
+    required: true

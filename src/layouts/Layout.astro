@@ -1,5 +1,7 @@
 ---
 import '@/styles/global.css';
+// Claude-powered assistant, replaced the SiteGuide embed 2026-08-20.
+import ChatWidget from '@/components/ChatWidget.astro';
 
 interface BreadcrumbItem {
   name: string;
@@ -268,13 +270,6 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
       wireLazyVideos();
     </script>
 
-    <!-- SiteGuide AI guide widget. Deliberately carries no `[data-cta]`
-         attribute, so the CTA tracker leaves its interactions alone. -->
-    <script
-      is:inline
-      src="https://siteguide-production.up.railway.app/widget.js"
-      data-site="companysite"
-      data-title="M3MM"
-      defer></script>
+    <ChatWidget />
   </body>
 </html>

@@ -47,6 +47,8 @@ const NAV_ONLY_CTAS: ReadonlySet<string> = new Set([
   'footer-a11y',       // Footer: nav → /accessibility statement page
   'footer-policies',   // Footer: nav → /policies company-policy library
   'policies-accessibility', // Policies: cross-link → accessibility statement
+  'chat-widget-open',  // ChatWidget: opens/closes the panel — a UI toggle,
+                       // not a conversion outcome to intent-tag.
 ]);
 
 const FORM_SUBMIT_CTAS: ReadonlySet<string> = new Set([
