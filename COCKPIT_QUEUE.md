@@ -7,6 +7,25 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-08-19 · CompanySite · Exact résumé PDF restored
+
+**Card:** M3MM umbrella hub
+**Move to:** Done
+
+**What shipped:** Replaced the Hub's generated résumé substitute with Michael's
+exact supplied one-page PDF. Restored the vendored-master build path so
+`assets/resume/source.pdf` is copied byte-for-byte to the public, built, and
+review-artifact locations; removed the unnecessary `pdfkit` dependency. The
+Hub and standalone ResumeSite now use the same 121,174-byte document with
+SHA-256 `f71d89ceaea7e488a2d4ad700a2d402067c284f6cfd79fdb1214af53ec6ab1ee`.
+
+**Verified:** rendered page visually inspected · 13-page production build ·
+placeholder fence clean · full suite **461 passed / 2 skipped** · Astro
+**0 errors / 0 warnings / 0 hints** · source, public, dist, output, attachment,
+and standalone ResumeSite hashes all match.
+
+---
+
 ## 2026-08-19 · CompanySite · Release truth corrected on m3mm.net
 
 **Card:** M3MM umbrella hub

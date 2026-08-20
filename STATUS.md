@@ -11,9 +11,10 @@
 
 ## Current production evidence — 2026-08-19
 
-- Cloudflare Pages production source: code commit `d0df34c` (Git deployment verified Active); independently verified immutable build: `35fe90a3.m3-companysite.pages.dev`; custom domain: `m3mm.net`.
+- The `/resume` download contract is pinned to Michael's exact supplied one-page PDF: 121,174 bytes, SHA-256 `f71d89ceaea7e488a2d4ad700a2d402067c284f6cfd79fdb1214af53ec6ab1ee`. CompanySite and the standalone ResumeSite now carry the same document.
+- Cloudflare Pages production tracks `origin/main` through the Git-connected build; the custom domain is `m3mm.net` and independently verified immutable build `35fe90a3.m3-companysite.pages.dev` remains available for comparison.
 - HTTP 200 verified on `/`, `/roadmap`, `/resume`, `/resume.pdf`, `/websites`, `/audit`, and `/for/construction` at both the immutable deployment URL and `https://m3mm.net`.
-- The public release model is standardized across the root, roadmap, website-sales pages, case studies, lead auto-reply, HTML résumé, and downloadable résumé PDF: one official release, four Testing previews, AriesOutdoorLiving next, and Big7 waiting on jobsite photography.
+- The public release model is standardized across the root, roadmap, website-sales pages, case studies, lead auto-reply, and HTML résumé: one official release, four Testing previews, AriesOutdoorLiving next, and Big7 waiting on jobsite photography. The PDF download is the owner-supplied résumé artifact above.
 - Local release gates: 13 pages built; shipped-placeholder scan clean; 461 tests passed, 2 dormant payment-link tests skipped; Astro check 0 errors/warnings/hints.
 
 ---

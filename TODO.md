@@ -2,12 +2,19 @@
 
 **Cold-start rule:** a fresh session should read this file and be productive in 60 seconds.
 
+## SHIPPED (2026-08-19 — exact owner-supplied résumé PDF restored)
+
+- Replaced the generated substitute at `/resume.pdf` with Michael's supplied one-page résumé, byte-for-byte.
+- Restored the vendored-document build contract: `assets/resume/source.pdf` is the authoritative PDF, and each build copies it unchanged to `public/`, `dist/`, and `output/pdf/`.
+- Removed the unnecessary `pdfkit` dependency from the normal Hub build. The exact document now matches the standalone ResumeSite copy: **121,174 bytes**, SHA-256 `f71d89ceaea7e488a2d4ad700a2d402067c284f6cfd79fdb1214af53ec6ab1ee`.
+- Verified the rendered one-page layout visually. Release gates: 13 pages built; placeholder fence clean; **461 passed / 2 skipped**; Astro **0/0/0**.
+
 ## SHIPPED (2026-08-19 — official releases separated from test deployments)
 
 - Corrected the public launch model: M3MM Hub is the only official release and AriesOutdoorLiving is the next hard launch.
 - Added a distinct Testing state and preview lab for M3MM Websites, the career site, SiteGuide, and AIMA. Their reachable deployments no longer inflate the official release count.
 - Moved Big7 Construction to the long-term end of the roadmap and made the dependency explicit: real jobsite photography is required before official launch.
-- The homepage Released ledger, preview lab, roadmap queue, `/roadmap`, counters, public sales/proof pages, lead auto-reply, HTML résumé, downloadable résumé PDF, and `RELEASES.yaml` now use the same definition of release.
+- The homepage Released ledger, preview lab, roadmap queue, `/roadmap`, counters, public sales/proof pages, lead auto-reply, HTML résumé, and `RELEASES.yaml` now use the same definition of release. The downloadable résumé remains the exact owner-supplied job-application document.
 - Release gates: 13 pages built; placeholder fence clean; **461 passed / 2 skipped**; Astro **0/0/0**.
 - Production deployment: Cloudflare Pages activated Git source `d0df34c`; the independently verified immutable build is `35fe90a3.m3-companysite.pages.dev`, and the same code serves through `https://m3mm.net`. Both hosts returned HTTP 200 across the Hub, roadmap, résumé, website-sales pages, trade proof, and PDF download. Production contains one official release, four test previews, Aries next, and Big7 long-term without a launch link.
 
