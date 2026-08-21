@@ -118,6 +118,18 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
   if (messages[messages.length - 1].role !== 'user') {
     return jsonResponse(400, { ok: false, error: 'validation', field: 'messages', reason: 'must_end_with_user' }, cors);
   }
+  // The Anthropic Messages API requires the conversation to start with a user
+  // turn and roles to strictly alternate. Enforce it here so a malformed or
+  // direct client can't push a bad sequence through to a (billed) API call
+  // that would just 400 anyway.
+  if (messages[0].role !== 'user') {
+    return jsonResponse(400, { ok: false, error: 'validation', field: 'messages', reason: 'must_start_with_user' }, cors);
+  }
+  for (let i = 1; i < messages.length; i++) {
+    if (messages[i].role === messages[i - 1].role) {
+      return jsonResponse(400, { ok: false, error: 'validation', field: 'messages', reason: 'must_alternate' }, cors);
+    }
+  }
 
   if (!env.ANTHROPIC_API_KEY) {
     // LAW 6 — never fake a reply. A visitor who gets a canned "I can't help

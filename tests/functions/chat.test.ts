@@ -260,3 +260,41 @@ describe('/api/chat — streaming happy path (mocked SDK, no network)', () => {
     vi.doUnmock('@anthropic-ai/sdk');
   });
 });
+
+describe('/api/chat — role alternation (Anthropic requires user-first + alternating)', () => {
+  beforeEach(() => __resetBuckets());
+
+  it('400s when the first message is not from the user', async () => {
+    const { onRequestPost } = await import('../../functions/api/chat');
+    const body = { messages: [
+      { role: 'assistant', content: 'hi' },
+      { role: 'user', content: 'hello' },
+    ] };
+    const res = await onRequestPost(ctx(req(body)));
+    expect(res.status).toBe(400);
+    expect((await res.json()).reason).toBe('must_start_with_user');
+  });
+
+  it('400s on consecutive same-role messages', async () => {
+    const { onRequestPost } = await import('../../functions/api/chat');
+    const body = { messages: [
+      { role: 'user', content: 'first' },
+      { role: 'user', content: 'second' },
+    ] };
+    const res = await onRequestPost(ctx(req(body)));
+    expect(res.status).toBe(400);
+    expect((await res.json()).reason).toBe('must_alternate');
+  });
+
+  it('accepts a valid alternating history (clears validation, 503 on missing key)', async () => {
+    const { onRequestPost } = await import('../../functions/api/chat');
+    const body = { messages: [
+      { role: 'user', content: 'a' },
+      { role: 'assistant', content: 'b' },
+      { role: 'user', content: 'c' },
+    ] };
+    const res = await onRequestPost(ctx(req(body)));
+    // No ANTHROPIC_API_KEY in env -> 503 proves it cleared alternation validation.
+    expect(res.status).toBe(503);
+  });
+});
