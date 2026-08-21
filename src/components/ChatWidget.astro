@@ -203,6 +203,7 @@
 
   if (widget && trigger && panel && closeBtn && messagesEl && form && input && sendBtn) {
     const history: ChatMessage[] = [];
+    const MAX_HISTORY = 20; // must match MAX_HISTORY_MESSAGES in functions/api/chat.ts
     let opened = false;
     let inFlight = false;
 
@@ -248,10 +249,14 @@
       sendBtn!.disabled = true;
 
       history.push({ role: 'user', content: message });
+      // Stay within the backend's message cap, trimming whole user/assistant
+      // pairs so the window still starts on a user turn (the API requires it).
+      while (history.length > MAX_HISTORY) history.splice(0, 2);
       appendMessage('user', message);
 
       const replyEl = appendMessage('assistant', '', true);
       let replyText = '';
+      let assistantCommitted = false;
 
       try {
         const res = await fetch('/api/chat', {
@@ -306,12 +311,20 @@
           }
         }
 
-        if (replyText) history.push({ role: 'assistant', content: replyText });
+        if (replyText) {
+          history.push({ role: 'assistant', content: replyText });
+          assistantCommitted = true;
+        }
       } catch {
         replyEl.classList.remove('chat-msg-pending');
         replyEl.classList.add('chat-msg-error');
         replyEl.textContent = 'Connection dropped. Try again, or use the free review form.';
       } finally {
+        // No assistant reply landed (error / 429 / dropped stream): drop the
+        // just-sent user turn so history stays strictly alternating. Otherwise
+        // the next send posts two user roles in a row, the API 400s, and every
+        // turn after that fails too — bricking the chat until a page reload.
+        if (!assistantCommitted) history.pop();
         inFlight = false;
         sendBtn!.disabled = false;
       }
