@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { existsSync } from 'node:fs';
+import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 // @ts-expect-error — plain .mjs build script, no type declarations by design
-import { RULES, isScannableFile, redactSecret, scanDir, scanText } from '../../scripts/check-shipped-placeholders.mjs';
+import { RULES, isScannableFile, redactSecret, scanDir, scanFileName, scanText } from '../../scripts/check-shipped-placeholders.mjs';
 
 // The build-time fence against the placeholder-shipped-to-production class.
 // Cloudflare Pages runs `npm run build`, never `npm test` — so the checkout
@@ -123,6 +126,76 @@ describe('placeholder scanner — does not false-positive on real page content',
       expect(rule.id).toMatch(/^[a-z-]+$/);
       expect(rule.message.length).toBeGreaterThan(10);
     }
+  });
+});
+
+// Codex re-review 2026-09-01 (SHIP-WITH-FIXES): the content rules alone would
+// NOT have caught the historical public/brand-ownership.md leak — that file
+// carried no placeholder markers and no key material. Markdown in shipped
+// output is therefore a finding by PRESENCE (`shipped-markdown`,
+// deny-by-default), and the fixture tests below automate what was previously
+// only a manual scratch-dir proof: block, redact, exit 1.
+describe('placeholder scanner — markdown never ships', () => {
+  const inTempDir = (files: Record<string, string>, run: (dir: string) => void) => {
+    const dir = mkdtempSync(join(tmpdir(), 'fence-md-'));
+    try {
+      for (const [name, text] of Object.entries(files)) writeFileSync(join(dir, name), text);
+      run(dir);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  };
+
+  it('flags a .md by presence alone — the brand-ownership.md class, no placeholder content at all', () => {
+    inTempDir(
+      { 'brand-ownership.md': '# Brand ownership record\n\nProse only. No markers, no keys, no links.\n' },
+      (dir) => {
+        const results = scanDir(dir);
+        expect(results).toHaveLength(1);
+        expect(results[0].file).toBe('brand-ownership.md');
+        expect(results[0].findings.map((f: { rule: string }) => f.rule)).toContain('shipped-markdown');
+      },
+    );
+  });
+
+  it('scanFileName leaves every non-markdown shipped file alone', () => {
+    for (const name of ['index.html', 'app.js', 'sitemap.xml', '_headers', 'hero.webp']) {
+      expect(scanFileName(name)).toEqual([]);
+    }
+  });
+
+  it('still runs the content rules on markdown, so a leak inside one is named too', () => {
+    inTempDir({ 'leaked.md': 'REPLACE_AFTER_SIGN_IN plus sk_live_51AbCdEfGhIjKlMnOp\n' }, (dir) => {
+      const rules = scanDir(dir)[0].findings.map((f: { rule: string }) => f.rule);
+      expect(rules).toContain('shipped-markdown');
+      expect(rules).toContain('replace-marker');
+      expect(rules).toContain('stripe-key-material');
+    });
+  });
+
+  it('CLI: a leaked .md blocks the build (exit 1) and the key is redacted from the log', () => {
+    const secret = 'sk_live_51AbCdEfGhIjKlMnOp';
+    inTempDir({ 'leaked.md': `REPLACE_AFTER_SIGN_IN plus ${secret}\n` }, (dir) => {
+      const cli = spawnSync(process.execPath, [join(root, 'scripts', 'check-shipped-placeholders.mjs'), dir], {
+        encoding: 'utf8',
+      });
+      const output = `${cli.stdout}${cli.stderr}`;
+      expect(cli.status).toBe(1);
+      expect(output).toContain('BUILD BLOCKED');
+      expect(output).toContain('shipped-markdown');
+      expect(output).toContain('[redacted,');
+      expect(output).not.toContain(secret); // the fence must never copy the leak into the build log
+    });
+  });
+
+  it('CLI: a placeholder-free .md still blocks the build with the move-to-docs message', () => {
+    inTempDir({ 'notes.md': '# Internal notes\n\nNothing placeholder-shaped.\n' }, (dir) => {
+      const cli = spawnSync(process.execPath, [join(root, 'scripts', 'check-shipped-placeholders.mjs'), dir], {
+        encoding: 'utf8',
+      });
+      expect(cli.status).toBe(1);
+      expect(`${cli.stdout}${cli.stderr}`).toContain('markdown must not ship');
+    });
   });
 });
 
