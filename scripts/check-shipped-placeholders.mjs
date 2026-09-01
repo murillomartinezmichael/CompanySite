@@ -25,8 +25,17 @@ import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
 import { join, extname, relative } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-/** Files worth scanning: shipped text. Binary assets are skipped. */
-const TEXT_EXT = new Set(['.html', '.htm', '.js', '.mjs', '.ts', '.css', '.json', '.xml', '.txt', '.svg', '.webmanifest']);
+/**
+ * Files worth scanning: shipped text. Binary assets are skipped.
+ *
+ * `.md` is in the set because anything in public/ ships verbatim — an internal
+ * markdown doc dropped there serves at m3mm.net/<name>.md. That exact miss
+ * shipped public/brand-ownership.md in Aug 2026 (caught by shipped-source
+ * hygiene, not by this fence, because .md was outside the scan set — build
+ * stayed green while tests went red). No .md is *supposed* to reach dist/, so
+ * scanning them costs nothing and catches the next one.
+ */
+const TEXT_EXT = new Set(['.html', '.htm', '.js', '.mjs', '.ts', '.css', '.json', '.xml', '.txt', '.svg', '.webmanifest', '.md']);
 const TEXT_NAMES = new Set(['_headers', '_redirects', 'robots.txt']);
 
 export const isScannableFile = (name) => TEXT_EXT.has(extname(name).toLowerCase()) || TEXT_NAMES.has(name);

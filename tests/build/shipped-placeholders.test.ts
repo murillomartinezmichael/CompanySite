@@ -109,6 +109,10 @@ describe('placeholder scanner — does not false-positive on real page content',
     expect(isScannableFile('_headers')).toBe(true);
     expect(isScannableFile('sitemap.xml')).toBe(true);
     expect(isScannableFile('lead.ts')).toBe(true); // Pages Functions ship too
+    // Regression: public/brand-ownership.md shipped to dist/ in Aug 2026 and
+    // the fence stayed quiet because .md was outside its scan set. Markdown
+    // that reaches dist/ is served verbatim, so it must be scanned.
+    expect(isScannableFile('brand-ownership.md')).toBe(true);
     expect(isScannableFile('hero.webp')).toBe(false);
     expect(isScannableFile('inter-latin.woff2')).toBe(false);
   });

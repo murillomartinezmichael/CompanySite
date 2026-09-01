@@ -2,6 +2,13 @@
 
 **Cold-start rule:** a fresh session should read this file and be productive in 60 seconds.
 
+## SHIPPED (2026-09-01 — Codex HOLD blockers verified closed; fence now scans .md)
+
+- Verified both blockers from the 2026-08-16 Codex HOLD on `fix/checkout-placeholder-fence` against the repo: **both were already fixed** by commit `2845413` (2026-08-16, in `main`) — `public/brand-ownership.md` moved to `docs/`, and `resolvePaymentLink()` redacts secret-shaped env values via the fence's own `redactSecret` + `stripe-key-material` rule (tests at `tests/build/start-checkout.test.ts` assert the redaction). The HOLD doc was stale; repo wins.
+- Closed the remaining hardening gap from that review: added `.md` to the placeholder fence's scan set (`scripts/check-shipped-placeholders.mjs`) so an internal markdown doc reaching `dist/` blocks the build instead of only failing tests, plus a regression assertion in `tests/build/shipped-placeholders.test.ts`. Proven live: a scratch `.md` with a REPLACE marker + `sk_live_` key exits 1 with the key redacted.
+- Gates on branch `security/fence-scan-md-2026-09-01` (off `main`): **485 passed / 2 skipped** before AND after (new coverage is assertions inside an existing test); 13 pages built; fence clean; `dist/` contains zero `.md` files.
+- NOT pushed, NOT deployed, NOT merged. **A Codex re-review of this branch's diff vs `main` is required before any ship** (money-path fence change, LAW #7 / hard trigger).
+
 ## SHIPPED (2026-08-19 — exact owner-supplied résumé PDF restored)
 
 - Replaced the generated substitute at `/resume.pdf` with Michael's supplied one-page résumé, byte-for-byte.
@@ -20,7 +27,8 @@
 
 ## NEXT ACTION
 
-Prepare the AriesOutdoorLiving hard launch as the first client release after the Hub; keep Big7 parked until jobsite photography arrives and keep all test deployments labeled Preview/Testing until Michael explicitly promotes them.
+1. Run the Codex second-opinion on `git diff main..security/fence-scan-md-2026-09-01` (one commit: fence scans `.md` + regression test). On PASS, merge to `main` — that also formally clears the stale 2026-08-16 HOLD, whose two blockers are already fixed in `main` (`2845413`).
+2. Then: prepare the AriesOutdoorLiving hard launch as the first client release after the Hub; keep Big7 parked until jobsite photography arrives and keep all test deployments labeled Preview/Testing until Michael explicitly promotes them.
 
 ## PREVIOUSLY SHIPPED (2026-08-18 — m3mm.net umbrella hub live)
 
