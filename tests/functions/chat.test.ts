@@ -187,6 +187,47 @@ describe('/api/chat — missing key (LAW 6: never fake a reply)', () => {
 describe('/api/chat — security headers', () => {
   beforeEach(() => __resetBuckets());
 
+  // Regression, measured against production 2026-09-07: `verify-security-headers.py`
+  // reported /api/chat FAIL on all five while /api/lead and /api/track PASSed. Cause:
+  // onRequest returned `preflightResponse(env, request)` raw. cors.ts builds that
+  // Response itself and owns only the CORS decision, so nothing layered the security
+  // headers on — exactly what `secureResponse` exists for, and what lead.ts already did.
+  // The pre-existing OPTIONS test asserted status + ACAO only, so it stayed green.
+  const FIVE = [
+    'Strict-Transport-Security',
+    'X-Content-Type-Options',
+    'X-Frame-Options',
+    'Referrer-Policy',
+    'Permissions-Policy',
+  ];
+
+  it('the GRANTED OPTIONS preflight carries the five hardened headers', async () => {
+    const { onRequest } = await import('../../functions/api/chat');
+    const res = await onRequest(ctx(new Request('https://m3mm.net/api/chat', {
+      method: 'OPTIONS',
+      headers: { Origin: ALLOWED_ORIGIN, 'Access-Control-Request-Method': 'POST' },
+    })));
+    expect(res.status).toBe(204);
+    expect(res.headers.get('Access-Control-Allow-Origin')).toBe(ALLOWED_ORIGIN);
+    for (const name of FIVE) {
+      expect(res.headers.get(name), `granted preflight missing ${name}`).toBeTruthy();
+    }
+  });
+
+  it('the DENIED OPTIONS preflight also carries them, and grants nothing', async () => {
+    const { onRequest } = await import('../../functions/api/chat');
+    const res = await onRequest(ctx(new Request('https://m3mm.net/api/chat', {
+      method: 'OPTIONS',
+      headers: { Origin: EVIL_ORIGIN, 'Access-Control-Request-Method': 'POST' },
+    })));
+    expect(res.status).toBe(204);
+    // A denial must still be a hardened response, and must not leak a grant.
+    expect(res.headers.get('Access-Control-Allow-Origin')).toBeNull();
+    for (const name of FIVE) {
+      expect(res.headers.get(name), `denied preflight missing ${name}`).toBeTruthy();
+    }
+  });
+
   it('every response carries the five hardened headers, including error paths', async () => {
     const { onRequestPost } = await import('../../functions/api/chat');
     const res = await onRequestPost(ctx(req({})));

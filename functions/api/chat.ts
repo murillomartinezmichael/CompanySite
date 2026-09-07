@@ -16,7 +16,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { checkRate, rateKey } from '../_lib/rate';
 import { originAllowed, corsResponseHeaders, preflightResponse } from '../_lib/cors';
-import { withSecurityHeaders } from '../_lib/security-headers';
+import { withSecurityHeaders, secureResponse } from '../_lib/security-headers';
 import { CHAT_SYSTEM_PROMPT } from '../_lib/chat-system-prompt';
 
 type Env = {
@@ -189,7 +189,13 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
 
 export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
   if (request.method === 'OPTIONS') {
-    return preflightResponse(env, request);
+    // `secureResponse` (not `withSecurityHeaders`) because the CORS module owns
+    // the preflight's construction — the grant/deny decision stays entirely in
+    // cors.ts and this only layers headers on top of whatever it returned.
+    // Measured 2026-09-07: without this wrap the OPTIONS 204 shipped ZERO of the
+    // five security headers, while /api/lead and /api/track (which do wrap) shipped
+    // all five. Same bug class as the one security-headers.ts was written to kill.
+    return secureResponse(preflightResponse(env, request));
   }
   return new Response('Method Not Allowed', {
     status: 405,
