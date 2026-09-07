@@ -2,6 +2,15 @@
 
 **Cold-start rule:** a fresh session should read this file and be productive in 60 seconds.
 
+## REVIEWED, AWAITING MIKE'S MERGE + PUSH (2026-09-01 — Codex HOLD blockers verified closed; markdown now deny-by-default in the fence)
+
+Status: local commits only on branch `security/fence-scan-md-2026-09-01` (off `main`). Codex re-review 2026-09-01 returned **SHIP-WITH-FIXES**; all four fixes are applied in a follow-up commit. Nothing pushed, merged, or deployed — awaiting Mike.
+
+- Verified both blockers from the 2026-08-16 Codex HOLD on `fix/checkout-placeholder-fence` against the repo: **both were already fixed** by commit `2845413` (2026-08-16, in `main`) — `public/brand-ownership.md` moved to `docs/`, and `resolvePaymentLink()` redacts secret-shaped env values via the fence's own `redactSecret` + `stripe-key-material` rule (tests at `tests/build/start-checkout.test.ts` assert the redaction). The HOLD doc was stale; repo wins.
+- Hardened the fence (`scripts/check-shipped-placeholders.mjs`): `.md` added to the scan set, and — per the Codex re-review, since the historical `brand-ownership.md` carried no markers or keys and content rules alone would have missed it — **any `.md` present in shipped output is now a finding by itself** (`shipped-markdown`, deny-by-default, "markdown must not ship — internal docs belong in docs/"). This would have caught the original leak and moots code-fence false positives in shipped markdown.
+- Automated the proof in `tests/build/shipped-placeholders.test.ts`: fixture-level tests run `scanDir` and the real CLI against temp dirs — a placeholder-free `.md` blocks (exit 1) on presence alone, and a `.md` carrying a REPLACE marker + `sk_live_`-shaped key blocks with the key redacted from the log.
+- Gates: **490 passed / 2 skipped** (was 485/2 at the `main` baseline; +5 fixture tests); 13 pages built; fence clean; `dist/` contains zero `.md` files.
+
 ## SHIPPED (2026-08-19 — exact owner-supplied résumé PDF restored)
 
 - Replaced the generated substitute at `/resume.pdf` with Michael's supplied one-page résumé, byte-for-byte.
@@ -20,7 +29,8 @@
 
 ## NEXT ACTION
 
-Prepare the AriesOutdoorLiving hard launch as the first client release after the Hub; keep Big7 parked until jobsite photography arrives and keep all test deployments labeled Preview/Testing until Michael explicitly promotes them.
+1. **Mike:** merge `security/fence-scan-md-2026-09-01` to `main` and make the session push (Codex verdict 2026-09-01: SHIP-WITH-FIXES; fixes applied and green). Merging also formally clears the stale 2026-08-16 HOLD, whose two blockers are already fixed in `main` (`2845413`).
+2. Then: prepare the AriesOutdoorLiving hard launch as the first client release after the Hub; keep Big7 parked until jobsite photography arrives and keep all test deployments labeled Preview/Testing until Michael explicitly promotes them.
 
 ## PREVIOUSLY SHIPPED (2026-08-18 — m3mm.net umbrella hub live)
 

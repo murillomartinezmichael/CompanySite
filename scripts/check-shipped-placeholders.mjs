@@ -25,8 +25,16 @@ import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
 import { join, extname, relative } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-/** Files worth scanning: shipped text. Binary assets are skipped. */
-const TEXT_EXT = new Set(['.html', '.htm', '.js', '.mjs', '.ts', '.css', '.json', '.xml', '.txt', '.svg', '.webmanifest']);
+/**
+ * Files worth scanning: shipped text. Binary assets are skipped.
+ *
+ * `.md` is in the set so a markdown file that reaches shipped output gets its
+ * CONTENT scanned like any other text — but content rules are not what fences
+ * markdown. The real markdown fence is `scanFileName` below: no .md belongs in
+ * shipped output at all, so its mere presence is a finding. See that rule for
+ * the incident history and why deny-by-default is the only shape that works.
+ */
+const TEXT_EXT = new Set(['.html', '.htm', '.js', '.mjs', '.ts', '.css', '.json', '.xml', '.txt', '.svg', '.webmanifest', '.md']);
 const TEXT_NAMES = new Set(['_headers', '_redirects', 'robots.txt']);
 
 export const isScannableFile = (name) => TEXT_EXT.has(extname(name).toLowerCase()) || TEXT_NAMES.has(name);
@@ -99,6 +107,35 @@ export const redactSecret = (value) => {
   return `${prefix}…[redacted, ${value.length} chars]`;
 };
 
+/**
+ * File-level rules: a finding triggered by a file's PRESENCE in shipped
+ * output, regardless of its content. Same finding shape as `scanText`.
+ *
+ * shipped-markdown — anything in public/ ships to dist/ verbatim and serves at
+ * m3mm.net/<name>. In Aug 2026, public/brand-ownership.md (an internal
+ * copyright record: legal name, asset SHA-256 fingerprints, registration
+ * strategy) shipped exactly that way. It contained no placeholder markers and
+ * no key material, so every content rule above would have stayed quiet — only
+ * deny-by-default catches that class. No .md is supposed to reach dist/ or
+ * functions/ (verified: the built site ships zero), so presence alone is the
+ * signal. Deny-all also moots the content-rule false-positive risk that comes
+ * with scanning markdown (a doc's code fence legitimately showing
+ * `YOUR_API_KEY` would trip replace-marker): the file is already a finding for
+ * existing, with a message that names the actual fix. If a .md ever must ship,
+ * that is a deliberate product decision — revisit this rule then, don't route
+ * around it.
+ */
+export function scanFileName(name) {
+  if (extname(name).toLowerCase() !== '.md') return [];
+  return [
+    {
+      rule: 'shipped-markdown',
+      message: 'markdown must not ship — internal docs belong in docs/, not public/ (public/ serves verbatim at the site root)',
+      samples: [name],
+    },
+  ];
+}
+
 /** Scan one file's text. Returns [{ rule, message, samples }]. */
 export function scanText(text) {
   const findings = [];
@@ -124,7 +161,7 @@ export function scanDir(dir) {
       const full = join(current, entry);
       if (statSync(full).isDirectory()) walk(full);
       else if (isScannableFile(entry)) {
-        const findings = scanText(readFileSync(full, 'utf8'));
+        const findings = [...scanFileName(entry), ...scanText(readFileSync(full, 'utf8'))];
         if (findings.length > 0) results.push({ file: relative(dir, full), findings });
       }
     }
