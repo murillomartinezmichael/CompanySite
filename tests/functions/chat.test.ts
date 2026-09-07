@@ -208,10 +208,18 @@ describe('/api/chat — security headers', () => {
       headers: { Origin: ALLOWED_ORIGIN, 'Access-Control-Request-Method': 'POST' },
     })));
     expect(res.status).toBe(204);
-    expect(res.headers.get('Access-Control-Allow-Origin')).toBe(ALLOWED_ORIGIN);
     for (const name of FIVE) {
       expect(res.headers.get(name), `granted preflight missing ${name}`).toBeTruthy();
     }
+    // Codex review 2026-09-07: assert the wrap PRESERVES the whole CORS grant,
+    // not just the origin. secureResponse must be additive and nothing else.
+    expect(res.headers.get('Access-Control-Allow-Origin')).toBe(ALLOWED_ORIGIN);
+    expect(res.headers.get('Access-Control-Allow-Methods')).toBe('POST, OPTIONS');
+    expect(res.headers.get('Access-Control-Allow-Headers')).toBe('Content-Type');
+    expect(res.headers.get('Access-Control-Max-Age')).toBe('86400');
+    expect(res.headers.get('Allow')).toBe('POST, OPTIONS');
+    expect(res.headers.get('Vary')).toContain('Origin');
+    expect(res.headers.get('Access-Control-Allow-Credentials')).toBeNull();
   });
 
   it('the DENIED OPTIONS preflight also carries them, and grants nothing', async () => {
@@ -221,11 +229,21 @@ describe('/api/chat — security headers', () => {
       headers: { Origin: EVIL_ORIGIN, 'Access-Control-Request-Method': 'POST' },
     })));
     expect(res.status).toBe(204);
-    // A denial must still be a hardened response, and must not leak a grant.
-    expect(res.headers.get('Access-Control-Allow-Origin')).toBeNull();
     for (const name of FIVE) {
       expect(res.headers.get(name), `denied preflight missing ${name}`).toBeTruthy();
     }
+    // A denial must still be hardened AND must leak no grant of any kind.
+    for (const acao of [
+      'Access-Control-Allow-Origin',
+      'Access-Control-Allow-Methods',
+      'Access-Control-Allow-Headers',
+      'Access-Control-Max-Age',
+      'Access-Control-Allow-Credentials',
+    ]) {
+      expect(res.headers.get(acao), `denied preflight leaked ${acao}`).toBeNull();
+    }
+    // The deny path still says what it varies on, or a cache can cross origins.
+    expect(res.headers.get('Vary')).toContain('Origin');
   });
 
   it('every response carries the five hardened headers, including error paths', async () => {
