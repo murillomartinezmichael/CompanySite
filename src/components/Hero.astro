@@ -14,12 +14,7 @@ const {
 ---
 
 <section class="relative isolate overflow-hidden">
-  <!-- Solid tint keeps headline contrast measurable across viewport sizes. -->
-  <div class="pointer-events-none absolute inset-x-0 -top-16 h-[420px] -z-10">
-    <div class="absolute inset-x-0 top-0 h-full bg-clay/[0.06]"></div>
-  </div>
-
-  <div class="container-page relative pb-20 pt-14 sm:pt-20 lg:pb-28 lg:pt-24">
+  <div class="container-page relative py-hq-section">
     <!-- Eyebrow row -->
     <div class="mb-10 flex flex-wrap items-center gap-x-4 gap-y-2">
       <span class="grid h-9 w-9 flex-none place-items-center overflow-hidden bg-ink-soft ring-1 ring-ink-line" style="border-radius: 2px;">
@@ -36,11 +31,9 @@ const {
       </span>
     </div>
 
-    <h1 class="text-display-2xl">
+    <h1 class="max-w-3xl text-hq-hero">
       <span class="block text-bone">Websites that</span>
-      <span class="highlight-yellow relative inline-block">
-        <span class="fg relative z-10">get you customers.</span>
-      </span>
+      <span class="block">get you customers.</span>
     </h1>
 
     <!-- Sub + CTA row: subhead on left, big authority stat on right (desktop) -->
@@ -90,40 +83,15 @@ const {
       </div>
     </div>
 
-    <!-- Trust marquee -->
-    <div class="relative mt-24 border-y border-ink-line/60 py-6 sm:mt-32">
-      <div class="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-ink to-transparent"></div>
-      <div class="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-ink to-transparent"></div>
-      <div class="flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
-        <div aria-hidden="true" class="flex shrink-0 animate-marquee items-center gap-x-14 pr-14 motion-reduce:animate-none">
-          <span class="font-display text-2xl text-bone-dim">Aries Outdoor Living</span>
-          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
-          <span class="font-display text-2xl text-bone-dim">Big 7 Construction</span>
-          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
-          <span class="font-display text-2xl text-bone-dim">SiteGuide</span>
-          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
-          <span class="font-display text-2xl text-bone-dim">AI Manual Assistant</span>
-          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
-          <span class="font-display text-2xl text-bone-dim">CockpitCloud</span>
-          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
-          <span class="font-display text-2xl text-bone-dim">PhotoPicker</span>
-          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
-        </div>
-        <div aria-hidden="true" class="flex shrink-0 animate-marquee items-center gap-x-14 pr-14 motion-reduce:animate-none">
-          <span class="font-display text-2xl text-bone-dim">Aries Outdoor Living</span>
-          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
-          <span class="font-display text-2xl text-bone-dim">Big 7 Construction</span>
-          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
-          <span class="font-display text-2xl text-bone-dim">SiteGuide</span>
-          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
-          <span class="font-display text-2xl text-bone-dim">AI Manual Assistant</span>
-          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
-          <span class="font-display text-2xl text-bone-dim">CockpitCloud</span>
-          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
-          <span class="font-display text-2xl text-bone-dim">PhotoPicker</span>
-          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
-        </div>
-      </div>
+    <div class="mt-12 border-y border-ink-line py-6">
+      <ul class="flex flex-wrap gap-x-8 gap-y-4 text-bone-dim" aria-label="M3MM projects and tools" role="list">
+        <li>Aries Outdoor Living</li>
+        <li>Big 7 Construction</li>
+        <li>SiteGuide</li>
+        <li>AI Manual Assistant</li>
+        <li>CockpitCloud</li>
+        <li>PhotoPicker</li>
+      </ul>
     </div>
   </div>
 </section>

@@ -1,4 +1,5 @@
 ---
+import designTokens from '../../tailwind.config.mjs';
 import '@/styles/global.css';
 // Claude-powered assistant, replaced the SiteGuide embed 2026-08-20.
 import ChatWidget from '@/components/ChatWidget.astro';
@@ -47,7 +48,7 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#0D0E14" />
+    <meta name="theme-color" content={designTokens.theme.extend.colors.ink.DEFAULT} />
     <meta name="color-scheme" content="dark" />
 
     <title>{title}</title>

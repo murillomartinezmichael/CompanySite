@@ -8,6 +8,7 @@ import Proof from '@/components/Proof.astro';
 import Services from '@/components/Services.astro';
 import Faq from '@/components/Faq.astro';
 import Intake from '@/components/Intake.astro';
+import SectionNav from '@/components/SectionNav.astro';
 ---
 
 <Layout
@@ -24,6 +25,13 @@ import Intake from '@/components/Intake.astro';
   <Hero />
   <TwoDoor />
   <Proof />
+  <div class="container-page">
+    <SectionNav label="Websites for your trade" section="proof" links={[
+      { label: 'Construction companies', href: '/for/construction', cta: 'websites-trade-construction', intent: 'product:construction-websites' },
+      { label: 'Home-service pros', href: '/for/home-services', cta: 'websites-trade-home-services', intent: 'product:home-service-websites' },
+      { label: 'Outdoor-living companies', href: '/for/outdoor-living', cta: 'websites-trade-outdoor-living', intent: 'product:outdoor-living-websites' },
+    ]} />
+  </div>
   <Services />
   <p class="container-page pb-8 text-bone-dim">
     Deciding between a builder, freelancer or custom site?

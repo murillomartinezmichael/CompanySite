@@ -20,17 +20,13 @@
   }
   body {
     @apply bg-ink text-bone font-sans antialiased;
-    /* One quiet radial hint, well under 10% alpha — no second hue. */
-    background-image:
-      radial-gradient(80% 60% at 50% 0%, rgba(79, 184, 199, 0.05), transparent 70%);
-    background-attachment: fixed;
     min-height: 100vh;
     position: relative;
   }
   body.hq-page {
     background-image: none;
   }
-  .hq-page footer {
+  footer {
     /* Keep the last links above the fixed chat and review controls. */
     padding-bottom: 5rem;
   }
@@ -71,13 +67,13 @@
      the fill slightly rather than swapping hue. 150ms. */
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2.5 border border-clay bg-clay px-7 py-3.5 text-base font-semibold text-ink transition-all duration-150;
-    border-radius: 6px;
+    border-radius: theme('borderRadius.hq-control');
     letter-spacing: 0.01em;
   }
   .btn-primary:hover {
     background-color: theme('colors.clay.glow');
     border-color: theme('colors.clay.glow');
-    box-shadow: 0 0 12px rgba(79, 184, 199, 0.30);
+    box-shadow: theme('boxShadow.glow-clay');
   }
   .btn-primary:active {
     transform: scale(0.99);
@@ -86,20 +82,19 @@
   /* Ghost CTA — thinner, more restrained */
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2 border px-7 py-3.5 text-base font-medium text-bone transition-all duration-150;
-    border-radius: 6px;
-    border-color: theme('colors.ink.line');
+    border-radius: theme('borderRadius.hq-control');
+    border-color: theme('colors.ink.outline');
   }
   .btn-ghost:hover {
     border-color: theme('colors.clay.DEFAULT');
     color: theme('colors.clay.DEFAULT');
   }
 
-  /* Card / panel — surface navy with a 1px accent-15% border */
+  /* Grouped content uses the shared neutral surface and panel radius. */
   .panel {
     background-color: theme('colors.ink.soft');
-    border: 1px solid rgba(79, 184, 199, 0.15);
-    border-radius: 10px;
-    box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset;
+    border: 1px solid theme('colors.ink.line');
+    border-radius: theme('borderRadius.hq-panel');
   }
 
   .kicker {
@@ -120,15 +115,15 @@
     @apply font-mono flex items-center justify-between text-[11px] font-medium uppercase tracking-[0.18em] text-bone-muted;
   }
   .field-input {
-    @apply w-full border bg-ink/60 px-4 py-3 text-bone placeholder:text-bone-muted/60 transition-all duration-150;
-    border-color: theme('colors.ink.line');
-    border-radius: 6px;
+    @apply w-full border bg-ink px-4 py-3 text-bone placeholder:text-bone-muted transition-all duration-150;
+    border-color: theme('colors.ink.outline');
+    border-radius: theme('borderRadius.hq-control');
   }
   .field-input:focus {
-    outline: none;
+    outline: 2px solid theme('colors.clay.DEFAULT');
     border-color: theme('colors.clay.DEFAULT');
     background: theme('colors.ink.DEFAULT');
-    box-shadow: 0 0 12px rgba(79, 184, 199, 0.30);
+    box-shadow: theme('boxShadow.glow-clay');
   }
 
   .reveal {
@@ -186,7 +181,7 @@
     text-transform: uppercase;
     border: 1px solid theme('colors.clay.DEFAULT');
     border-radius: 999px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    box-shadow: theme('boxShadow.floating-control');
     opacity: 0;
     transform: translateY(8px);
     pointer-events: none;
@@ -215,6 +210,6 @@
   /* Section divider — 1px accent hairline */
   .rule-cyan {
     @apply block h-px w-full;
-    background: rgba(79, 184, 199, 0.25);
+    background: color-mix(in srgb, theme('colors.clay.DEFAULT') 25%, transparent);
   }
 }

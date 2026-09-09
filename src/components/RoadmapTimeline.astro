@@ -1,0 +1,61 @@
+---
+import type { Drop } from '@/config/roadmap';
+interface Props { drops: Drop[]; }
+const { drops } = Astro.props;
+const statusLabels = {
+  released: 'Released',
+  next: 'Next',
+  testing: 'Testing',
+  upcoming: 'Planned',
+} as const;
+---
+
+<ol class="timeline">
+  {drops.map((d) => (
+    <li class={`item item-${d.status}`}>
+      <div class="date">
+        <b>{d.dateLabel}</b>{d.year}
+      </div>
+      <div class="body">
+        <h3>
+          {d.url
+            ? <a href={d.url} rel={d.url.startsWith('http') ? 'noopener' : undefined} data-cta="roadmap-drop-open" data-section="roadmap" data-intent="product:roadmap-drop" data-release-status={d.status}>{d.name}</a>
+            : d.name}
+          <span class={`status status-${d.status}`}>
+            {statusLabels[d.status]}
+          </span>
+        </h3>
+        <p>{d.blurb}</p>
+      </div>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .timeline { position: relative; margin: 0; padding-left: 1.5rem; list-style: none; border-left: 1px solid theme('colors.ink.line'); }
+  .item {
+    position: relative; display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 1.5rem;
+    padding: 1.5rem; margin-bottom: 1rem; background: theme('colors.ink.soft');
+    border-radius: theme('borderRadius.hq-panel');
+  }
+  .item::before {
+    content: ''; position: absolute; left: -1.875rem; top: 2rem;
+    width: .75rem; height: .75rem; border-radius: 50%; background: theme('colors.bone.muted');
+  }
+  .item-released::before { background: theme('colors.clay.glow'); }
+  .item-next::before, .item-testing::before { background: theme('colors.clay.DEFAULT'); }
+  .date { @apply text-hq-small; color: theme('colors.bone.muted'); font-variant-numeric: tabular-nums; }
+  .date b { display: block; color: theme('colors.bone.dim'); font-weight: 600; }
+  .body { min-width: 0; }
+  .body h3 { @apply font-display text-hq-title font-medium; margin: 0; }
+  .body h3 a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; }
+  .body h3 a:hover { color: theme('colors.clay.glow'); }
+  .body p { margin-top: .75rem; color: theme('colors.bone.dim'); max-width: 65ch; line-height: 1.65; }
+  .status { @apply font-sans text-hq-label font-medium; display: block; margin-top: .5rem; color: theme('colors.clay.DEFAULT'); }
+  .status-released { color: theme('colors.clay.glow'); }
+  .status-upcoming { color: theme('colors.bone.muted'); }
+  @media (max-width: 640px) {
+    .item { grid-template-columns: minmax(0, 1fr); gap: 1rem; padding: 1.25rem; }
+    .date b { display: inline; margin-right: .5rem; }
+  }
+</style>

@@ -1,4 +1,4 @@
-/** @type {import('tailwindcss').Config} */
+/** @satisfies {import('tailwindcss').Config} */
 // ─────────────────────────────────────────────────────────────────────────
 // M3MM design tokens — homepage rules: docs/M3_DESIGN_SYSTEM.md (2026-09-08).
 //
@@ -67,6 +67,8 @@ export default {
         'display-md':  ['clamp(1.5rem, 3vw, 2.25rem)', { lineHeight: '1.1', letterSpacing: '-0.015em' }],
       },
       boxShadow: {
+        'floating-control': '0 8px 24px rgba(0, 0, 0, 0.45)',
+        'chat-panel': '0 20px 60px rgba(0, 0, 0, 0.55)',
         // Hover states get a faint accent glow — 12px cap, ~0.3 alpha. No
         // large ambient glows. `glow-clay` kept as the name for backwards
         // compat with existing component classes.

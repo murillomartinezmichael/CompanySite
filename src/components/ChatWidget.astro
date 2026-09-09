@@ -70,7 +70,7 @@
     background: theme('colors.clay.DEFAULT');
     color: theme('colors.ink.DEFAULT');
     border: 1px solid theme('colors.clay.DEFAULT');
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    box-shadow: theme('boxShadow.floating-control');
     cursor: pointer;
     transition: background 150ms ease, border-color 150ms ease, transform 150ms ease;
   }
@@ -94,7 +94,7 @@
     background: theme('colors.ink.soft');
     border: 1px solid theme('colors.ink.line');
     border-radius: 12px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+    box-shadow: theme('boxShadow.chat-panel');
     overflow: hidden;
   }
   .chat-panel[hidden] { display: none; }
@@ -142,7 +142,7 @@
   .chat-msg a { color: theme('colors.clay.DEFAULT'); text-decoration: underline; text-underline-offset: 3px; }
   .chat-msg-assistant { align-self: flex-start; background: theme('colors.ink.panel'); border: 1px solid theme('colors.ink.line'); }
   .chat-msg-user { align-self: flex-end; background: theme('colors.clay.DEFAULT'); color: theme('colors.ink.DEFAULT'); }
-  .chat-msg-error { align-self: flex-start; background: rgba(255, 60, 60, 0.08); border: 1px solid rgba(255, 60, 60, 0.35); color: theme('colors.bone.dim'); }
+  .chat-msg-error { align-self: flex-start; background: theme('colors.ink.panel'); border: 1px solid theme('colors.ink.outline'); color: theme('colors.bone.dim'); }
   .chat-msg-pending::after {
     content: ''; display: inline-block; width: 6px; height: 6px; margin-left: 4px;
     border-radius: 999px; background: currentColor; opacity: 0.6;

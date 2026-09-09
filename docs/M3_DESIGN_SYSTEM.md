@@ -164,6 +164,18 @@ Control radius is 6px; grouped panels use 12px; department tiles remain square.
 
 ## Related sites: share discipline, preserve the buyer's context
 
+**2026-09-09 adoption update:** CompanySite now uses Astro 7.3.2 and Tailwind 3.
+The structure pass extends `hq-section` spacing to shared sales sections and
+public page wrappers, `hq-hero` to the sales/campaign/receipt headings, and the
+existing panel/control/outline contract to shared UI. Every page has visible
+primary navigation without JavaScript. Footer clearance applies site-wide.
+SectionNav and RoadmapTimeline follow these tokens; no new accent is introduced.
+The table and dated verification below describe the original September 8 pass.
+Current evidence and remaining legacy type/radius inventory are in
+`STRUCTURE_AUDIT_2026-09-09.md` and `STRUCTURE_VERIFICATION_2026-09-09.md`.
+The subsequent Astro migration is complete; remaining dependency advisories are
+the separately recorded Vitest/SVGO patch gate in `../PENDING_MANUAL.md`.
+
 | Site | Existing implementation | Adaptation boundary / next work |
 | --- | --- | --- |
 | CompanySite | Astro 5, Tailwind 3; headquarters plus `/websites` sales department | This pass applies the system to `/`. Preserve the complete sales funnel and its anchors. Other pages keep their existing display tokens. |

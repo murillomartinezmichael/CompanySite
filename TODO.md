@@ -4,6 +4,26 @@
 
 ## Current TODO sweep — 2026-09-09
 
+### Structure follow-through
+
+- [x] Audit all 14 routes and re-check the August audit against current source.
+  See `docs/STRUCTURE_AUDIT_2026-09-09.md` and its token inventory.
+- [x] Restore visible primary navigation on secondary/mobile pages, direct
+  Website services links, a trade directory and roadmap quarter/signup jumps.
+- [x] Extract the repeated roadmap timeline; align shared section, heading,
+  panel and field treatments with the current tokens. Preserve the headquarters
+  argument, sales ladder, release data and both receipt URLs.
+- [x] Fix footer email hydration selecting another page's contact link. Browser
+  coverage now verifies each email destination and the urgent link's label.
+- [x] Add built-site reachability/fragment/tracking checks and expand browser
+  coverage to all 14 routes at four widths. Exact final output is recorded in
+  `docs/STRUCTURE_VERIFICATION_2026-09-09.md`.
+- [ ] Confirm a roadmap-specific receipt message/flow: `/thanks` currently
+  promises the free-review teardown after a roadmap update request. Recorded in
+  `PENDING_MANUAL.md`; no substitute promise or API routing change was invented.
+
+### Earlier actionable sweep (included in this branch)
+
 Branch: `codex/companysite-todo-2026-09-09`, based on design commit `0cc205e`.
 This checklist supersedes older next-action and parked notes below; those remain
 as history, not a second backlog. Changes are local, not published.

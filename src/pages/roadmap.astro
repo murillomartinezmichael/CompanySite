@@ -2,6 +2,8 @@
 import Layout from '@/layouts/Layout.astro';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
+import SectionNav from '@/components/SectionNav.astro';
+import RoadmapTimeline from '@/components/RoadmapTimeline.astro';
 import { DROPS, LAUNCH_STATS } from '@/config/roadmap';
 
 // Group drops by quarter label for the timeline sections.
@@ -10,12 +12,7 @@ const grouped = DROPS.reduce<Record<string, typeof DROPS>>((acc, d) => {
   return acc;
 }, {} as Record<string, typeof DROPS>);
 const quarterOrder = Array.from(new Set(DROPS.map((d) => d.quarter)));
-const statusLabels = {
-  released: 'Released',
-  next: 'Next',
-  testing: 'Testing',
-  upcoming: 'Planned',
-} as const;
+
 
 // Intake POST target. Reuses the site's existing lead endpoint so roadmap
 // subscribers flow through the same pipeline as any other intake.
@@ -34,7 +31,7 @@ const intakePost = '/api/lead';
   <Header slot="header" minimal={true} path="/roadmap" />
 
   <section class="roadmap-scope" aria-labelledby="roadmap-heading">
-    <div class="container-page py-14 sm:py-20">
+    <div class="container-page py-hq-section">
       <p class="intro-label">The M3MM release queue</p>
 
       <div class="brand-heading">
@@ -59,29 +56,15 @@ const intakePost = '/api/lead';
         <li class="stat"><b>Aries</b><span>Next launch</span></li>
       </ul>
 
+      <SectionNav label="Jump to a release group" section="roadmap" links={[
+        ...quarterOrder.map((q, index) => ({ label: q, href: `#quarter-${index}`, cta: `roadmap-jump-${index}`, intent: 'product:roadmap' })),
+        { label: 'Follow a build', href: '#signup-heading', cta: 'roadmap-jump-signup', intent: 'book:roadmap-subscribe' },
+      ]} />
+
       {quarterOrder.map((q, index) => (
         <section aria-labelledby={`quarter-${index}`}>
           <h2 id={`quarter-${index}`} class="section-head">{q}</h2>
-          <ol class="timeline">
-            {grouped[q].map((d) => (
-              <li class={`item item-${d.status}`}>
-                <div class="date">
-                  <b>{d.dateLabel}</b>{d.year}
-                </div>
-                <div class="body">
-                  <h3>
-                    {d.url
-                      ? <a href={d.url} rel={d.url.startsWith('http') ? 'noopener' : undefined} data-cta="roadmap-drop-open" data-section="roadmap" data-intent="product:roadmap-drop" data-release-status={d.status}>{d.name}</a>
-                      : d.name}
-                    <span class={`status status-${d.status}`}>
-                      {statusLabels[d.status]}
-                    </span>
-                  </h3>
-                  <p>{d.blurb}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
+          <RoadmapTimeline drops={grouped[q]} />
         </section>
       ))}
 
@@ -267,28 +250,6 @@ const intakePost = '/api/lead';
   .roadmap-scope .stat b { @apply font-display text-hq-section font-medium; display: block; font-variant-numeric: tabular-nums; }
   .roadmap-scope .stat span { @apply text-hq-small; display: block; margin-top: .5rem; color: var(--secondary); }
   .roadmap-scope .section-head { @apply font-display text-hq-section font-medium; margin: theme('spacing.hq-section') 0 1.5rem; max-width: 26ch; }
-  .roadmap-scope .timeline { position: relative; margin: 0; padding-left: 1.5rem; list-style: none; border-left: 1px solid var(--line); }
-  .roadmap-scope .item {
-    position: relative; display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 1.5rem;
-    padding: 1.5rem; margin-bottom: 1rem; background: var(--card);
-    border-radius: theme('borderRadius.hq-panel');
-  }
-  .roadmap-scope .item::before {
-    content: ''; position: absolute; left: -1.875rem; top: 2rem;
-    width: .75rem; height: .75rem; border-radius: 50%; background: var(--ink-mute);
-  }
-  .roadmap-scope .item-released::before { background: var(--highlight); }
-  .roadmap-scope .item-next::before, .roadmap-scope .item-testing::before { background: var(--accent); }
-  .roadmap-scope .date { @apply text-hq-small; color: var(--ink-mute); font-variant-numeric: tabular-nums; }
-  .roadmap-scope .date b { display: block; color: var(--secondary); font-weight: 600; }
-  .roadmap-scope .body { min-width: 0; }
-  .roadmap-scope .body h3 { @apply font-display text-hq-title font-medium; margin: 0; }
-  .roadmap-scope .body h3 a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; }
-  .roadmap-scope .body h3 a:hover { color: var(--highlight); }
-  .roadmap-scope .body p { margin-top: .75rem; color: var(--secondary); max-width: 65ch; line-height: 1.65; }
-  .roadmap-scope .status { @apply font-sans text-hq-label font-medium; display: block; margin-top: .5rem; color: var(--accent); }
-  .roadmap-scope .status-released { color: var(--highlight); }
-  .roadmap-scope .status-upcoming { color: var(--ink-mute); }
   .roadmap-scope .signup { margin: theme('spacing.hq-section') 0 1.5rem; padding: 2rem; background: var(--card); border-radius: theme('borderRadius.hq-panel'); }
   .roadmap-scope .signup .section-head { margin-top: 0; }
   .roadmap-scope .signup-copy { color: var(--secondary); max-width: 65ch; line-height: 1.65; }
@@ -307,8 +268,6 @@ const intakePost = '/api/lead';
   .roadmap-scope .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
   @media (max-width: 640px) {
     .roadmap-scope .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .roadmap-scope .item { grid-template-columns: minmax(0, 1fr); gap: 1rem; padding: 1.25rem; }
-    .roadmap-scope .date b { display: inline; margin-right: .5rem; }
     .roadmap-scope .signup { padding: 1.25rem; }
     .roadmap-scope .signup-btn { width: 100%; }
   }

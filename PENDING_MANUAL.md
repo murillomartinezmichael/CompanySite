@@ -1,5 +1,19 @@
 # Pending manual
 
+## 2026-09-09 — Structure audit handoff
+
+- [ ] **Confirm the roadmap update receipt.** Roadmap signup currently routes
+  successful requests to `/thanks`, whose title and body promise a personal
+  free-review video within 24 hours. Confirm the actual update-request response
+  and whether it needs a separate receipt. Then implement the approved copy and
+  routing together, including native-form and JavaScript success tests. The
+  structure pass preserves current API behavior and both existing receipt pages.
+- [ ] **Review the local structure commit as part of the combined release.**
+  See `docs/STRUCTURE_AUDIT_2026-09-09.md` for the 14-page map, implemented fixes,
+  remaining style inventory and exact verification. No production writes or
+  outbound form/chat submissions were performed. Existing dependency, proof
+  asset and publication gates below still apply.
+
 ## 2026-09-09 — TODO sweep handoff
 
 - [ ] **Review and release `codex/companysite-todo-2026-09-09`.** Includes the

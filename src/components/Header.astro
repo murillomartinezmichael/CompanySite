@@ -14,17 +14,14 @@ const intakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
 const isHubHome = path === '/';
 ---
 
-<header class:list={["relative z-30", { "hub-header": isHubHome }]}>
+<header class="hub-header relative z-30">
   <div class="container-page flex items-center justify-between py-6">
     <a href="/" class="group flex items-center gap-2.5" aria-label="M3MM home" data-cta="logo" data-section="header">
       <span
         class="grid h-9 w-9 place-items-center overflow-hidden bg-ink-soft ring-1 ring-ink-line transition-all group-hover:ring-clay/60"
         style="border-radius: 2px;"
       >
-        <!-- mark-light.png, not brand-mark.svg: the SVG paints #0a0a0a on this
-             #161A24 tile (~1.13:1) so it renders as an empty square, and
-             docs/brand-ownership.md calls it the rough vector draft. This is the
-             light-on-dark master, the same file Footer and Intake already use. -->
+        <!-- Use the supplied light-on-dark master, shared with Footer and Intake. -->
         <img
           src="/mark-light.png"
           alt=""
@@ -43,6 +40,15 @@ const isHubHome = path === '/';
         <a href="#roadmap" class="transition-colors hover:text-bone" data-cta="nav-roadmap" data-section="header" data-intent="product:roadmap">Roadmap</a>
         <a href="/resume" class="transition-colors hover:text-bone" data-cta="nav-resume" data-section="header" data-intent="product:career">Resume</a>
         <a href="/policies" class="transition-colors hover:text-bone" data-cta="nav-policies" data-section="header" data-intent="product:company-policies">Policies</a>
+        <a href="/websites" class="transition-colors hover:text-bone" data-cta="nav-websites" data-section="header" data-intent="product:website-services">Websites</a>
+      </nav>
+    )}
+
+    {minimal && (
+      <nav aria-label="Primary" class="items-center text-sm text-bone-dim">
+        <a href="/" data-cta="nav-home" data-section="header" data-intent="product:company-hub">Home</a>
+        <a href="/websites" data-cta="nav-websites" data-section="header" data-intent="product:website-services">Websites</a>
+        <a href="/roadmap" aria-current={path === '/roadmap' ? 'page' : undefined} data-cta="nav-roadmap-page" data-section="header" data-intent="product:roadmap">Roadmap</a>
       </nav>
     )}
 
@@ -53,19 +59,10 @@ const isHubHome = path === '/';
         <a href={intakeHref} class="transition-colors hover:text-bone" data-cta="nav-intake" data-section="header" data-intent="book:free-review">Contact</a>
       </nav>
     )}
-
-    {/*
-      2026-08-19: the hub-home CTA used to be "Website services ▸" -> /websites.
-      m3mm.net is the main COMPANY page, so the website-services department no
-      longer advertises itself from the company chrome. Both branches now offer
-      the same free review. /websites still exists and still builds; it is only
-      unlinked from here. Restore by reinstating the isHubHome branch.
-    */}
     {(
       <a
         href={intakeHref}
-        class="inline-flex items-center gap-1.5 border border-clay bg-clay px-4 py-2 text-sm font-semibold text-ink transition-all duration-150 hover:bg-clay-glow hover:border-clay-glow hover:shadow-glow-clay"
-        style="border-radius: 6px; letter-spacing: 0.01em;"
+        class="inline-flex items-center gap-1.5 border border-clay bg-clay px-4 py-2 text-sm font-semibold text-ink transition-all duration-150 hover:bg-clay-glow hover:border-clay-glow hover:shadow-glow-clay rounded-hq-control"
         data-cta="header-review"
         data-section="header"
         data-intent="book:free-review"
@@ -77,10 +74,11 @@ const isHubHome = path === '/';
 </header>
 
 <style>
-  /* Keep the headquarters navigation available on narrow screens without JS. */
+  /* Every page keeps a visible, wrapping primary navigation without JS. */
   .hub-header > div { flex-wrap: wrap; gap: 1rem; }
   .hub-header a { min-height: 44px; display: inline-flex; align-items: center; }
   .hub-header nav { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; }
+  .hub-header nav a:hover, .hub-header nav a[aria-current="page"] { color: theme('colors.clay.DEFAULT'); }
   @media (max-width: 1100px) {
     .hub-header nav { order: 3; width: 100%; justify-content: space-between; }
   }

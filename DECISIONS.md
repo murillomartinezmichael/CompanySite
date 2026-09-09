@@ -4,6 +4,27 @@ Cross-cutting choices that took real thought. Cross-refs to the repo-wide ledger
 
 Format per entry: **D-CS-###** · date · one-line rule · why · reversibility.
 
+## 2026-09-09 — Structure and navigation
+
+The explicit structure brief authorizes direct Websites links in shared chrome.
+Keep the homepage's headquarters argument and Released primary action; the full
+sales funnel remains at `/websites`. Link its three existing trade variants
+after proof, preserving comparison as a separate purchase-decision page.
+Keep both noindex receipt routes; the roadmap/free-review receipt mismatch needs
+confirmed content and a bounded flow change, not an invented subscription promise.
+
+Use a shared section-navigation component for the trade directory and roadmap
+jumps. Extract only the repeated quarter timeline renderer; leave quarter
+grouping and signup ownership in the page. Keep unique headquarters sections
+inline. Shared section spacing, controls and panels adopt the existing tokens.
+
+Remove the broad class-selector axe overlap waiver. Fix the actual layouts and
+scope footer email hydration to its own link; a rendered browser assertion now
+protects the urgent link's original label and email context. Exact reviewed
+silent-video and independently measured chat checks remain visible in evidence.
+No price, claim, release status or server endpoint changed. These local edits
+can be reverted through an ordinary Git change; publication remains separate.
+
 ## 2026-09-09 — Astro 7 and the actionable TODO sweep
 
 Use Astro 7.3.2 with Node 22.23.1 and Tailwind 3 through Vite/PostCSS; remove the

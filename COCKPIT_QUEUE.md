@@ -7,6 +7,29 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-09-09 · CompanySite · Structure and navigation (local)
+
+**Card:** M3MM umbrella hub / website sales floor
+**State:** Local implementation complete; publication remains owner-gated.
+
+**Work:** Mapped all 14 routes, connected the three orphan trade pages, restored
+visible mobile/secondary navigation, added roadmap jumps, extracted repeated
+timeline rendering, and aligned shared spacing/panels/controls with tokens.
+Fixed footer hydration overwriting the urgent email label. Claims, prices,
+release data, server endpoints and both receipt URLs remain intact.
+
+**Verified:** 14-page build/placeholder fence; 512 tests passed, 2 existing skips;
+56 browser page/width combinations clean; 14 canonicals; Astro 0/0/0. Selected
+home, roadmap and sales screenshots inspected at 375/1440, urgent receipt at320.
+Full audit, file summary and exact output: `docs/STRUCTURE_AUDIT_2026-09-09.md`
+and `docs/STRUCTURE_VERIFICATION_2026-09-09.md`.
+
+**Next:** Michael confirms roadmap-specific receipt content/flow; existing
+dependency, proof-asset and production release gates remain. No deployment or
+outbound submission. This is a queued entry, not an actual browser Work Log write.
+
+---
+
 ## 2026-08-19 · CompanySite · Exact résumé PDF restored
 
 **Card:** M3MM umbrella hub
