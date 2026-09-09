@@ -1,11 +1,11 @@
 # CompanySite — m3mm.net
 
 **Status:** 🟢 LIVE at [https://m3mm.net](https://m3mm.net) (Cloudflare Pages, since 2026-07-06).
-**Design:** "Confident Studio" — dark, restrained, single clay accent (replaced the cyberpunk theme 2026-07-21, see `DECISIONS.md § D-CS-010`; the old single-file site is preserved read-only in `legacy/`).
+**Design:** Dark, restrained M3MM identity with a teal accent. The homepage and roadmap follow the measured [M3MM design system](docs/M3_DESIGN_SYSTEM.md). This branch's redesign is verified locally and awaiting release; the legacy cyberpunk page stays read-only in `legacy/`.
 **Perf:** Lighthouse desktop = 98/96/93/91 (2026-07-07 measurement). Measurement + strike ledger at [`docs/lighthouse-baseline.md`](docs/lighthouse-baseline.md).
 
-M3MM's marketing site. Turns TikTok/Instagram traffic into DMs and quote requests.
-Visitors arrive already half-sold from a video; this site's only job is to close the loop.
+M3MM's company headquarters: released work, testing previews, departments and
+roadmap. The `/websites` department turns TikTok/Instagram traffic into quote requests.
 
 ## Offer Ladder
 

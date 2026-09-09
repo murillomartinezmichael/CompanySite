@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 // ─────────────────────────────────────────────────────────────────────────
-// CONFIDENT STUDIO design system v4 — 2026-07-21.
+// M3MM design tokens — homepage rules: docs/M3_DESIGN_SYSTEM.md (2026-09-08).
 //
 // Replaces the v3 "Cyberpunk 2055 / Edgerunners" theme. That theme was
 // built for TikTok-scroll-stopping character (see git history), but the
@@ -29,6 +29,7 @@ export default {
           DEFAULT: '#0D0E14',   // --bg-void  · page ground
           soft:    '#161A24',   // --surface  · nav, cards, panels
           panel:   '#1D212C',   // --surface-alt · alternate sections
+          outline: '#82879A',   // interactive boundaries; >=3:1 on all dark surfaces
           line:    '#262B38',   // hairline (raw hex; rgba variants in raw CSS)
         },
         bone: {
@@ -51,7 +52,15 @@ export default {
         sans:    ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
         mono:    ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
       },
+      spacing: { 'hq-section': 'clamp(3rem, 6vw, 5rem)' },
+      borderRadius: { 'hq-control': '6px', 'hq-panel': '12px' },
       fontSize: {
+        'hq-hero': ['clamp(2.5rem, 5.5vw, 4.5rem)', { lineHeight: '1.04', letterSpacing: '-0.035em' }],
+        'hq-section': ['clamp(2rem, 3.5vw, 3rem)', { lineHeight: '1.12', letterSpacing: '-0.025em' }],
+        'hq-title': ['1.5rem', { lineHeight: '1.25' }],
+        'hq-lede': ['1.125rem', { lineHeight: '1.65' }],
+        'hq-small': ['0.875rem', { lineHeight: '1.6' }],
+        'hq-label': ['0.8125rem', { lineHeight: '1.5' }],
         'display-2xl': ['clamp(3rem, 11vw, 9.5rem)', { lineHeight: '0.88', letterSpacing: '-0.045em' }],
         'display-xl':  ['clamp(2.75rem, 8vw, 6.5rem)', { lineHeight: '0.95', letterSpacing: '-0.03em' }],
         'display-lg':  ['clamp(2rem, 5.5vw, 4rem)', { lineHeight: '1.02', letterSpacing: '-0.025em' }],

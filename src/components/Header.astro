@@ -14,7 +14,7 @@ const intakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
 const isHubHome = path === '/';
 ---
 
-<header class="relative z-30">
+<header class:list={["relative z-30", { "hub-header": isHubHome }]}>
   <div class="container-page flex items-center justify-between py-6">
     <a href="/" class="group flex items-center gap-2.5" aria-label="M3MM home" data-cta="logo" data-section="header">
       <span
@@ -75,3 +75,13 @@ const isHubHome = path === '/';
     )}
   </div>
 </header>
+
+<style>
+  /* Keep the headquarters navigation available on narrow screens without JS. */
+  .hub-header > div { flex-wrap: wrap; gap: 1rem; }
+  .hub-header a { min-height: 44px; display: inline-flex; align-items: center; }
+  .hub-header nav { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; }
+  @media (max-width: 1100px) {
+    .hub-header nav { order: 3; width: 100%; justify-content: space-between; }
+  }
+</style>

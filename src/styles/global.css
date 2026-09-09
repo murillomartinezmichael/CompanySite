@@ -27,6 +27,13 @@
     min-height: 100vh;
     position: relative;
   }
+  body.hq-page {
+    background-image: none;
+  }
+  .hq-page footer {
+    /* Keep the last links above the fixed chat and review controls. */
+    padding-bottom: 5rem;
+  }
 
   h1, h2, h3, h4 {
     @apply font-display font-medium;
@@ -160,6 +167,7 @@
      above this element's z-index 45 — so a right-aligned CTA here would sit
      permanently underneath it, unclickable. Confirmed live 2026-08-20. */
   .sticky-cta {
+    visibility: hidden;
     position: fixed;
     left: 16px;
     bottom: 16px;
@@ -185,6 +193,7 @@
     transition: opacity 180ms ease, transform 180ms ease, background 150ms ease, border-color 150ms ease;
   }
   .sticky-cta.is-visible {
+    visibility: visible;
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;

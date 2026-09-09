@@ -208,7 +208,7 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
       })} />
     )}
   </head>
-  <body>
+  <body class:list={[{ 'hq-page': path === '/' }]}>
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-clay focus:px-4 focus:py-2 focus:text-ink">Skip to content</a>
 
     <slot name="header" />
@@ -220,6 +220,7 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
     <slot name="footer" />
 
     <!-- Sticky mobile CTA. Mobile-only; the Header nav covers desktop. -->
+    <nav aria-label="Quick contact">
     <a
       id="sticky-cta"
       href={stickyIntakeHref}
@@ -234,6 +235,7 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
         <path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </a>
+    </nav>
 
     <script is:inline>
       // Reveal past the hero fold; hide again once the intake is within one

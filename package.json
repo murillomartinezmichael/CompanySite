@@ -14,7 +14,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "audit:canonicals": "node scripts/audit-canonicals.mjs",
-    "resume:pdf": "node scripts/generate-resume-pdf.mjs"
+    "resume:pdf": "node scripts/generate-resume-pdf.mjs",
+    "test:a11y": "node scripts/axe-home.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.120.0",
@@ -25,6 +26,8 @@
     "typescript": "^5.6.3"
   },
   "devDependencies": {
+    "axe-core": "^4.13.0",
+    "puppeteer-core": "^25.6.0",
     "vitest": "^4.1.10",
     "wrangler": "^4.112.0"
   },

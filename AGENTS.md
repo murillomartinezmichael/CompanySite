@@ -2,17 +2,18 @@
 
 ## What This Is
 
-M3MM marketing site at **m3mm.net**. Only job: convert TikTok / Instagram traffic
-into DMs and quote requests. Visitors arrive already half-sold from a video —
-this site closes the loop.
+M3MM company headquarters at **m3mm.net**. The root separates official releases,
+testing previews, departments and roadmap. The website-services conversion funnel
+lives at `/websites`. Current brand and release rules are in `CLAUDE.md`;
+homepage tokens and component rules are in `docs/M3_DESIGN_SYSTEM.md`.
 
 ## Stack
 
-- **Astro 4** static output on **Cloudflare Pages**
+- **Astro 5** static output on **Cloudflare Pages**
 - **Tailwind 3** utility CSS
 - **Cloudflare Pages Functions** in `functions/api/*.ts` for the intake + analytics endpoints
 - No JS framework beyond Astro's built-in islands
-- Fonts: Fraunces (display) + Inter (body)
+- Fonts: self-hosted Space Grotesk (display) + Inter (body)
 
 Old cyberpunk single-file HTML is preserved at `legacy/2026-cyberpunk-index.html`.
 Do not resurrect it — the current site is a deliberate reset.

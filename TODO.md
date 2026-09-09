@@ -2,6 +2,94 @@
 
 **Cold-start rule:** a fresh session should read this file and be productive in 60 seconds.
 
+## SESSION CLOSED — combined homepage + roadmap design
+
+The complete design change is saved in a local commit on
+`design/m3-system-2026-09-08`. This supersedes the uncommitted status in the
+work notes below. The reviewed commit includes the homepage, roadmap, shared
+tokens/navigation, browser runner and dependencies, tests, and design documentation.
+Release data and lead/payment APIs are unchanged. Unrelated proposals, image
+backups and social source assets are excluded.
+
+Final gates: 493 tests passed / 2 existing skips; 13-page build and placeholder
+fence clean; Astro 0 errors/warnings/hints; axe 0 violations and no overflow on
+home + roadmap at 320/375/768/1440px. Evidence: `output/design-qa/axe-home.json`
+and reviewed screenshots. No code changed after those checks.
+
+Exact next action: owner-approved merge and production release of this branch,
+then verify `/` and `/roadmap` on m3mm.net. Recorded in `PENDING_MANUAL.md`.
+No push, merge or deployment performed. Broader page restyling, the Astro major
+upgrade, and the existing Stripe/content gates remain parked.
+
+## COMPLETE LOCALLY — roadmap matches the homepage (2026-09-08)
+
+Michael authorized continuing from the prior agent's uncommitted homepage design.
+`/roadmap` now uses that same palette, type scale, solid ground and control styles.
+Removed the page-local hex palette, low-contrast testing labels, pulse/glow styling,
+tiny uppercase metadata and fixed fortnightly shipping promise. Planned dates are
+explicitly targets; signup describes an update request rather than promising an
+automated mailing/unsubscribe system. Release data, destinations and submission
+logic are preserved. All 21 builds remain in the existing release order.
+
+Verified: `npm test` 493 passed / 2 existing skips; `npm run build` 13 pages and
+clean placeholder fence; `npx astro check` 0 errors/warnings/hints; expanded
+`npm run test:a11y` checks `/` and `/roadmap/` at 320/375/768/1440px with zero
+violations and zero overflow. Keyboard skip/focus and reduced motion pass on both;
+homepage no-JS navigation still passes. Existing chat incomplete contrast finding
+is retained and independently measured by the runner. Reviewed roadmap screenshots
+include mobile hero, desktop testing list and narrow signup in `output/design-qa/`.
+
+Files touched this continuation: `src/pages/roadmap.astro`, `scripts/axe-home.mjs`,
+`tests/build/muted-text-contrast.test.ts`, `tests/README.md`,
+`docs/M3_DESIGN_SYSTEM.md`, `TODO.md`; root `SESSION_GOAL.md` records the scope change.
+
+Next action: review the combined homepage/roadmap branch and release through the
+owner-approved deployment flow. The roadmap depends on the existing uncommitted
+homepage tokens and browser tooling, so this continuation remains together with
+that work for review. Nothing pushed/deployed; pre-existing backups and proposals
+remain untouched. Broader page adoption and Astro migration remain parked.
+
+Cockpit draft: M3MM roadmap brought into the homepage design system; 493 tests,
+13-page build, Astro clean, axe zero violations across eight route/width pairs.
+
+## COMPLETE LOCALLY — M3MM homepage design system (2026-09-08)
+
+Branch: `design/m3-system-2026-09-08`. Changes are uncommitted for review; nothing
+pushed or deployed. The older review/merge entries below are historical; root
+TODO records their 2026-09-07 deployment.
+
+- Researched and documented `docs/M3_DESIGN_SYSTEM.md`, with a fleet entrypoint
+  at `../docs/M3_DESIGN_SYSTEM.md`: tokens, type scale, component rules, complete
+  approved contrast matrix, source references and Big7/ResumeSite boundaries.
+- Applied it to the headquarters homepage: sentence-case readable type,
+  centralized colors, visible mobile navigation, clearer release/preview sections,
+  and footer clearance for floating controls. Preserved release data, the supplied
+  logo, CTA destinations/intents and the `/websites` funnel.
+- Fixed the preview section's semantics and the shared floating CTA landmark and
+  hidden-focus behavior. Corrected stale AGENTS/README/test instructions.
+- Gates: `npm test` **493 passed / 2 existing skips**; `npm run build` **13 pages**
+  with a clean placeholder fence; `npx astro check` **0 errors/warnings/hints**;
+  `npm run test:a11y` **0 violations at 320/375/768/1440px**, no overflow, keyboard
+  skip/focus, reduced motion, and no-JavaScript mobile navigation pass.
+- Raw browser evidence and reviewed screenshots: `output/design-qa/`. Open chat's
+  one incomplete greeting contrast check remains recorded and is independently
+  verified (8.38:1 text, 6.90:1 link, unclipped); no violations are suppressed.
+- Existing npm audit debt: Astro and its Tailwind integration still produce one
+  high and one low package finding. Keep the already-scoped Astro major migration
+  separate; the added browser audit dependencies introduce no reported findings.
+
+**Exact next action:** review this branch's homepage and design document, then
+commit the explicit changed files and use the normal owner-approved merge/deploy
+flow. Re-run the four commands above if code changes. Do not stage the pre-existing
+`docs/proposals/`, backup OG files, or `public/social/_loop-src/`.
+
+**Parked:** other homepage-like surfaces adopting this type scale; Astro migration;
+Big7 and ResumeSite implementation (another session owns those repositories).
+
+**Cockpit Work Log draft:** M3MM homepage design system prepared locally; researched
+tokens and AA pairs, responsive navigation and release layout, 493 passing tests,
+13-page clean build, zero axe violations at four widths. Pending review/deploy.
+
 ## REVIEWED, AWAITING MIKE'S MERGE + PUSH (2026-09-01 — Codex HOLD blockers verified closed; markdown now deny-by-default in the fence)
 
 Status: local commits only on branch `security/fence-scan-md-2026-09-01` (off `main`). Codex re-review 2026-09-01 returned **SHIP-WITH-FIXES**; all four fixes are applied in a follow-up commit. Nothing pushed, merged, or deployed — awaiting Mike.

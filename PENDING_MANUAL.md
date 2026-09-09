@@ -1,5 +1,16 @@
 # Pending manual
 
+## M3MM homepage + roadmap release
+
+- [ ] **Approve production release of `design/m3-system-2026-09-08`.**
+  - **What:** review the completed local homepage/roadmap design commit, then
+    authorize the normal merge and production deployment.
+  - **Why Mike:** the current session authorizes local design work; production
+    publication remains an explicit owner gate under root CLAUDE.md.
+  - **Resumes:** release the verified change and check `/` and `/roadmap` live.
+    Local gates pass: 493 tests (2 existing skips), 13-page build, Astro clean,
+    axe zero violations on both routes at four widths.
+
 ## Competitor-research implementation gates (2026-07-19)
 
 - [ ] **Be ready to deliver recorded video teardowns (OBS/Loom).**
