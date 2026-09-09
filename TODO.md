@@ -1,5 +1,14 @@
 # CompanySite — TODO
 
+## 2026-09-09 — publication closeout
+
+Michael authorized committing and pushing current work. Preserved the existing
+`docs/proposals/harness-positioning-2026-09.md` as a dated proposal, not approved
+public copy. Build/placeholder gate and 512 tests passed (2 tests skipped).
+No prices, claims, logo files, live account settings or routes changed in this
+closeout. Local backup rasters and source frames are excluded. Existing payment,
+intake and publication-status decisions remain separate from pushing this branch.
+
 **Cold-start rule:** a fresh session should read this file and be productive in 60 seconds.
 
 ## Current TODO sweep — 2026-09-09
