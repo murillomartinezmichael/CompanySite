@@ -1,5 +1,49 @@
 # Pending manual
 
+## 2026-09-09 — TODO sweep handoff
+
+- [ ] **Review and release `codex/companysite-todo-2026-09-09`.** Includes the
+  preceding homepage/roadmap design plus Astro 7, API middleware, comparison page
+  and sales accessibility fixes. Resolve the npm advisory gate below first;
+  obtain the required independent money-path review before production. Confirm
+  the Pages build uses Node >=22.12 and Functions has `nodejs_compat` enabled
+  for the existing SDK imports; verify static routes and API headers after release.
+  Owner publication authority is required; this session made no production writes.
+- [ ] **Confirm product changes before implementing them.** The suggested new
+  flat-fee tier above $2,000 conflicts with the approved quote-only ceiling.
+  A named expanded guarantee/client board needs agreed terms and an actual board.
+  The instant AI homepage generator needs scope, provider/budget, output/retention
+  policy and agreement to change the human-review offer. These decisions unblock
+  bounded implementation; the present confirmed offer remains intact.
+- [ ] **Supply remaining proof assets.** Existing Aries video and founder
+  signature are already wired. Still needed: Big7 video/jobsite assets,
+  headshot/confirmed TikTok and IG URLs, approved real testimonials or review-profile evidence,
+  and the selected reel URL. Aries before/after needs client permission plus the
+  selected historical capture. Do not manufacture ratings or business results.
+- [ ] **Transcribe the Cockpit queue in the actual local browser state.** The
+  tick-23 entry exists in `COCKPIT_QUEUE.md`; copying it to another file is not
+  draining the work log. Preserve it until the actual write is verified.
+- [ ] **Verify live delivery and analytics with authorized account access.**
+  Local tests use mocks/empty bindings; they cannot prove delivered real email,
+  live n8n/Cockpit writes or conversion results. Follow the existing smoke
+  procedure only when outbound test submissions are authorized.
+
+The earlier design-only release item below is subsumed by this combined branch.
+
+## 2026-09-09 — npm patch-update failure
+
+- [ ] **Repair npm's dependency update failure, then apply available patches.**
+  - **What:** in a clean checkout or repaired npm environment, update Vitest to
+    >=4.1.11 and SVGO to >=4.0.3 (current 4.1.0), regenerate the lockfile and
+    rerun build/tests/audit. Do not use audit fix --force.
+  - **Why blocked:** npm update, explicit install, and package-lock-only install
+    each failed with `Cannot read properties of null (reading 'edgesOut')`.
+    Three fix attempts reached the fleet setup limit. The installed Astro 7
+    migration remains separately verifiable; failed patch specs were removed.
+  - **Resumes:** close the remaining @vitest/mocker + vitest moderate and svgo
+    high audit findings. Advisory references: GHSA-82fw-gwwq-j7x9,
+    GHSA-w27v-7q3p-w38r, GHSA-4vpr-x523-8j87.
+
 ## M3MM homepage + roadmap release
 
 - [ ] **Approve production release of `design/m3-system-2026-09-08`.**

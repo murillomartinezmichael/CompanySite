@@ -82,10 +82,15 @@ const isTextish = (p: string) => TEXT_EXT.test(p) || /(^|\/)(_headers|_redirects
 
 const scan = (surface: string, text: string, findings: Finding[]) => {
   for (const { category, re } of FORBIDDEN) {
+    // This explicitly requested public comparison names providers by design.
+    // Comments and script/style bodies still cannot leak research notes.
+    const content = category === 'competitor name' && surface === 'dist/compare/website-options/index.html'
+      ? [...text.matchAll(/<!--[\s\S]*?-->|<(?:script|style)\b[^>]*>[\s\S]*?<\/(?:script|style)>/g)].map(m => m[0]).join('\n')
+      : text;
     const all = new RegExp(re.source, re.flags.includes('g') ? re.flags : `${re.flags}g`);
-    for (const hit of text.matchAll(all)) {
+    for (const hit of content.matchAll(all)) {
       const at = Math.max(0, hit.index - 60);
-      const excerpt = text
+      const excerpt = content
         .slice(at, hit.index + hit[0].length + 60)
         .replace(/\s+/g, ' ')
         .trim();
@@ -101,6 +106,22 @@ const report = (findings: Finding[]) =>
   findings.map((f) => `  ${f.surface} [${f.category}]\n    …${f.excerpt}…`).join('\n');
 
 describe('shipped source carries no internal reasoning', () => {
+  it('allows public comparison names only on the comparison page, never internal notes', () => {
+    const surface = 'dist/compare/website-options/index.html';
+    const visible: Finding[] = [];
+    scan(surface, '<p>Compare Wix and Fiverr.</p>', visible);
+    expect(visible).toEqual([]);
+    for (const [file, body] of [
+      [surface, '<!-- Copy Wix positioning -->'],
+      [surface, '<script>/* Fiverr research */</script>'],
+      [surface, '<p>PENDING_MANUAL</p>'],
+      ['dist/index.html', '<p>Wix research</p>'],
+    ]) {
+      const findings: Finding[] = [];
+      scan(file, body, findings);
+      expect(findings.length).toBeGreaterThan(0);
+    }
+  });
   it('the .astro surfaces a browser receives verbatim are clean', () => {
     const findings: Finding[] = [];
     for (const file of walk(`${root}src`).filter((f) => f.endsWith('.astro'))) {

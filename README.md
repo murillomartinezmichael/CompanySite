@@ -21,8 +21,8 @@ SiteGuide handles the DIY starter-company lane: templates, widgets, and bundles.
 
 ## Stack
 
-- **Astro 5** — static output, zero runtime JS by default
-- **Tailwind 3** — utility-first, design tokens in `tailwind.config.mjs`
+- **Astro 7** — static output; Node >=22.12, tested version in `.node-version`
+- **Tailwind 3** — PostCSS in `astro.config.mjs`, design tokens in `tailwind.config.mjs`
 - **Cloudflare Pages** — build + host + edge functions
 - **Cloudflare Pages Functions** (`functions/api/*.ts`) — serverless intake (`/api/lead` via Resend) + analytics beacon (`/api/track`)
 - **Fonts:** Space Grotesk (display) + Inter (body) — self-hosted variable WOFF2 served same-origin (no Google Fonts request at runtime); mono labels fall back to the system stack
@@ -40,8 +40,8 @@ CompanySite/
 │   │   ├── CaseStudy.astro        ← one card per case study
 │   │   ├── Services.astro         ← outcomes-framed services + from-pricing
 │   │   └── Intake.astro           ← lead form + client-side submit
+│   ├── content.config.ts          ← glob loader + case-study schema
 │   ├── content/
-│   │   ├── config.ts              ← case-study schema
 │   │   └── caseStudies/*.md       ← drop a .md file = new case study
 │   ├── assets/                    ← case-study screenshots (optimized at build)
 │   ├── lib/track.ts               ← CTA tracking helper (data-cta attribute)

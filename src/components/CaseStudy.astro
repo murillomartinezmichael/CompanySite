@@ -11,7 +11,7 @@ interface Props {
 const { entry, index } = Astro.props;
 const d = entry.data;
 const flip = index % 2 === 1;
-const hideLiveHeader = entry.slug === 'big7';
+const hideLiveHeader = entry.id === 'big7';
 
 // Attribution on outbound case-study visits so referral traffic from m3mm.net
 // is legible in the client site's analytics.
@@ -22,7 +22,7 @@ if (d.liveUrl) {
     u.searchParams.set('utm_source', 'm3mm.net');
     u.searchParams.set('utm_medium', 'case-study');
     u.searchParams.set('utm_campaign', 'proof');
-    u.searchParams.set('utm_content', entry.slug);
+    u.searchParams.set('utm_content', entry.id);
     outboundLiveUrl = u.toString();
   } catch {
     outboundLiveUrl = d.liveUrl;
@@ -35,6 +35,8 @@ if (d.liveUrl) {
   <div class={`relative isolate mb-8 ${hideLiveHeader ? 'aspect-video' : 'aspect-[16/10]'} w-full overflow-hidden rounded-xl bg-ink-panel ring-1 ring-ink-line lg:mb-0 lg:w-1/2`}>
     {d.video ? (
       <video
+        aria-label={`${d.client} website preview`}
+        aria-describedby={`case-study-${entry.id}-details`}
         class="h-full w-full object-cover"
         preload="none"
         playsinline
@@ -56,14 +58,14 @@ if (d.liveUrl) {
         decoding="async"
       />
     ) : (
-      <CaseStudyArt slug={entry.slug} client={d.client} />
+      <CaseStudyArt slug={entry.id} client={d.client} />
     )}
     <!-- Vignette so text overlays read clean if we ever add one -->
     <div class="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/5"></div>
   </div>
 
   <!-- Copy -->
-  <div class="lg:w-1/2">
+  <div id={`case-study-${entry.id}-details`} class="lg:w-1/2">
     <div class="mb-4 flex flex-wrap items-baseline gap-3">
       <span class="kicker">{String(index + 1).padStart(2, '0')} · {d.year}</span>
       {d.location && <span class="text-xs text-bone-muted">{d.location}</span>}
@@ -100,9 +102,9 @@ if (d.liveUrl) {
         target="_blank"
         rel="noopener noreferrer"
         class="mt-6 inline-flex items-center gap-1.5 text-sm text-clay transition-colors hover:text-clay-glow"
-        data-cta={`casestudy-${entry.slug}-visit`}
+        data-cta={`casestudy-${entry.id}-visit`}
         data-section="proof"
-        data-intent={`product:${entry.slug}`}
+        data-intent={`product:${entry.id}`}
       >
         Open the project deployment
         <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3h7v7m0-7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>

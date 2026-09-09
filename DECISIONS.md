@@ -4,6 +4,32 @@ Cross-cutting choices that took real thought. Cross-refs to the repo-wide ledger
 
 Format per entry: **D-CS-###** · date · one-line rule · why · reversibility.
 
+## 2026-09-09 — Astro 7 and the actionable TODO sweep
+
+Use Astro 7.3.2 with Node 22.23.1 and Tailwind 3 through Vite/PostCSS; remove the
+Astro-5-only Tailwind integration rather than forcing unsupported peers. Migrate
+case studies to the glob loader and stable `entry.id`; built-output attribution
+tests prevent the prior spike's silent undefined-identifier regression. Keep
+`compressHTML: true` to preserve this site's existing whitespace behavior.
+Sources: [Astro 7 migration](https://docs.astro.build/en/guides/upgrade-to/v7/),
+[Astro 6 migration](https://docs.astro.build/en/guides/upgrade-to/v6/),
+[PostCSS support](https://docs.astro.build/en/guides/styling/).
+
+The third API route now meets the old middleware trigger. Add a shared security
+boundary while retaining per-handler wrappers and route-specific error behavior;
+stream responses are not buffered. Platform-generated errors remain outside it.
+Local runtime smoke uses an isolated temporary worker with empty bindings and
+`nodejs_compat`; the installed workerd supports compatibility date 2026-08-27.
+
+The comparison page discloses M3MM authorship and compares fit, ownership and
+scope instead of inventing rankings or competitor prices. Existing confirmed
+prices/refund policy remain unchanged. Source links are embedded in the article.
+
+Patch updating separately failed three times with npm's `edgesOut` exception.
+Vitest >=4.1.11 and SVGO >=4.0.3 remain a release follow-up in PENDING_MANUAL;
+do not call the audit clean or run a forced downgrade. The migration can be
+reverted as a normal Git change; no deployment has occurred.
+
 ---
 
 ## D-CS-00X · 2026-07-05 · Vitest pinned to `^2.1.9` (not 4.x)

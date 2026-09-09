@@ -208,7 +208,7 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
       })} />
     )}
   </head>
-  <body class:list={[{ 'hq-page': path === '/' }]}>
+  <body class:list={[{ 'hq-page': path === '/' || path === '/websites' }]}>
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-clay focus:px-4 focus:py-2 focus:text-ink">Skip to content</a>
 
     <slot name="header" />

@@ -14,9 +14,9 @@ const {
 ---
 
 <section class="relative isolate overflow-hidden">
-  <!-- Ambient hint (subtle two-stop cyan gradient at 6%) -->
+  <!-- Solid tint keeps headline contrast measurable across viewport sizes. -->
   <div class="pointer-events-none absolute inset-x-0 -top-16 h-[420px] -z-10">
-    <div class="absolute inset-x-0 top-0 h-full bg-gradient-to-b from-clay/[0.06] via-transparent to-transparent"></div>
+    <div class="absolute inset-x-0 top-0 h-full bg-clay/[0.06]"></div>
   </div>
 
   <div class="container-page relative pb-20 pt-14 sm:pt-20 lg:pb-28 lg:pt-24">
@@ -40,23 +40,6 @@ const {
       <span class="block text-bone">Websites that</span>
       <span class="highlight-yellow relative inline-block">
         <span class="fg relative z-10">get you customers.</span>
-        <!-- Accent hairline underline (drawn on load, reinforces the highlight) -->
-        <svg
-          class="absolute -bottom-2 left-0 h-[0.14em] w-full text-clay/60 sm:-bottom-3"
-          viewBox="0 0 400 6"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M2 3 L398 3"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="square"
-            fill="none"
-            stroke-dasharray="500"
-            style="animation: drawLine 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both;"
-          />
-        </svg>
       </span>
     </h1>
 
@@ -112,33 +95,33 @@ const {
       <div class="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-ink to-transparent"></div>
       <div class="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-ink to-transparent"></div>
       <div class="flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
-        <div class="flex shrink-0 animate-marquee items-center gap-x-14 pr-14 motion-reduce:animate-none">
+        <div aria-hidden="true" class="flex shrink-0 animate-marquee items-center gap-x-14 pr-14 motion-reduce:animate-none">
           <span class="font-display text-2xl text-bone-dim">Aries Outdoor Living</span>
-          <span class="text-clay">·</span>
+          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
           <span class="font-display text-2xl text-bone-dim">Big 7 Construction</span>
-          <span class="text-clay">·</span>
+          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
           <span class="font-display text-2xl text-bone-dim">SiteGuide</span>
-          <span class="text-clay">·</span>
+          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
           <span class="font-display text-2xl text-bone-dim">AI Manual Assistant</span>
-          <span class="text-clay">·</span>
+          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
           <span class="font-display text-2xl text-bone-dim">CockpitCloud</span>
-          <span class="text-clay">·</span>
+          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
           <span class="font-display text-2xl text-bone-dim">PhotoPicker</span>
-          <span class="text-clay">·</span>
+          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
         </div>
         <div aria-hidden="true" class="flex shrink-0 animate-marquee items-center gap-x-14 pr-14 motion-reduce:animate-none">
           <span class="font-display text-2xl text-bone-dim">Aries Outdoor Living</span>
-          <span class="text-clay">·</span>
+          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
           <span class="font-display text-2xl text-bone-dim">Big 7 Construction</span>
-          <span class="text-clay">·</span>
+          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
           <span class="font-display text-2xl text-bone-dim">SiteGuide</span>
-          <span class="text-clay">·</span>
+          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
           <span class="font-display text-2xl text-bone-dim">AI Manual Assistant</span>
-          <span class="text-clay">·</span>
+          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
           <span class="font-display text-2xl text-bone-dim">CockpitCloud</span>
-          <span class="text-clay">·</span>
+          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
           <span class="font-display text-2xl text-bone-dim">PhotoPicker</span>
-          <span class="text-clay">·</span>
+          <span class="h-1 w-1 flex-none rounded-full bg-clay" aria-hidden="true"></span>
         </div>
       </div>
     </div>

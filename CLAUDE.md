@@ -28,9 +28,9 @@ and the shipping roadmap. The website-services conversion floor lives at
 
 ## Stack
 
-- **Astro 5** static output on **Cloudflare Pages** (`astro@^5.18.2`; the 5→7
-  major is triaged and scoped in `TODO.md`, not yet taken)
-- **Tailwind 3** utility CSS
+- **Astro 7** static output on **Cloudflare Pages** (`astro@^7.3.2`);
+  Node >=22.12, tested runtime pinned in `.node-version`.
+- **Tailwind 3** utility CSS via PostCSS; content loader in `src/content.config.ts`
 - **Cloudflare Pages Functions** in `functions/api/*.ts` for the intake + analytics endpoints
 - No JS framework beyond Astro's built-in islands
 - Fonts: self-hosted Space Grotesk + Inter variable WOFF2 files

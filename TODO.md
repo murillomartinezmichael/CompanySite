@@ -2,6 +2,50 @@
 
 **Cold-start rule:** a fresh session should read this file and be productive in 60 seconds.
 
+## Current TODO sweep — 2026-09-09
+
+Branch: `codex/companysite-todo-2026-09-09`, based on design commit `0cc205e`.
+This checklist supersedes older next-action and parked notes below; those remain
+as history, not a second backlog. Changes are local, not published.
+
+- [x] Upgrade Astro 5 to 7.3.2 with Node 22, supported Tailwind 3 PostCSS wiring,
+  the glob content loader, and built-output case-study attribution regressions.
+- [x] Add shared API security middleware now that `/api/chat` is the third route.
+  Preserve streams, redirects, CORS and existing endpoint wrappers; sanitize
+  unexpected failures. Seven boundary tests added.
+- [x] Prepare the sourced, explicitly self-authored website-options comparison
+  at `/compare/website-options`, linked from `/websites` and in the sitemap.
+  Compare fit, cost and ownership without inventing independent rankings.
+- [x] Fix Services number contrast and decorative layers obscuring contrast
+  checks; adopt the solid page ground and verify mobile/desktop sales layouts.
+- [x] Add CI browser coverage for the hub, roadmap, sales and comparison pages
+  at 320/375/768/1440px, with evidence uploads and a pinned Node runtime.
+- [x] Reconcile older requests: fonts are self-hosted; sitemap + robots exist;
+  proof/results, founder signature, confirmed refund badge and `/start`
+  intake are already implemented. Aries has its MP4/poster; Big7 does not.
+- [ ] Repair npm patch updates: three attempts fail with `edgesOut`; Vitest and
+  SVGO advisories remain. Exact versions and recovery in `PENDING_MANUAL.md`.
+- [ ] Owner-approved release and post-deploy smoke, including API compatibility
+  settings. No push, merge, external submission or deployment in this sweep.
+- [ ] Owner/data gates: Stripe live write access/link; referral payout amount;
+  approved testimonials/ratings; Aries before/after permission and capture;
+  Big7 media; headshot/TikTok/IG and chosen reel/upload; live delivery/analytics evidence.
+  See `PENDING_MANUAL.md` for concrete steps.
+- [ ] Product decisions: a new public tier above $2,000, expanded guarantee or
+  client board, and an instant AI mockup generator require confirmed scope,
+  terms/provider/spend. Preserve the approved ladder and human review meanwhile.
+- [ ] Cross-repository follow-up: SiteGuide demo prefill, per-template OG and
+  Product schema belong to SiteGuide, not CompanySite. Audit its current source
+  and TODO before implementing; old tick notes here are not proof of missing work.
+- [ ] Cockpit work-log transcription remains local-browser state work; preserve
+  `COCKPIT_QUEUE.md`, including tick 23, until the actual log write is verified.
+
+**Next action:** resolve the dependency-patch environment gate in a clean
+checkout, rerun build/tests/audit, then obtain approval for the combined release.
+Do not unlock checkout, publish client claims, or mark the remaining gates done
+without their evidence. Older deployment questions and Astro spike versions
+below are historical; this section is the current handoff.
+
 ## SESSION CLOSED — combined homepage + roadmap design
 
 The complete design change is saved in a local commit on
@@ -137,7 +181,11 @@ Status: local commits only on branch `security/fence-scan-md-2026-09-01` (off `m
 - Release gates: 12 pages built, placeholder fence clean, **447 passed / 2 skipped**, Astro **0/0/0**, preflight READY. Live checks passed for `/`, `/hub`, `/roadmap`, `/policies`, `/accessibility`, sitemap, and the `/api/lead` function boundary.
 - Production deployment: Cloudflare Pages deployment `39e1993a.m3-companysite.pages.dev`, serving through `https://m3mm.net`.
 
-## Deferred from the 2026-08-12 Codex API-security review
+## Completed locally 2026-09-09 — deferred API-security review
+
+The third route now exists. Shared middleware and its regression tests are added;
+the rationale below is historical. Platform-generated failures remain outside
+the middleware boundary.
 
 **Move the API security headers into `functions/api/_middleware.ts`.** Codex's
 "what I would do differently": one middleware boundary would harden all current

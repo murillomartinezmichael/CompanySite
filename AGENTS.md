@@ -9,8 +9,8 @@ homepage tokens and component rules are in `docs/M3_DESIGN_SYSTEM.md`.
 
 ## Stack
 
-- **Astro 5** static output on **Cloudflare Pages**
-- **Tailwind 3** utility CSS
+- **Astro 7** static output on **Cloudflare Pages**; Node >=22.12 (`.node-version` pins the tested runtime)
+- **Tailwind 3** utility CSS via PostCSS in `astro.config.mjs`
 - **Cloudflare Pages Functions** in `functions/api/*.ts` for the intake + analytics endpoints
 - No JS framework beyond Astro's built-in islands
 - Fonts: self-hosted Space Grotesk (display) + Inter (body)
