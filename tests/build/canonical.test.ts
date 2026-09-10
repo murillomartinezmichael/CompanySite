@@ -50,6 +50,10 @@ const PAGE_EXPECTATIONS: ReadonlyArray<{
   { file: 'src/pages/for/home-services.astro', path: '/for/home-services' },
   { file: 'src/pages/for/outdoor-living.astro', path: '/for/outdoor-living' },
   { file: 'src/pages/start/thanks.astro', path: '/start/thanks', noindex: true },
+  // A roadmap subscriber gets its own receipt: /thanks promises a recorded
+  // video teardown, which is false for a follow request. noindex for the same
+  // reason as every other receipt -- it eats crawl budget on a dead-end page.
+  { file: 'src/pages/roadmap/thanks.astro', path: '/roadmap/thanks', noindex: true },
   // ADR 0001 — the résumé moved onto the hub from its own Worker property.
   { file: 'src/pages/resume.astro', path: '/resume' },
 ];

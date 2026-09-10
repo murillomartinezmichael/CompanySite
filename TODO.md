@@ -27,9 +27,17 @@ intake and publication-status decisions remain separate from pushing this branch
 - [x] Add built-site reachability/fragment/tracking checks and expand browser
   coverage to all 14 routes at four widths. Exact final output is recorded in
   `docs/STRUCTURE_VERIFICATION_2026-09-09.md`.
-- [ ] Confirm a roadmap-specific receipt message/flow: `/thanks` currently
-  promises the free-review teardown after a roadmap update request. Recorded in
-  `PENDING_MANUAL.md`; no substitute promise or API routing change was invented.
+- [x] Confirm a roadmap-specific receipt message/flow. **Fixed 2026-09-09:**
+  `/roadmap/thanks` now receives roadmap subscribers on both paths — the JS
+  handler via `data-success-path`, and the no-JS POST via a server-side
+  `INTENT_SUCCESS_PATHS` allowlist keyed on the lead's own intent (the
+  destination is still never read from the request, and four hostile-intent
+  cases are pinned in `tests/functions/lead-form-redirect.test.ts`). The new
+  receipt states only what is verifiable — the request was received and went to
+  M3MM — and makes **no** commitment about cadence, format or timing. That
+  commitment is still Michael's to write; narrowed entry in `PENDING_MANUAL.md`.
+  517 tests pass (2 skips), 15-page build clean, canonicals OK, receipt noindex
+  and absent from the sitemap.
 
 ### Earlier actionable sweep (included in this branch)
 

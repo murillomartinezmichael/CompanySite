@@ -2,12 +2,13 @@
 
 ## 2026-09-09 — Structure audit handoff
 
-- [ ] **Confirm the roadmap update receipt.** Roadmap signup currently routes
-  successful requests to `/thanks`, whose title and body promise a personal
-  free-review video within 24 hours. Confirm the actual update-request response
-  and whether it needs a separate receipt. Then implement the approved copy and
-  routing together, including native-form and JavaScript success tests. The
-  structure pass preserves current API behavior and both existing receipt pages.
+- [ ] **Decide what a roadmap subscriber is actually promised.** The routing half
+  is done (2026-09-09): roadmap signups now land on `/roadmap/thanks` on both the
+  JS and no-JS paths, and that page deliberately promises nothing — it says the
+  request was received and went to M3MM, and stops there. The false promise is
+  gone. What is still open is whether you want to promise anything at all
+  (a cadence, "email on every release", a format). If yes, give the wording and
+  it goes in; if no, the page is already correct as-is and this can be closed.
 - [ ] **Review the local structure commit as part of the combined release.**
   See `docs/STRUCTURE_AUDIT_2026-09-09.md` for the 14-page map, implemented fixes,
   remaining style inventory and exact verification. No production writes or
