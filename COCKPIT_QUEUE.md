@@ -1596,3 +1596,12 @@ Product design preference/standard recorded at fleet root; other UI rollouts pen
 
 Draft only: Michael must enter this in Cockpit (press l). No browser localStorage
 write was performed by the agent.
+
+## 2026-09-10 — cinematic roadmap and proof (draft; not entered)
+
+Applied useful composition and interaction techniques from Michael's local tutorial:
+21-build coordinated roadmap stage, larger existing proof media, accessible native
+still viewers and user-controlled video. Source claims, prices, logo and routes
+preserved. Final checks and review limitations are in
+`docs/CINEMATIC_VERIFICATION_2026-09-10.md`. Shared reference/learning records updated.
+Local commits only; no push/deploy. Draft only: Michael enters this in Cockpit.

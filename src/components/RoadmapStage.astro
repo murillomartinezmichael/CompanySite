@@ -1,0 +1,130 @@
+---
+import { DROPS } from '@/config/roadmap';
+import { getImage } from 'astro:assets';
+import big7 from '@/assets/big7-live-site.jpg';
+import ReleasePath from './ReleasePath.astro';
+const quarters = [...new Set(DROPS.map(drop => drop.quarter))];
+const initialIndex = Math.max(0, DROPS.findIndex(drop => drop.status === 'next'));
+const initial = DROPS[initialIndex];
+const labels = { released: 'Officially released', next: 'Next official launch', testing: 'Testing preview', upcoming: 'Planned' };
+const big7Image = await getImage({ src: big7, width: 1280, format: 'webp' });
+const imageFor = (name: string) => name === 'AriesOutdoorLiving' ? '/videos/aries-walkthrough-still.webp' : name === 'Big7 Construction' ? big7Image.src : '';
+const titleFor = (name: string) => name === 'AriesOutdoorLiving' ? 'Aries Outdoor Living' : name;
+---
+<section class="release-stage" aria-labelledby="selected-build-title" data-release-stage data-sticky-suppress>
+  <div class="stage-heading">
+    <p>Explore the release queue</p>
+    <label class="build-picker" hidden data-stage-controls><span>Choose a build</span>
+      <select data-stage-select data-cta="roadmap-stage-select" data-section="roadmap" data-intent="product:roadmap-drop">
+        {DROPS.map((drop, index) => <option value={index} selected={index === initialIndex}
+          data-title={titleFor(drop.name)} data-description={drop.blurb} data-status={labels[drop.status]}
+          data-state={drop.status} data-category={drop.category} data-quarter={drop.quarter}
+          data-destination={`#quarter-${quarters.indexOf(drop.quarter)}`} data-image={imageFor(drop.name)}>
+          {titleFor(drop.name)} — {labels[drop.status]}
+        </option>)}
+      </select>
+    </label>
+  </div>
+  <div class="stage-scene" data-stage-scene>
+    <div class="stage-copy" data-stage-copy>
+      <p class="stage-state" data-stage-state data-state={initial.status}>{labels[initial.status]}</p>
+      <h2 id="selected-build-title" data-stage-title>{titleFor(initial.name)}</h2>
+      <p class="stage-description" data-stage-description>{initial.blurb}</p>
+      <p class="stage-meta"><span data-stage-category>{initial.category}</span><span data-stage-quarter>{initial.quarter}</span></p>
+      <a href={`#quarter-${quarters.indexOf(initial.quarter)}`} data-stage-link data-cta="roadmap-next-details" data-section="roadmap" data-intent="product:roadmap-drop">View build details <span aria-hidden="true">↘</span></a>
+    </div>
+    <div class="stage-visual" data-stage-visual>
+      <img src={imageFor(initial.name) || undefined} alt={`${titleFor(initial.name)} website preview`} data-stage-image hidden={!imageFor(initial.name)} decoding="async" />
+      <div class="stage-art" data-stage-art hidden={Boolean(imageFor(initial.name))}><ReleasePath /><p>Modernize. Mobilize. Multiply.</p></div>
+    </div>
+  </div>
+  <div class="stage-footer">
+    <div class="build-index" hidden data-stage-controls>
+      <p>Build index <span data-stage-position>{initialIndex + 1} / {DROPS.length}</span></p>
+      <div class="index-track" role="group" aria-label="Choose a build from the release queue">
+        {DROPS.map((drop, index) => <button type="button" data-stage-index={index} aria-label={`Explore ${titleFor(drop.name)}`} aria-pressed={index === initialIndex ? 'true' : 'false'} tabindex={index === initialIndex ? 0 : -1} data-cta="roadmap-stage-build" data-section="roadmap" data-intent="product:roadmap-drop"><span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span></button>)}
+      </div>
+    </div>
+    <button class="motion-toggle" type="button" data-motion-toggle hidden aria-pressed="false" data-cta="roadmap-motion-toggle" data-section="roadmap">Pause motion</button>
+  </div>
+  <p class="sr-only" role="status" data-stage-announcement></p>
+</section>
+<script>
+  const stage = document.querySelector<HTMLElement>('[data-release-stage]');
+  if (stage) {
+    const select = stage.querySelector<HTMLSelectElement>('[data-stage-select]')!;
+    const buttons = [...stage.querySelectorAll<HTMLButtonElement>('[data-stage-index]')];
+    const image = stage.querySelector<HTMLImageElement>('[data-stage-image]')!;
+    const art = stage.querySelector<HTMLElement>('[data-stage-art]')!;
+    const copy = stage.querySelector<HTMLElement>('[data-stage-copy]')!;
+    const visual = stage.querySelector<HTMLElement>('[data-stage-visual]')!;
+    const text = (key: string, value: string) => { stage.querySelector(`[data-stage-${key}]`)!.textContent = value; };
+    const cancelMotion = () => [copy, visual].forEach(el => el.getAnimations().forEach(animation => animation.cancel()));
+    const show = (index: number, keyboard = false) => {
+      const option = select.options[index];
+      if (!option) return;
+      const data = option.dataset;
+      cancelMotion();
+      select.selectedIndex = index;
+      text('title', data.title || ''); text('description', data.description || '');
+      text('state', data.status || ''); text('category', data.category || ''); text('quarter', data.quarter || '');
+      stage.querySelector<HTMLElement>('[data-stage-state]')!.dataset.state = data.state;
+      stage.querySelector<HTMLAnchorElement>('[data-stage-link]')!.href = data.destination || '#signup-heading';
+      image.hidden = !data.image; art.hidden = Boolean(data.image);
+      if (data.image) { image.src = data.image; image.alt = `${data.title} website preview`; }
+      text('position', `${index + 1} / ${buttons.length}`);
+      text('announcement', `${data.title}. ${data.status}. ${data.quarter}.`);
+      buttons.forEach((button, i) => { button.setAttribute('aria-pressed', String(i === index)); button.tabIndex = i === index ? 0 : -1; });
+      if (keyboard) buttons[index].focus({ preventScroll: true });
+      // Scroll only the local index strip, never the document or wheel input.
+      const track = buttons[index].parentElement!;
+      track.scrollLeft = buttons[index].offsetLeft - track.offsetLeft - track.clientWidth / 2 + buttons[index].clientWidth / 2;
+      if (document.documentElement.dataset.motion === 'full') {
+        copy.animate([{ opacity: .35, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 280, easing: 'ease-out' });
+        visual.animate([{ opacity: .45, transform: 'scale(.985)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 420, easing: 'cubic-bezier(.2,.7,.2,1)' });
+      }
+    };
+    select.addEventListener('change', () => show(select.selectedIndex));
+    buttons.forEach((button, index) => {
+      button.addEventListener('click', () => show(index));
+      button.addEventListener('keydown', event => {
+        const next = event.key === 'ArrowRight' ? (index + 1) % buttons.length : event.key === 'ArrowLeft' ? (index - 1 + buttons.length) % buttons.length : event.key === 'Home' ? 0 : event.key === 'End' ? buttons.length - 1 : -1;
+        if (next < 0) return;
+        event.preventDefault(); show(next, true);
+      });
+    });
+    image.addEventListener('error', () => { image.hidden = true; art.hidden = false; });
+    new MutationObserver(() => { if (document.documentElement.dataset.motion !== 'full') cancelMotion(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-motion'] });
+    stage.querySelectorAll<HTMLElement>('[data-stage-controls]').forEach(el => { el.hidden = false; });
+  }
+</script>
+<style>
+  .release-stage { margin-top: theme('spacing.hq-section'); border-top: 1px solid theme('colors.ink.line'); border-bottom: 1px solid theme('colors.ink.line'); }
+  .stage-heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; padding: 1.5rem 0; }
+  .stage-heading > p { color: theme('colors.bone.dim'); }
+  .build-picker { display: flex; align-items: center; gap: 1rem; font-size: theme('fontSize.hq-small[0]'); min-width: 0; }
+  .build-picker > span { color: theme('colors.bone.muted'); }
+  select { width: min(350px, 100%); min-height: 44px; padding: .5rem 2rem .5rem .75rem; background: theme('colors.ink.soft'); border: 1px solid theme('colors.ink.outline'); border-radius: theme('borderRadius.hq-control'); color: theme('colors.bone.DEFAULT'); }
+  .stage-scene { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 3rem; align-items: center; min-height: 440px; padding: 2rem 0; }
+  .stage-copy { min-width: 0; }
+  .stage-state { color: theme('colors.clay.DEFAULT'); font-size: theme('fontSize.hq-small[0]'); }
+  .stage-state[data-state="testing"] { color: theme('colors.electric.DEFAULT'); }
+  .stage-state[data-state="upcoming"] { color: theme('colors.bone.muted'); }
+  h2 { margin-top: 1rem; font: 500 theme('fontSize.hq-section[0]')/1.1 theme('fontFamily.display'); letter-spacing: -.035em; overflow-wrap: anywhere; }
+  .stage-description { margin-top: 1.5rem; color: theme('colors.bone.dim'); line-height: 1.7; max-width: 50ch; }
+  .stage-meta { display: flex; flex-wrap: wrap; gap: .5rem 1rem; margin-top: 1.5rem; color: theme('colors.bone.muted'); font-size: theme('fontSize.hq-label[0]'); }
+  .stage-copy > a { display: inline-flex; align-items: center; gap: 1rem; min-height: 44px; margin-top: 1.5rem; color: theme('colors.electric.DEFAULT'); text-decoration: underline; text-underline-offset: .3em; }
+  .stage-visual { min-width: 0; overflow: hidden; border: 1px solid theme('colors.ink.line'); border-radius: theme('borderRadius.hq-panel'); background: theme('colors.ink.soft'); aspect-ratio: 16 / 11; }
+  .stage-visual img { width: 100%; height: 100%; object-fit: contain; object-position: center; }
+  .stage-art { height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 2rem; }
+  .stage-art p { text-align: center; color: theme('colors.bone.muted'); font-size: theme('fontSize.hq-small[0]'); }
+  .stage-footer { padding: 1.5rem 0; display: flex; align-items: end; gap: 1.5rem; }
+  .build-index { flex: 1; min-width: 0; }
+  .build-index > p { color: theme('colors.bone.muted'); font-size: theme('fontSize.hq-label[0]'); display: flex; justify-content: space-between; margin-bottom: .5rem; }
+  .index-track { display: flex; overflow-x: auto; position: relative; scrollbar-width: thin; scrollbar-color: theme('colors.ink.outline') theme('colors.ink.soft'); padding: 4px; }
+  .index-track button { min-width: 44px; min-height: 44px; flex: 1; border-top: 1px solid theme('colors.ink.line'); font-size: theme('fontSize.hq-label[0]'); color: theme('colors.bone.muted'); }
+  .index-track button[aria-pressed="true"] { border-color: theme('colors.clay.DEFAULT'); color: theme('colors.clay.DEFAULT'); background: theme('colors.ink.soft'); }
+  [hidden] { display: none !important; }
+  @media (max-width: 1100px) { .index-track { display: none; } }
+  @media (max-width: 768px) { .stage-scene { grid-template-columns: 1fr; gap: 1.5rem; min-height: 0; } .build-picker { width: 100%; flex-wrap: wrap; gap: .5rem; } select { width: 100%; } .stage-footer { display: block; } .motion-toggle { margin-top: 1rem; } .stage-visual { aspect-ratio: 16 / 9; } }
+</style>

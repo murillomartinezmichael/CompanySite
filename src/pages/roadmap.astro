@@ -2,7 +2,7 @@
 import Layout from '@/layouts/Layout.astro';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
-import ReleasePath from '@/components/ReleasePath.astro';
+import RoadmapStage from '@/components/RoadmapStage.astro';
 import SectionNav from '@/components/SectionNav.astro';
 import RoadmapFilters from '@/components/RoadmapFilters.astro';
 import RoadmapTimeline from '@/components/RoadmapTimeline.astro';
@@ -14,8 +14,6 @@ const grouped = DROPS.reduce<Record<string, typeof DROPS>>((acc, d) => {
   return acc;
 }, {} as Record<string, typeof DROPS>);
 const quarterOrder = Array.from(new Set(DROPS.map((d) => d.quarter)));
-const nextDrop = DROPS.find(drop => drop.status === 'next');
-const nextQuarter = nextDrop ? quarterOrder.indexOf(nextDrop.quarter) : 0;
 
 
 // Intake POST target. Reuses the site's existing lead endpoint so roadmap
@@ -48,17 +46,10 @@ const intakePost = '/api/lead';
             <li class="stat"><b>{LAUNCH_STATS.testing}</b><span>Testing</span></li>
           </ul>
         </div>
-        {nextDrop && <aside class="launch-spotlight" aria-labelledby="next-launch-heading">
-          <div class="spotlight-meta"><span>Next official launch</span><span>{nextDrop.category}</span></div>
-          <ReleasePath />
-          <h2 id="next-launch-heading">{nextDrop.name === 'AriesOutdoorLiving' ? 'Aries Outdoor Living' : nextDrop.name}</h2>
-          <p>{nextDrop.blurb}</p>
-          <div class="spotlight-actions">
-            <a href={`#quarter-${nextQuarter}`} data-cta="roadmap-next-details" data-section="roadmap" data-intent="product:roadmap-drop">View launch details <span aria-hidden="true">↘</span></a>
-            <button class="motion-toggle" type="button" data-motion-toggle hidden aria-pressed="false" data-cta="roadmap-motion-toggle" data-section="roadmap">Pause motion</button>
-          </div>
-        </aside>}
+
       </div>
+
+      <RoadmapStage />
 
       <div class="roadmap-board">
         <aside class="roadmap-sidebar">
@@ -282,14 +273,11 @@ const intakePost = '/api/lead';
     .roadmap-scope .signup { padding: 1.25rem; }
     .roadmap-scope .signup-btn { width: 100%; }
   }
-  .roadmap-intro { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 4rem; align-items: center; }
-  .launch-spotlight { background: var(--card); border: 1px solid var(--line); border-radius: theme('borderRadius.hq-panel'); padding: 2rem; }
-  .spotlight-meta { display: flex; justify-content: space-between; gap: 1rem; color: var(--ink-mute); font-size: theme('fontSize.hq-label[0]'); }
-  .spotlight-meta span:first-child { color: var(--accent); }
-  .launch-spotlight h2 { font-size: theme('fontSize.hq-section[0]'); line-height: 1.15; letter-spacing: -.035em; }
-  .launch-spotlight > p { margin-top: 1rem; color: var(--secondary); line-height: 1.65; }
-  .spotlight-actions { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; }
-  .spotlight-actions a { display: inline-flex; align-items: center; gap: 1rem; min-height: 44px; font-size: theme('fontSize.hq-small[0]'); color: theme('colors.electric.DEFAULT'); text-decoration: underline; text-underline-offset: .3em; }
+  .roadmap-intro .intro-copy { display: grid; grid-template-columns: 1fr 1fr; gap: 0 4rem; }
+  .roadmap-intro .intro-label, .roadmap-intro h1 { grid-column: 1; }
+  .roadmap-intro .lede { grid-column: 1; }
+  .roadmap-intro .schedule-note { grid-column: 1; }
+  .roadmap-intro .stats { grid-column: 2; grid-row: 2 / 5; align-self: center; }
   .roadmap-board { display: grid; grid-template-columns: 205px minmax(0,1fr); gap: 3rem; margin-top: theme('spacing.hq-section'); align-items: start; }
   .roadmap-sidebar { position: sticky; top: 2rem; }
   .roadmap-sidebar :global(.section-nav) { margin: 0; border: 0; padding: 0; }
@@ -299,6 +287,6 @@ const intakePost = '/api/lead';
   .roadmap-groups { min-width: 0; }
   .group-count { display: block; margin-top: .5rem; font: 400 .8125rem/1.5 theme('fontFamily.sans'); color: var(--ink-mute); letter-spacing: 0; }
   [data-roadmap-quarter][hidden] { display: none; }
-  @media (max-width: 980px) { .roadmap-intro { grid-template-columns: 1fr; gap: 2rem; } .roadmap-board { grid-template-columns: 1fr; gap: 1.5rem; } .roadmap-sidebar { position: static; } .roadmap-sidebar :global(.section-nav ul) { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; } }
-  @media (max-width: 640px) { .launch-spotlight { padding: 1.25rem; } .roadmap-scope .stat b { font-size: 2rem; } }
+  @media (max-width: 980px) { .roadmap-intro .intro-copy { display: block; } .roadmap-board { grid-template-columns: 1fr; gap: 1.5rem; } .roadmap-sidebar { position: static; } .roadmap-sidebar :global(.section-nav ul) { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; } }
+  @media (max-width: 640px) { .roadmap-scope .stat b { font-size: 2rem; } }
 </style>

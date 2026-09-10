@@ -143,3 +143,16 @@ roadmap, followed by release-group navigation, animated status filtering and
 native expandable build details. Preserve every build's source data, prices,
 claims, forms, route and the original logo. Motion stays optional and bounded.
 Verification is recorded in `docs/ORBIT_VERIFICATION_2026-09-09.md`; local only.
+
+## D-CS-013 — Apply the cinematic tutorial to proof and release exploration (2026-09-10)
+
+Michael asked to apply useful techniques from his supplied Paul J Lipsky MP4.
+Local on-screen sampling identified structure-first iteration, a large focal
+visual and an inspectable gallery. Full narration review was unavailable because
+Gemini upload required sign-in. Implement large, uncropped proof media with native
+playback and larger-still dialogs; replace the fixed roadmap spotlight with a
+source-backed selected-build stage and synchronized details. Keep the existing
+page funnel, original logo, claims, prices and full no-JS build list. A still at
+00:03 of our existing Aries walkthrough supplies its preview; the tutorial's
+cabin assets and third-party providers are not used. No long pinned scroll intro
+or new rendering dependency. See the cinematic application and verification docs.

@@ -232,6 +232,8 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
     <nav aria-label="Quick contact">
     <a
       id="sticky-cta"
+      tabindex="-1"
+      aria-hidden="true"
       href={stickyIntakeHref}
       class="sticky-cta lg:hidden"
       data-cta="sticky-mobile"
@@ -253,16 +255,23 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
         var el = document.getElementById('sticky-cta');
         if (!el) return;
         var intake = document.getElementById('intake');
+        var interactive = document.querySelectorAll('[data-sticky-suppress]');
         function tick() {
           var y = window.scrollY || window.pageYOffset;
           var shouldShow = y > 260;
+          var vh = window.innerHeight || document.documentElement.clientHeight;
+          if (Array.prototype.some.call(interactive, function (surface) {
+            var bounds = surface.getBoundingClientRect();
+            return bounds.top < vh && bounds.bottom > 0;
+          })) shouldShow = false;
           if (intake) {
             var rect = intake.getBoundingClientRect();
-            var vh = window.innerHeight || document.documentElement.clientHeight;
             // Hide when the intake form is within one screen height of the top.
             if (rect.top < vh * 1.1) shouldShow = false;
           }
           el.classList.toggle('is-visible', shouldShow);
+          el.tabIndex = shouldShow ? 0 : -1;
+          el.setAttribute('aria-hidden', String(!shouldShow));
         }
         tick();
         window.addEventListener('scroll', tick, { passive: true });

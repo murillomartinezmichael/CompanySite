@@ -1,6 +1,6 @@
 # M3MM design system
 
-Version 2.1 · September 9, 2026 · all CompanySite pages.
+Version 2.2 · September 10, 2026 · all CompanySite pages.
 
 Michael explicitly requested neon green, blue and black with animation inspired
 by his 2021 Polaris Scrambler XP 1000 S. This supersedes Version 1's restrained
@@ -69,15 +69,22 @@ remain first in mobile reading order. At 320px every page must reflow.
   Released ledger, Testing previews, roadmap queue, company close.
 - Sales: Hero → TwoDoor → Proof → Services → FAQ → Intake. Section jumps help
   returning buyers reach proof/pricing/form; preserve all existing anchors.
-- Roadmap: release explanation and counts alongside a next-launch spotlight with
-  a decorative animated release path. Desktop has a sticky release-group directory;
-  mobile has wrapping jump links. Optional status filters precede grouped native
-  build disclosures. Released and next builds start expanded; testing and planned
-  builds expand on demand, including without JavaScript. Filter transitions are
-  short, canceled on rapid input and disabled by motion preferences. Quarter jumps
-  reset filters before navigation. The follow form closes the board.
+  Proof uses large media stages and editorial text. Preserve portrait video with
+  object-fit: contain, preload none, native controls and no autoplay/loop. Existing
+  stills open in native dialogs with a close action, Escape and focus return.
+  Dialog controls are hidden without JS; media and proof text remain available.
+- Roadmap: release explanation and counts, then a selected-build stage sourced
+  from all 21 DROPS. A native chooser updates its title, description, release state,
+  preview and detail jump. A keyboard-operated build index also appears above
+  1100px. Show actual preview media only where it exists; otherwise use decorative
+  ReleasePath. Source statuses remain distinct from date/percentage progress.
+  The complete grouped disclosure list, optional status filters and follow form
+  remain below. With no JS the stage shows the next build and the list shows all
+  builds. Group/detail jumps reset filters before navigation.
 - Forms: solid reading surfaces, persistent labels, visible borders and focus.
   Preserve validation, error messages, endpoint and receipt destinations.
+- Floating review shortcut: hide while a `data-sticky-suppress` interactive
+  surface intersects the viewport; hidden shortcuts leave the tab order.
 - Footer: two-column directory on mobile, three on desktop, full email row,
   brand and motion control. Keep content clear of floating chat/review controls.
 

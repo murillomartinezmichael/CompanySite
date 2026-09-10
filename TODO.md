@@ -1,5 +1,20 @@
 # CompanySite — TODO
 
+## 2026-09-10 — cinematic reference application
+
+- [x] Review sampled on-screen tutorial examples; record observations and review limits.
+- [x] Make the roadmap a source-driven, keyboard-operable 21-build stage with short coordinated transitions.
+- [x] Enlarge existing case-study media, add native still viewers and manual video playback.
+- [x] Suppress the floating review shortcut over interactive proof and roadmap areas.
+- [x] Verify build, 520 passing tests (2 existing skips), 60 axe combinations, 15 canonicals,
+  Astro diagnostics, and four-width interaction checks. Exact evidence and scoped modal
+  contrast review: `docs/CINEMATIC_VERIFICATION_2026-09-10.md`.
+- [x] Persist applied techniques and limits in shared product guidance and learning log.
+- [ ] Michael: review existing proof-media content before publication; see PENDING_MANUAL.md.
+- [ ] Optional full narrated tutorial review requires an available approved native-video seat.
+- [ ] Broader rollout remains parked: Aries V2, Resume-specific interaction and other products.
+  This pass adds shared proof improvements to home and Websites; no deployment or push.
+
 ## 2026-09-09 — orbital motion and roadmap refinement
 
 - [x] Replace mechanical artwork with a bounded galaxy-like particle field and SVG fallback.

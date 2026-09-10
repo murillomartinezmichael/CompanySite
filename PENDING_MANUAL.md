@@ -150,3 +150,19 @@ The earlier design-only release item below is subsumed by this combined branch.
   - **What to do:** Decide the cash paid per successful referral and the payout trigger, then set them in `functions/_lib/referral.ts` — `REFERRAL_PROGRAM.bountyUsd` (currently `null`) and `payoutTrigger` (currently `'when their build starts'`). That one edit lights up all four surfaces at once: the intake hint, `/thanks`, `/start/thanks`, and the auto-reply email. The research pattern (WebsiteDesignFor99) uses $100/referral; the field, the `?ref=` share links, and the admin-email attribution row are already live and capturing referrers today.
   - **Why blocked on him:** It is a cash commitment published on a live money-path site. Guessing the number would be fabrication (LAW 6), so the code deliberately ships in capture-only mode and `tests/build/referral-program.test.ts` fails if any payout figure reaches a public surface while `bountyUsd` is null.
   - **Resumes:** The program stops being "tell me who sent you" and becomes "get $X for sending someone" — the actual conversion mechanic. Also update the expectation in `tests/build/referral-program.test.ts` ("keeps the bounty unset until the owner confirms it") in the same commit as the decision.
+
+## 2026-09-09 — optional full tutorial review
+
+- [ ] Gemini sign-in is required to upload the supplied cinematic-websites MP4
+  through the fleet's native video-review route. On-screen frames were reviewed
+  locally; narration was not. Full video/audio review remains optional follow-up.
+  No upload or login was performed; implementation evidence distinguishes scope.
+
+### 2026-09-10 — existing proof-media content review before publication
+
+The larger viewer makes existing source-image details easier to read. The supplied
+Big7 screenshot includes a `(555)` phone number and a license line; the existing
+Aries walkthrough contains rating/project-count text. This pass did not invent,
+edit or independently verify those embedded statements. Michael must confirm the
+media is suitable for public proof or supply an approved replacement before publishing.
+Source assets: `src/assets/big7-live-site.jpg`, `public/videos/aries-scroll-v2.mp4`.
