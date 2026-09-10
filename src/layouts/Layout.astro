@@ -1,4 +1,5 @@
 ---
+import designTokens from '../../tailwind.config.mjs';
 import '@/styles/global.css';
 // Claude-powered assistant, replaced the SiteGuide embed 2026-08-20.
 import ChatWidget from '@/components/ChatWidget.astro';
@@ -24,7 +25,7 @@ const {
   title = 'M3MM — Modernize. Mobilize. Multiply.',
   description = 'M3MM is Michael Murillo-Martinez\'s company hub for the official release, test deployments, client work, company departments, policies, and roadmap.',
   path = '/',
-  ogImage = '/og.png',
+  ogImage = '/official-logo.png',
   noindex = false,
   breadcrumbs,
 } = Astro.props;
@@ -47,7 +48,7 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#0D0E14" />
+    <meta name="theme-color" content={designTokens.theme.extend.colors.ink.DEFAULT} />
     <meta name="color-scheme" content="dark" />
 
     <title>{title}</title>
@@ -66,18 +67,17 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={new URL(ogImage, canonical).toString()} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image:width" content={ogImage === '/official-logo.png' ? '1024' : '1200'} />
+    <meta property="og:image:height" content={ogImage === '/official-logo.png' ? '1024' : '630'} />
     <meta property="og:image:type" content={ogImage.endsWith('.svg') ? 'image/svg+xml' : 'image/png'} />
-    <meta property="og:image:alt" content={title} />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:image:alt" content={ogImage === '/official-logo.png' ? 'M3MM official logo' : title} />
+    <meta name="twitter:card" content={ogImage === '/official-logo.png' ? 'summary' : 'summary_large_image'} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(ogImage, canonical).toString()} />
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" href="/official-logo.png" />
+    <link rel="apple-touch-icon" href="/official-logo.png" />
 
     <!--
       Self-hosted fonts. Inter (400/500/600) and Space Grotesk (300–700) each
@@ -208,20 +208,32 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
       })} />
     )}
   </head>
-  <body>
+  <body class:list={[{ 'hq-page': path === '/' || path === '/websites' }]}>
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-clay focus:px-4 focus:py-2 focus:text-ink">Skip to content</a>
 
     <slot name="header" />
 
-    <main id="main">
+    <main id="main" data-page={path}>
+      {breadcrumbs && breadcrumbs.length > 1 && (
+        <nav class="page-trail container-page" aria-label="Breadcrumb">
+          <ol>{breadcrumbs.map((crumb, index) => <li>
+            {index < breadcrumbs.length - 1
+              ? <a href={crumb.url} data-cta="breadcrumb" data-section="navigation">{crumb.name}</a>
+              : <span aria-current="page">{crumb.name}</span>}
+          </li>)}</ol>
+        </nav>
+      )}
       <slot />
     </main>
 
     <slot name="footer" />
 
     <!-- Sticky mobile CTA. Mobile-only; the Header nav covers desktop. -->
+    <nav aria-label="Quick contact">
     <a
       id="sticky-cta"
+      tabindex="-1"
+      aria-hidden="true"
       href={stickyIntakeHref}
       class="sticky-cta lg:hidden"
       data-cta="sticky-mobile"
@@ -234,6 +246,7 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
         <path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </a>
+    </nav>
 
     <script is:inline>
       // Reveal past the hero fold; hide again once the intake is within one
@@ -242,16 +255,23 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
         var el = document.getElementById('sticky-cta');
         if (!el) return;
         var intake = document.getElementById('intake');
+        var interactive = document.querySelectorAll('[data-sticky-suppress]');
         function tick() {
           var y = window.scrollY || window.pageYOffset;
           var shouldShow = y > 260;
+          var vh = window.innerHeight || document.documentElement.clientHeight;
+          if (Array.prototype.some.call(interactive, function (surface) {
+            var bounds = surface.getBoundingClientRect();
+            return bounds.top < vh && bounds.bottom > 0;
+          })) shouldShow = false;
           if (intake) {
             var rect = intake.getBoundingClientRect();
-            var vh = window.innerHeight || document.documentElement.clientHeight;
             // Hide when the intake form is within one screen height of the top.
             if (rect.top < vh * 1.1) shouldShow = false;
           }
           el.classList.toggle('is-visible', shouldShow);
+          el.tabIndex = shouldShow ? 0 : -1;
+          el.setAttribute('aria-hidden', String(!shouldShow));
         }
         tick();
         window.addEventListener('scroll', tick, { passive: true });
@@ -260,12 +280,12 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
     </script>
 
     <script>
+      import { wireMotion } from '@/lib/motion';
       import { wireCTAs } from '@/lib/track';
-      import { wireReveals } from '@/lib/reveal';
       import { wirePrefill } from '@/lib/prefill';
       import { wireLazyVideos } from '@/lib/lazyVideo';
+      wireMotion();
       wireCTAs();
-      wireReveals();
       wirePrefill();
       wireLazyVideos();
     </script>

@@ -49,7 +49,7 @@ describe('CaseStudy outbound deployment link carries UTM attribution', () => {
     // Without utm_content, a client with multiple case studies (future
     // state) can't tell which one drove the visit. Slug-per-content
     // scopes it correctly today and future-proofs the loop.
-    expect(src).toMatch(/searchParams\.set\(\s*['"]utm_content['"],\s*entry\.slug\s*\)/);
+    expect(src).toMatch(/searchParams\.set\(\s*['"]utm_content['"],\s*entry\.id\s*\)/);
   });
 
   it('renders the anchor with data-cta / data-section / data-intent so the click side of the loop closes too', () => {
@@ -57,9 +57,9 @@ describe('CaseStudy outbound deployment link carries UTM attribution', () => {
     // event on the SOURCE side (m3mm.net analytics) closes on data-cta
     // + data-intent — track.ts's wireCTAs pulls both. Missing either
     // makes proof-section funnel analysis a guess.
-    expect(src).toMatch(/data-cta=\{`casestudy-\$\{entry\.slug\}-visit`\}/);
+    expect(src).toMatch(/data-cta=\{`casestudy-\$\{entry\.id\}-visit`\}/);
     expect(src).toMatch(/data-section="proof"/);
-    expect(src).toMatch(/data-intent=\{`product:\$\{entry\.slug\}`\}/);
+    expect(src).toMatch(/data-intent=\{`product:\$\{entry\.id\}`\}/);
   });
 
   it('opens in a new tab with rel="noopener noreferrer"', () => {

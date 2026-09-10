@@ -1,11 +1,11 @@
 # CompanySite — m3mm.net
 
 **Status:** 🟢 LIVE at [https://m3mm.net](https://m3mm.net) (Cloudflare Pages, since 2026-07-06).
-**Design:** "Confident Studio" — dark, restrained, single clay accent (replaced the cyberpunk theme 2026-07-21, see `DECISIONS.md § D-CS-010`; the old single-file site is preserved read-only in `legacy/`).
+**Design:** Dark, restrained M3MM identity with a teal accent. The homepage and roadmap follow the measured [M3MM design system](docs/M3_DESIGN_SYSTEM.md). This branch's redesign is verified locally and awaiting release; the legacy cyberpunk page stays read-only in `legacy/`.
 **Perf:** Lighthouse desktop = 98/96/93/91 (2026-07-07 measurement). Measurement + strike ledger at [`docs/lighthouse-baseline.md`](docs/lighthouse-baseline.md).
 
-M3MM's marketing site. Turns TikTok/Instagram traffic into DMs and quote requests.
-Visitors arrive already half-sold from a video; this site's only job is to close the loop.
+M3MM's company headquarters: released work, testing previews, departments and
+roadmap. The `/websites` department turns TikTok/Instagram traffic into quote requests.
 
 ## Offer Ladder
 
@@ -21,8 +21,8 @@ SiteGuide handles the DIY starter-company lane: templates, widgets, and bundles.
 
 ## Stack
 
-- **Astro 5** — static output, zero runtime JS by default
-- **Tailwind 3** — utility-first, design tokens in `tailwind.config.mjs`
+- **Astro 7** — static output; Node >=22.12, tested version in `.node-version`
+- **Tailwind 3** — PostCSS in `astro.config.mjs`, design tokens in `tailwind.config.mjs`
 - **Cloudflare Pages** — build + host + edge functions
 - **Cloudflare Pages Functions** (`functions/api/*.ts`) — serverless intake (`/api/lead` via Resend) + analytics beacon (`/api/track`)
 - **Fonts:** Space Grotesk (display) + Inter (body) — self-hosted variable WOFF2 served same-origin (no Google Fonts request at runtime); mono labels fall back to the system stack
@@ -40,8 +40,8 @@ CompanySite/
 │   │   ├── CaseStudy.astro        ← one card per case study
 │   │   ├── Services.astro         ← outcomes-framed services + from-pricing
 │   │   └── Intake.astro           ← lead form + client-side submit
+│   ├── content.config.ts          ← glob loader + case-study schema
 │   ├── content/
-│   │   ├── config.ts              ← case-study schema
 │   │   └── caseStudies/*.md       ← drop a .md file = new case study
 │   ├── assets/                    ← case-study screenshots (optimized at build)
 │   ├── lib/track.ts               ← CTA tracking helper (data-cta attribute)

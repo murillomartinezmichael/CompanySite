@@ -22,17 +22,16 @@ const referral = referralOffer();
 >
   <Header slot="header" minimal={true} path="/thanks" />
 
-  <section class="relative isolate overflow-hidden">
-    <div class="pointer-events-none absolute inset-x-0 top-0 h-[500px] bg-gradient-to-b from-clay/[0.10] via-transparent to-transparent"></div>
+  <section class="page-intro receipt-page relative isolate overflow-hidden">
 
-    <div class="container-page relative pb-24 pt-14 sm:pt-24">
+    <div class="container-page relative py-hq-section">
       <div class="max-w-3xl">
         <div class="mb-6 flex items-center gap-3">
           <span class="hairline"></span>
           <p class="kicker mono">// Sent · queued for personal review</p>
         </div>
 
-        <h1 class="text-display-lg">
+        <h1 class="text-hq-hero">
           Got it. <span class="text-bone-dim">Reply within</span>
           <span class="highlight-yellow"><span class="fg">24 hours.</span></span>
         </h1>
@@ -126,12 +125,11 @@ const referral = referralOffer();
             data-intent="book:free-review"
           >
             Send them the review form
-            <span aria-hidden="true">→</span>
           </a>
         </div>
 
         <!-- Same-day path -->
-        <div class="mt-14 rounded-2xl border border-clay/30 bg-ink-soft/40 p-6 sm:p-8">
+        <div class="panel mt-14 p-6 sm:p-8">
           <p class="kicker mono mb-3 text-clay/80">// If it's actually urgent</p>
           <p class="text-bone-dim">
             This can't wait a day —

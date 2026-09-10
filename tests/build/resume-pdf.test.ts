@@ -99,7 +99,7 @@ describe('resume.pdf builds', () => {
     const html = readFileSync(join(DIST, 'resume/index.html'), 'utf8');
     // Hub Header brand mark + hub Footer tagline: proves the page mounts the
     // company chrome rather than importing the old standalone site's own.
-    expect(html, 'hub Header brand mark missing').toContain('/mark-light.png');
+    expect(html, 'hub Header brand mark missing').toContain('/official-logo.png');
     expect(html, 'hub Footer missing').toMatch(/Modernize\. Mobilize\. Multiply\./);
     expect(html, 'canonical is not the hub URL').toContain('href="https://m3mm.net/resume"');
     // The retired accent token from the standalone site must not survive the

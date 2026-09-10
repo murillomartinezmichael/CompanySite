@@ -2,16 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─────────────────────────────────────────────────────────────────
-   CONFIDENT STUDIO — design system v4 (2026-07-21)
-   Replaces the v3 "Cyberpunk Edgerunners" theme (see tailwind.config.mjs
-   for the full rationale). Dark mode kept — it still reads modern/premium
-   — but the neon-HUD decoration (scanlines, grid lattice, glitch, halftone
-   swarms, multi-hue accent rotation) is gone. One accent, used sparingly.
-   Transitions 120–180ms. Class names stay stable across component code
-   where the class still makes sense; removed classes are deleted below
-   with a note on where their markup usage went.
-   ───────────────────────────────────────────────────────────────── */
+/* Performance direction: lime actions, electric blue wayfinding, black ground.
+   All color values resolve to tailwind.config.mjs. */
 
 @layer base {
   html {
@@ -20,12 +12,15 @@
   }
   body {
     @apply bg-ink text-bone font-sans antialiased;
-    /* One quiet radial hint, well under 10% alpha — no second hue. */
-    background-image:
-      radial-gradient(80% 60% at 50% 0%, rgba(79, 184, 199, 0.05), transparent 70%);
-    background-attachment: fixed;
     min-height: 100vh;
     position: relative;
+  }
+  body.hq-page {
+    background-image: none;
+  }
+  footer {
+    /* Keep the last links above the fixed chat and review controls. */
+    padding-bottom: 5rem;
   }
 
   h1, h2, h3, h4 {
@@ -49,6 +44,7 @@
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
       animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
@@ -57,20 +53,20 @@
 
 @layer components {
   .container-page {
-    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
   }
 
   /* Primary CTA — solid accent fill, confident and simple. Hover deepens
      the fill slightly rather than swapping hue. 150ms. */
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2.5 border border-clay bg-clay px-7 py-3.5 text-base font-semibold text-ink transition-all duration-150;
-    border-radius: 6px;
+    border-radius: theme('borderRadius.hq-control');
     letter-spacing: 0.01em;
   }
   .btn-primary:hover {
     background-color: theme('colors.clay.glow');
     border-color: theme('colors.clay.glow');
-    box-shadow: 0 0 12px rgba(79, 184, 199, 0.30);
+    box-shadow: theme('boxShadow.glow-clay');
   }
   .btn-primary:active {
     transform: scale(0.99);
@@ -79,24 +75,23 @@
   /* Ghost CTA — thinner, more restrained */
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2 border px-7 py-3.5 text-base font-medium text-bone transition-all duration-150;
-    border-radius: 6px;
-    border-color: theme('colors.ink.line');
+    border-radius: theme('borderRadius.hq-control');
+    border-color: theme('colors.ink.outline');
   }
   .btn-ghost:hover {
     border-color: theme('colors.clay.DEFAULT');
     color: theme('colors.clay.DEFAULT');
   }
 
-  /* Card / panel — surface navy with a 1px accent-15% border */
+  /* Grouped content uses the shared neutral surface and panel radius. */
   .panel {
     background-color: theme('colors.ink.soft');
-    border: 1px solid rgba(79, 184, 199, 0.15);
-    border-radius: 10px;
-    box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset;
+    border: 1px solid theme('colors.ink.line');
+    border-radius: theme('borderRadius.hq-panel');
   }
 
   .kicker {
-    @apply font-mono text-[11px] font-medium uppercase tracking-[0.24em] text-bone-muted;
+    @apply font-sans text-hq-small font-medium text-electric;
   }
 
   /* Thin accent hairline — used as section-open markers */
@@ -110,34 +105,23 @@
   }
 
   .field-label {
-    @apply font-mono flex items-center justify-between text-[11px] font-medium uppercase tracking-[0.18em] text-bone-muted;
+    @apply font-sans flex items-center justify-between text-hq-small font-medium text-bone-dim;
   }
   .field-input {
-    @apply w-full border bg-ink/60 px-4 py-3 text-bone placeholder:text-bone-muted/60 transition-all duration-150;
-    border-color: theme('colors.ink.line');
-    border-radius: 6px;
+    @apply w-full border bg-ink px-4 py-3 text-bone placeholder:text-bone-muted transition-all duration-150;
+    border-color: theme('colors.ink.outline');
+    border-radius: theme('borderRadius.hq-control');
   }
   .field-input:focus {
-    outline: none;
+    outline: 2px solid theme('colors.clay.DEFAULT');
     border-color: theme('colors.clay.DEFAULT');
     background: theme('colors.ink.DEFAULT');
-    box-shadow: 0 0 12px rgba(79, 184, 199, 0.30);
+    box-shadow: theme('boxShadow.glow-clay');
   }
 
-  .reveal {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: opacity, transform;
-  }
-  .reveal.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .reveal-delay-1 { transition-delay: 60ms; }
-  .reveal-delay-2 { transition-delay: 120ms; }
-  .reveal-delay-3 { transition-delay: 180ms; }
-  .reveal-delay-4 { transition-delay: 240ms; }
+  /* Content stays visible with scripts blocked, slow or disabled. Motion belongs
+     to the hero sculpture, not every reading section. */
+  .reveal, .reveal.is-visible { opacity: 1; transform: none; }
 
   /* Hero/headline accent word — plain accent color + weight, no
      background box or glitch. Restrained; the SVG underline drawn in
@@ -160,6 +144,7 @@
      above this element's z-index 45 — so a right-aligned CTA here would sit
      permanently underneath it, unclickable. Confirmed live 2026-08-20. */
   .sticky-cta {
+    visibility: hidden;
     position: fixed;
     left: 16px;
     bottom: 16px;
@@ -178,13 +163,14 @@
     text-transform: uppercase;
     border: 1px solid theme('colors.clay.DEFAULT');
     border-radius: 999px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    box-shadow: theme('boxShadow.floating-control');
     opacity: 0;
     transform: translateY(8px);
     pointer-events: none;
     transition: opacity 180ms ease, transform 180ms ease, background 150ms ease, border-color 150ms ease;
   }
   .sticky-cta.is-visible {
+    visibility: visible;
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
@@ -206,6 +192,37 @@
   /* Section divider — 1px accent hairline */
   .rule-cyan {
     @apply block h-px w-full;
-    background: rgba(79, 184, 199, 0.25);
+    background: color-mix(in srgb, theme('colors.clay.DEFAULT') 25%, transparent);
   }
 }
+
+/* Shared structure across the hub, sales, editorial and receipt pages. */
+.page-trail { padding-top: 1.5rem; }
+.page-trail ol { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; font-size: theme('fontSize.hq-label[0]'); color: theme('colors.bone.muted'); }
+.page-trail li { display: flex; align-items: center; gap: .5rem; }
+.page-trail li + li::before { content: '/'; color: theme('colors.bone.muted'); }
+.page-trail a { display: inline-flex; align-items: center; min-height: 44px; color: theme('colors.electric.DEFAULT'); text-decoration: underline; text-underline-offset: .25em; }
+.motion-toggle { display: inline-flex; min-height: 44px; align-items: center; padding: .5rem .875rem; border: 1px solid theme('colors.ink.outline'); border-radius: theme('borderRadius.hq-control'); color: theme('colors.bone.dim'); font-size: theme('fontSize.hq-label[0]'); }
+.motion-toggle[hidden] { display: none; }
+.motion-toggle:hover { border-color: theme('colors.electric.DEFAULT'); }
+.motion-toggle:disabled { cursor: default; }
+html[data-motion="paused"] *, html[data-motion="paused"] *::before, html[data-motion="paused"] *::after { animation-play-state: paused !important; }
+img[src="/official-logo.png"] { object-fit: contain; border-radius: 0; filter: none; }
+.page-intro { border-bottom: 1px solid theme('colors.ink.line'); }
+.page-intro h1 { font-weight: 600; }
+.page-intro .hairline { height: 3px; width: 2rem; background: theme('colors.electric.DEFAULT'); }
+.page-intro h1 .text-bone-dim { color: inherit; }
+.reading-page h1 { font-weight: 600; letter-spacing: -.035em; }
+.reading-page h2 { scroll-margin-top: 2rem; }
+.reading-page > section { border-top: 1px solid theme('colors.ink.line'); padding-top: 2rem; }
+.reading-page > section h2 { border-bottom: 0; }
+.receipt-page .panel { border-top: 2px solid theme('colors.electric.DEFAULT'); }
+:where(main) :is(section[id], article[id], h2[id]) { scroll-margin-top: 2rem; }
+:where(main) :is(h1,h2,h3,p) { overflow-wrap: break-word; }
+@media (prefers-reduced-motion: reduce) { .kinetic-track * { animation: none !important; } }
+
+/* Orbit refinement: the artwork supplies motion; interface labels stay quiet. */
+.kicker.mono { font-family: theme('fontFamily.sans'); font-size: theme('fontSize.hq-small[0]'); letter-spacing: .01em; text-transform: none; color: theme('colors.bone.dim'); }
+.motion-toggle { border-color: transparent; padding-inline: 0; text-decoration: underline; text-underline-offset: .3em; }
+.motion-toggle:hover { border-color: transparent; color: theme('colors.electric.DEFAULT'); }
+.btn-primary, .btn-ghost { transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease; }

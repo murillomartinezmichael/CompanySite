@@ -15,7 +15,7 @@ import Footer from '@/components/Footer.astro';
 >
   <Header slot="header" minimal={true} path="/accessibility" />
 
-  <section class="container-page py-16 lg:py-24 max-w-3xl">
+  <section class="reading-page container-page py-hq-section max-w-3xl">
     <p class="text-xs uppercase tracking-[0.24em] text-bone-muted">Statement · Accessibility</p>
     <h1 class="mt-4 font-display text-4xl sm:text-5xl leading-[1.05] text-bone">
       Accessibility <em class="text-clay italic">Statement</em>
@@ -29,7 +29,7 @@ import Footer from '@/components/Footer.astro';
     <h2 class="mt-14 font-display text-2xl text-bone">Our commitment</h2>
     <p class="mt-4 text-bone-muted leading-relaxed">
       We aim to conform to the
-      <a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank" rel="noopener" class="text-clay underline underline-offset-4 hover:text-bone">
+      <a href="https://www.w3.org/WAI/WCAG21/quickref/" data-cta="accessibility-standard" data-section="accessibility" data-intent="product:accessibility" target="_blank" rel="noopener" class="text-clay underline underline-offset-4 hover:text-bone">
         Web Content Accessibility Guidelines (WCAG) 2.1 Level AA</a>.
       These guidelines cover readable text, sufficient color contrast, keyboard navigation, alt
       text on meaningful images, and clear labeling — the things that make a site work for people
@@ -63,7 +63,7 @@ import Footer from '@/components/Footer.astro';
         <strong>Email:</strong>
         <a
           href="/audit?intent=book:accessibility-report#intake"
-          class="text-clay underline underline-offset-4 hover:text-bone"
+          class="inline-block max-w-full break-all text-clay underline underline-offset-4 hover:text-bone"
           data-cta="accessibility-contact"
           data-section="accessibility"
           data-intent="book:accessibility-report"

@@ -1,5 +1,87 @@
 # Pending manual
 
+## 2026-09-09 — performance redesign review
+
+- [ ] Review the local lime/blue/black site before choosing a release. Preview:
+  `http://127.0.0.1:4321`. Design authority: D-CS-011; evidence and limits:
+  `docs/PERFORMANCE_VERIFICATION_2026-09-09.md`. This redesign is not deployed.
+- [ ] Copy the prepared performance-redesign entry from `COCKPIT_QUEUE.md` into
+  the actual Cockpit Work Log. No browser localStorage write is claimed.
+
+The supplied logo is preserved at 804,005 bytes. It is reused from one cached
+URL; this pass intentionally makes no smaller or recolored derivative.
+
+
+## 2026-09-09 — Structure audit handoff
+
+- [ ] **Decide what a roadmap subscriber is actually promised.** The routing half
+  is done (2026-09-09): roadmap signups now land on `/roadmap/thanks` on both the
+  JS and no-JS paths, and that page deliberately promises nothing — it says the
+  request was received and went to M3MM, and stops there. The false promise is
+  gone. What is still open is whether you want to promise anything at all
+  (a cadence, "email on every release", a format). If yes, give the wording and
+  it goes in; if no, the page is already correct as-is and this can be closed.
+- [ ] **Review the local structure commit as part of the combined release.**
+  See `docs/STRUCTURE_AUDIT_2026-09-09.md` for the 14-page map, implemented fixes,
+  remaining style inventory and exact verification. No production writes or
+  outbound form/chat submissions were performed. Existing dependency, proof
+  asset and publication gates below still apply.
+
+## 2026-09-09 — TODO sweep handoff
+
+- [ ] **Review and release `codex/companysite-todo-2026-09-09`.** Includes the
+  preceding homepage/roadmap design plus Astro 7, API middleware, comparison page
+  and sales accessibility fixes. Resolve the npm advisory gate below first;
+  obtain the required independent money-path review before production. Confirm
+  the Pages build uses Node >=22.12 and Functions has `nodejs_compat` enabled
+  for the existing SDK imports; verify static routes and API headers after release.
+  Owner publication authority is required; this session made no production writes.
+- [ ] **Confirm product changes before implementing them.** The suggested new
+  flat-fee tier above $2,000 conflicts with the approved quote-only ceiling.
+  A named expanded guarantee/client board needs agreed terms and an actual board.
+  The instant AI homepage generator needs scope, provider/budget, output/retention
+  policy and agreement to change the human-review offer. These decisions unblock
+  bounded implementation; the present confirmed offer remains intact.
+- [ ] **Supply remaining proof assets.** Existing Aries video and founder
+  signature are already wired. Still needed: Big7 video/jobsite assets,
+  headshot/confirmed TikTok and IG URLs, approved real testimonials or review-profile evidence,
+  and the selected reel URL. Aries before/after needs client permission plus the
+  selected historical capture. Do not manufacture ratings or business results.
+- [ ] **Transcribe the Cockpit queue in the actual local browser state.** The
+  tick-23 entry exists in `COCKPIT_QUEUE.md`; copying it to another file is not
+  draining the work log. Preserve it until the actual write is verified.
+- [ ] **Verify live delivery and analytics with authorized account access.**
+  Local tests use mocks/empty bindings; they cannot prove delivered real email,
+  live n8n/Cockpit writes or conversion results. Follow the existing smoke
+  procedure only when outbound test submissions are authorized.
+
+The earlier design-only release item below is subsumed by this combined branch.
+
+## 2026-09-09 — npm patch-update failure
+
+- [ ] **Repair npm's dependency update failure, then apply available patches.**
+  - **What:** in a clean checkout or repaired npm environment, update Vitest to
+    >=4.1.11 and SVGO to >=4.0.3 (current 4.1.0), regenerate the lockfile and
+    rerun build/tests/audit. Do not use audit fix --force.
+  - **Why blocked:** npm update, explicit install, and package-lock-only install
+    each failed with `Cannot read properties of null (reading 'edgesOut')`.
+    Three fix attempts reached the fleet setup limit. The installed Astro 7
+    migration remains separately verifiable; failed patch specs were removed.
+  - **Resumes:** close the remaining @vitest/mocker + vitest moderate and svgo
+    high audit findings. Advisory references: GHSA-82fw-gwwq-j7x9,
+    GHSA-w27v-7q3p-w38r, GHSA-4vpr-x523-8j87.
+
+## M3MM homepage + roadmap release
+
+- [ ] **Approve production release of `design/m3-system-2026-09-08`.**
+  - **What:** review the completed local homepage/roadmap design commit, then
+    authorize the normal merge and production deployment.
+  - **Why Mike:** the current session authorizes local design work; production
+    publication remains an explicit owner gate under root CLAUDE.md.
+  - **Resumes:** release the verified change and check `/` and `/roadmap` live.
+    Local gates pass: 493 tests (2 existing skips), 13-page build, Astro clean,
+    axe zero violations on both routes at four widths.
+
 ## Competitor-research implementation gates (2026-07-19)
 
 - [ ] **Be ready to deliver recorded video teardowns (OBS/Loom).**
@@ -68,3 +150,19 @@
   - **What to do:** Decide the cash paid per successful referral and the payout trigger, then set them in `functions/_lib/referral.ts` — `REFERRAL_PROGRAM.bountyUsd` (currently `null`) and `payoutTrigger` (currently `'when their build starts'`). That one edit lights up all four surfaces at once: the intake hint, `/thanks`, `/start/thanks`, and the auto-reply email. The research pattern (WebsiteDesignFor99) uses $100/referral; the field, the `?ref=` share links, and the admin-email attribution row are already live and capturing referrers today.
   - **Why blocked on him:** It is a cash commitment published on a live money-path site. Guessing the number would be fabrication (LAW 6), so the code deliberately ships in capture-only mode and `tests/build/referral-program.test.ts` fails if any payout figure reaches a public surface while `bountyUsd` is null.
   - **Resumes:** The program stops being "tell me who sent you" and becomes "get $X for sending someone" — the actual conversion mechanic. Also update the expectation in `tests/build/referral-program.test.ts` ("keeps the bounty unset until the owner confirms it") in the same commit as the decision.
+
+## 2026-09-09 — optional full tutorial review
+
+- [ ] Gemini sign-in is required to upload the supplied cinematic-websites MP4
+  through the fleet's native video-review route. On-screen frames were reviewed
+  locally; narration was not. Full video/audio review remains optional follow-up.
+  No upload or login was performed; implementation evidence distinguishes scope.
+
+### 2026-09-10 — existing proof-media content review before publication
+
+The larger viewer makes existing source-image details easier to read. The supplied
+Big7 screenshot includes a `(555)` phone number and a license line; the existing
+Aries walkthrough contains rating/project-count text. This pass did not invent,
+edit or independently verify those embedded statements. Michael must confirm the
+media is suitable for public proof or supply an approved replacement before publishing.
+Source assets: `src/assets/big7-live-site.jpg`, `public/videos/aries-scroll-v2.mp4`.

@@ -29,7 +29,7 @@ import resume from '@/data/resume.json';
 >
   <Header slot="header" minimal={true} path="/resume" />
 
-  <article class="container-page max-w-3xl py-16 lg:py-24">
+  <article class="reading-page container-page max-w-3xl py-hq-section">
     <p class="kicker">Career · Resume</p>
 
     <div class="mt-4 flex flex-wrap items-start justify-between gap-6">
@@ -40,6 +40,7 @@ import resume from '@/data/resume.json';
       <a
         href="/resume.pdf"
         download
+        data-cta="resume-download" data-section="resume" data-intent="product:career"
         class="btn-ghost shrink-0 text-sm px-5 py-2.5"
       >
         Download PDF
@@ -77,6 +78,7 @@ import resume from '@/data/resume.json';
             <a
               class="mt-3 inline-block py-1 text-sm text-clay underline underline-offset-4 hover:text-clay-glow"
               href={work.url}
+              data-cta="resume-work" data-section="resume" data-intent="product:career"
               target="_blank"
               rel="noopener"
             >
@@ -144,6 +146,7 @@ import resume from '@/data/resume.json';
       <p>
         <a
           id="resume-contact"
+          data-cta="resume-contact" data-section="resume" data-intent="product:career"
           href="/audit#intake"
           class="text-clay underline underline-offset-4 hover:text-clay-glow"
           data-em-u={resume.email.split('@')[0]}

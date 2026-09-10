@@ -45,6 +45,15 @@ const PAGE_EXPECTATIONS: ReadonlyArray<{
   { file: 'src/pages/policies.astro', path: '/policies' },
   { file: 'src/pages/roadmap.astro', path: '/roadmap' },
   { file: 'src/pages/websites.astro', path: '/websites' },
+  { file: 'src/pages/compare/website-options.astro', path: '/compare/website-options' },
+  { file: 'src/pages/for/construction.astro', path: '/for/construction' },
+  { file: 'src/pages/for/home-services.astro', path: '/for/home-services' },
+  { file: 'src/pages/for/outdoor-living.astro', path: '/for/outdoor-living' },
+  { file: 'src/pages/start/thanks.astro', path: '/start/thanks', noindex: true },
+  // A roadmap subscriber gets its own receipt: /thanks promises a recorded
+  // video teardown, which is false for a follow request. noindex for the same
+  // reason as every other receipt -- it eats crawl budget on a dead-end page.
+  { file: 'src/pages/roadmap/thanks.astro', path: '/roadmap/thanks', noindex: true },
   // ADR 0001 — the résumé moved onto the hub from its own Worker property.
   { file: 'src/pages/resume.astro', path: '/resume' },
 ];
@@ -115,9 +124,8 @@ describe('canonical URL wiring', () => {
     // If someone adds a new page and forgets to pin it here, the audit
     // silently rots. Enumerate the directory and diff against the list
     // — any *.astro file missing from PAGE_EXPECTATIONS fails.
-    const disk = readdirSync(root + 'src/pages')
-      .filter((f) => f.endsWith('.astro'))
-      .map((f) => `src/pages/${f}`)
+    const disk = walkAstro(root + 'src/pages')
+      .map((f) => relative(root, f).replace(/\\/g, '/'))
       .sort();
     const covered = PAGE_EXPECTATIONS.map((p) => p.file).sort();
     expect(disk).toEqual(covered);

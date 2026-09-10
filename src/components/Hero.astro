@@ -1,4 +1,5 @@
 ---
+import KineticTrack from '@/components/KineticTrack.astro';
 interface Props {
   eyebrow?: string;
   ctaLabel?: string;
@@ -13,57 +14,32 @@ const {
 } = Astro.props;
 ---
 
-<section class="relative isolate overflow-hidden">
-  <!-- Ambient hint (subtle two-stop cyan gradient at 6%) -->
-  <div class="pointer-events-none absolute inset-x-0 -top-16 h-[420px] -z-10">
-    <div class="absolute inset-x-0 top-0 h-full bg-gradient-to-b from-clay/[0.06] via-transparent to-transparent"></div>
-  </div>
-
-  <div class="container-page relative pb-20 pt-14 sm:pt-20 lg:pb-28 lg:pt-24">
+<section class="sales-hero page-intro relative isolate overflow-hidden">
+  <div class="container-page relative py-hq-section">
     <!-- Eyebrow row -->
     <div class="mb-10 flex flex-wrap items-center gap-x-4 gap-y-2">
       <span class="grid h-9 w-9 flex-none place-items-center overflow-hidden bg-ink-soft ring-1 ring-ink-line" style="border-radius: 2px;">
-        <img src="/mark-light.png" alt="M3MM" width="28" height="28" class="h-7 w-7 object-contain" decoding="async" />
+        <img src="/official-logo.png" alt="M3MM" width="28" height="28" class="h-7 w-7 object-contain" decoding="async" />
       </span>
       <span class="hairline"></span>
       <p class="kicker mono">{eyebrow}</p>
       <span class="ml-auto hidden items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-bone-muted sm:inline-flex">
         <span class="relative flex h-2 w-2">
-          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-clay opacity-70"></span>
+          <span class="absolute inline-flex h-full w-full rounded-full bg-clay opacity-70"></span>
           <span class="relative inline-flex h-2 w-2 rounded-full bg-clay" style="box-shadow: 0 0 6px currentColor;"></span>
         </span>
         <span>Booking · 24h reply</span>
       </span>
     </div>
 
-    <h1 class="text-display-2xl">
-      <span class="block text-bone">Websites that</span>
-      <span class="highlight-yellow relative inline-block">
-        <span class="fg relative z-10">get you customers.</span>
-        <!-- Accent hairline underline (drawn on load, reinforces the highlight) -->
-        <svg
-          class="absolute -bottom-2 left-0 h-[0.14em] w-full text-clay/60 sm:-bottom-3"
-          viewBox="0 0 400 6"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M2 3 L398 3"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="square"
-            fill="none"
-            stroke-dasharray="500"
-            style="animation: drawLine 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both;"
-          />
-        </svg>
-      </span>
-    </h1>
-
     <!-- Sub + CTA row: subhead on left, big authority stat on right (desktop) -->
-    <div class="mt-12 grid gap-10 lg:grid-cols-[1.35fr,1fr] lg:items-end lg:gap-16">
+    <div class="sales-stage grid gap-10 lg:grid-cols-[1.2fr,1fr] lg:items-start lg:gap-16">
       <div>
-        <p class="max-w-2xl text-lg leading-relaxed text-bone-dim sm:text-xl">
+        <h1 class="max-w-3xl text-hq-hero">
+          <span class="block text-bone">Websites that</span>
+          <span class="block">get you customers.</span>
+        </h1>
+        <p class="mt-6 max-w-2xl text-lg leading-relaxed text-bone-dim sm:text-xl">
           You saw the work — this closes the loop. Viewers become
           <span class="text-bone">DMs, quote requests, and phone calls</span>. Not clicks.
           Not vanity metrics. One engineer scopes it, ships it, hands it off — no agency
@@ -84,7 +60,11 @@ const {
       </div>
 
       <!-- Editorial stat block (right column on desktop) -->
-      <div class="border-l border-ink-line pl-6 sm:pl-8 lg:border-l lg:pl-10">
+      <div class="sales-evidence">
+        <div class="sales-art">
+          <KineticTrack compact />
+          <button type="button" class="motion-toggle" data-motion-toggle hidden aria-pressed="false" data-cta="sales-motion-toggle" data-section="hero">Pause motion</button>
+        </div>
         <div class="font-mono text-[11px] uppercase tracking-[0.22em] text-clay/80">
           // Since 2023
         </div>
@@ -107,40 +87,22 @@ const {
       </div>
     </div>
 
-    <!-- Trust marquee -->
-    <div class="relative mt-24 border-y border-ink-line/60 py-6 sm:mt-32">
-      <div class="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-ink to-transparent"></div>
-      <div class="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-ink to-transparent"></div>
-      <div class="flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
-        <div class="flex shrink-0 animate-marquee items-center gap-x-14 pr-14 motion-reduce:animate-none">
-          <span class="font-display text-2xl text-bone-dim">Aries Outdoor Living</span>
-          <span class="text-clay">·</span>
-          <span class="font-display text-2xl text-bone-dim">Big 7 Construction</span>
-          <span class="text-clay">·</span>
-          <span class="font-display text-2xl text-bone-dim">SiteGuide</span>
-          <span class="text-clay">·</span>
-          <span class="font-display text-2xl text-bone-dim">AI Manual Assistant</span>
-          <span class="text-clay">·</span>
-          <span class="font-display text-2xl text-bone-dim">CockpitCloud</span>
-          <span class="text-clay">·</span>
-          <span class="font-display text-2xl text-bone-dim">PhotoPicker</span>
-          <span class="text-clay">·</span>
-        </div>
-        <div aria-hidden="true" class="flex shrink-0 animate-marquee items-center gap-x-14 pr-14 motion-reduce:animate-none">
-          <span class="font-display text-2xl text-bone-dim">Aries Outdoor Living</span>
-          <span class="text-clay">·</span>
-          <span class="font-display text-2xl text-bone-dim">Big 7 Construction</span>
-          <span class="text-clay">·</span>
-          <span class="font-display text-2xl text-bone-dim">SiteGuide</span>
-          <span class="text-clay">·</span>
-          <span class="font-display text-2xl text-bone-dim">AI Manual Assistant</span>
-          <span class="text-clay">·</span>
-          <span class="font-display text-2xl text-bone-dim">CockpitCloud</span>
-          <span class="text-clay">·</span>
-          <span class="font-display text-2xl text-bone-dim">PhotoPicker</span>
-          <span class="text-clay">·</span>
-        </div>
-      </div>
+    <div class="mt-12 border-y border-ink-line py-6">
+      <ul class="flex flex-wrap gap-x-8 gap-y-4 text-bone-dim" aria-label="M3MM projects and tools" role="list">
+        <li>Aries Outdoor Living</li>
+        <li>Big 7 Construction</li>
+        <li>SiteGuide</li>
+        <li>AI Manual Assistant</li>
+        <li>CockpitCloud</li>
+        <li>PhotoPicker</li>
+      </ul>
     </div>
   </div>
 </section>
+
+<style>
+  .sales-evidence { min-width: 0; padding-left: 1rem; }
+  .sales-art { min-width: 0; margin-bottom: 2rem; }
+  .sales-hero h1 { font-weight: 600; }
+  @media (max-width: 1023px) { .sales-evidence { border-left: 0; padding-left: 0; } }
+</style>

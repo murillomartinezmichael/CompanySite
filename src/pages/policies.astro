@@ -15,13 +15,12 @@ import Footer from '@/components/Footer.astro';
 >
   <Header slot="header" minimal={true} path="/policies" />
 
-  <section class="relative isolate overflow-hidden py-16 sm:py-24">
-    <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[520px] bg-gradient-to-b from-clay/[0.08] via-transparent to-transparent"></div>
+  <section class="page-intro relative isolate overflow-hidden py-hq-section">
 
     <div class="container-page">
       <div class="flex items-center gap-4">
         <span class="grid h-12 w-12 flex-none place-items-center overflow-hidden bg-ink-soft ring-1 ring-ink-line" style="border-radius: 2px;">
-          <img src="/mark-light.png" alt="M3MM" width="38" height="38" class="h-9 w-9 object-contain" decoding="async" />
+          <img src="/official-logo.png" alt="M3MM" width="38" height="38" class="h-9 w-9 object-contain" decoding="async" />
         </span>
         <div>
           <p class="kicker mono">M3MM · Policy library</p>
@@ -29,7 +28,7 @@ import Footer from '@/components/Footer.astro';
         </div>
       </div>
 
-      <h1 class="mt-10 max-w-4xl text-display-xl">
+      <h1 class="mt-10 max-w-4xl text-hq-hero">
         Company policies,<br />
         <span class="text-bone-dim">written in plain English.</span>
       </h1>
@@ -42,9 +41,9 @@ import Footer from '@/components/Footer.astro';
         <aside class="lg:sticky lg:top-24 lg:h-fit" aria-label="Policy index">
           <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-bone-muted">Policy index</p>
           <nav class="mt-4 border-l border-ink-line" aria-label="Company policies">
-            <a href="#covid-vaccination" class="block border-l border-clay py-2 pl-4 text-sm text-bone transition-colors hover:text-clay">COVID-19 vaccination</a>
-            <a href="#accessibility" class="block py-2 pl-4 text-sm text-bone-dim transition-colors hover:text-bone">Accessibility</a>
-            <a href="#updates" class="block py-2 pl-4 text-sm text-bone-dim transition-colors hover:text-bone">Updates and scope</a>
+            <a href="#covid-vaccination" data-cta="policies-jump-vaccination" data-section="policies" data-intent="product:company-policies" class="block border-l border-clay py-2 pl-4 text-sm text-bone transition-colors hover:text-clay">COVID-19 vaccination</a>
+            <a href="#accessibility" data-cta="policies-jump-accessibility" data-section="policies" data-intent="product:company-policies" class="block py-2 pl-4 text-sm text-bone-dim transition-colors hover:text-bone">Accessibility</a>
+            <a href="#updates" data-cta="policies-jump-updates" data-section="policies" data-intent="product:company-policies" class="block py-2 pl-4 text-sm text-bone-dim transition-colors hover:text-bone">Updates and scope</a>
           </nav>
         </aside>
 
@@ -109,9 +108,9 @@ import Footer from '@/components/Footer.astro';
             <div class="mt-8 border-t border-ink-line pt-6 text-xs leading-relaxed text-bone-muted">
               <p>
                 Reference guidance:
-                <a href="https://www.osha.gov/common-respiratory-illnesses/general-recommendations" target="_blank" rel="noopener" class="text-clay underline decoration-clay/50 underline-offset-4 hover:text-bone">OSHA workplace recommendations</a>
+                <a data-cta="policies-osha" data-section="policies" data-intent="product:company-policies" href="https://www.osha.gov/common-respiratory-illnesses/general-recommendations" target="_blank" rel="noopener" class="text-clay underline decoration-clay/50 underline-offset-4 hover:text-bone">OSHA workplace recommendations</a>
                 and
-                <a href="https://www.eeoc.gov/federal-laws-protect-you-against-employment-discrimination-during-covid-19-pandemic" target="_blank" rel="noopener" class="text-clay underline decoration-clay/50 underline-offset-4 hover:text-bone">EEOC employment guidance</a>.
+                <a data-cta="policies-eeoc" data-section="policies" data-intent="product:company-policies" href="https://www.eeoc.gov/federal-laws-protect-you-against-employment-discrimination-during-covid-19-pandemic" target="_blank" rel="noopener" class="text-clay underline decoration-clay/50 underline-offset-4 hover:text-bone">EEOC employment guidance</a>.
               </p>
             </div>
           </article>

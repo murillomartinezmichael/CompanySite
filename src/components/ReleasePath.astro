@@ -1,0 +1,23 @@
+<div class="release-path" data-kinetic aria-hidden="true">
+  <svg viewBox="0 0 480 170" fill="none" focusable="false">
+    <path class="track-base" d="M25 125H115C170 125 150 45 220 45H265C330 45 315 105 365 105H455" />
+    <path class="track-light" pathLength="100" d="M25 125H115C170 125 150 45 220 45H265C330 45 315 105 365 105H455" />
+    <circle class="node node-released" cx="65" cy="125" r="7" />
+    <circle class="halo" cx="242" cy="45" r="23" />
+    <circle class="node node-next" cx="242" cy="45" r="9" />
+    <circle class="node node-planned" cx="420" cy="105" r="7" />
+  </svg>
+</div>
+<style>
+  .release-path { width: 100%; margin-block: .5rem; }
+  svg { display: block; width: 100%; height: auto; }
+  .track-base { stroke: theme('colors.ink.line'); stroke-width: 2; }
+  .track-light { stroke: theme('colors.electric.DEFAULT'); stroke-width: 2; stroke-dasharray: 16 84; stroke-linecap: round; }
+  .node-released { fill: theme('colors.electric.DEFAULT'); }
+  .node-next { fill: theme('colors.clay.DEFAULT'); }
+  .node-planned { fill: theme('colors.ink.soft'); stroke: theme('colors.bone.muted'); stroke-width: 2; }
+  .halo { stroke: theme('colors.clay.DEFAULT'); opacity: .3; }
+  :global(html[data-motion="full"]) .release-path[data-in-view="true"] .track-light { animation: release-flow 7s linear infinite; }
+  @keyframes release-flow { to { stroke-dashoffset: -100; } }
+  @media (prefers-reduced-motion: reduce) { .track-light { animation: none !important; } }
+</style>

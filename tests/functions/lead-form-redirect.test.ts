@@ -46,22 +46,52 @@ const jsonPost = (ip = '198.51.100.21') =>
 describe('no-JS form submits land on a page, not on raw JSON', () => {
   beforeEach(() => __resetBuckets());
 
-  it('a successful urlencoded submit redirects to the thank-you page', async () => {
+  // The receipt now depends on the lead's intent: /thanks promises a recorded
+  // video teardown within 24 hours, which is true of a site-review intake and
+  // false of someone who only asked to follow the roadmap. The destination is
+  // still chosen from a server-side allowlist, never from the request.
+  it('a roadmap subscriber lands on the roadmap receipt, not the review one', async () => {
     const res = await leadPost(ctx(formPost()));
     expect(res.status).toBe(303);
-    expect(res.headers.get('Location')).toBe('/thanks');
+    expect(res.headers.get('Location')).toBe('/roadmap/thanks');
     expect(await res.text()).toBe('');
   });
 
-  it('the redirect is a fixed same-site path, never taken from the request', async () => {
-    const res = await leadPost(ctx(formPost({ successPath: 'https://evil.example/steal' })));
+  it('every other intent still lands on the default thank-you page', async () => {
+    const res = await leadPost(ctx(formPost({ intent: 'book:free-review' }), '198.51.100.30'));
+    expect(res.status).toBe(303);
     expect(res.headers.get('Location')).toBe('/thanks');
+  });
+
+  it('an unknown intent falls back to the default rather than 404ing the visitor', async () => {
+    const res = await leadPost(ctx(formPost({ intent: 'book:not-a-real-flow' }), '198.51.100.31'));
+    expect(res.headers.get('Location')).toBe('/thanks');
+  });
+
+  it('the redirect is a same-site path from the allowlist, never taken from the request', async () => {
+    // Both the old attack (a successPath field) and the new surface (a hostile
+    // intent) must be inert. Anything the request supplies can at most select
+    // one of our own receipts; it can never introduce a destination.
+    const attacks = [
+      { successPath: 'https://evil.example/steal' },
+      { intent: 'https://evil.example/steal' },
+      { intent: '//evil.example' },
+      { intent: '/../../etc/passwd' },
+    ];
+    const allowed = ['/thanks', '/roadmap/thanks'];
+    let ip = 40;
+    for (const attack of attacks) {
+      const res = await leadPost(ctx(formPost(attack, `198.51.100.${ip++}`)));
+      const location = res.headers.get('Location');
+      expect(allowed, `intent ${JSON.stringify(attack)} escaped the allowlist`).toContain(location);
+    }
   });
 
   it('the honeypot success looks identical to a real one, so bots learn nothing', async () => {
     const res = await leadPost(ctx(formPost({ company_website: 'https://spam.example' })));
     expect(res.status).toBe(303);
-    expect(res.headers.get('Location')).toBe('/thanks');
+    // Same fixture, same intent -> byte-identical to the real success above.
+    expect(res.headers.get('Location')).toBe('/roadmap/thanks');
   });
 
   it('the redirect still carries the security headers and is never cached', async () => {

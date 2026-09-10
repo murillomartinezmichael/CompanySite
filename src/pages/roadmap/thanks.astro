@@ -1,0 +1,83 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+
+// Roadmap subscribers used to land on /thanks, which promises "a recorded video
+// teardown from Michael, within 24 hours" — the receipt for a site-review
+// intake, not for someone asking to follow a build. That was a false promise
+// shown to a real lead.
+//
+// This page states only what is verifiably true of a roadmap signup: the
+// request was received and it goes to M3MM ("Your request goes directly to
+// M3MM" is the existing approved line on /roadmap). It deliberately makes NO
+// commitment about cadence, format or timing, because nobody has decided what
+// that commitment is — that call is Michael's and is tracked in
+// PENDING_MANUAL.md. Removing a false promise does not require inventing a
+// replacement one.
+---
+
+<Layout
+  title="Roadmap request received — M3MM"
+  description="Your M3MM roadmap update request was received."
+  path="/roadmap/thanks"
+  noindex={true}
+  breadcrumbs={[{ name: 'M3MM', url: '/' }, { name: 'Roadmap', url: '/roadmap' }, { name: 'Request received', url: '/roadmap/thanks' }]}
+>
+  <Header slot="header" minimal={true} path="/roadmap/thanks" />
+  <div class="receipt-page container-page py-hq-section">
+    <section class="panel mx-auto max-w-2xl p-8 sm:p-12">
+      <p class="kicker mono">Request received</p>
+      <h1 class="mt-5 text-hq-hero">You're on the list.</h1>
+      <p class="mt-6 text-lg text-bone-dim">
+        Your request went directly to M3MM, along with the builds you said you
+        wanted to hear about.
+      </p>
+
+      <div class="mt-8 border-l-2 border-clay pl-5 text-sm text-bone-dim">
+        This is a follow request, not a project intake — nothing is scheduled and
+        nothing is owed. If you want work quoted, use the review form below.
+      </div>
+
+      <div class="mt-10 border-t border-ink-line pt-8">
+        <p class="kicker mono mb-3">// While you wait</p>
+        <p class="font-medium text-bone">The roadmap is public.</p>
+        <p class="mt-2 text-sm text-bone-dim">
+          Every release, preview and department already on the board is visible
+          there — no email needed.
+        </p>
+        <a
+          href="/roadmap"
+          class="mt-4 inline-flex items-center gap-2 text-sm text-clay underline decoration-clay/50 decoration-1 underline-offset-[6px] hover:text-bone"
+          data-cta="roadmap-thanks-board"
+          data-section="roadmap-thanks"
+          data-intent="product:roadmap"
+        >
+          Back to the roadmap
+        </a>
+      </div>
+
+      <div class="mt-10 border-t border-ink-line pt-8">
+        <p class="kicker mono mb-3">// If you want a site looked at</p>
+        <a
+          href="/audit#intake"
+          class="inline-flex items-center gap-2 text-sm text-clay underline decoration-clay/50 decoration-1 underline-offset-[6px] hover:text-bone"
+          data-cta="roadmap-thanks-review"
+          data-section="roadmap-thanks"
+          data-intent="book:free-review"
+        >
+          Send the free review form
+        </a>
+      </div>
+
+      <a
+        href="/"
+        class="btn-secondary mt-10 inline-flex"
+        data-cta="roadmap-thanks-home"
+        data-section="roadmap-thanks"
+        data-intent="product:case-studies"
+      >Back home</a>
+    </section>
+  </div>
+  <Footer slot="footer" path="/roadmap/thanks" />
+</Layout>

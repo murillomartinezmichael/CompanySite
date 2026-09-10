@@ -54,6 +54,20 @@ const RESEND_TIMEOUT_MS = 6_000;
 // handlers on every page) are unaffected and still receive `{"ok":true}`.
 const FORM_SUCCESS_PATH = '/thanks';
 
+// Different flows earn different receipts. /thanks promises a recorded video
+// teardown within 24 hours, which is true of a site-review intake and false of
+// someone who only asked to follow the roadmap. The destination is chosen from
+// this server-side allowlist keyed on the lead's own intent -- never from a
+// request field -- so the open-redirect property above is unchanged.
+const INTENT_SUCCESS_PATHS: Record<string, string> = {
+  'book:roadmap-subscribe': '/roadmap/thanks',
+};
+
+function successPathFor(intent: string | undefined): string {
+  if (!intent) return FORM_SUCCESS_PATH;
+  return INTENT_SUCCESS_PATHS[intent] ?? FORM_SUCCESS_PATH;
+}
+
 function redirectResponse(location: string, extraHeaders: Record<string, string> = {}): Response {
   return new Response(null, {
     status: 303,
@@ -163,8 +177,11 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
 
   // Success funnel. A fetch caller gets the JSON it parses; a native form POST
   // gets a 303 to the thank-you page so the visitor never sees raw JSON.
-  const succeed = () =>
-    isForm ? redirectResponse(FORM_SUCCESS_PATH, cors) : reply(200, { ok: true });
+  // `intent` is looked up in the allowlist above, which only ever yields a
+  // hard-coded same-site constant, so passing an unvalidated value here cannot
+  // influence the Location header beyond picking one of our own receipts.
+  const succeed = (intent?: string) =>
+    isForm ? redirectResponse(successPathFor(intent), cors) : reply(200, { ok: true });
 
   const contentLengthRaw = request.headers.get('Content-Length');
   const contentLength = contentLengthRaw ? Number(contentLengthRaw) : NaN;
@@ -238,7 +255,7 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
   // Honeypot: bots gleefully fill the hidden field. Silent 200 so they
   // don't know they were caught.
   if (body.company_website) {
-    return succeed();
+    return succeed(typeof body.intent === 'string' ? body.intent : undefined);
   }
 
   const result = validateLead(body);
@@ -371,7 +388,7 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
     ts: Date.now(),
   }));
 
-  return succeed();
+  return succeed(lead.intent);
 };
 
 // Catch-all for every method except POST (Pages routes POST to onRequestPost).

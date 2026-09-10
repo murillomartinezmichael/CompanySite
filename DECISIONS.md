@@ -4,6 +4,53 @@ Cross-cutting choices that took real thought. Cross-refs to the repo-wide ledger
 
 Format per entry: **D-CS-###** · date · one-line rule · why · reversibility.
 
+## 2026-09-09 — Structure and navigation
+
+The explicit structure brief authorizes direct Websites links in shared chrome.
+Keep the homepage's headquarters argument and Released primary action; the full
+sales funnel remains at `/websites`. Link its three existing trade variants
+after proof, preserving comparison as a separate purchase-decision page.
+Keep both noindex receipt routes; the roadmap/free-review receipt mismatch needs
+confirmed content and a bounded flow change, not an invented subscription promise.
+
+Use a shared section-navigation component for the trade directory and roadmap
+jumps. Extract only the repeated quarter timeline renderer; leave quarter
+grouping and signup ownership in the page. Keep unique headquarters sections
+inline. Shared section spacing, controls and panels adopt the existing tokens.
+
+Remove the broad class-selector axe overlap waiver. Fix the actual layouts and
+scope footer email hydration to its own link; a rendered browser assertion now
+protects the urgent link's original label and email context. Exact reviewed
+silent-video and independently measured chat checks remain visible in evidence.
+No price, claim, release status or server endpoint changed. These local edits
+can be reverted through an ordinary Git change; publication remains separate.
+
+## 2026-09-09 — Astro 7 and the actionable TODO sweep
+
+Use Astro 7.3.2 with Node 22.23.1 and Tailwind 3 through Vite/PostCSS; remove the
+Astro-5-only Tailwind integration rather than forcing unsupported peers. Migrate
+case studies to the glob loader and stable `entry.id`; built-output attribution
+tests prevent the prior spike's silent undefined-identifier regression. Keep
+`compressHTML: true` to preserve this site's existing whitespace behavior.
+Sources: [Astro 7 migration](https://docs.astro.build/en/guides/upgrade-to/v7/),
+[Astro 6 migration](https://docs.astro.build/en/guides/upgrade-to/v6/),
+[PostCSS support](https://docs.astro.build/en/guides/styling/).
+
+The third API route now meets the old middleware trigger. Add a shared security
+boundary while retaining per-handler wrappers and route-specific error behavior;
+stream responses are not buffered. Platform-generated errors remain outside it.
+Local runtime smoke uses an isolated temporary worker with empty bindings and
+`nodejs_compat`; the installed workerd supports compatibility date 2026-08-27.
+
+The comparison page discloses M3MM authorship and compares fit, ownership and
+scope instead of inventing rankings or competitor prices. Existing confirmed
+prices/refund policy remain unchanged. Source links are embedded in the article.
+
+Patch updating separately failed three times with npm's `edgesOut` exception.
+Vitest >=4.1.11 and SVGO >=4.0.3 remain a release follow-up in PENDING_MANUAL;
+do not call the audit clean or run a forced downgrade. The migration can be
+reverted as a normal Git change; no deployment has occurred.
+
 ---
 
 ## D-CS-00X · 2026-07-05 · Vitest pinned to `^2.1.9` (not 4.x)
@@ -72,3 +119,40 @@ Format per entry: **D-CS-###** · date · one-line rule · why · reversibility.
 - **Why:** The research item said "Get $X" and the pattern source used $100 — but no referral price exists anywhere in the fleet, and this is a live money-path site. Publishing an invented cash commitment is fabrication (LAW 6), and the precedent is fresh: the 2026-07-19 refund badge shipped the researcher's draft wording and Mike had to revise it the next day (D-CS-010 window). Better to ship the capture mechanic — which has no policy content at all — and let one config line flip the offer on.
 - **Also decided:** `?ref=<name>` joins `PARAM_TO_FIELD` even though that whitelist deliberately rejects `source`/`intent`/`company_website`. Rationale: `referredBy` is self-declared free text that only ever reaches a human triage email, so a forged `?ref=` costs one wrong name — whereas a forged `source` would corrupt attribution analytics. Without the URL lane the program needs the prospect to know and type the referrer's name, which is where referral programs die.
 - **Reversibility:** One line for the amount. Removing the program entirely is one field + one config file + two test files.
+
+## D-CS-011 — Owner-requested performance palette and immutable logo (2026-09-09)
+
+Michael asked to amplify all pages with animation and change the colors to neon
+green, blue and black, referencing his 2021 Polaris Scrambler XP 1000 S. This
+supersedes the earlier restrained single-accent direction, including D-CS-010's
+visual restrictions, while retaining release truth, pricing, mobile usability
+and accessibility. Implementation stays in the existing Astro/Tailwind stack.
+Use the exact official-logo.png original; no logo modification is authorized.
+New animation is separate decorative artwork with reduced-motion and pause
+controls. No deployment or new push is part of this local redesign.
+
+## D-CS-012 — Professional orbital motion and an interactive roadmap (2026-09-09)
+
+Michael refined the performance direction: clean, professional, futuristic
+structure and fluid animation, using Astra's galaxy as a craft reference. He
+then requested a more animated, better displayed roadmap. Keep the approved
+black/blue/lime tokens; replace mechanical decorative plates with a deterministic
+canvas field and SVG fallback. Widen the shared container, soften grouped
+surfaces and simplify the department directory. Put the next launch first on
+roadmap, followed by release-group navigation, animated status filtering and
+native expandable build details. Preserve every build's source data, prices,
+claims, forms, route and the original logo. Motion stays optional and bounded.
+Verification is recorded in `docs/ORBIT_VERIFICATION_2026-09-09.md`; local only.
+
+## D-CS-013 — Apply the cinematic tutorial to proof and release exploration (2026-09-10)
+
+Michael asked to apply useful techniques from his supplied Paul J Lipsky MP4.
+Local on-screen sampling identified structure-first iteration, a large focal
+visual and an inspectable gallery. Full narration review was unavailable because
+Gemini upload required sign-in. Implement large, uncropped proof media with native
+playback and larger-still dialogs; replace the fixed roadmap spotlight with a
+source-backed selected-build stage and synchronized details. Keep the existing
+page funnel, original logo, claims, prices and full no-JS build list. A still at
+00:03 of our existing Aries walkthrough supplies its preview; the tutorial's
+cabin assets and third-party providers are not used. No long pinned scroll intro
+or new rendering dependency. See the cinematic application and verification docs.

@@ -1,6 +1,219 @@
 # CompanySite — TODO
 
+## 2026-09-10 — cinematic reference application
+
+- [x] Review sampled on-screen tutorial examples; record observations and review limits.
+- [x] Make the roadmap a source-driven, keyboard-operable 21-build stage with short coordinated transitions.
+- [x] Enlarge existing case-study media, add native still viewers and manual video playback.
+- [x] Suppress the floating review shortcut over interactive proof and roadmap areas.
+- [x] Verify build, 520 passing tests (2 existing skips), 60 axe combinations, 15 canonicals,
+  Astro diagnostics, and four-width interaction checks. Exact evidence and scoped modal
+  contrast review: `docs/CINEMATIC_VERIFICATION_2026-09-10.md`.
+- [x] Persist applied techniques and limits in shared product guidance and learning log.
+- [ ] Michael: review existing proof-media content before publication; see PENDING_MANUAL.md.
+- [ ] Optional full narrated tutorial review requires an available approved native-video seat.
+- [ ] Broader rollout remains parked: Aries V2, Resume-specific interaction and other products.
+  This pass adds shared proof improvements to home and Websites; no deployment or push.
+
+## 2026-09-09 — orbital motion and roadmap refinement
+
+- [x] Replace mechanical artwork with a bounded galaxy-like particle field and SVG fallback.
+- [x] Simplify shared type/surfaces and the homepage department directory.
+- [x] Spotlight the next roadmap launch; add an animated release path, desktop directory,
+  native expandable builds and short status-filter transitions.
+- [x] Verify build, 518 tests (2 existing skips), all 60 axe combinations, 15 canonicals,
+  Astro diagnostics and interaction checks at 320/375/768/1440.
+- [x] Inspect home/roadmap/sales at 375/1440; preserve logo, claims, prices and all routes.
+  Evidence: `docs/ORBIT_VERIFICATION_2026-09-09.md`.
+- [ ] Michael: publication remains separate; no new push or deployment in this pass.
+- [ ] Parked broader rollout: apply `../docs/PRODUCT_DESIGN_STANDARD.md` per product,
+  starting with a fresh Aries V2 inspection. No Aries V1 work is authorized here.
+
+## 2026-09-09 — performance redesign
+
+- [x] Implement Michael's requested lime/blue/black direction across the shared
+  shell and page families; record D-CS-011 and design system v2.
+- [x] Use the exact original logo, including its background; guard its public
+  and built bytes with the owner's SHA-256.
+- [x] Add custom decorative motion, persistent pause/OS override/offscreen stop,
+  consistent navigation/breadcrumbs, sales jumps and mobile package labels,
+  homepage release strip and useful department routing, roadmap status filters.
+- [x] Keep all 15 routes, pricing, release data and form behavior. No content
+  invented to clear proof or owner gates.
+- [x] Final local verification and commit closeout: see
+  `docs/PERFORMANCE_VERIFICATION_2026-09-09.md`. No deployment or new push.
+
+
+## 2026-09-09 — publication closeout
+
+Michael authorized committing and pushing current work. Preserved the existing
+`docs/proposals/harness-positioning-2026-09.md` as a dated proposal, not approved
+public copy. Build/placeholder gate and 512 tests passed (2 tests skipped).
+No prices, claims, logo files, live account settings or routes changed in this
+closeout. Local backup rasters and source frames are excluded. Existing payment,
+intake and publication-status decisions remain separate from pushing this branch.
+
 **Cold-start rule:** a fresh session should read this file and be productive in 60 seconds.
+
+## Current TODO sweep — 2026-09-09
+
+### Structure follow-through
+
+- [x] Audit all 14 routes and re-check the August audit against current source.
+  See `docs/STRUCTURE_AUDIT_2026-09-09.md` and its token inventory.
+- [x] Restore visible primary navigation on secondary/mobile pages, direct
+  Website services links, a trade directory and roadmap quarter/signup jumps.
+- [x] Extract the repeated roadmap timeline; align shared section, heading,
+  panel and field treatments with the current tokens. Preserve the headquarters
+  argument, sales ladder, release data and both receipt URLs.
+- [x] Fix footer email hydration selecting another page's contact link. Browser
+  coverage now verifies each email destination and the urgent link's label.
+- [x] Add built-site reachability/fragment/tracking checks and expand browser
+  coverage to all 14 routes at four widths. Exact final output is recorded in
+  `docs/STRUCTURE_VERIFICATION_2026-09-09.md`.
+- [x] Confirm a roadmap-specific receipt message/flow. **Fixed 2026-09-09:**
+  `/roadmap/thanks` now receives roadmap subscribers on both paths — the JS
+  handler via `data-success-path`, and the no-JS POST via a server-side
+  `INTENT_SUCCESS_PATHS` allowlist keyed on the lead's own intent (the
+  destination is still never read from the request, and four hostile-intent
+  cases are pinned in `tests/functions/lead-form-redirect.test.ts`). The new
+  receipt states only what is verifiable — the request was received and went to
+  M3MM — and makes **no** commitment about cadence, format or timing. That
+  commitment is still Michael's to write; narrowed entry in `PENDING_MANUAL.md`.
+  517 tests pass (2 skips), 15-page build clean, canonicals OK, receipt noindex
+  and absent from the sitemap.
+
+### Earlier actionable sweep (included in this branch)
+
+Branch: `codex/companysite-todo-2026-09-09`, based on design commit `0cc205e`.
+This checklist supersedes older next-action and parked notes below; those remain
+as history, not a second backlog. Changes are local, not published.
+
+- [x] Upgrade Astro 5 to 7.3.2 with Node 22, supported Tailwind 3 PostCSS wiring,
+  the glob content loader, and built-output case-study attribution regressions.
+- [x] Add shared API security middleware now that `/api/chat` is the third route.
+  Preserve streams, redirects, CORS and existing endpoint wrappers; sanitize
+  unexpected failures. Seven boundary tests added.
+- [x] Prepare the sourced, explicitly self-authored website-options comparison
+  at `/compare/website-options`, linked from `/websites` and in the sitemap.
+  Compare fit, cost and ownership without inventing independent rankings.
+- [x] Fix Services number contrast and decorative layers obscuring contrast
+  checks; adopt the solid page ground and verify mobile/desktop sales layouts.
+- [x] Add CI browser coverage for the hub, roadmap, sales and comparison pages
+  at 320/375/768/1440px, with evidence uploads and a pinned Node runtime.
+- [x] Reconcile older requests: fonts are self-hosted; sitemap + robots exist;
+  proof/results, founder signature, confirmed refund badge and `/start`
+  intake are already implemented. Aries has its MP4/poster; Big7 does not.
+- [ ] Repair npm patch updates: three attempts fail with `edgesOut`; Vitest and
+  SVGO advisories remain. Exact versions and recovery in `PENDING_MANUAL.md`.
+- [ ] Owner-approved release and post-deploy smoke, including API compatibility
+  settings. No push, merge, external submission or deployment in this sweep.
+- [ ] Owner/data gates: Stripe live write access/link; referral payout amount;
+  approved testimonials/ratings; Aries before/after permission and capture;
+  Big7 media; headshot/TikTok/IG and chosen reel/upload; live delivery/analytics evidence.
+  See `PENDING_MANUAL.md` for concrete steps.
+- [ ] Product decisions: a new public tier above $2,000, expanded guarantee or
+  client board, and an instant AI mockup generator require confirmed scope,
+  terms/provider/spend. Preserve the approved ladder and human review meanwhile.
+- [ ] Cross-repository follow-up: SiteGuide demo prefill, per-template OG and
+  Product schema belong to SiteGuide, not CompanySite. Audit its current source
+  and TODO before implementing; old tick notes here are not proof of missing work.
+- [ ] Cockpit work-log transcription remains local-browser state work; preserve
+  `COCKPIT_QUEUE.md`, including tick 23, until the actual log write is verified.
+
+**Next action:** resolve the dependency-patch environment gate in a clean
+checkout, rerun build/tests/audit, then obtain approval for the combined release.
+Do not unlock checkout, publish client claims, or mark the remaining gates done
+without their evidence. Older deployment questions and Astro spike versions
+below are historical; this section is the current handoff.
+
+## SESSION CLOSED — combined homepage + roadmap design
+
+The complete design change is saved in a local commit on
+`design/m3-system-2026-09-08`. This supersedes the uncommitted status in the
+work notes below. The reviewed commit includes the homepage, roadmap, shared
+tokens/navigation, browser runner and dependencies, tests, and design documentation.
+Release data and lead/payment APIs are unchanged. Unrelated proposals, image
+backups and social source assets are excluded.
+
+Final gates: 493 tests passed / 2 existing skips; 13-page build and placeholder
+fence clean; Astro 0 errors/warnings/hints; axe 0 violations and no overflow on
+home + roadmap at 320/375/768/1440px. Evidence: `output/design-qa/axe-home.json`
+and reviewed screenshots. No code changed after those checks.
+
+Exact next action: owner-approved merge and production release of this branch,
+then verify `/` and `/roadmap` on m3mm.net. Recorded in `PENDING_MANUAL.md`.
+No push, merge or deployment performed. Broader page restyling, the Astro major
+upgrade, and the existing Stripe/content gates remain parked.
+
+## COMPLETE LOCALLY — roadmap matches the homepage (2026-09-08)
+
+Michael authorized continuing from the prior agent's uncommitted homepage design.
+`/roadmap` now uses that same palette, type scale, solid ground and control styles.
+Removed the page-local hex palette, low-contrast testing labels, pulse/glow styling,
+tiny uppercase metadata and fixed fortnightly shipping promise. Planned dates are
+explicitly targets; signup describes an update request rather than promising an
+automated mailing/unsubscribe system. Release data, destinations and submission
+logic are preserved. All 21 builds remain in the existing release order.
+
+Verified: `npm test` 493 passed / 2 existing skips; `npm run build` 13 pages and
+clean placeholder fence; `npx astro check` 0 errors/warnings/hints; expanded
+`npm run test:a11y` checks `/` and `/roadmap/` at 320/375/768/1440px with zero
+violations and zero overflow. Keyboard skip/focus and reduced motion pass on both;
+homepage no-JS navigation still passes. Existing chat incomplete contrast finding
+is retained and independently measured by the runner. Reviewed roadmap screenshots
+include mobile hero, desktop testing list and narrow signup in `output/design-qa/`.
+
+Files touched this continuation: `src/pages/roadmap.astro`, `scripts/axe-home.mjs`,
+`tests/build/muted-text-contrast.test.ts`, `tests/README.md`,
+`docs/M3_DESIGN_SYSTEM.md`, `TODO.md`; root `SESSION_GOAL.md` records the scope change.
+
+Next action: review the combined homepage/roadmap branch and release through the
+owner-approved deployment flow. The roadmap depends on the existing uncommitted
+homepage tokens and browser tooling, so this continuation remains together with
+that work for review. Nothing pushed/deployed; pre-existing backups and proposals
+remain untouched. Broader page adoption and Astro migration remain parked.
+
+Cockpit draft: M3MM roadmap brought into the homepage design system; 493 tests,
+13-page build, Astro clean, axe zero violations across eight route/width pairs.
+
+## COMPLETE LOCALLY — M3MM homepage design system (2026-09-08)
+
+Branch: `design/m3-system-2026-09-08`. Changes are uncommitted for review; nothing
+pushed or deployed. The older review/merge entries below are historical; root
+TODO records their 2026-09-07 deployment.
+
+- Researched and documented `docs/M3_DESIGN_SYSTEM.md`, with a fleet entrypoint
+  at `../docs/M3_DESIGN_SYSTEM.md`: tokens, type scale, component rules, complete
+  approved contrast matrix, source references and Big7/ResumeSite boundaries.
+- Applied it to the headquarters homepage: sentence-case readable type,
+  centralized colors, visible mobile navigation, clearer release/preview sections,
+  and footer clearance for floating controls. Preserved release data, the supplied
+  logo, CTA destinations/intents and the `/websites` funnel.
+- Fixed the preview section's semantics and the shared floating CTA landmark and
+  hidden-focus behavior. Corrected stale AGENTS/README/test instructions.
+- Gates: `npm test` **493 passed / 2 existing skips**; `npm run build` **13 pages**
+  with a clean placeholder fence; `npx astro check` **0 errors/warnings/hints**;
+  `npm run test:a11y` **0 violations at 320/375/768/1440px**, no overflow, keyboard
+  skip/focus, reduced motion, and no-JavaScript mobile navigation pass.
+- Raw browser evidence and reviewed screenshots: `output/design-qa/`. Open chat's
+  one incomplete greeting contrast check remains recorded and is independently
+  verified (8.38:1 text, 6.90:1 link, unclipped); no violations are suppressed.
+- Existing npm audit debt: Astro and its Tailwind integration still produce one
+  high and one low package finding. Keep the already-scoped Astro major migration
+  separate; the added browser audit dependencies introduce no reported findings.
+
+**Exact next action:** review this branch's homepage and design document, then
+commit the explicit changed files and use the normal owner-approved merge/deploy
+flow. Re-run the four commands above if code changes. Do not stage the pre-existing
+`docs/proposals/`, backup OG files, or `public/social/_loop-src/`.
+
+**Parked:** other homepage-like surfaces adopting this type scale; Astro migration;
+Big7 and ResumeSite implementation (another session owns those repositories).
+
+**Cockpit Work Log draft:** M3MM homepage design system prepared locally; researched
+tokens and AA pairs, responsive navigation and release layout, 493 passing tests,
+13-page clean build, zero axe violations at four widths. Pending review/deploy.
 
 ## REVIEWED, AWAITING MIKE'S MERGE + PUSH (2026-09-01 — Codex HOLD blockers verified closed; markdown now deny-by-default in the fence)
 
@@ -49,7 +262,11 @@ Status: local commits only on branch `security/fence-scan-md-2026-09-01` (off `m
 - Release gates: 12 pages built, placeholder fence clean, **447 passed / 2 skipped**, Astro **0/0/0**, preflight READY. Live checks passed for `/`, `/hub`, `/roadmap`, `/policies`, `/accessibility`, sitemap, and the `/api/lead` function boundary.
 - Production deployment: Cloudflare Pages deployment `39e1993a.m3-companysite.pages.dev`, serving through `https://m3mm.net`.
 
-## Deferred from the 2026-08-12 Codex API-security review
+## Completed locally 2026-09-09 — deferred API-security review
+
+The third route now exists. Shared middleware and its regression tests are added;
+the rationale below is historical. Platform-generated failures remain outside
+the middleware boundary.
 
 **Move the API security headers into `functions/api/_middleware.ts`.** Codex's
 "what I would do differently": one middleware boundary would harden all current

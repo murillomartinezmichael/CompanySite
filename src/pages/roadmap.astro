@@ -2,6 +2,10 @@
 import Layout from '@/layouts/Layout.astro';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
+import RoadmapStage from '@/components/RoadmapStage.astro';
+import SectionNav from '@/components/SectionNav.astro';
+import RoadmapFilters from '@/components/RoadmapFilters.astro';
+import RoadmapTimeline from '@/components/RoadmapTimeline.astro';
 import { DROPS, LAUNCH_STATS } from '@/config/roadmap';
 
 // Group drops by quarter label for the timeline sections.
@@ -10,12 +14,7 @@ const grouped = DROPS.reduce<Record<string, typeof DROPS>>((acc, d) => {
   return acc;
 }, {} as Record<string, typeof DROPS>);
 const quarterOrder = Array.from(new Set(DROPS.map((d) => d.quarter)));
-const statusLabels = {
-  released: 'Released',
-  next: 'Next',
-  testing: 'Testing',
-  upcoming: 'Planned',
-} as const;
+
 
 // Intake POST target. Reuses the site's existing lead endpoint so roadmap
 // subscribers flow through the same pipeline as any other intake.
@@ -33,69 +32,56 @@ const intakePost = '/api/lead';
 >
   <Header slot="header" minimal={true} path="/roadmap" />
 
-  <section class="roadmap-scope">
-    <div class="container-page py-14 sm:py-20">
-      <div class="mb-6 flex items-center gap-3">
-        <span class="hairline hairline-red"></span>
-        <p class="kicker mono">One drop · every two weeks · public receipts</p>
+  <section class="roadmap-scope" aria-labelledby="roadmap-heading">
+    <div class="container-page py-hq-section">
+      <div class="roadmap-intro">
+        <div class="intro-copy">
+          <p class="intro-label">The M3MM release queue</p>
+          <h1 id="roadmap-heading" class="brand-display">Roadmap</h1>
+          <p class="lede"><strong>{LAUNCH_STATS.released} official release: the M3MM Hub.</strong> Testing previews stay separate from official releases.</p>
+          <p class="schedule-note">Planned dates are targets. Big7 remains long-term while M3MM waits for real jobsite photography.</p>
+          <ul class="stats" role="list">
+            <li class="stat"><b>{LAUNCH_STATS.total}</b><span>Tracked builds</span></li>
+            <li class="stat"><b>{LAUNCH_STATS.released}</b><span>Released</span></li>
+            <li class="stat"><b>{LAUNCH_STATS.testing}</b><span>Testing</span></li>
+          </ul>
+        </div>
+
       </div>
 
-      <div class="brand-heading">
-        <img src="/mark-light.png" alt="M3MM" width="96" height="96" class="brand-mark" decoding="async" />
-        <h1 class="brand-display">ROADMAP</h1>
-      </div>
-      <p class="brand-meaning">Modernize. Mobilize. Multiply.</p>
+      <RoadmapStage />
 
-      <p class="lede">
-        <strong>{LAUNCH_STATS.released} official release: the M3MM Hub.</strong> Aries Outdoor Living is
-        the next public hard launch. Some other builds have reachable test deployments; those stay
-        labeled <em>Testing</em> and do not count as releases. Big7 remains long-term while M3MM waits
-        for real jobsite photography.
-      </p>
+      <div class="roadmap-board">
+        <aside class="roadmap-sidebar">
+      <SectionNav label="Jump to a release group" section="roadmap" links={[
+        ...quarterOrder.map((q, index) => ({ label: q, href: `#quarter-${index}`, cta: `roadmap-jump-${index}`, intent: 'product:roadmap' })),
+        { label: 'Follow a build', href: '#signup-heading', cta: 'roadmap-jump-signup', intent: 'book:roadmap-subscribe' },
+      ]} />
 
-      <ul class="stats" role="list">
-        <li class="stat"><b>{LAUNCH_STATS.total}</b><span>Tracked builds</span></li>
-        <li class="stat"><b>{LAUNCH_STATS.released}</b><span>Official release</span></li>
-        <li class="stat"><b>{LAUNCH_STATS.testing}</b><span>Test previews</span></li>
-        <li class="stat"><b>Aries</b><span>Next launch</span></li>
-      </ul>
+        </aside>
+        <div class="roadmap-groups">
+      <RoadmapFilters />
 
-      {quarterOrder.map((q) => (
-        <section>
-          <h2 class="section-head">{q}</h2>
-          <ol class="timeline">
-            {grouped[q].map((d) => (
-              <li class={`item item-${d.status}`}>
-                <div class="date">
-                  <b>{d.dateLabel}</b>{d.year}
-                </div>
-                <div class="body">
-                  <h3>
-                    {d.url
-                      ? <a href={d.url} rel={d.url.startsWith('http') ? 'noopener' : undefined} data-cta="roadmap-drop-open" data-section="roadmap" data-intent="product:roadmap-drop" data-release-status={d.status}>{d.name}</a>
-                      : d.name}
-                    <span class={`status status-${d.status}`}>
-                      {statusLabels[d.status]}
-                    </span>
-                  </h3>
-                  <p>{d.blurb}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
+      {quarterOrder.map((q, index) => (
+        <section data-roadmap-quarter aria-labelledby={`quarter-${index}`}>
+          <h2 id={`quarter-${index}`} class="section-head">{q}<span class="group-count">{grouped[q].length} {grouped[q].length === 1 ? 'build' : 'builds'}</span></h2>
+          <RoadmapTimeline drops={grouped[q]} />
         </section>
       ))}
 
+        </div>
+      </div>
+
       <section class="signup" aria-labelledby="signup-heading">
-        <h2 id="signup-heading" class="section-head">Get the drops</h2>
-        <p class="signup-copy">One email per drop. Never anything else. Unsubscribe on any send.</p>
+        <h2 id="signup-heading" class="section-head">Follow a build</h2>
+        <p class="signup-copy">Leave your email and the builds you’re interested in. Your request goes directly to M3MM.</p>
 
         <form
           id="roadmap-signup"
           action={intakePost}
           method="POST"
           class="signup-form"
-          data-success-path="/thanks"
+          data-success-path="/roadmap/thanks"
         >
           <input type="hidden" name="source" value="roadmap" />
           <input type="hidden" name="intent" value="book:roadmap-subscribe" />
@@ -139,15 +125,14 @@ const intakePost = '/api/lead';
           </label>
 
           <button type="submit" class="signup-btn" data-cta="roadmap-subscribe" data-section="roadmap" data-intent="book:roadmap-subscribe">
-            Notify me
+            Request updates
           </button>
         </form>
 
         <p id="roadmap-status" class="signup-status" role="status" aria-live="polite" hidden></p>
 
         <p class="fine">
-          Rules: no upsells, no drip sequences, no "here's a case study" filler.
-          If a drop slips, you'll hear about that too.
+          This sends an update request. You can also return here to check release status.
         </p>
       </section>
 
@@ -236,337 +221,72 @@ const intakePost = '/api/lead';
 </script>
 
 <style>
-  /* Roadmap uses the site's one accent (clay), not a second palette — status
-     is read through intensity along that single hue instead of competing
-     hues: upcoming/next sit at the standard accent, testing sits dimmer
-     (clay-deep), released sits brightest (clay-glow) and keeps its pulse.
-     2026-08-20: previously a self-contained red/green/amber/cyan "terminal"
-     scheme with scanlines and a meme display font — flagged by
-     docs/DESIGN_AUDIT_2026-08-16.md as reading like a different company from
-     the rest of the site. Variable names kept as-is so every var() reference
-     below still resolves; only the values changed. */
+  :global(body:has(.roadmap-scope)) {
+    background: theme('colors.ink.DEFAULT');
+  }
   .roadmap-scope {
-    --red: #4FB8C7;
-    --red-glow: rgba(79, 184, 199, 0.25);
-    --amber: #4FB8C7;
-    --green: #8FD9E3;
-    --preview: #2E7A85;
-    --ink-dim: #82879A;
-    --ink-mute: #82879A;
-    --line: #262B38;
-    --card: #1D212C;
-    position: relative;
-    isolation: isolate;
+    --accent: theme('colors.clay.DEFAULT');
+    --highlight: theme('colors.clay.glow');
+    --text: theme('colors.bone.DEFAULT');
+    --secondary: theme('colors.bone.dim');
+    --ink-mute: theme('colors.bone.muted');
+    --line: theme('colors.ink.line');
+    --outline: theme('colors.ink.outline');
+    --card: theme('colors.ink.soft');
+    --ground: theme('colors.ink.DEFAULT');
+    padding-bottom: 5rem;
+    color: var(--text);
+    overflow-wrap: anywhere;
   }
-
-  .roadmap-scope .hairline-red { background: var(--red); }
-
-  .roadmap-scope .brand-heading {
-    display: flex;
-    align-items: center;
-    gap: clamp(14px, 2.4vw, 28px);
-    margin-top: 8px;
-  }
-  .roadmap-scope .brand-mark {
-    width: clamp(52px, 8vw, 82px);
-    height: clamp(52px, 8vw, 82px);
-    flex: none;
-    object-fit: contain;
-  }
-
-  .roadmap-scope .brand-display {
-    font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
-    font-size: clamp(48px, 8vw, 88px);
-    line-height: 0.95;
-    letter-spacing: -0.02em;
-    margin: 0;
-    text-transform: uppercase;
-    color: #EDEFF3;
-  }
-  .roadmap-scope .brand-meaning {
-    margin: 14px 0 0;
-    color: var(--ink-dim);
-    font-family: ui-monospace, "JetBrains Mono", "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-  }
-
-  .roadmap-scope .lede {
-    max-width: 640px;
-    margin: 20px 0 8px;
-    font-size: 17px;
-    line-height: 1.6;
-  }
-  .roadmap-scope .lede strong { color: var(--red); font-weight: 700; }
-  .roadmap-scope .lede em { font-style: italic; }
-
+  .roadmap-scope .intro-label { @apply text-hq-small; color: var(--secondary); margin-bottom: 1.5rem; }
+  .roadmap-scope .brand-display { @apply font-display text-hq-hero font-medium; margin: 0; }
+  .roadmap-scope .lede { @apply text-hq-lede; max-width: 65ch; margin: 1.5rem 0 1rem; color: var(--secondary); }
+  .roadmap-scope .lede strong { color: var(--text); font-weight: 600; }
+  .roadmap-scope .schedule-note { @apply text-hq-small; color: var(--ink-mute); max-width: 65ch; }
   .roadmap-scope .stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 12px;
-    margin: 28px 0 12px;
-    padding: 20px;
-    background: var(--card);
-    border: 1px solid var(--line);
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem;
+    margin: 2rem 0 0; padding: 1.5rem 0 0; border-top: 1px solid var(--line);
     list-style: none;
   }
-  .roadmap-scope .stat { padding: 4px 0; }
-  .roadmap-scope .stat b {
-    display: block;
-    font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
-    font-size: 34px;
-    color: var(--red);
-    line-height: 1;
-  }
-  .roadmap-scope .stat span {
-    display: block;
-    font-size: 11px;
-    color: var(--ink-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-top: 6px;
-  }
-
-  .roadmap-scope .section-head {
-    font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
-    font-size: 32px;
-    text-transform: uppercase;
-    letter-spacing: -0.01em;
-    margin: 48px 0 20px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid var(--red);
-    display: inline-block;
-    color: #EDEFF3;
-  }
-
-  .roadmap-scope .timeline {
-    position: relative;
-    margin: 12px 0;
-    padding: 0 0 0 32px;
-    list-style: none;
-  }
-  .roadmap-scope .timeline::before {
-    content: "";
-    position: absolute;
-    left: 8px; top: 0; bottom: 0;
-    width: 2px;
-    background: var(--line);
-  }
-
-  .roadmap-scope .item {
-    position: relative;
-    background: var(--card);
-    border: 1px solid var(--line);
-    padding: 18px 20px;
-    margin: 0 0 14px;
-    display: grid;
-    grid-template-columns: 110px 1fr;
-    gap: 20px;
-    align-items: start;
-    font-family: ui-monospace, "JetBrains Mono", "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
-    font-size: 15px;
-    line-height: 1.55;
-  }
-  .roadmap-scope .item::before {
-    content: "";
-    position: absolute;
-    left: -32px; top: 22px;
-    width: 14px; height: 14px;
-    border-radius: 50%;
-    background: var(--ink-mute);
-    border: 3px solid #0D0E14;
-    box-shadow: 0 0 0 2px var(--line);
-  }
-  .roadmap-scope .item-released::before {
-    background: var(--green);
-    box-shadow: 0 0 0 2px var(--line), 0 0 12px var(--green);
-    animation: roadmap-pulse 2.4s ease-in-out infinite;
-  }
-  .roadmap-scope .item-next::before {
-    background: var(--amber);
-    box-shadow: 0 0 0 2px var(--line), 0 0 10px var(--amber);
-  }
-  .roadmap-scope .item-testing::before {
-    background: var(--preview);
-    box-shadow: 0 0 0 2px var(--line), 0 0 10px var(--preview);
-  }
-  .roadmap-scope .item-upcoming::before {
-    background: var(--red);
-    box-shadow: 0 0 0 2px var(--line);
-  }
-
-  @keyframes roadmap-pulse {
-    0%, 100% { box-shadow: 0 0 0 2px var(--line), 0 0 6px var(--green); }
-    50%      { box-shadow: 0 0 0 2px var(--line), 0 0 16px var(--green); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .roadmap-scope .item-released::before { animation: none; }
-  }
-
-  .roadmap-scope .date {
-    font-size: 12px;
-    color: var(--ink-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    padding-top: 2px;
-    border-right: 1px solid var(--line);
-    padding-right: 12px;
-    text-align: right;
-  }
-  .roadmap-scope .date b {
-    display: block;
-    font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
-    font-size: 20px;
-    color: #EDEFF3;
-    letter-spacing: 0.02em;
-  }
-
-  .roadmap-scope .body h3 {
-    margin: 0 0 4px;
-    font-size: 20px;
-    font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
-    text-transform: uppercase;
-    letter-spacing: -0.005em;
-    color: #EDEFF3;
-  }
-  .roadmap-scope .body h3 a { color: #EDEFF3; text-decoration: none; border-bottom: 1px solid transparent; }
-  .roadmap-scope .body h3 a:hover,
-  .roadmap-scope .body h3 a:focus-visible { color: var(--red); border-bottom-color: var(--red); }
-  .roadmap-scope .body p {
-    margin: 4px 0 0;
-    color: var(--ink-dim);
-    font-size: 14px;
-    line-height: 1.55;
-  }
-
-  .roadmap-scope .status {
-    display: inline-block;
-    font-size: 10px;
-    padding: 2px 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-weight: 700;
-    border: 1px solid currentColor;
-    vertical-align: middle;
-    margin-left: 8px;
-    position: relative;
-    top: -3px;
-  }
-  .roadmap-scope .status-released { color: var(--green); }
-  .roadmap-scope .status-next { color: var(--amber); }
-  .roadmap-scope .status-testing { color: var(--preview); }
-  .roadmap-scope .status-upcoming { color: var(--red); }
-
-  .roadmap-scope .signup {
-    margin: 48px 0 24px;
-    padding: 28px;
-    background: var(--card);
-    border: 1px solid var(--red);
-    box-shadow: 0 0 20px var(--red-glow);
-  }
+  .roadmap-scope .stat b { color: theme('colors.electric.DEFAULT'); @apply font-display text-hq-section font-medium; display: block; font-variant-numeric: tabular-nums; }
+  .roadmap-scope .stat:nth-child(2) b { color: theme('colors.clay.DEFAULT'); }
+  .roadmap-scope .stat span { @apply text-hq-small; display: block; margin-top: .5rem; color: var(--secondary); }
+  .roadmap-scope .section-head { @apply font-display text-hq-title font-medium; margin: theme('spacing.hq-section') 0 1.5rem; max-width: 26ch; }
+  .roadmap-scope .signup { margin: theme('spacing.hq-section') 0 1.5rem; padding: 2rem; background: var(--card); border-left: 3px solid theme('colors.electric.DEFAULT'); border-radius: theme('borderRadius.hq-panel'); }
   .roadmap-scope .signup .section-head { margin-top: 0; }
-  .roadmap-scope .signup-copy { color: var(--ink-dim); margin: 4px 0 0; }
-  .roadmap-scope .signup-form {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-top: 16px;
-    align-items: flex-end;
-  }
-  .roadmap-scope .field {
-    flex: 1 1 260px;
-    display: block;
-  }
-  .roadmap-scope .field-label {
-    display: block;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    font-size: 12px;
-    color: var(--ink-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 6px;
-  }
-  .roadmap-scope .field input {
-    display: block;
-    width: 100%;
-    padding: 10px 12px;
-    background: #0D0E14;
-    border: 1px solid var(--line);
-    color: #EDEFF3;
-    font-family: inherit;
-    font-size: 15px;
-    border-radius: 4px;
-  }
-  .roadmap-scope .field input:focus-visible {
-    outline: 2px solid var(--red);
-    outline-offset: 2px;
-    border-color: var(--red);
-  }
-  .roadmap-scope .signup-btn {
-    align-self: flex-end;
-    padding: 12px 24px;
-    background: var(--red);
-    color: #0D0E14;
-    border: none;
-    font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
-    font-size: 16px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    cursor: pointer;
-    font-weight: 700;
-    border-radius: 4px;
-  }
-  .roadmap-scope .signup-btn:hover,
-  .roadmap-scope .signup-btn:focus-visible {
-    background: #8FD9E3;
-    outline: 2px solid var(--red);
-    outline-offset: 2px;
-  }
-  .roadmap-scope .signup-status {
-    margin: 12px 0 0;
-    padding: 10px 12px;
-    border: 1px solid var(--ink-dim);
-    border-radius: 4px;
-    font-size: 14px;
-    color: #EDEFF3;
-    background: #0D0E14;
-  }
+  .roadmap-scope .signup-copy { color: var(--secondary); max-width: 65ch; line-height: 1.65; }
+  .roadmap-scope .signup-form { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1rem; margin-top: 1.5rem; }
+  .roadmap-scope .field { flex: 1 1 16rem; min-width: 0; }
+  .roadmap-scope .field-label { @apply font-sans text-hq-small normal-case tracking-normal; display: block; margin-bottom: .5rem; }
+  .roadmap-scope .field input { width: 100%; min-height: 3rem; padding: .75rem; background: var(--ground); color: var(--text); border: 1px solid var(--outline); border-radius: theme('borderRadius.hq-control'); font: inherit; }
+  .roadmap-scope .field input::placeholder { color: var(--ink-mute); opacity: 1; }
+  .roadmap-scope .signup-btn { min-height: 3rem; padding: .75rem 1.5rem; background: var(--accent); color: var(--ground); border-radius: theme('borderRadius.hq-control'); font-weight: 600; cursor: pointer; }
+  .roadmap-scope .signup-btn:hover { background: var(--highlight); }
+  .roadmap-scope .signup-btn:disabled { cursor: wait; }
+  .roadmap-scope :is(a, input, button):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .roadmap-scope .signup-status { margin-top: 1rem; padding: .75rem; border: 1px solid var(--outline); border-radius: theme('borderRadius.hq-control'); }
   .roadmap-scope .signup-status[hidden] { display: none; }
-  .roadmap-scope .signup-status.is-ok { border-color: var(--green); }
-  .roadmap-scope .signup-status.is-error { border-color: var(--red); }
-  .roadmap-scope .signup-status a { color: var(--green); }
-
-  .roadmap-scope .fine {
-    font-size: 12px;
-    color: var(--ink-mute);
-    margin-top: 12px;
-  }
-  .roadmap-scope .hp {
-    position: absolute;
-    left: -10000px;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-  }
-
-  .roadmap-scope .foot-note {
-    margin: 32px 0 0;
-    color: var(--ink-mute);
-    font-size: 12px;
-  }
-
+  .roadmap-scope .fine, .roadmap-scope .foot-note { @apply text-hq-small; color: var(--ink-mute); margin-top: 1rem; max-width: 65ch; }
+  .roadmap-scope .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
   @media (max-width: 640px) {
-    .roadmap-scope .item { grid-template-columns: 1fr; gap: 8px; }
-    .roadmap-scope .date {
-      border-right: none;
-      border-bottom: 1px solid var(--line);
-      text-align: left;
-      padding-right: 0;
-      padding-bottom: 6px;
-    }
-    .roadmap-scope .timeline { padding-left: 24px; }
-    .roadmap-scope .item::before { left: -24px; top: 20px; width: 12px; height: 12px; }
+    .roadmap-scope .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .roadmap-scope .signup { padding: 1.25rem; }
+    .roadmap-scope .signup-btn { width: 100%; }
   }
+  .roadmap-intro .intro-copy { display: grid; grid-template-columns: 1fr 1fr; gap: 0 4rem; }
+  .roadmap-intro .intro-label, .roadmap-intro h1 { grid-column: 1; }
+  .roadmap-intro .lede { grid-column: 1; }
+  .roadmap-intro .schedule-note { grid-column: 1; }
+  .roadmap-intro .stats { grid-column: 2; grid-row: 2 / 5; align-self: center; }
+  .roadmap-board { display: grid; grid-template-columns: 205px minmax(0,1fr); gap: 3rem; margin-top: theme('spacing.hq-section'); align-items: start; }
+  .roadmap-sidebar { position: sticky; top: 2rem; }
+  .roadmap-sidebar :global(.section-nav) { margin: 0; border: 0; padding: 0; }
+  .roadmap-sidebar :global(.section-nav ul) { display: grid; gap: .25rem; }
+  .roadmap-sidebar :global(.section-nav a) { background: transparent; border: 0; padding: .5rem 0; text-decoration: none; color: var(--ink-mute); }
+  .roadmap-sidebar :global(.section-nav a:hover) { color: theme('colors.electric.DEFAULT'); }
+  .roadmap-groups { min-width: 0; }
+  .group-count { display: block; margin-top: .5rem; font: 400 .8125rem/1.5 theme('fontFamily.sans'); color: var(--ink-mute); letter-spacing: 0; }
+  [data-roadmap-quarter][hidden] { display: none; }
+  @media (max-width: 980px) { .roadmap-intro .intro-copy { display: block; } .roadmap-board { grid-template-columns: 1fr; gap: 1.5rem; } .roadmap-sidebar { position: static; } .roadmap-sidebar :global(.section-nav ul) { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; } }
+  @media (max-width: 640px) { .roadmap-scope .stat b { font-size: 2rem; } }
 </style>

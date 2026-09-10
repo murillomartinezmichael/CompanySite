@@ -1,0 +1,39 @@
+---
+// Retain the component entry point; the visual is now an orbital light field.
+interface Props { compact?: boolean; }
+const { compact = false } = Astro.props;
+const trails = Array.from({ length: 24 }, (_, i) => {
+  const points = Array.from({ length: 100 }, (_, n) => {
+    const r = 18 + n * 1.7;
+    const a = n / 100 * 4.5 + i / 24 * Math.PI * 2;
+    return `${n ? 'L' : 'M'}${250 + Math.cos(a) * r},${230 + Math.sin(a) * r * .65}`;
+  });
+  return points.join(' ');
+});
+---
+<div class:list={['kinetic-track', { compact }]} data-kinetic aria-hidden="true">
+  <svg class="orbit-fallback" viewBox="0 0 500 460" fill="none" focusable="false">
+    {trails.map((path, i) => <path d={path} class:list={{ 'lime-trail': i % 7 === 0 }} />)}
+    <circle cx="250" cy="230" r="4" />
+  </svg>
+  <canvas class="orbit-canvas" data-orbit-canvas></canvas>
+</div>
+<style>
+  .kinetic-track {
+    --orbit-blue: theme('colors.electric.DEFAULT');
+    --orbit-lime: theme('colors.clay.DEFAULT');
+    --orbit-white: theme('colors.bone.DEFAULT');
+    position: relative; width: 100%; aspect-ratio: 1.08; min-width: 0;
+    isolation: isolate; overflow: hidden;
+    background: radial-gradient(ellipse at 50% 50%, color-mix(in srgb, theme('colors.electric.deep') 14%, transparent), transparent 66%);
+  }
+  .orbit-canvas, .orbit-fallback { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .orbit-canvas { opacity: 0; }
+  [data-rendered="true"] .orbit-canvas { opacity: 1; }
+  [data-rendered="true"] .orbit-fallback { visibility: hidden; }
+  .orbit-fallback path { stroke: var(--orbit-blue); stroke-width: .7; opacity: .4; }
+  .orbit-fallback .lime-trail { stroke: var(--orbit-lime); }
+  .orbit-fallback circle { fill: var(--orbit-white); }
+  .compact { max-width: 440px; margin-inline: auto; }
+  @media (max-width: 640px) { .kinetic-track { max-height: 330px; } }
+</style>
