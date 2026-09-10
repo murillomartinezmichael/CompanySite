@@ -1018,3 +1018,9 @@ yet; wait for miniflare to ship the undici bump.
 Resurrection: next dedicated session, or immediately if any of `define:vars`,
 spread props, `transition:*`, view transitions, or server islands ever gets
 used in `src/`.
+
+## Environment maintenance — 2026-09-10
+
+- Shipped: verified dependency refresh on `codex/environment-maintenance-2026-09-10`; test PASS, run build PASS.
+- Audit: No npm audit findings remain in this component.
+- Parked: existing local media/backups remain untouched. Production deployment and live service checks were not performed.
