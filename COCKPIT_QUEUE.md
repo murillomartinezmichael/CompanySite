@@ -1583,3 +1583,16 @@ mobile sales actions, home release strip and roadmap status filters. Exact
 local checks and screenshot review: docs/PERFORMANCE_VERIFICATION_2026-09-09.md.
 No production deployment or new push. Michael still owns the existing payment,
 proof-content, live-delivery and release gates.
+
+## 2026-09-09 — CompanySite orbital motion and roadmap (draft; not entered)
+
+CompanySite local refinement: flowing orbital artwork, cleaner shared structure,
+and roadmap next-launch spotlight, animated release path, native build details
+and status transitions. All 15 routes and source content preserved. Build passed;
+518 tests passed, 2 skipped; 60 axe combinations clean; 15 canonicals; Astro 0/0/0;
+interaction checks at 320/375/768/1440. Evidence in
+`docs/ORBIT_VERIFICATION_2026-09-09.md`. Local commit only, no push/deploy.
+Product design preference/standard recorded at fleet root; other UI rollouts pending.
+
+Draft only: Michael must enter this in Cockpit (press l). No browser localStorage
+write was performed by the agent.

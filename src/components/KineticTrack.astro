@@ -1,56 +1,39 @@
 ---
+// Retain the component entry point; the visual is now an orbital light field.
 interface Props { compact?: boolean; }
 const { compact = false } = Astro.props;
-const rail = 'M65 190 210 105 460 105 540 151 395 236 145 236Z';
+const trails = Array.from({ length: 24 }, (_, i) => {
+  const points = Array.from({ length: 100 }, (_, n) => {
+    const r = 18 + n * 1.7;
+    const a = n / 100 * 4.5 + i / 24 * Math.PI * 2;
+    return `${n ? 'L' : 'M'}${250 + Math.cos(a) * r},${230 + Math.sin(a) * r * .65}`;
+  });
+  return points.join(' ');
+});
 ---
 <div class:list={['kinetic-track', { compact }]} data-kinetic aria-hidden="true">
-  <svg viewBox="0 0 600 450" fill="none" focusable="false">
-    <g class="terrain">
-      {[0, 1, 2, 3, 4, 5].map(i => <path d={`M${25 + i * 48} 335 300 ${175 + i * 28} 575 335 300 ${435 - i * 10}Z`} />)}
-    </g>
-    <g class="assembly">
-      <g class="deck deck-bottom" transform="translate(0 135)">
-        <path class="sidewall" d="M65 190 145 236H395L540 151V171L395 256H145L65 210Z" />
-        <path class="plate" d={rail} /><path class="rail rail-blue" d={rail} />
-        <path class="trace trace-blue" pathLength="100" d={rail} />
-      </g>
-      <g class="struts"><path d="M145 235V365M395 235V365M210 105V235M460 105V235" /></g>
-      <g class="deck deck-middle" transform="translate(0 65)">
-        <path class="sidewall" d="M65 190 145 236H395L540 151V165L395 250H145L65 204Z" />
-        <path class="plate" d={rail} /><path class="rail rail-blue" d={rail} />
-        <path class="trace" pathLength="100" d={rail} />
-      </g>
-      <g class="deck deck-top">
-        <path class="sidewall" d="M65 190 145 236H395L540 151V169L395 254H145L65 208Z" />
-        <path class="plate" d={rail} /><path class="rail" d={rail} />
-        <path class="inner-rail" d="M115 190 227 124H442L490 151 378 217H163Z" />
-        <path class="trace" pathLength="100" d={rail} />
-        <g class="plate-detail"><path d="m184 181 37-22h76l-37 22zm110 0 37-22h76l-37 22z" /><path d="m233 143 16-9h176l-16 9z" /></g>
-      </g>
-    </g>
+  <svg class="orbit-fallback" viewBox="0 0 500 460" fill="none" focusable="false">
+    {trails.map((path, i) => <path d={path} class:list={{ 'lime-trail': i % 7 === 0 }} />)}
+    <circle cx="250" cy="230" r="4" />
   </svg>
-  <div class="track-caption"><span>Modernize.</span><span>Mobilize.</span><span>Multiply.</span></div>
+  <canvas class="orbit-canvas" data-orbit-canvas></canvas>
 </div>
 <style>
-  .kinetic-track { position: relative; width: 100%; min-width: 0; }
-  svg { display: block; width: 100%; height: auto; max-height: 420px; overflow: hidden; }
-  .terrain { stroke: theme('colors.ink.line'); stroke-width: 1; }
-  .plate { fill: theme('colors.ink.soft'); }
-  .sidewall { fill: theme('colors.ink.panel'); stroke: theme('colors.electric.deep'); stroke-width: 1; }
-  .rail { stroke: theme('colors.clay.DEFAULT'); stroke-width: 3; }
-  .rail-blue { stroke: theme('colors.electric.DEFAULT'); stroke-width: 2; }
-  .inner-rail { stroke: theme('colors.clay.DEFAULT'); stroke-width: 1; }
-  .struts { stroke: theme('colors.electric.DEFAULT'); stroke-width: 2; }
-  .plate-detail { fill: theme('colors.clay.DEFAULT'); }
-  .trace { stroke: theme('colors.bone.DEFAULT'); stroke-width: 4; stroke-dasharray: 5 95; stroke-linecap: round; }
-  .trace-blue { stroke: theme('colors.electric.DEFAULT'); }
-  .track-caption { display: flex; justify-content: space-between; gap: .5rem; padding: 1rem 0; border-top: 1px solid theme('colors.ink.line'); font-size: theme('fontSize.hq-label[0]'); color: theme('colors.bone.muted'); }
-  .track-caption span:nth-child(2) { color: theme('colors.electric.DEFAULT'); }
-  .compact svg { max-height: 320px; }
-  :global(html[data-motion="full"]) .kinetic-track[data-in-view="true"] .assembly { animation: suspension 6s ease-in-out infinite; }
-  :global(html[data-motion="full"]) .kinetic-track[data-in-view="true"] .trace { animation: drive 5s linear infinite; }
-  .deck-middle .trace { animation-direction: reverse !important; }
-  @keyframes drive { to { stroke-dashoffset: -100; } }
-  @keyframes suspension { 50% { transform: translateY(-12px); } }
-  @media (max-width: 640px) { svg { max-height: 285px; } }
+  .kinetic-track {
+    --orbit-blue: theme('colors.electric.DEFAULT');
+    --orbit-lime: theme('colors.clay.DEFAULT');
+    --orbit-white: theme('colors.bone.DEFAULT');
+    position: relative; width: 100%; aspect-ratio: 1.08; min-width: 0;
+    isolation: isolate; overflow: hidden;
+    background: radial-gradient(ellipse at 50% 50%, color-mix(in srgb, theme('colors.electric.deep') 14%, transparent), transparent 66%);
+  }
+  .orbit-canvas, .orbit-fallback { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .orbit-canvas { opacity: 0; }
+  [data-rendered="true"] .orbit-canvas { opacity: 1; }
+  [data-rendered="true"] .orbit-fallback { visibility: hidden; }
+  .orbit-fallback path { stroke: var(--orbit-blue); stroke-width: .7; opacity: .4; }
+  .orbit-fallback .lime-trail { stroke: var(--orbit-lime); }
+  .orbit-fallback circle { fill: var(--orbit-white); }
+  .compact { max-width: 440px; margin-inline: auto; }
+  @media (max-width: 640px) { .kinetic-track { max-height: 330px; } }
 </style>

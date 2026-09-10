@@ -1,5 +1,19 @@
 # CompanySite — TODO
 
+## 2026-09-09 — orbital motion and roadmap refinement
+
+- [x] Replace mechanical artwork with a bounded galaxy-like particle field and SVG fallback.
+- [x] Simplify shared type/surfaces and the homepage department directory.
+- [x] Spotlight the next roadmap launch; add an animated release path, desktop directory,
+  native expandable builds and short status-filter transitions.
+- [x] Verify build, 518 tests (2 existing skips), all 60 axe combinations, 15 canonicals,
+  Astro diagnostics and interaction checks at 320/375/768/1440.
+- [x] Inspect home/roadmap/sales at 375/1440; preserve logo, claims, prices and all routes.
+  Evidence: `docs/ORBIT_VERIFICATION_2026-09-09.md`.
+- [ ] Michael: publication remains separate; no new push or deployment in this pass.
+- [ ] Parked broader rollout: apply `../docs/PRODUCT_DESIGN_STANDARD.md` per product,
+  starting with a fresh Aries V2 inspection. No Aries V1 work is authorized here.
+
 ## 2026-09-09 — performance redesign
 
 - [x] Implement Michael's requested lime/blue/black direction across the shared

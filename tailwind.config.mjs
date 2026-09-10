@@ -33,9 +33,9 @@ export default {
         mono:    ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
       },
       spacing: { 'hq-section': 'clamp(3rem, 6vw, 5rem)' },
-      borderRadius: { 'hq-control': '3px', 'hq-panel': '8px' },
+      borderRadius: { 'hq-control': '8px', 'hq-panel': '16px' },
       fontSize: {
-        'hq-hero': ['clamp(2.5rem, 5.7vw, 5rem)', { lineHeight: '1.04', letterSpacing: '-0.035em' }],
+        'hq-hero': ['clamp(2.5rem, 5.2vw, 4.5rem)', { lineHeight: '1.04', letterSpacing: '-0.035em' }],
         'hq-section': ['clamp(2rem, 3.5vw, 3rem)', { lineHeight: '1.12', letterSpacing: '-0.025em' }],
         'hq-title': ['1.5rem', { lineHeight: '1.25' }],
         'hq-lede': ['1.125rem', { lineHeight: '1.65' }],

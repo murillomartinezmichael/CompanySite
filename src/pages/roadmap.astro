@@ -2,6 +2,7 @@
 import Layout from '@/layouts/Layout.astro';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
+import ReleasePath from '@/components/ReleasePath.astro';
 import SectionNav from '@/components/SectionNav.astro';
 import RoadmapFilters from '@/components/RoadmapFilters.astro';
 import RoadmapTimeline from '@/components/RoadmapTimeline.astro';
@@ -13,6 +14,8 @@ const grouped = DROPS.reduce<Record<string, typeof DROPS>>((acc, d) => {
   return acc;
 }, {} as Record<string, typeof DROPS>);
 const quarterOrder = Array.from(new Set(DROPS.map((d) => d.quarter)));
+const nextDrop = DROPS.find(drop => drop.status === 'next');
+const nextQuarter = nextDrop ? quarterOrder.indexOf(nextDrop.quarter) : 0;
 
 
 // Intake POST target. Reuses the site's existing lead endpoint so roadmap
@@ -33,43 +36,50 @@ const intakePost = '/api/lead';
 
   <section class="roadmap-scope" aria-labelledby="roadmap-heading">
     <div class="container-page py-hq-section">
-      <p class="intro-label">The M3MM release queue</p>
-
-      <div class="brand-heading">
-        <img src="/official-logo.png" alt="M3MM" width="96" height="96" class="brand-mark" decoding="async" />
-        <h1 id="roadmap-heading" class="brand-display">Roadmap</h1>
+      <div class="roadmap-intro">
+        <div class="intro-copy">
+          <p class="intro-label">The M3MM release queue</p>
+          <h1 id="roadmap-heading" class="brand-display">Roadmap</h1>
+          <p class="lede"><strong>{LAUNCH_STATS.released} official release: the M3MM Hub.</strong> Testing previews stay separate from official releases.</p>
+          <p class="schedule-note">Planned dates are targets. Big7 remains long-term while M3MM waits for real jobsite photography.</p>
+          <ul class="stats" role="list">
+            <li class="stat"><b>{LAUNCH_STATS.total}</b><span>Tracked builds</span></li>
+            <li class="stat"><b>{LAUNCH_STATS.released}</b><span>Released</span></li>
+            <li class="stat"><b>{LAUNCH_STATS.testing}</b><span>Testing</span></li>
+          </ul>
+        </div>
+        {nextDrop && <aside class="launch-spotlight" aria-labelledby="next-launch-heading">
+          <div class="spotlight-meta"><span>Next official launch</span><span>{nextDrop.category}</span></div>
+          <ReleasePath />
+          <h2 id="next-launch-heading">{nextDrop.name === 'AriesOutdoorLiving' ? 'Aries Outdoor Living' : nextDrop.name}</h2>
+          <p>{nextDrop.blurb}</p>
+          <div class="spotlight-actions">
+            <a href={`#quarter-${nextQuarter}`} data-cta="roadmap-next-details" data-section="roadmap" data-intent="product:roadmap-drop">View launch details <span aria-hidden="true">↘</span></a>
+            <button class="motion-toggle" type="button" data-motion-toggle hidden aria-pressed="false" data-cta="roadmap-motion-toggle" data-section="roadmap">Pause motion</button>
+          </div>
+        </aside>}
       </div>
-      <p class="brand-meaning">Modernize. Mobilize. Multiply.</p>
 
-      <p class="lede">
-        <strong>{LAUNCH_STATS.released} official release: the M3MM Hub.</strong> Aries Outdoor Living is
-        the next public hard launch. Some other builds have reachable test deployments; those stay
-        labeled <em>Testing</em> and do not count as releases. Big7 remains long-term while M3MM waits
-        for real jobsite photography.
-      </p>
-
-      <p class="schedule-note">Planned dates are targets. Testing previews stay separate from official releases.</p>
-
-      <ul class="stats" role="list">
-        <li class="stat"><b>{LAUNCH_STATS.total}</b><span>Tracked builds</span></li>
-        <li class="stat"><b>{LAUNCH_STATS.released}</b><span>Official release</span></li>
-        <li class="stat"><b>{LAUNCH_STATS.testing}</b><span>Test previews</span></li>
-        <li class="stat"><b>Aries</b><span>Next launch</span></li>
-      </ul>
-
+      <div class="roadmap-board">
+        <aside class="roadmap-sidebar">
       <SectionNav label="Jump to a release group" section="roadmap" links={[
         ...quarterOrder.map((q, index) => ({ label: q, href: `#quarter-${index}`, cta: `roadmap-jump-${index}`, intent: 'product:roadmap' })),
         { label: 'Follow a build', href: '#signup-heading', cta: 'roadmap-jump-signup', intent: 'book:roadmap-subscribe' },
       ]} />
 
+        </aside>
+        <div class="roadmap-groups">
       <RoadmapFilters />
 
       {quarterOrder.map((q, index) => (
         <section data-roadmap-quarter aria-labelledby={`quarter-${index}`}>
-          <h2 id={`quarter-${index}`} class="section-head">{q}</h2>
+          <h2 id={`quarter-${index}`} class="section-head">{q}<span class="group-count">{grouped[q].length} {grouped[q].length === 1 ? 'build' : 'builds'}</span></h2>
           <RoadmapTimeline drops={grouped[q]} />
         </section>
       ))}
+
+        </div>
+      </div>
 
       <section class="signup" aria-labelledby="signup-heading">
         <h2 id="signup-heading" class="section-head">Follow a build</h2>
@@ -238,22 +248,19 @@ const intakePost = '/api/lead';
     overflow-wrap: anywhere;
   }
   .roadmap-scope .intro-label { @apply text-hq-small; color: var(--secondary); margin-bottom: 1.5rem; }
-  .roadmap-scope .brand-heading { display: flex; align-items: center; gap: 1rem; }
-  .roadmap-scope .brand-mark { width: clamp(3rem, 7vw, 5rem); height: auto; flex: none; }
   .roadmap-scope .brand-display { @apply font-display text-hq-hero font-medium; margin: 0; }
-  .roadmap-scope .brand-meaning { @apply text-hq-small; margin-top: 1rem; color: var(--secondary); }
   .roadmap-scope .lede { @apply text-hq-lede; max-width: 65ch; margin: 1.5rem 0 1rem; color: var(--secondary); }
   .roadmap-scope .lede strong { color: var(--text); font-weight: 600; }
   .roadmap-scope .schedule-note { @apply text-hq-small; color: var(--ink-mute); max-width: 65ch; }
   .roadmap-scope .stats {
-    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem;
-    margin: 2rem 0 0; padding: 1.5rem; background: var(--card); border-top: 3px solid var(--accent);
-    border-radius: theme('borderRadius.hq-panel'); list-style: none;
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem;
+    margin: 2rem 0 0; padding: 1.5rem 0 0; border-top: 1px solid var(--line);
+    list-style: none;
   }
   .roadmap-scope .stat b { color: theme('colors.electric.DEFAULT'); @apply font-display text-hq-section font-medium; display: block; font-variant-numeric: tabular-nums; }
   .roadmap-scope .stat:nth-child(2) b { color: theme('colors.clay.DEFAULT'); }
   .roadmap-scope .stat span { @apply text-hq-small; display: block; margin-top: .5rem; color: var(--secondary); }
-  .roadmap-scope .section-head { @apply font-display text-hq-section font-medium; margin: theme('spacing.hq-section') 0 1.5rem; max-width: 26ch; }
+  .roadmap-scope .section-head { @apply font-display text-hq-title font-medium; margin: theme('spacing.hq-section') 0 1.5rem; max-width: 26ch; }
   .roadmap-scope .signup { margin: theme('spacing.hq-section') 0 1.5rem; padding: 2rem; background: var(--card); border-left: 3px solid theme('colors.electric.DEFAULT'); border-radius: theme('borderRadius.hq-panel'); }
   .roadmap-scope .signup .section-head { margin-top: 0; }
   .roadmap-scope .signup-copy { color: var(--secondary); max-width: 65ch; line-height: 1.65; }
@@ -271,8 +278,27 @@ const intakePost = '/api/lead';
   .roadmap-scope .fine, .roadmap-scope .foot-note { @apply text-hq-small; color: var(--ink-mute); margin-top: 1rem; max-width: 65ch; }
   .roadmap-scope .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
   @media (max-width: 640px) {
-    .roadmap-scope .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .roadmap-scope .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .roadmap-scope .signup { padding: 1.25rem; }
     .roadmap-scope .signup-btn { width: 100%; }
   }
+  .roadmap-intro { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 4rem; align-items: center; }
+  .launch-spotlight { background: var(--card); border: 1px solid var(--line); border-radius: theme('borderRadius.hq-panel'); padding: 2rem; }
+  .spotlight-meta { display: flex; justify-content: space-between; gap: 1rem; color: var(--ink-mute); font-size: theme('fontSize.hq-label[0]'); }
+  .spotlight-meta span:first-child { color: var(--accent); }
+  .launch-spotlight h2 { font-size: theme('fontSize.hq-section[0]'); line-height: 1.15; letter-spacing: -.035em; }
+  .launch-spotlight > p { margin-top: 1rem; color: var(--secondary); line-height: 1.65; }
+  .spotlight-actions { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; }
+  .spotlight-actions a { display: inline-flex; align-items: center; gap: 1rem; min-height: 44px; font-size: theme('fontSize.hq-small[0]'); color: theme('colors.electric.DEFAULT'); text-decoration: underline; text-underline-offset: .3em; }
+  .roadmap-board { display: grid; grid-template-columns: 205px minmax(0,1fr); gap: 3rem; margin-top: theme('spacing.hq-section'); align-items: start; }
+  .roadmap-sidebar { position: sticky; top: 2rem; }
+  .roadmap-sidebar :global(.section-nav) { margin: 0; border: 0; padding: 0; }
+  .roadmap-sidebar :global(.section-nav ul) { display: grid; gap: .25rem; }
+  .roadmap-sidebar :global(.section-nav a) { background: transparent; border: 0; padding: .5rem 0; text-decoration: none; color: var(--ink-mute); }
+  .roadmap-sidebar :global(.section-nav a:hover) { color: theme('colors.electric.DEFAULT'); }
+  .roadmap-groups { min-width: 0; }
+  .group-count { display: block; margin-top: .5rem; font: 400 .8125rem/1.5 theme('fontFamily.sans'); color: var(--ink-mute); letter-spacing: 0; }
+  [data-roadmap-quarter][hidden] { display: none; }
+  @media (max-width: 980px) { .roadmap-intro { grid-template-columns: 1fr; gap: 2rem; } .roadmap-board { grid-template-columns: 1fr; gap: 1.5rem; } .roadmap-sidebar { position: static; } .roadmap-sidebar :global(.section-nav ul) { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; } }
+  @media (max-width: 640px) { .launch-spotlight { padding: 1.25rem; } .roadmap-scope .stat b { font-size: 2rem; } }
 </style>

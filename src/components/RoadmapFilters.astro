@@ -25,7 +25,16 @@ const filters = [
     const result = filters.querySelector('[data-filter-count]');
     const apply = (key: string) => {
       let count = 0;
-      rows.forEach(row => { row.hidden = key !== 'all' && row.dataset.roadmapStatus !== key; if (!row.hidden) count++; });
+      rows.forEach(row => {
+        row.getAnimations().forEach(animation => animation.cancel());
+        row.hidden = key !== 'all' && row.dataset.roadmapStatus !== key;
+        if (!row.hidden) {
+          count++;
+          if (document.documentElement.dataset.motion === 'full') row.animate(
+            [{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'translateY(0)' }],
+            { duration: 240, delay: Math.min((count - 1) * 24, 120), easing: 'cubic-bezier(.2,.7,.2,1)' });
+        }
+      });
       groups.forEach(group => { group.hidden = !group.querySelector('[data-roadmap-status]:not([hidden])'); });
       buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filter === key)));
       if (result) result.textContent = key === 'all' ? `Showing all ${count} builds.` : `Showing ${count} ${key === 'upcoming' ? 'planned' : key} ${count === 1 ? 'build' : 'builds'}.`;
@@ -33,11 +42,15 @@ const filters = [
     buttons.forEach(button => button.addEventListener('click', () => apply(button.dataset.filter || 'all')));
     // Quarter jumps always expose their destination, including from a filtered view.
     document.querySelectorAll<HTMLAnchorElement>('a[href^="#quarter-"]').forEach(link => link.addEventListener('click', () => apply('all')));
+    // Immediate cancellation also covers an OS preference change mid-transition.
+    new MutationObserver(() => {
+      if (document.documentElement.dataset.motion !== 'full') rows.forEach(row => row.getAnimations().forEach(animation => animation.cancel()));
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-motion'] });
     filters.hidden = false;
   }
 </script>
 <style>
-  .roadmap-filters { margin-top: 2rem; }
+  .roadmap-filters { padding-bottom: 1.5rem; border-bottom: 1px solid theme('colors.ink.line'); }
   [hidden] { display: none; }
   [role="group"] { display: flex; flex-wrap: wrap; gap: .5rem; }
   button { min-height: 44px; padding: .625rem 1rem; border: 1px solid theme('colors.ink.outline'); border-radius: theme('borderRadius.hq-control'); font-size: theme('fontSize.hq-small[0]'); color: theme('colors.bone.dim'); }

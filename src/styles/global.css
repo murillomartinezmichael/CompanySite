@@ -53,7 +53,7 @@
 
 @layer components {
   .container-page {
-    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
   }
 
   /* Primary CTA — solid accent fill, confident and simple. Hover deepens
@@ -220,3 +220,9 @@ img[src="/official-logo.png"] { object-fit: contain; border-radius: 0; filter: n
 :where(main) :is(section[id], article[id], h2[id]) { scroll-margin-top: 2rem; }
 :where(main) :is(h1,h2,h3,p) { overflow-wrap: break-word; }
 @media (prefers-reduced-motion: reduce) { .kinetic-track * { animation: none !important; } }
+
+/* Orbit refinement: the artwork supplies motion; interface labels stay quiet. */
+.kicker.mono { font-family: theme('fontFamily.sans'); font-size: theme('fontSize.hq-small[0]'); letter-spacing: .01em; text-transform: none; color: theme('colors.bone.dim'); }
+.motion-toggle { border-color: transparent; padding-inline: 0; text-decoration: underline; text-underline-offset: .3em; }
+.motion-toggle:hover { border-color: transparent; color: theme('colors.electric.DEFAULT'); }
+.btn-primary, .btn-ghost { transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease; }

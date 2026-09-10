@@ -130,3 +130,16 @@ and accessibility. Implementation stays in the existing Astro/Tailwind stack.
 Use the exact official-logo.png original; no logo modification is authorized.
 New animation is separate decorative artwork with reduced-motion and pause
 controls. No deployment or new push is part of this local redesign.
+
+## D-CS-012 — Professional orbital motion and an interactive roadmap (2026-09-09)
+
+Michael refined the performance direction: clean, professional, futuristic
+structure and fluid animation, using Astra's galaxy as a craft reference. He
+then requested a more animated, better displayed roadmap. Keep the approved
+black/blue/lime tokens; replace mechanical decorative plates with a deterministic
+canvas field and SVG fallback. Widen the shared container, soften grouped
+surfaces and simplify the department directory. Put the next launch first on
+roadmap, followed by release-group navigation, animated status filtering and
+native expandable build details. Preserve every build's source data, prices,
+claims, forms, route and the original logo. Motion stays optional and bounded.
+Verification is recorded in `docs/ORBIT_VERIFICATION_2026-09-09.md`; local only.

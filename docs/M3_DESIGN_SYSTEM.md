@@ -1,12 +1,14 @@
 # M3MM design system
 
-Version 2 · September 9, 2026 · all CompanySite pages.
+Version 2.1 · September 9, 2026 · all CompanySite pages.
 
 Michael explicitly requested neon green, blue and black with animation inspired
 by his 2021 Polaris Scrambler XP 1000 S. This supersedes Version 1's restrained
 teal-only and no-neon rules. The archived legacy site remains read-only; this is
 an Astro implementation of the new direction. See `DESIGN_DIRECTION_2026-09-09.md`
-for the plan, critique and prioritized findings, and DECISIONS.md for authority.
+for the initial plan and findings. `ORBIT_DESIGN_2026-09-09.md` records the later
+owner-directed professional/galaxy refinement and roadmap redesign; D-CS-012
+is its decision receipt.
 
 ## Identity and content
 
@@ -48,13 +50,13 @@ axe tests measure rendered pages as well. Do not reduce text opacity casually.
 
 Self-hosted Space Grotesk for display; Inter for body and controls. Keep sentence
 case, left alignment, readable paragraph lengths (65–70ch maximum). Metadata
-uses `hq-label` or `hq-small`; no extra font downloads. The hero is fluid 40–80px,
+uses `hq-label` or `hq-small`; no extra font downloads. The hero is fluid 40–72px,
 section headings 32–48px. Use `hq-title`, `hq-lede` and the shared type scale.
 
-`container-page`: 1152px maximum, 20px mobile/32px larger gutters. Section rhythm
-uses `spacing.hq-section` (48–80px). Controls use a 3px radius; grouped surfaces
-8px. Standalone targets are at least 44px tall, primary buttons at least 48px.
-The homepage sculpture may expand on desktop, but prose and primary actions
+`container-page`: 1280px maximum, 20px mobile/32px larger gutters. Section rhythm
+uses `spacing.hq-section` (48–80px). Controls use an 8px radius; grouped surfaces
+16px. Standalone targets are at least 44px tall, primary buttons at least 48px.
+The homepage particle field may expand on desktop, but prose and primary actions
 remain first in mobile reading order. At 320px every page must reflow.
 
 ## Component contracts
@@ -63,13 +65,17 @@ remain first in mobile reading order. At 320px every page must reflow.
   review action, complete original logo. Wrapping navigation needs no script.
 - Breadcrumb: each secondary page uses Layout's existing breadcrumb data for
   visible navigation as well as structured data. Receipt pages stay noindex.
-- Home: statement and sculpture, compact release facts, department directory,
+- Home: statement and particle field, compact release facts, department directory,
   Released ledger, Testing previews, roadmap queue, company close.
 - Sales: Hero → TwoDoor → Proof → Services → FAQ → Intake. Section jumps help
   returning buyers reach proof/pricing/form; preserve all existing anchors.
-- Roadmap: release explanation, status overview, quarter jumps, optional status
-  filters, quarter timelines, follow form. Filters hide only matching views;
-  no-JS readers get all builds. Quarter jumps reset filters before navigation.
+- Roadmap: release explanation and counts alongside a next-launch spotlight with
+  a decorative animated release path. Desktop has a sticky release-group directory;
+  mobile has wrapping jump links. Optional status filters precede grouped native
+  build disclosures. Released and next builds start expanded; testing and planned
+  builds expand on demand, including without JavaScript. Filter transitions are
+  short, canceled on rapid input and disabled by motion preferences. Quarter jumps
+  reset filters before navigation. The follow form closes the board.
 - Forms: solid reading surfaces, persistent labels, visible borders and focus.
   Preserve validation, error messages, endpoint and receipt destinations.
 - Footer: two-column directory on mobile, three on desktop, full email row,
@@ -77,9 +83,12 @@ remain first in mobile reading order. At 320px every page must reflow.
 
 ## Motion and accessibility
 
-Decorative animation is concentrated in the dimensional track artwork. The
-artwork is hidden from assistive technology, static without JavaScript, stopped
-outside the viewport and paused by a persistent user control. OS reduced motion
+Decorative motion is concentrated in the orbital particle field and roadmap's
+release path. `KineticTrack` retains its import contract while rendering a canvas
+field with static SVG fallback; `ReleasePath` is a small decorative SVG. Neither
+is the logo. Canvas rendering caps at 30fps and 1.5 DPR, with fewer mobile particles;
+it stops when hidden, offscreen or paused. Artwork is hidden from assistive
+technology, static without JavaScript and paused by a persistent user control. OS reduced motion
 always overrides the enabled preference. The control is hidden when JS is off.
 No flashing, glitch effects, pointer trails, scroll hijacking or auto-scrolling.
 Reading content is immediately visible; `.reveal` no longer hides content.
