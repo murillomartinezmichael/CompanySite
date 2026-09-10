@@ -131,7 +131,9 @@ Build: 15 pages, placeholder fence clean. Vitest: 518 passed, 2 existing skips,
 chat state; all mobile primary navigation works without JavaScript. Canonicals:
 15 OK. Interaction checks: all four widths pass. Astro check: 0 errors, warnings
 or hints. Logo hash and all 15 sharing metadata records verified. No API or
-roadmap-data diff. `git diff --check` clean.
+roadmap-data diff. Source-only `git diff --check` is clean. This document
+preserves trailing whitespace emitted by Astro inside the verbatim log blocks;
+the unrestricted whitespace check reports those terminal lines.
 
 Screenshot selection: `output/performance-qa/home-375.png`, `home-1440.png`,
 `roadmap-375.png`, `roadmap-1440.png`, `websites-375.png`, `websites-1440.png`.
