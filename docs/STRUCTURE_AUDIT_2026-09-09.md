@@ -219,3 +219,25 @@ not every screenshot or complete page was manually inspected.
 - Remaining older metadata/type/radius uses are flagged in the inventory, not
   silently certified as fully migrated. Supplied artwork is unchanged.
 - Actual Cockpit browser work-log transcription remains queued locally.
+
+
+## September 9 follow-through: performance redesign
+
+The initial 14-page inventory above is a dated baseline. Commit `ab405ff` added
+`/roadmap/thanks` before this redesign: its job is to acknowledge a roadmap
+follow request, its primary action returns to `/roadmap`, and its incoming path
+is the roadmap form's JS/native success flow. It is intentionally noindex and
+not a browsing destination. There are now 15 pages; none were deleted.
+
+Michael subsequently requested neon green, blue and black, referencing his
+2021 Polaris Scrambler XP 1000 S. This supersedes the baseline single-accent
+recommendation. The revised plan, finding/evidence/fix/priority list, component
+contracts and verification live in `DESIGN_DIRECTION_2026-09-09.md`,
+`M3_DESIGN_SYSTEM.md` and `PERFORMANCE_VERIFICATION_2026-09-09.md`.
+
+New structure: consistent global page navigation plus visible breadcrumbs;
+homepage statement/artwork followed by compact release facts; Website services
+now has a real department tile; sales section jumps and visible mobile package
+actions; optional roadmap status filters with quarter reset and complete no-JS
+content; shared footer directory and motion preference. Existing receipt routes,
+prices, referral configuration, releases and lead endpoint are retained.

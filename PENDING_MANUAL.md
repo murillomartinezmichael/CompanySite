@@ -1,5 +1,17 @@
 # Pending manual
 
+## 2026-09-09 — performance redesign review
+
+- [ ] Review the local lime/blue/black site before choosing a release. Preview:
+  `http://127.0.0.1:4321`. Design authority: D-CS-011; evidence and limits:
+  `docs/PERFORMANCE_VERIFICATION_2026-09-09.md`. This redesign is not deployed.
+- [ ] Copy the prepared performance-redesign entry from `COCKPIT_QUEUE.md` into
+  the actual Cockpit Work Log. No browser localStorage write is claimed.
+
+The supplied logo is preserved at 804,005 bytes. It is reused from one cached
+URL; this pass intentionally makes no smaller or recolored derivative.
+
+
 ## 2026-09-09 — Structure audit handoff
 
 - [ ] **Decide what a roadmap subscriber is actually promised.** The routing half

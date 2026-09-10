@@ -72,7 +72,7 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
       <!-- Signature card -->
       <div class="mt-10 flex items-center gap-4 rounded-2xl border border-ink-line bg-ink-soft/60 p-5 backdrop-blur-sm">
         <div class="grid h-11 w-11 flex-none place-items-center overflow-hidden rounded-full bg-ink-panel ring-1 ring-ink-line">
-          <img src="/mark-light.png" alt="" width="28" height="28" class="h-7 w-7 object-contain" decoding="async" />
+          <img src="/official-logo.png" alt="" width="28" height="28" class="h-7 w-7 object-contain" decoding="async" />
         </div>
         <div class="text-sm">
           <p class="font-medium text-bone">Michael Murillo-Martinez</p>
@@ -215,7 +215,7 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
 
       <div class="flex flex-col gap-4 pt-2 sm:flex-row sm:items-center sm:justify-between">
         <p class="mono text-[11px] uppercase tracking-[0.18em] text-bone-muted">
-          <span class="text-clay/80">●</span> Encrypted in transit · Never sold
+          <span class="inline-block h-1.5 w-1.5 rounded-full bg-clay" aria-hidden="true"></span> Encrypted in transit · Never sold
         </p>
         <button
           type="submit"
@@ -335,3 +335,8 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
     });
   }
 </script>
+
+<style>
+  #intake { border-top: 1px solid theme('colors.ink.line'); background: theme('colors.ink.soft'); }
+  #intake form { background: theme('colors.ink.DEFAULT'); border: 1px solid theme('colors.ink.line'); border-top: 3px solid theme('colors.electric.DEFAULT'); border-radius: theme('borderRadius.hq-panel'); padding: clamp(1.25rem, 3vw, 2rem); }
+</style>

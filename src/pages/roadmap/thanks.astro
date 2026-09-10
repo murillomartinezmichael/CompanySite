@@ -22,9 +22,10 @@ import Footer from '@/components/Footer.astro';
   description="Your M3MM roadmap update request was received."
   path="/roadmap/thanks"
   noindex={true}
+  breadcrumbs={[{ name: 'M3MM', url: '/' }, { name: 'Roadmap', url: '/roadmap' }, { name: 'Request received', url: '/roadmap/thanks' }]}
 >
   <Header slot="header" minimal={true} path="/roadmap/thanks" />
-  <div class="container-page py-hq-section">
+  <div class="receipt-page container-page py-hq-section">
     <section class="panel mx-auto max-w-2xl p-8 sm:p-12">
       <p class="kicker mono">Request received</p>
       <h1 class="mt-5 text-hq-hero">You're on the list.</h1>

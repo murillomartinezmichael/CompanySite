@@ -1,0 +1,48 @@
+---
+import { DROPS } from '@/config/roadmap';
+const filters = [
+  { key: 'all', label: 'All builds' },
+  { key: 'released', label: 'Released' },
+  { key: 'next', label: 'Next' },
+  { key: 'testing', label: 'Testing' },
+  { key: 'upcoming', label: 'Planned' },
+];
+---
+<div class="roadmap-filters" data-roadmap-filters hidden>
+  <div role="group" aria-label="Filter builds by status">
+    {filters.map(filter => <button type="button" data-filter={filter.key} aria-pressed={filter.key === 'all' ? 'true' : 'false'} data-cta={`roadmap-filter-${filter.key}`} data-section="roadmap">
+      {filter.label} <span>{filter.key === 'all' ? DROPS.length : DROPS.filter(d => d.status === filter.key).length}</span>
+    </button>)}
+  </div>
+  <p role="status" aria-live="polite" data-filter-count>Showing all {DROPS.length} builds.</p>
+</div>
+<script>
+  const filters = document.querySelector<HTMLElement>('[data-roadmap-filters]');
+  if (filters) {
+    const buttons = filters.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    const rows = document.querySelectorAll<HTMLElement>('[data-roadmap-status]');
+    const groups = document.querySelectorAll<HTMLElement>('[data-roadmap-quarter]');
+    const result = filters.querySelector('[data-filter-count]');
+    const apply = (key: string) => {
+      let count = 0;
+      rows.forEach(row => { row.hidden = key !== 'all' && row.dataset.roadmapStatus !== key; if (!row.hidden) count++; });
+      groups.forEach(group => { group.hidden = !group.querySelector('[data-roadmap-status]:not([hidden])'); });
+      buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filter === key)));
+      if (result) result.textContent = key === 'all' ? `Showing all ${count} builds.` : `Showing ${count} ${key === 'upcoming' ? 'planned' : key} ${count === 1 ? 'build' : 'builds'}.`;
+    };
+    buttons.forEach(button => button.addEventListener('click', () => apply(button.dataset.filter || 'all')));
+    // Quarter jumps always expose their destination, including from a filtered view.
+    document.querySelectorAll<HTMLAnchorElement>('a[href^="#quarter-"]').forEach(link => link.addEventListener('click', () => apply('all')));
+    filters.hidden = false;
+  }
+</script>
+<style>
+  .roadmap-filters { margin-top: 2rem; }
+  [hidden] { display: none; }
+  [role="group"] { display: flex; flex-wrap: wrap; gap: .5rem; }
+  button { min-height: 44px; padding: .625rem 1rem; border: 1px solid theme('colors.ink.outline'); border-radius: theme('borderRadius.hq-control'); font-size: theme('fontSize.hq-small[0]'); color: theme('colors.bone.dim'); }
+  button span { margin-left: .5rem; font-variant-numeric: tabular-nums; }
+  button[aria-pressed="true"] { background: theme('colors.electric.DEFAULT'); border-color: theme('colors.electric.DEFAULT'); color: theme('colors.ink.DEFAULT'); }
+  button:hover { border-color: theme('colors.electric.DEFAULT'); }
+  p { margin-top: 1rem; color: theme('colors.bone.muted'); font-size: theme('fontSize.hq-small[0]'); }
+</style>

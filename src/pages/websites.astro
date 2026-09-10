@@ -15,7 +15,6 @@ import SectionNav from '@/components/SectionNav.astro';
   title="M3MM Websites — Websites that get you customers"
   description="M3MM's website-services department: custom business websites, sellable templates, free site reviews, and lead-generating launch systems."
   path="/websites"
-  ogImage="/og-websites.png"
   breadcrumbs={[
     { name: 'M3MM', url: '/' },
     { name: 'Websites', url: '/websites' },
@@ -23,6 +22,14 @@ import SectionNav from '@/components/SectionNav.astro';
 >
   <Header slot="header" path="/websites" />
   <Hero />
+  <div class="container-page">
+    <SectionNav label="Explore website services" section="websites" links={[
+      { label: 'Project examples', href: '#proof', cta: 'sales-jump-proof', intent: 'product:case-studies' },
+      { label: 'Packages & pricing', href: '#services', cta: 'sales-jump-services', intent: 'product:website-services' },
+      { label: 'Questions', href: '#faq', cta: 'sales-jump-faq', intent: 'product:website-services' },
+      { label: 'Free review', href: '#intake', cta: 'sales-jump-intake', intent: 'book:free-review' },
+    ]} />
+  </div>
   <TwoDoor />
   <Proof />
   <div class="container-page">

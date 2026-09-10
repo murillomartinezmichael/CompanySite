@@ -42,8 +42,10 @@ function walkAstro(dir: string): string[] {
 
 const NAV_ONLY_CTAS: ReadonlySet<string> = new Set([
   'logo',              // Header: brand mark → /
-  'nav-proof',         // Header: in-page anchor → #proof
-  'nav-services',      // Header: in-page anchor → #services
+  'breadcrumb',        // Page hierarchy navigation, not a conversion.
+  'hq-motion-toggle',  // Decorative motion preference, not a conversion.
+  'sales-motion-toggle', // Same preference on the sales hero.
+  'footer-motion-toggle', // Accessible sitewide motion preference.
   'footer-a11y',       // Footer: nav → /accessibility statement page
   'footer-policies',   // Footer: nav → /policies company-policy library
   'policies-accessibility', // Policies: cross-link → accessibility statement

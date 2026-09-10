@@ -101,11 +101,12 @@ describe('§ 1 — page anchors resolve to sections on the same page', () => {
     expect(src).toMatch(/ctaHref\s*=\s*['"]#intake['"]/);
   });
 
-  it('Header.astro keeps both hub and sales same-page anchor contracts', () => {
-    const src = read('src/components/Header.astro');
-    expect(src).toMatch(/href="#released"/);
-    expect(src).toMatch(/href="#roadmap"/);
-    expect(src).toMatch(/href="#proof"/);
-    expect(src).toMatch(/href="#services"/);
+  it('sales section jumps preserve proof, services and intake destinations', () => {
+    const src = read('src/pages/websites.astro');
+    for (const anchor of ['#proof', '#services', '#intake']) expect(src).toContain(`href: '${anchor}'`);
+    // The global navigation now travels between pages; rendered reachability
+    // and fragment validity are checked across every route in site-structure.
+    expect(read('src/components/Header.astro')).toContain("href: '/websites'");
+    expect(read('src/components/Header.astro')).toContain("href: '/roadmap'");
   });
 });

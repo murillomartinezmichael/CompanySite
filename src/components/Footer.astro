@@ -20,11 +20,11 @@ const EMAIL_SUBJECT = 'Free site review request — m3mm.net';
 const EMAIL_BODY = "Hey Mike,\n\nBusiness: \nCurrent site: \nWhat's frustrating me: \n\n— sent from m3mm.net footer";
 ---
 
-<footer class="mt-24 border-t border-ink-line/60">
+<footer class="site-footer mt-24 border-t border-ink-line/60">
   <div class="container-page flex flex-col gap-6 py-10 text-sm text-bone-muted sm:flex-row sm:items-center sm:justify-between">
     <div class="flex items-center gap-3">
-      <span class="grid h-7 w-7 place-items-center overflow-hidden rounded-md bg-ink-panel ring-1 ring-ink-line">
-        <img src="/mark-light.png" alt="M3MM" width="20" height="20" class="h-5 w-5 object-contain" decoding="async" />
+      <span class="grid h-12 w-12 shrink-0 place-items-center">
+        <img src="/official-logo.png" alt="M3MM" width="48" height="48" class="h-12 w-12 object-contain" decoding="async" />
       </span>
       <span class="flex flex-col gap-0.5">
         <span class="font-mono text-[10px] uppercase tracking-[0.16em] text-bone-dim">Modernize. Mobilize. Multiply.</span>
@@ -61,6 +61,7 @@ const EMAIL_BODY = "Hey Mike,\n\nBusiness: \nCurrent site: \nWhat's frustrating 
       <a href="/accessibility" class="transition-colors hover:text-bone" data-cta="footer-a11y" data-section="footer">Accessibility</a>
     </nav>
   </div>
+  <div class="container-page"><button class="motion-toggle" type="button" data-motion-toggle hidden aria-pressed="false" data-cta="footer-motion-toggle" data-section="footer">Pause motion</button></div>
 </footer>
 
 <script is:inline>
@@ -81,3 +82,13 @@ const EMAIL_BODY = "Hey Mike,\n\nBusiness: \nCurrent site: \nWhat's frustrating 
     a.textContent = addr;
   })();
 </script>
+
+<style>
+  .site-footer { border-top: 3px solid theme('colors.electric.DEFAULT'); background: theme('colors.ink.soft'); }
+  .site-footer > div:first-child { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.4fr); align-items: start; gap: 3rem; }
+  .site-footer nav { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .25rem 1.5rem; }
+  .site-footer nav a { display: inline-flex; align-items: center; min-height: 44px; color: theme('colors.bone.dim'); }
+  .site-footer nav a:hover { color: theme('colors.electric.DEFAULT'); }
+  .site-footer nav a[data-cta="footer-email"] { grid-column: 1 / -1; order: 1; }
+  @media (max-width: 768px) { .site-footer > div:first-child { grid-template-columns: 1fr; gap: 2rem; } .site-footer nav { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+</style>

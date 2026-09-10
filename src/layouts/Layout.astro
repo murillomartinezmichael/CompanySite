@@ -25,7 +25,7 @@ const {
   title = 'M3MM — Modernize. Mobilize. Multiply.',
   description = 'M3MM is Michael Murillo-Martinez\'s company hub for the official release, test deployments, client work, company departments, policies, and roadmap.',
   path = '/',
-  ogImage = '/og.png',
+  ogImage = '/official-logo.png',
   noindex = false,
   breadcrumbs,
 } = Astro.props;
@@ -67,18 +67,17 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={new URL(ogImage, canonical).toString()} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image:width" content={ogImage === '/official-logo.png' ? '1024' : '1200'} />
+    <meta property="og:image:height" content={ogImage === '/official-logo.png' ? '1024' : '630'} />
     <meta property="og:image:type" content={ogImage.endsWith('.svg') ? 'image/svg+xml' : 'image/png'} />
-    <meta property="og:image:alt" content={title} />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:image:alt" content={ogImage === '/official-logo.png' ? 'M3MM official logo' : title} />
+    <meta name="twitter:card" content={ogImage === '/official-logo.png' ? 'summary' : 'summary_large_image'} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(ogImage, canonical).toString()} />
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" href="/official-logo.png" />
+    <link rel="apple-touch-icon" href="/official-logo.png" />
 
     <!--
       Self-hosted fonts. Inter (400/500/600) and Space Grotesk (300–700) each
@@ -214,7 +213,16 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
 
     <slot name="header" />
 
-    <main id="main">
+    <main id="main" data-page={path}>
+      {breadcrumbs && breadcrumbs.length > 1 && (
+        <nav class="page-trail container-page" aria-label="Breadcrumb">
+          <ol>{breadcrumbs.map((crumb, index) => <li>
+            {index < breadcrumbs.length - 1
+              ? <a href={crumb.url} data-cta="breadcrumb" data-section="navigation">{crumb.name}</a>
+              : <span aria-current="page">{crumb.name}</span>}
+          </li>)}</ol>
+        </nav>
+      )}
       <slot />
     </main>
 
@@ -263,12 +271,12 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
     </script>
 
     <script>
+      import { wireMotion } from '@/lib/motion';
       import { wireCTAs } from '@/lib/track';
-      import { wireReveals } from '@/lib/reveal';
       import { wirePrefill } from '@/lib/prefill';
       import { wireLazyVideos } from '@/lib/lazyVideo';
+      wireMotion();
       wireCTAs();
-      wireReveals();
       wirePrefill();
       wireLazyVideos();
     </script>

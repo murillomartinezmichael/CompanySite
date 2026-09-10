@@ -1,6 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import Header from '@/components/Header.astro';
+import KineticTrack from '@/components/KineticTrack.astro';
 import Footer from '@/components/Footer.astro';
 import { DROPS, LAUNCH_STATS } from '@/config/roadmap';
 
@@ -10,7 +11,7 @@ const roadmapPreview = DROPS.filter((drop) => drop.status === 'next' || drop.sta
 
 // Department content is independent of the shared site navigation.
 const departments = [
-  { number: '01', name: 'Release status', description: 'Official launches, test previews, and the difference between the two.', href: '#released', action: 'Open the ledger' },
+  { number: '01', name: 'Website services', description: 'Custom business websites, project examples, and a free site review.', href: '/websites', action: 'Explore website services' },
   { number: '02', name: 'Roadmap', description: 'The shipping queue, launch order, dates, and signup for future product drops.', href: '/roadmap', action: 'View full roadmap' },
   { number: '03', name: 'Resume', description: 'Career surface: experience, the work behind it, and a downloadable resume.', href: '/resume', action: 'Open resume' },
   { number: '04', name: 'Company policies', description: 'The public policy library, including workplace vaccination and accessibility.', href: '/policies', action: 'Read policies' },
@@ -31,10 +32,6 @@ const isExternal = (url?: string) => Boolean(url?.startsWith('http'));
     <section class="hero container-page" aria-labelledby="hub-heading">
       <div class="hero-copy">
         <div class="eyebrow"><span></span>M3MM headquarters in Atlanta</div>
-        <div class="brand-lockup">
-          <img src="/mark-light.png" alt="M3MM" width="112" height="112" class="brand-mark" decoding="async" />
-          <p class="brand-name">M3MM</p>
-        </div>
         <h1 id="hub-heading">Everything I’m building.<br />One front door.</h1>
         <p class="meaning">Modernize. Mobilize. Multiply.</p>
         <p class="hero-lede">
@@ -51,6 +48,13 @@ const isExternal = (url?: string) => Boolean(url?.startsWith('http'));
         </div>
       </div>
 
+      <div class="hero-visual">
+        <KineticTrack />
+        <button class="motion-toggle" type="button" data-motion-toggle hidden aria-pressed="false" data-cta="hq-motion-toggle" data-section="hero">Pause motion</button>
+      </div>
+    </section>
+
+    <div class="container-page release-overview">
       <aside class="command-card" aria-label="M3MM release status">
         <div class="command-head"><span>Release overview</span><span class="system-live">Public hub</span></div>
         <div class="command-body">
@@ -63,9 +67,8 @@ const isExternal = (url?: string) => Boolean(url?.startsWith('http'));
             <div><dt>Roadmap</dt><dd>{LAUNCH_STATS.total} tracked builds</dd></div>
           </dl>
         </div>
-        <div class="command-foot"><span>m3mm.net</span><span>Company headquarters</span></div>
       </aside>
-    </section>
+    </div>
 
     <section class="departments container-page" aria-labelledby="departments-heading">
       <div class="section-intro">
@@ -190,7 +193,7 @@ const isExternal = (url?: string) => Boolean(url?.startsWith('http'));
     </section>
 
     <section class="closing container-page" aria-labelledby="closing-heading">
-      <img src="/mark-light.png" alt="" width="84" height="84" decoding="async" />
+      <img src="/official-logo.png" alt="" width="84" height="84" decoding="async" />
       <div>
         <p class="section-code">Built in public</p>
         <h2 id="closing-heading">The hub grows when the work ships.</h2>
@@ -222,14 +225,11 @@ const isExternal = (url?: string) => Boolean(url?.startsWith('http'));
   .hq-scope :is(section, aside, li, .hero-copy, .queue-body) { min-width: 0; }
   .hq-scope :is(h1,h2,h3,h4,p,dd,a) { overflow-wrap: anywhere; }
   .hq-scope :is(section[id], h2[id]) { scroll-margin-top: 2rem; }
-  .hero { display: grid; grid-template-columns: minmax(0,1.4fr) minmax(280px,.6fr); gap: 3rem; align-items: center; padding-block: var(--hq-space); }
+  .hero { display: grid; grid-template-columns: minmax(0,1.15fr) minmax(0,1fr); gap: 3rem; align-items: center; padding-block: var(--hq-space); }
   .eyebrow,.section-code,.release-meta,.command-label,.meaning { font-size: theme('fontSize.hq-label[0]'); line-height: 1.5; font-weight: 500; }
   .eyebrow { color: var(--hq-muted); }
   .eyebrow span { display: none; }
-  .brand-lockup { display: flex; align-items: center; gap: 1rem; margin-top: 2rem; }
-  .brand-mark { width: 4rem; height: 4rem; object-fit: contain; }
-  .brand-name { margin: 0; font: 600 2rem/1.1 theme('fontFamily.display'); letter-spacing: -.025em; }
-  .hero h1 { margin: 2rem 0 0; font-size: theme('fontSize.hq-hero[0]'); line-height: 1.04; letter-spacing: -.035em; font-weight: 500; }
+  .hero h1 { margin: 1.5rem 0 0; font-size: theme('fontSize.hq-hero[0]'); line-height: 1.04; letter-spacing: -.035em; font-weight: 600; }
   .meaning { margin: 1.5rem 0 0; color: var(--hq-accent); }
   .hero-lede { max-width: 56ch; margin: 1rem 0 0; color: var(--hq-dim); font-size: theme('fontSize.hq-lede[0]'); line-height: 1.65; }
   .hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
@@ -238,15 +238,16 @@ const isExternal = (url?: string) => Boolean(url?.startsWith('http'));
   .action-live:hover { background: var(--hq-highlight); border-color: var(--hq-highlight); }
   .action-ghost { color: var(--hq-text); }
   .action-ghost:hover { background: var(--hq-panel); }
-  .command-card { border: 1px solid var(--hq-line); border-radius: theme('borderRadius.hq-panel'); background: var(--hq-card); overflow: hidden; }
-  .command-head,.command-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem; padding: 1rem 1.5rem; font-size: theme('fontSize.hq-label[0]'); color: var(--hq-muted); }
-  .command-head { border-bottom: 1px solid var(--hq-line); }
-  .command-foot { border-top: 1px solid var(--hq-line); }
+  .command-card { display: grid; grid-template-columns: 1fr 3fr; border: 1px solid var(--hq-line); border-radius: theme('borderRadius.hq-panel'); background: var(--hq-card); overflow: hidden; }
+  .command-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem; padding: 1rem 1.5rem; font-size: theme('fontSize.hq-label[0]'); color: var(--hq-muted); }
+  .command-head { flex-direction: column; justify-content: center; border-right: 1px solid var(--hq-line); }
   .system-live { color: var(--hq-accent); }
-  .command-body { padding: 1.5rem; }
+  .command-body { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: .5rem 2rem; padding: 1.5rem; }
+  .command-label { grid-column: 1; }
+  .command-stats { grid-column: 2; grid-row: 1 / 4; }
   .command-label { color: var(--hq-muted); }
-  .command-number { margin-top: 1rem; color: var(--hq-text); font: 500 4rem/1 theme('fontFamily.display'); font-variant-numeric: tabular-nums; }
-  .command-caption { margin: .5rem 0 1.5rem; color: var(--hq-dim); }
+  .command-number { margin-top: 0; color: var(--hq-accent); font: 600 3rem/1 theme('fontFamily.display'); font-variant-numeric: tabular-nums; }
+  .command-caption { margin: 0; color: var(--hq-dim); }
   .command-stats div { display: grid; grid-template-columns: 1fr 1.6fr; gap: .75rem; padding-block: .75rem; border-top: 1px solid var(--hq-line); font-size: theme('fontSize.hq-small[0]'); }
   .command-stats dt { color: var(--hq-muted); }
   .command-stats dd { text-align: right; }
@@ -257,11 +258,11 @@ const isExternal = (url?: string) => Boolean(url?.startsWith('http'));
   .section-intro h2,.ledger-title h2,.roadmap-copy h2,.closing h2 { margin: 0; font-size: theme('fontSize.hq-section[0]'); line-height: 1.12; letter-spacing: -.025em; }
   .section-intro>p:last-child,.ledger-note { max-width: 48ch; color: var(--hq-dim); line-height: 1.65; }
   .department-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 1rem; list-style: none; padding: 0; margin-top: 2rem; }
-  .department-card { display: flex; flex-direction: column; height: 100%; padding: 1.5rem; border-top: 2px solid var(--hq-accent); background: var(--hq-card); color: var(--hq-text); text-decoration: none; transition: background 150ms ease; }
+  .department-card { display: flex; flex-direction: column; height: 100%; padding: 1.5rem; border-top: 2px solid theme('colors.electric.DEFAULT'); background: var(--hq-card); color: var(--hq-text); text-decoration: none; transition: background 150ms ease; }
   .department-card:hover { background: var(--hq-panel); }
   .department-card h3 { margin: 0; font-size: theme('fontSize.hq-title[0]'); line-height: 1.25; }
   .department-card p { margin: 1rem 0 1.5rem; font-size: theme('fontSize.hq-small[0]'); color: var(--hq-dim); line-height: 1.6; }
-  .department-action { display: flex; justify-content: space-between; gap: .75rem; margin-top: auto; font-size: theme('fontSize.hq-small[0]'); font-weight: 600; }
+  .department-action { color: theme('colors.electric.DEFAULT'); display: flex; justify-content: space-between; gap: .75rem; margin-top: auto; font-size: theme('fontSize.hq-small[0]'); font-weight: 600; }
   .release-ledger,.preview-list,.queue { list-style: none; padding: 0; margin: 0; }
   .release-ledger { margin-top: 2rem; border-top: 1px solid var(--hq-line); }
   .release-row { display: grid; grid-template-columns: 3rem minmax(0,1fr) auto; gap: 1.5rem; align-items: center; padding-block: 2rem; border-bottom: 1px solid var(--hq-line); }
@@ -278,7 +279,7 @@ const isExternal = (url?: string) => Boolean(url?.startsWith('http'));
   .preview-list li { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 1.5rem; padding-block: 1.5rem; align-items: center; border-bottom: 1px solid var(--hq-line); }
   .preview-list li:first-child { padding-top: 0; }
   .preview-list li:last-child { border: 0; padding-bottom: 0; }
-  .preview-status { color: var(--hq-accent); font-size: theme('fontSize.hq-label[0]'); }
+  .preview-status { color: theme('colors.electric.DEFAULT'); font-size: theme('fontSize.hq-label[0]'); }
   .preview-list h4 { margin-top: .5rem; font-size: 1.125rem; }
   .preview-list p { font-size: theme('fontSize.hq-small[0]'); }
   .roadmap-preview { background: var(--hq-card); }
@@ -307,6 +308,10 @@ const isExternal = (url?: string) => Boolean(url?.startsWith('http'));
     .closing a { grid-column: 2; justify-self: start; }
   }
   @media (max-width: 640px) {
+    .command-card { grid-template-columns: 1fr; }
+    .command-head { flex-direction: row; border-right: 0; border-bottom: 1px solid var(--hq-line); }
+    .command-body { gap: .5rem 1rem; }
+    .hero-visual { margin-top: -1rem; }
     .hero-actions,.action { width: 100%; }
     .section-intro,.department-grid { grid-template-columns: 1fr; }
     .department-card { padding: 1.5rem; }

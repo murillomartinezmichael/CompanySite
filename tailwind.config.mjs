@@ -1,46 +1,26 @@
-/** @satisfies {import('tailwindcss').Config} */
-// ─────────────────────────────────────────────────────────────────────────
-// M3MM design tokens — homepage rules: docs/M3_DESIGN_SYSTEM.md (2026-09-08).
-//
-// Replaces the v3 "Cyberpunk 2055 / Edgerunners" theme. That theme was
-// built for TikTok-scroll-stopping character (see git history), but the
-// actual buyer here is a small-business/contractor owner deciding whether
-// to trust this person with their company's public face — BRD.md calls
-// the audience out explicitly: "credible... not a DIY template." A
-// gamer/anime aesthetic answers a different question than the one this
-// page needs to answer. Direction: still dark, still confident and
-// distinctive — just one restrained accent, no glitch/halftone/neon-HUD
-// decoration. See DECISIONS.md for the full rationale.
-//
-// Semantic mapping (Tailwind class names unchanged; HEX shifted so every
-// existing `text-clay` / `bg-ink` / etc. call site keeps working):
-//   clay   → single accent, deepened + desaturated from the old neon cyan
-//   ink    → void/navy family, kept (dark mode reads modern here)
-//   bone   → text family, kept
-//   cyber / neon → REMOVED. Every former usage now maps to clay or a
-//   neutral bone/muted tone (see the file-by-file sweep in DECISIONS.md).
-// ─────────────────────────────────────────────────────────────────────────
+/** M3MM performance palette — Michael approved lime/blue/black, 2026-09-09. */
 export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
   theme: {
     extend: {
       colors: {
+        electric: { DEFAULT: '#50BDFF', deep: '#174E78', glow: '#9BDCFF' },
         ink: {
-          DEFAULT: '#0D0E14',   // --bg-void  · page ground
-          soft:    '#161A24',   // --surface  · nav, cards, panels
-          panel:   '#1D212C',   // --surface-alt · alternate sections
-          outline: '#82879A',   // interactive boundaries; >=3:1 on all dark surfaces
-          line:    '#262B38',   // hairline (raw hex; rgba variants in raw CSS)
+          DEFAULT: '#050607',   // --bg-void  · page ground
+          soft:    '#101519',   // --surface  · nav, cards, panels
+          panel:   '#192127',   // --surface-alt · alternate sections
+          outline: '#9AA7B1',   // interactive boundaries; >=3:1 on all dark surfaces
+          line:    '#354149',   // hairline (raw hex; rgba variants in raw CSS)
         },
         bone: {
-          DEFAULT: '#EDEFF3',   // --text-main  · body copy, headings
-          dim:     '#B7BBC7',   // secondary body
-          muted:   '#82879A',   // --text-muted · labels, mono, metadata
+          DEFAULT: '#F4F7F8',   // --text-main  · body copy, headings
+          dim:     '#C2CDD3',   // secondary body
+          muted:   '#9AA7B1',   // --text-muted · labels, mono, metadata
         },
         clay: {
-          DEFAULT: '#4FB8C7',   // --accent · single restrained teal-cyan, deepened
-          deep:    '#2E7A85',   // deeper tone for shadows/borders
-          glow:    '#8FD9E3',   // hover-tint (thin usage only)
+          DEFAULT: '#B6FF3B',   // primary action lime; legacy token name
+          deep:    '#567C18',   // deeper tone for shadows/borders
+          glow:    '#D2FF87',   // hover-tint (thin usage only)
         },
       },
       fontFamily: {
@@ -53,9 +33,9 @@ export default {
         mono:    ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
       },
       spacing: { 'hq-section': 'clamp(3rem, 6vw, 5rem)' },
-      borderRadius: { 'hq-control': '6px', 'hq-panel': '12px' },
+      borderRadius: { 'hq-control': '3px', 'hq-panel': '8px' },
       fontSize: {
-        'hq-hero': ['clamp(2.5rem, 5.5vw, 4.5rem)', { lineHeight: '1.04', letterSpacing: '-0.035em' }],
+        'hq-hero': ['clamp(2.5rem, 5.7vw, 5rem)', { lineHeight: '1.04', letterSpacing: '-0.035em' }],
         'hq-section': ['clamp(2rem, 3.5vw, 3rem)', { lineHeight: '1.12', letterSpacing: '-0.025em' }],
         'hq-title': ['1.5rem', { lineHeight: '1.25' }],
         'hq-lede': ['1.125rem', { lineHeight: '1.65' }],
@@ -72,7 +52,7 @@ export default {
         // Hover states get a faint accent glow — 12px cap, ~0.3 alpha. No
         // large ambient glows. `glow-clay` kept as the name for backwards
         // compat with existing component classes.
-        'glow-clay': '0 0 12px rgba(79, 184, 199, 0.30)',
+        'glow-clay': '0 0 12px rgba(182, 255, 59, 0.22)',
         'panel':     '0 1px 0 rgba(255,255,255,0.03) inset, 0 12px 40px -30px rgba(0,0,0,0.9)',
       },
       backgroundImage: {

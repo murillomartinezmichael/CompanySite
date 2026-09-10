@@ -1571,3 +1571,15 @@ rung.
 **What shipped on `origin/main` (`efa2278`):** A six-question native FAQ now sits between Services and Intake, answers only confirmed pricing, ownership, budget, and review-process objections, and routes visitors either to the free review or the fully attributed SiteGuide under-$500 lane. Added source-level regression coverage for placement, semantics, confirmed claims, CTA metadata, UTMs, and keyboard-focus styling.
 
 **Verified:** Astro check 0 errors/warnings/hints; Vitest 211/211; Astro build 4 pages; canonical audit 4/4. Browser smoke at 375x812 and 1440x900 confirmed six disclosures, pointer toggling, visible focus rings, 8px clearance before answer copy, and zero FAQ-local overflow. Production returned 200 with `#faq`, both attributed FAQ CTA markers, and all six disclosures. A one-minute physical-keyboard toggle remains queued in `PENDING_MANUAL.md` because synthetic Enter/Space events did not invoke the browser's native default action.
+
+
+## 2026-09-09 — CompanySite performance redesign (draft; not entered)
+
+Implemented Michael's Scrambler-inspired lime/blue/black direction across the
+15-page M3MM site. Preserved his original logo byte-for-byte, all prices and
+release states. Added animated dimensional artwork with persistent pause,
+reduced-motion and offscreen controls, consistent navigation/breadcrumbs,
+mobile sales actions, home release strip and roadmap status filters. Exact
+local checks and screenshot review: docs/PERFORMANCE_VERIFICATION_2026-09-09.md.
+No production deployment or new push. Michael still owns the existing payment,
+proof-content, live-delivery and release gates.

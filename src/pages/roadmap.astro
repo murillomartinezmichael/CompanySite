@@ -3,6 +3,7 @@ import Layout from '@/layouts/Layout.astro';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import SectionNav from '@/components/SectionNav.astro';
+import RoadmapFilters from '@/components/RoadmapFilters.astro';
 import RoadmapTimeline from '@/components/RoadmapTimeline.astro';
 import { DROPS, LAUNCH_STATS } from '@/config/roadmap';
 
@@ -35,7 +36,7 @@ const intakePost = '/api/lead';
       <p class="intro-label">The M3MM release queue</p>
 
       <div class="brand-heading">
-        <img src="/mark-light.png" alt="M3MM" width="96" height="96" class="brand-mark" decoding="async" />
+        <img src="/official-logo.png" alt="M3MM" width="96" height="96" class="brand-mark" decoding="async" />
         <h1 id="roadmap-heading" class="brand-display">Roadmap</h1>
       </div>
       <p class="brand-meaning">Modernize. Mobilize. Multiply.</p>
@@ -61,8 +62,10 @@ const intakePost = '/api/lead';
         { label: 'Follow a build', href: '#signup-heading', cta: 'roadmap-jump-signup', intent: 'book:roadmap-subscribe' },
       ]} />
 
+      <RoadmapFilters />
+
       {quarterOrder.map((q, index) => (
-        <section aria-labelledby={`quarter-${index}`}>
+        <section data-roadmap-quarter aria-labelledby={`quarter-${index}`}>
           <h2 id={`quarter-${index}`} class="section-head">{q}</h2>
           <RoadmapTimeline drops={grouped[q]} />
         </section>
@@ -244,13 +247,14 @@ const intakePost = '/api/lead';
   .roadmap-scope .schedule-note { @apply text-hq-small; color: var(--ink-mute); max-width: 65ch; }
   .roadmap-scope .stats {
     display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem;
-    margin: 2rem 0 0; padding: 1.5rem; background: var(--card);
+    margin: 2rem 0 0; padding: 1.5rem; background: var(--card); border-top: 3px solid var(--accent);
     border-radius: theme('borderRadius.hq-panel'); list-style: none;
   }
-  .roadmap-scope .stat b { @apply font-display text-hq-section font-medium; display: block; font-variant-numeric: tabular-nums; }
+  .roadmap-scope .stat b { color: theme('colors.electric.DEFAULT'); @apply font-display text-hq-section font-medium; display: block; font-variant-numeric: tabular-nums; }
+  .roadmap-scope .stat:nth-child(2) b { color: theme('colors.clay.DEFAULT'); }
   .roadmap-scope .stat span { @apply text-hq-small; display: block; margin-top: .5rem; color: var(--secondary); }
   .roadmap-scope .section-head { @apply font-display text-hq-section font-medium; margin: theme('spacing.hq-section') 0 1.5rem; max-width: 26ch; }
-  .roadmap-scope .signup { margin: theme('spacing.hq-section') 0 1.5rem; padding: 2rem; background: var(--card); border-radius: theme('borderRadius.hq-panel'); }
+  .roadmap-scope .signup { margin: theme('spacing.hq-section') 0 1.5rem; padding: 2rem; background: var(--card); border-left: 3px solid theme('colors.electric.DEFAULT'); border-radius: theme('borderRadius.hq-panel'); }
   .roadmap-scope .signup .section-head { margin-top: 0; }
   .roadmap-scope .signup-copy { color: var(--secondary); max-width: 65ch; line-height: 1.65; }
   .roadmap-scope .signup-form { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1rem; margin-top: 1.5rem; }

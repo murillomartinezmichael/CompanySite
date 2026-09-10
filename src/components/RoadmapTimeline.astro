@@ -12,7 +12,7 @@ const statusLabels = {
 
 <ol class="timeline">
   {drops.map((d) => (
-    <li class={`item item-${d.status}`}>
+    <li class={`item item-${d.status}`} data-roadmap-status={d.status}>
       <div class="date">
         <b>{d.dateLabel}</b>{d.year}
       </div>
@@ -38,6 +38,9 @@ const statusLabels = {
     padding: 1.5rem; margin-bottom: 1rem; background: theme('colors.ink.soft');
     border-radius: theme('borderRadius.hq-panel');
   }
+  .item[hidden] { display: none; }
+  .item-next { border: 1px solid theme('colors.clay.DEFAULT'); }
+  .item-testing { border-left: 2px solid theme('colors.electric.DEFAULT'); }
   .item::before {
     content: ''; position: absolute; left: -1.875rem; top: 2rem;
     width: .75rem; height: .75rem; border-radius: 50%; background: theme('colors.bone.muted');
@@ -53,6 +56,7 @@ const statusLabels = {
   .body p { margin-top: .75rem; color: theme('colors.bone.dim'); max-width: 65ch; line-height: 1.65; }
   .status { @apply font-sans text-hq-label font-medium; display: block; margin-top: .5rem; color: theme('colors.clay.DEFAULT'); }
   .status-released { color: theme('colors.clay.glow'); }
+  .status-testing { color: theme('colors.electric.DEFAULT'); }
   .status-upcoming { color: theme('colors.bone.muted'); }
   @media (max-width: 640px) {
     .item { grid-template-columns: minmax(0, 1fr); gap: 1rem; padding: 1.25rem; }

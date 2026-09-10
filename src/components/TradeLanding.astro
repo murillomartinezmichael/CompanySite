@@ -23,15 +23,14 @@ interface Props {
 }
 const { trade, kicker, headline, headlineDim, sub, proofs } = Astro.props;
 
-// Single restrained accent — see the 2026-07-21 redesign note in
-// tailwind.config.mjs. Keys kept so ProofPanel['accent'] callers don't churn.
+// The owner-approved lime/blue palette shares the existing caller keys.
 const accentText: Record<ProofPanel['accent'], string> = {
   cyber: 'text-clay/80',
-  neon: 'text-clay/80',
+  neon: 'text-electric',
 };
 ---
 
-<section class="relative isolate overflow-hidden">
+<section class="page-intro trade-intro relative isolate overflow-hidden">
 
   <div class="container-page relative py-hq-section">
     <div class="max-w-3xl">

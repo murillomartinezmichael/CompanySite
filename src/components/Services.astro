@@ -114,7 +114,7 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
         return (
           <a
             href={s.href}
-            class="group relative block py-10 transition-colors duration-500 hover:bg-ink-soft/40 sm:py-14"
+            class="service-option group relative block py-10 transition-colors duration-500 hover:bg-ink-soft/40 sm:py-14"
             data-cta={`service-${s.key}`}
             data-section="services"
             data-intent={s.intent}
@@ -165,7 +165,7 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
               </div>
 
               <!-- CTA arrow -->
-              <div class="hidden items-center lg:flex">
+              <div class="flex items-center">
                 <span class={`mono text-xs uppercase tracking-[0.2em] ${a.text} ${a.hover} transition-all duration-500 group-hover:translate-x-1`}>
                   {s.cta}
                 </span>
@@ -202,3 +202,9 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
     </div>
   </div>
 </section>
+
+<style>
+  #services { border-top: 1px solid theme('colors.ink.line'); }
+  .service-option { padding-inline: 1.25rem; border-left: 2px solid theme('colors.clay.DEFAULT'); }
+  .service-option:nth-child(even) { border-left-color: theme('colors.electric.DEFAULT'); }
+</style>

@@ -119,3 +119,14 @@ reverted as a normal Git change; no deployment has occurred.
 - **Why:** The research item said "Get $X" and the pattern source used $100 — but no referral price exists anywhere in the fleet, and this is a live money-path site. Publishing an invented cash commitment is fabrication (LAW 6), and the precedent is fresh: the 2026-07-19 refund badge shipped the researcher's draft wording and Mike had to revise it the next day (D-CS-010 window). Better to ship the capture mechanic — which has no policy content at all — and let one config line flip the offer on.
 - **Also decided:** `?ref=<name>` joins `PARAM_TO_FIELD` even though that whitelist deliberately rejects `source`/`intent`/`company_website`. Rationale: `referredBy` is self-declared free text that only ever reaches a human triage email, so a forged `?ref=` costs one wrong name — whereas a forged `source` would corrupt attribution analytics. Without the URL lane the program needs the prospect to know and type the referrer's name, which is where referral programs die.
 - **Reversibility:** One line for the amount. Removing the program entirely is one field + one config file + two test files.
+
+## D-CS-011 — Owner-requested performance palette and immutable logo (2026-09-09)
+
+Michael asked to amplify all pages with animation and change the colors to neon
+green, blue and black, referencing his 2021 Polaris Scrambler XP 1000 S. This
+supersedes the earlier restrained single-accent direction, including D-CS-010's
+visual restrictions, while retaining release truth, pricing, mobile usability
+and accessibility. Implementation stays in the existing Astro/Tailwind stack.
+Use the exact official-logo.png original; no logo modification is authorized.
+New animation is separate decorative artwork with reduced-motion and pause
+controls. No deployment or new push is part of this local redesign.

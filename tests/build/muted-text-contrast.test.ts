@@ -44,14 +44,14 @@ const mutedOf = (file: string, variable: string) => {
 
 describe('muted greys clear the AA body-copy floor', () => {
   it('every homepage text and control pairing meets its contrast threshold', () => {
-    const { ink, bone, clay } = theme.theme.extend.colors;
+    const { ink, bone, clay, electric } = theme.theme.extend.colors;
     for (const bg of [ink.DEFAULT, ink.soft, ink.panel]) {
-      for (const fg of [bone.DEFAULT, bone.dim, bone.muted, clay.DEFAULT, clay.glow]) {
+      for (const fg of [bone.DEFAULT, bone.dim, bone.muted, clay.DEFAULT, clay.glow, electric.DEFAULT, electric.glow]) {
         expect(contrast(fg, bg), `${fg} on ${bg}`).toBeGreaterThanOrEqual(4.5);
       }
       expect(contrast(ink.outline, bg), `control boundary on ${bg}`).toBeGreaterThanOrEqual(3);
     }
-    for (const bg of [clay.DEFAULT, clay.glow]) {
+    for (const bg of [clay.DEFAULT, clay.glow, electric.DEFAULT, electric.glow]) {
       expect(contrast(ink.DEFAULT, bg), `button text on ${bg}`).toBeGreaterThanOrEqual(4.5);
     }
   });

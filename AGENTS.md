@@ -16,7 +16,7 @@ homepage tokens and component rules are in `docs/M3_DESIGN_SYSTEM.md`.
 - Fonts: self-hosted Space Grotesk (display) + Inter (body)
 
 Old cyberpunk single-file HTML is preserved at `legacy/2026-cyberpunk-index.html`.
-Do not resurrect it — the current site is a deliberate reset.
+Keep legacy/ read-only. The September 9 owner-requested lime/blue/black direction is implemented in Astro; see D-CS-011 and the current design system.
 
 ## Key files
 

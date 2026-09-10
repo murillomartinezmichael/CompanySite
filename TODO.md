@@ -1,5 +1,20 @@
 # CompanySite — TODO
 
+## 2026-09-09 — performance redesign
+
+- [x] Implement Michael's requested lime/blue/black direction across the shared
+  shell and page families; record D-CS-011 and design system v2.
+- [x] Use the exact original logo, including its background; guard its public
+  and built bytes with the owner's SHA-256.
+- [x] Add custom decorative motion, persistent pause/OS override/offscreen stop,
+  consistent navigation/breadcrumbs, sales jumps and mobile package labels,
+  homepage release strip and useful department routing, roadmap status filters.
+- [x] Keep all 15 routes, pricing, release data and form behavior. No content
+  invented to clear proof or owner gates.
+- [x] Final local verification and commit closeout: see
+  `docs/PERFORMANCE_VERIFICATION_2026-09-09.md`. No deployment or new push.
+
+
 ## 2026-09-09 — publication closeout
 
 Michael authorized committing and pushing current work. Preserved the existing

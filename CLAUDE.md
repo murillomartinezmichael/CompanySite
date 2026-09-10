@@ -11,7 +11,7 @@ and the shipping roadmap. The website-services conversion floor lives at
 
 - The written brand is **M3MM**, never `M³` or standalone `M3`.
 - The three Ms mean **Modernize. Mobilize. Multiply.** Keep that punctuation and order.
-- Use the supplied three-fold logo (`public/mark-light.png` on dark surfaces) wherever a visual wordmark/mark is shown; do not rebuild the old typed M³ mark.
+- Use the exact original `public/official-logo.png`, including its white background, wherever a mark is shown. No cropping, filters, recoloring, animation or redraws. See docs/M3_DESIGN_SYSTEM.md.
 - `m3mm.net` is the umbrella hub. The root must keep separate Released and Roadmap sections and route visitors to every M3MM department. `/hub` permanently redirects to `/`.
 - Public reachability and official release are separate states. Only M3MM Hub is currently released; AriesOutdoorLiving is next; preview deployments stay labeled `testing`; Big7 is long-term pending real jobsite photography.
 - `/websites` is the complete custom-site sales department. Preserve its Hero → TwoDoor → Proof → Services → FAQ → Intake funnel and its `#proof`, `#services`, and `#intake` anchors.
@@ -36,7 +36,7 @@ and the shipping roadmap. The website-services conversion floor lives at
 - Fonts: self-hosted Space Grotesk + Inter variable WOFF2 files
 
 Old cyberpunk single-file HTML is preserved at `legacy/2026-cyberpunk-index.html`.
-Do not resurrect it — the current site is a deliberate reset.
+Keep legacy/ read-only. The September 9 owner-requested lime/blue/black direction is implemented in Astro; see D-CS-011 and the current design system.
 
 ## Key files
 

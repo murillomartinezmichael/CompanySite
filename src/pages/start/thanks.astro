@@ -12,9 +12,10 @@ const referral = referralOffer();
   description="Your M3MM basic-site project intake was received."
   path="/start/thanks"
   noindex={true}
+  breadcrumbs={[{ name: 'M3MM', url: '/' }, { name: 'Basic website', url: '/start' }, { name: 'Intake received', url: '/start/thanks' }]}
 >
   <Header slot="header" minimal={true} path="/start/thanks" />
-  <div class="container-page py-hq-section">
+  <div class="receipt-page container-page py-hq-section">
     <section class="panel mx-auto max-w-2xl p-8 sm:p-12">
       <p class="kicker mono">Intake received</p>
       <h1 class="mt-5 text-hq-hero">Your project is in the queue.</h1>
