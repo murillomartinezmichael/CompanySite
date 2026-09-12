@@ -1,5 +1,20 @@
 # CompanySite — TODO
 
+## 2026-09-12 - scanner diagnostic redaction fixed
+
+- Central redaction protects overlapping rule samples, filenames, directory
+  messages and caught filesystem errors. Detection coverage stays unchanged;
+  clean exits remain 0 and findings/errors remain 1. Files are read by their
+  original paths; only diagnostic representations are masked.
+- Ten synthetic regressions failed against the old scanner and now pass,
+  including real CLI checks of stdout/stderr, partial key fragments and
+  filesystem-error output. Full suite: 530 passed, 2 existing skips. All 52
+  scanner tests pass; `npm run verify:dist` passes on existing dist/functions.
+  Independent review is clean. No fresh Astro build or production deployment.
+- **Exact next action:** audit and repair the legacy build/deploy entry points
+  so every supported deployment route runs the current build fence. Keep the
+  URL compatibility/coverage limitations and real Stripe checks explicit.
+
 ## 2026-09-12 - recovered security reviews
 
 - API security-header review `20260812-221943-codex-b0bea9` is integrated:
@@ -8,11 +23,8 @@
   passed, 2 existing live-checkout skips. No production deployment.
 - Vitest now uses `envDir: false` so unit tests do not load the operator's
   local environment files; fixtures remain test-owned.
-- **Next action / release hold:** repair diagnostic redaction across every
-  scanner rule. A synthetic key in a malformed Stripe URL query is retained
-  in `dead-stripe-link.samples` even though the separate key finding redacts it.
-  Reproduction uses `scanText` with synthetic input only. Add a real CLI test
-  proving neither stdout nor stderr contains that key, then re-review.
+- Diagnostic redaction finding: fixed in the follow-up above, including
+  overlapping matches and path/error messages. Synthetic CLI regressions pass.
 - The older placeholder review `20260812-214326-codex-4a959c` remains open:
   documented legacy deploy paths can bypass the build fence; the bare-link
   compatibility restriction and scanner coverage limits are not resolved by

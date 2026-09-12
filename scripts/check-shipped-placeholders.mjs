@@ -77,11 +77,6 @@ export const RULES = [
     id: 'stripe-key-material',
     test: (text) => text.match(/\b(sk|rk)_(live|test)_[A-Za-z0-9]{6,}|\bpk_test_[A-Za-z0-9]{6,}/g) ?? [],
     message: 'Stripe key material in shipped output (secret keys must never leave the server; pk_test is a wrong-mode key)',
-    // This rule's samples ARE the secret. Build logs (Cloudflare Pages, GitHub
-    // Actions) are retained and widely readable, so echoing the match verbatim
-    // would copy a leaked live key into a second place every time the fence
-    // fires. Print only enough to locate it.
-    redact: true,
   },
   {
     id: 'example-contact-target',
@@ -107,6 +102,15 @@ export const redactSecret = (value) => {
   return `${prefix}…[redacted, ${value.length} chars]`;
 };
 
+// Redaction applies to every diagnostic, including overlapping rule matches,
+// filenames and filesystem errors. Mask partial/underscore-containing key
+// shapes too: diagnostic safety must not depend on a detector's match length.
+// Detection rules above deliberately retain their existing coverage.
+export const redactDiagnostic = (value) => value.replace(
+  /(?:sk|rk)_(?:live|test)_[A-Za-z0-9_]+|pk_test_[A-Za-z0-9_]+/g,
+  redactSecret,
+);
+
 /**
  * File-level rules: a finding triggered by a file's PRESENCE in shipped
  * output, regardless of its content. Same finding shape as `scanText`.
@@ -131,7 +135,7 @@ export function scanFileName(name) {
     {
       rule: 'shipped-markdown',
       message: 'markdown must not ship — internal docs belong in docs/, not public/ (public/ serves verbatim at the site root)',
-      samples: [name],
+      samples: [redactDiagnostic(name)],
     },
   ];
 }
@@ -146,7 +150,7 @@ export function scanText(text) {
       findings.push({
         rule: rule.id,
         message: rule.message,
-        samples: rule.redact ? samples.map(redactSecret) : samples,
+        samples: samples.map(redactDiagnostic),
       });
     }
   }
@@ -162,7 +166,7 @@ export function scanDir(dir) {
       if (statSync(full).isDirectory()) walk(full);
       else if (isScannableFile(entry)) {
         const findings = [...scanFileName(entry), ...scanText(readFileSync(full, 'utf8'))];
-        if (findings.length > 0) results.push({ file: relative(dir, full), findings });
+        if (findings.length > 0) results.push({ file: redactDiagnostic(relative(dir, full)), findings });
       }
     }
   };
@@ -172,26 +176,37 @@ export function scanDir(dir) {
 
 // ---------------------------------------------------------------- CLI ----
 const invokedDirectly = process.argv[1] !== undefined && import.meta.url === pathToFileURL(process.argv[1]).href;
-if (invokedDirectly) {
+function runCli() {
   const dirs = process.argv.slice(2).length > 0 ? process.argv.slice(2) : ['dist'];
   const results = [];
   for (const dir of dirs) {
     if (!existsSync(dir)) {
-      console.error(`check-shipped-placeholders: '${dir}' not found — run \`npm run build\` first.`);
-      process.exit(1);
+      console.error(redactDiagnostic(`check-shipped-placeholders: '${dir}' not found — run \`npm run build\` first.`));
+      return 1;
     }
     results.push(...scanDir(dir).map((r) => ({ ...r, file: `${dir}/${r.file}` })));
   }
   if (results.length === 0) {
-    console.log(`check-shipped-placeholders: clean — no placeholders in ${dirs.join('/, ')}/`);
-    process.exit(0);
+    console.log(redactDiagnostic(`check-shipped-placeholders: clean — no placeholders in ${dirs.join('/, ')}/`));
+    return 0;
   }
   console.error(`\ncheck-shipped-placeholders: BUILD BLOCKED — placeholder content shipped\n`);
   for (const { file, findings } of results) {
     for (const f of findings) {
-      console.error(`  ${file}\n    [${f.rule}] ${f.message}\n    e.g. ${f.samples.join(' , ')}`);
+      console.error(redactDiagnostic(`  ${file}\n    [${f.rule}] ${f.message}\n    e.g. ${f.samples.join(' , ')}`));
     }
   }
   console.error('\nFix the source (see src/config/offers.ts for the checkout gate) and rebuild.\n');
-  process.exit(1);
+  return 1;
+}
+
+if (invokedDirectly) {
+  try {
+    process.exitCode = runCli();
+  } catch (error) {
+    // Uncaught Node errors echo their raw filesystem paths and bypass normal
+    // diagnostics. Keep the failure visible without copying key material.
+    console.error(redactDiagnostic(`check-shipped-placeholders: ${error instanceof Error ? error.message : String(error)}`));
+    process.exitCode = 1;
+  }
 }

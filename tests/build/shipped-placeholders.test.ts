@@ -87,7 +87,7 @@ describe('placeholder scanner — never echoes a detected secret', () => {
     expect(finding.samples[0]).toBe('sk_live_…[redacted, 26 chars]');
   });
 
-  it('redacts only secret findings, leaving other rules actionable', () => {
+  it('redacts key material while leaving ordinary samples actionable', () => {
     const [finding] = scanText('<a href="https://buy.stripe.com/REPLACE_AFTER_SIGN_IN">Pay</a>');
     expect(finding.samples[0]).toBe('https://buy.stripe.com/REPLACE_AFTER_SIGN_IN');
     expect(redactSecret('sk_live_abcdef123456')).toMatch(/^sk_live_…\[redacted, \d+ chars\]$/);
