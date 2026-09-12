@@ -1,5 +1,15 @@
 # Pending manual
 
+## 2026-09-12 — payment fence release checks
+
+- [ ] Verify the real Payment Link in Michael's Stripe account: active, live,
+  correct merchant, USD and the $100 deposit. Confirm any custom payment domain
+  before adding it to the shared host allowlist. Confirm Pages uses `npm run build`
+  and review the combined branch before release. **Why Michael:** these facts
+  require his provider accounts and release decision; syntax tests cannot prove
+  them. **Resumes:** configure the verified link and approve production release.
+  Evidence: `docs/PAYMENT_FENCE_RECOVERY_2026-09-12.md`.
+
 ## 2026-09-09 — performance redesign review
 
 - [ ] Review the local lime/blue/black site before choosing a release. Preview:

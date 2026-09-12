@@ -121,10 +121,9 @@ For preview review, use `npm run deploy -- --branch review-name`. Raw Wrangler
 uploads of an existing `dist/` are not a supported release path: Wrangler itself
 does not run this repository's build checks. Account setup remains separate.
 
-The fleet-level `scripts/deploy.py ship CompanySite` uses `deploy.yaml`'s build
-command by default, but its explicit `--no-build` override bypasses that gate.
-Do not use that override for CompanySite releases; fleet-tool hardening remains
-a separate follow-up. Use the repository command above for direct uploads.
+The fleet-level `scripts/deploy.py ship CompanySite` also requires its configured
+build command: Pages uploads reject `--no-build` and missing build gates. Use
+the repository command above to include tests and the immediate output rescan.
 
 Wrangler branch/upload behavior: [Cloudflare Pages commands](https://developers.cloudflare.com/workers/wrangler/commands/pages/).
 

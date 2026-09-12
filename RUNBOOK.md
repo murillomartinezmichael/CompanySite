@@ -165,9 +165,9 @@ This section is the local readiness check. The direct-deploy command reruns
 build/tests and the scanner itself, so these checks cannot be replaced by a
 stale earlier pass. Git-integrated Pages builds must retain `npm run build`
 as their configured command; this repository does not change dashboard settings.
-The fleet deployment tool's explicit `--no-build` option still bypasses its
-build step and is unsupported for CompanySite releases. Use `npm run deploy`
-for direct uploads. Windows batch regressions additionally skip on other OSes.
+The fleet deployment tool rejects `--no-build` and missing build commands for
+Pages uploads. Use `npm run deploy` for direct uploads with tests and rescan.
+Windows batch regressions additionally skip on other OSes.
 
 ---
 
