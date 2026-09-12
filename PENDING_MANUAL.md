@@ -1,5 +1,26 @@
 # Pending manual
 
+## 2026-09-12 - www canonical-host repair
+
+- The owner authorized the production repair. Authenticated Pages metadata
+  confirmed `m3-companysite` bound only the active apex `m3mm.net` while `www`
+  returned HTTP 522. After adding `www.m3mm.net`, a subsequent scoped GET
+  confirmed both domains' status, validation and verification are `active`.
+  Public apex and www subsequently both returned HTTP 200; canonical redirection
+  remains pending the application release.
+- The actual `www` DNS record type/target remains unverified: the scoped DNS
+  read returned permission error `10000`. No DNS or redirect-rule write occurred.
+- PR #18 now supplies a Pages Functions redirect to the fixed apex, preserving
+  path/query (GET/HEAD 301; other methods 308). Next: review, test, release, then
+  verify active domain status plus public redirects and the apex response.
+  This supersedes the August owner-only dashboard instruction; no new manual
+  step is claimed unless provider activation actually requires one.
+- Production compatibility metadata is `2026-07-07` with no flags. The Functions
+  compiler warns about existing SDK dynamic Node imports. Local workerd fails
+  at startup identically for this branch and current main; no regression or
+  required flag change is established. Verify the Pages preview's static and
+  API OPTIONS responses before releasing middleware that covers static requests.
+
 ## 2026-09-12 — payment fence release checks
 
 - [ ] Verify the real Payment Link in Michael's Stripe account: active, live,

@@ -1,5 +1,28 @@
 # CompanySite — TODO
 
+## 2026-09-12 - repair www canonical-host routing (PR #18)
+
+- Integrated main `534cd07` into the original PR branch, preserving current
+  files and replacing the obsolete owner-only www note with observed facts.
+  Pages accepted the missing www association; a subsequent GET confirms both
+  apex and www status/validation/verification active.
+  Public apex and www now both return 200; canonical redirect is not yet deployed.
+  The DNS record read was denied (`10000`); no DNS/rules write was performed.
+- Added a root Pages middleware: only `www.m3mm.net` redirects to the fixed
+  `https://m3mm.net` origin with the same path/query. GET/HEAD use 301; other
+  methods use 308 without consuming the body. Other hosts pass through unchanged.
+- Sanitized isolated verification: 21 new regressions and 7 existing API
+  middleware tests pass; full suite **622 passed, 2 existing skips**. Build:
+  **15 pages**, clean shipped-output fence. Astro check: **45 files, zero
+  errors/warnings/hints**. Pages Functions compile succeeds; existing Anthropic
+  SDK dynamic node:fs/node:path warnings. Production metadata has date `2026-07-07`
+  and no compatibility flags. Local workerd fails at startup identically for
+  current main and this branch, so local runtime verification is inconclusive.
+- Independent review is clean. Next: push PR #18, require green CI and a Pages
+  preview smoke (static HTML/asset and API OPTIONS) before merging; then verify
+  public www redirect/apex 200. Root middleware also runs before static assets.
+  No real form submission, email, payment or application deployment in this pass.
+
 ## 2026-09-12 - restore the required Make aliases
 
 - Restored `lint` (Astro diagnostics) and `clean` (only generated `dist` and `.astro`).
