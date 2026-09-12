@@ -1,5 +1,26 @@
 # CompanySite — TODO
 
+## 2026-09-12 - recovered security reviews
+
+- API security-header review `20260812-221943-codex-b0bea9` is integrated:
+  route-specific rate buckets, JSON object guards, header-case handling and
+  exception middleware address its material findings. Current gate: 520 tests
+  passed, 2 existing live-checkout skips. No production deployment.
+- Vitest now uses `envDir: false` so unit tests do not load the operator's
+  local environment files; fixtures remain test-owned.
+- **Next action / release hold:** repair diagnostic redaction across every
+  scanner rule. A synthetic key in a malformed Stripe URL query is retained
+  in `dead-stripe-link.samples` even though the separate key finding redacts it.
+  Reproduction uses `scanText` with synthetic input only. Add a real CLI test
+  proving neither stdout nor stderr contains that key, then re-review.
+- The older placeholder review `20260812-214326-codex-4a959c` remains open:
+  documented legacy deploy paths can bypass the build fence; the bare-link
+  compatibility restriction and scanner coverage limits are not resolved by
+  green unit tests. Stripe activation/ownership/amount checks stay manual.
+- Both August 5 checkout reviews are historically adjudicated, but their old
+  fleet records have no registered verification command. Original receipts are
+  preserved; none establishes live-payment readiness.
+
 ## 2026-09-10 — cinematic reference application
 
 - [x] Review sampled on-screen tutorial examples; record observations and review limits.
