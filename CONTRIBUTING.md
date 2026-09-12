@@ -16,6 +16,8 @@ build.bat         # Windows
 ```
 
 If `build.sh` fails on a fresh clone, file an issue — that's a build-script bug, not your environment.
+Both scripts run the locked npm install, Astro build/fence and tests. They do
+not generate local environment files or publish the site.
 
 ## Workflow
 
@@ -27,7 +29,7 @@ If `build.sh` fails on a fresh clone, file an issue — that's a build-script bu
 3. Add tests at the right tier (see `../docs/TESTING_STANDARDS.md`).
 4. Lint + test locally:
    ```bash
-   make lint
+   npm run build
    make test
    ```
 5. Open a PR using the template. Be specific in "How tested."

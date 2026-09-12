@@ -1,5 +1,77 @@
 # CompanySite — TODO
 
+## 2026-09-12 - restore the required Make aliases
+
+- Restored `lint` (Astro diagnostics) and `clean` (only generated `dist` and `.astro`).
+  Cleanup resolves its own repository, validates all targets before deletion,
+  and refuses linked paths. Source and dependencies remain intact.
+- Nine isolated CLI/Make tests pass, including junction refusal and failure
+  propagation. All five targets required by verify.yml are present; diff check
+  passes. Full `npm test` in the isolated source: **601 passed, 2 existing skips**.
+  Actual `npm exec -- astro check`: **45 files, zero errors, warnings or hints**.
+  Verification used a sanitized environment; cleanup never ran on real repo output.
+- Next: review this CI-contract correction with the pending branch changes.
+
+## 2026-09-12 - shared payment policy and bounded scanner
+
+- [x] Shared parsed URL policy supports query parameters and explicit trusted
+  hosts; rejects encoded key material without printing it. Removed the arbitrary
+  slug-length promise. Scanner covers more text formats/encodings and refuses
+  links and traversal/size overruns. No actual Stripe configuration changed.
+- [x] Isolated 15-page builds with checkout enabled and disabled each pass the
+  fence and 592 tests/2 conditional skips. Independent final review is clean.
+  Fleet Pages build-skip bypass is fixed, with 87 offline deployment tests.
+- **Exact next action:** Michael's actual payment/release checks in
+  `PENDING_MANUAL.md`. Detection boundaries and complete evidence are in
+  `docs/PAYMENT_FENCE_RECOVERY_2026-09-12.md`; no production readiness inferred.
+
+## 2026-09-12 - repository build/deploy entrypoints fixed
+
+- Bash and Windows setup now run npm ci, the actual Astro build/fence and tests;
+  they stop on any failed command, including negative Windows exit codes.
+  Make targets use real npm commands. Direct uploads require an explicit branch
+  and run build, tests and an immediate output rescan before local Wrangler.
+- 37 isolated command regressions pass, covering native Bash/cmd/GNU Make,
+  failure ordering, unrelated caller directories and branch injection rejection.
+  A tracked-source temporary copy built 15 pages and passed the output fence;
+  its full suite passed 567 tests with 2 existing live-checkout skips. Installed
+  dependencies were reused; a fresh npm ci install was not independently run.
+  No local env files copied, actual upload attempted or dashboard settings changed.
+  Independent final review is clean; README/RUNBOOK/CONTRIBUTING now match.
+- Fleet build-skip follow-up and shared-policy verification completed above.
+  Raw Wrangler uploads remain unsupported release paths; live checks stay manual.
+
+## 2026-09-12 - scanner diagnostic redaction fixed
+
+- Central redaction protects overlapping rule samples, filenames, directory
+  messages and caught filesystem errors. Detection coverage stays unchanged;
+  clean exits remain 0 and findings/errors remain 1. Files are read by their
+  original paths; only diagnostic representations are masked.
+- Ten synthetic regressions failed against the old scanner and now pass,
+  including real CLI checks of stdout/stderr, partial key fragments and
+  filesystem-error output. Full suite: 530 passed, 2 existing skips. All 52
+  scanner tests pass; `npm run verify:dist` passes on existing dist/functions.
+  Independent review is clean. No fresh Astro build or production deployment.
+- Repository entrypoint and shared-policy follow-ups completed above; documented
+  detection limitations and real Stripe checks remain explicit.
+
+## 2026-09-12 - recovered security reviews
+
+- API security-header review `20260812-221943-codex-b0bea9` is integrated:
+  route-specific rate buckets, JSON object guards, header-case handling and
+  exception middleware address its material findings. Current gate: 520 tests
+  passed, 2 existing live-checkout skips. No production deployment.
+- Vitest now uses `envDir: false` so unit tests do not load the operator's
+  local environment files; fixtures remain test-owned.
+- Diagnostic redaction finding: fixed in the follow-up above, including
+  overlapping matches and path/error messages. Synthetic CLI regressions pass.
+- The older placeholder review `20260812-214326-codex-4a959c` remains open:
+  code findings are repaired and verified above; inherent scanner limits and
+  Stripe activation/ownership/amount checks remain release boundaries.
+- Both August 5 checkout reviews are historically adjudicated, but their old
+  fleet records have no registered verification command. Original receipts are
+  preserved; none establishes live-payment readiness.
+
 ## 2026-09-10 — cinematic reference application
 
 - [x] Review sampled on-screen tutorial examples; record observations and review limits.

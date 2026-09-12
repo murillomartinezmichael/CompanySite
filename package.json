@@ -8,6 +8,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "npm run resume:pdf && astro build && npm run verify:dist",
+    "deploy": "node scripts/deploy-pages.mjs",
     "verify:dist": "node scripts/check-shipped-placeholders.mjs dist functions",
     "preview": "astro preview",
     "astro": "astro",

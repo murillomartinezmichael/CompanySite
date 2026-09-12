@@ -21,9 +21,10 @@
  * `npm run verify:dist` scans BOTH shipped surfaces: `dist/` (the static site)
  * and `functions/` (the Pages Functions that ship as Workers alongside it).
  */
-import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
+import { opendirSync, readFileSync, lstatSync, existsSync } from 'node:fs';
 import { join, extname, relative } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { PAYMENT_LINK_HOSTS, paymentLinkProblem, decodePercentLiterals } from './payment-link-policy.mjs';
 
 /**
  * Files worth scanning: shipped text. Binary assets are skipped.
@@ -34,10 +35,10 @@ import { pathToFileURL } from 'node:url';
  * shipped output at all, so its mere presence is a finding. See that rule for
  * the incident history and why deny-by-default is the only shape that works.
  */
-const TEXT_EXT = new Set(['.html', '.htm', '.js', '.mjs', '.ts', '.css', '.json', '.xml', '.txt', '.svg', '.webmanifest', '.md']);
+const TEXT_EXT = new Set(['.html', '.htm', '.js', '.mjs', '.ts', '.css', '.json', '.xml', '.txt', '.svg', '.webmanifest', '.md', '.map', '.cjs', '.tsx', '.astro', '.toml', '.yaml', '.yml', '.csv']);
 const TEXT_NAMES = new Set(['_headers', '_redirects', 'robots.txt']);
 
-export const isScannableFile = (name) => TEXT_EXT.has(extname(name).toLowerCase()) || TEXT_NAMES.has(name);
+export const isScannableFile = (name) => TEXT_EXT.has(extname(name).toLowerCase()) || TEXT_NAMES.has(name) || extname(name) === '';
 
 /**
  * Each rule is deliberately narrow. A false positive here fails a production
@@ -48,18 +49,15 @@ export const isScannableFile = (name) => TEXT_EXT.has(extname(name).toLowerCase(
 export const RULES = [
   {
     id: 'dead-stripe-link',
-    // Any buy.stripe.com URL that is not a well-formed LIVE payment link.
-    //
-    // The finder must consume the WHOLE URL, not just the leading id-shaped
-    // run. An earlier `[A-Za-z0-9_-]*` finder stopped at the first `?` or `/`,
-    // so it handed the validator a truncated-but-valid-looking base and
-    // `…/<valid-id>?x`, `…/<valid-id>/`, and `…/<valid-id>/extra` all passed
-    // the fence. Consume up to the first character that cannot appear in a URL
-    // in shipped text (whitespace, quote, angle bracket, backslash, closing
-    // paren/brace) so the validator judges the real thing.
+    // Consume complete literal URLs. Shared parsing keeps the build fence
+    // and checkout gate consistent for allowed hosts and query parameters.
     test: (text) => {
-      const found = text.match(/https?:\/\/buy\.stripe\.com\/[^\s"'`<>)\]}\\]*/g) ?? [];
-      return found.filter((u) => !/^https:\/\/buy\.stripe\.com\/[A-Za-z0-9]{10,64}$/.test(u) || u.includes('test_'));
+      const found = text.match(/https?:\/\/[^\s"'`<>)\]}\\]+/gi) ?? [];
+      return found.filter((value) => {
+        let hostname;
+        try { hostname = new URL(value).hostname; } catch { return false; }
+        return PAYMENT_LINK_HOSTS.includes(hostname) && paymentLinkProblem(value) !== null;
+      });
     },
     message: 'dead or test-mode Stripe payment link shipped',
   },
@@ -77,11 +75,6 @@ export const RULES = [
     id: 'stripe-key-material',
     test: (text) => text.match(/\b(sk|rk)_(live|test)_[A-Za-z0-9]{6,}|\bpk_test_[A-Za-z0-9]{6,}/g) ?? [],
     message: 'Stripe key material in shipped output (secret keys must never leave the server; pk_test is a wrong-mode key)',
-    // This rule's samples ARE the secret. Build logs (Cloudflare Pages, GitHub
-    // Actions) are retained and widely readable, so echoing the match verbatim
-    // would copy a leaked live key into a second place every time the fence
-    // fires. Print only enough to locate it.
-    redact: true,
   },
   {
     id: 'example-contact-target',
@@ -105,6 +98,17 @@ export const RULES = [
 export const redactSecret = (value) => {
   const prefix = value.match(/^(?:sk|rk|pk)_(?:live|test)_/)?.[0] ?? '';
   return `${prefix}…[redacted, ${value.length} chars]`;
+};
+
+// Redaction applies to every diagnostic, including overlapping rule matches,
+// filenames and filesystem errors. Mask partial/underscore-containing key
+// shapes too: diagnostic safety must not depend on a detector's match length.
+// Detection rules above deliberately retain their existing coverage.
+export const redactDiagnostic = (value) => {
+  const pattern = /(?:sk|rk)_(?:live|test)_[A-Za-z0-9_]+|pk_test_[A-Za-z0-9_]+/g;
+  const decoded = decodePercentLiterals(value);
+  if (decoded !== value && pattern.test(decoded)) return redactSecret(decoded);
+  return value.replace(pattern, redactSecret);
 };
 
 /**
@@ -131,13 +135,23 @@ export function scanFileName(name) {
     {
       rule: 'shipped-markdown',
       message: 'markdown must not ship — internal docs belong in docs/, not public/ (public/ serves verbatim at the site root)',
-      samples: [name],
+      samples: [redactDiagnostic(name)],
     },
   ];
 }
 
 /** Scan one file's text. Returns [{ rule, message, samples }]. */
 export function scanText(text) {
+  // Decode common literal encodings, without evaluating scripts or expressions.
+  // Arbitrarily constructed runtime strings remain outside a static text fence.
+  for (let pass = 0; pass < 2; pass++) {
+    text = decodePercentLiterals(text);
+    text = text.replace(/\\\//g, '/').replace(/\\u([0-9a-f]{4})/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
+      .replace(/&#(x[0-9a-f]+|[0-9]+);/gi, (whole, code) => {
+        const point = code[0].toLowerCase() === 'x' ? parseInt(code.slice(1), 16) : Number(code);
+        return point <= 0x10ffff ? String.fromCodePoint(point) : whole;
+      }).replace(/&(colon|sol|bsol|amp);/gi, (_, name) => ({ colon: ':', sol: '/', bsol: '\\', amp: '&' })[name.toLowerCase()]);
+  }
   const findings = [];
   for (const rule of RULES) {
     const hits = rule.test(text);
@@ -146,52 +160,76 @@ export function scanText(text) {
       findings.push({
         rule: rule.id,
         message: rule.message,
-        samples: rule.redact ? samples.map(redactSecret) : samples,
+        samples: samples.map(redactDiagnostic),
       });
     }
   }
   return findings;
 }
 
-/** Walk a directory, scanning every shipped text file. */
-export function scanDir(dir) {
+/** Bound traversal and reject links before following/reading their targets. */
+export const SCAN_LIMITS = Object.freeze({ fileBytes: 8 * 1024 * 1024, totalBytes: 64 * 1024 * 1024, entries: 20000, depth: 32 });
+export function scanDir(dir, limits = SCAN_LIMITS) {
+  if (!lstatSync(dir).isDirectory()) throw new Error(`scanner requires a directory: ${redactDiagnostic(dir)}`);
   const results = [];
-  const walk = (current) => {
-    for (const entry of readdirSync(current)) {
-      const full = join(current, entry);
-      if (statSync(full).isDirectory()) walk(full);
-      else if (isScannableFile(entry)) {
-        const findings = [...scanFileName(entry), ...scanText(readFileSync(full, 'utf8'))];
-        if (findings.length > 0) results.push({ file: relative(dir, full), findings });
-      }
+  let entries = 0;
+  let totalBytes = 0;
+  const walk = (current, depth) => {
+    if (++entries > limits.entries || depth > limits.depth) throw new Error('scanner traversal limit exceeded');
+    const stat = lstatSync(current);
+    if (stat.isSymbolicLink()) throw new Error('scanner refuses symbolic links and junctions');
+    if (stat.isDirectory()) {
+      const directory = opendirSync(current);
+      try {
+        let entry;
+        while ((entry = directory.readSync()) !== null) walk(join(current, entry.name), depth + 1);
+      } finally { directory.closeSync(); }
+    } else if (!stat.isFile()) {
+      throw new Error('scanner refuses non-regular files');
+    } else if (isScannableFile(current)) {
+      totalBytes += stat.size;
+      if (stat.size > limits.fileBytes || totalBytes > limits.totalBytes) throw new Error('scanner text size limit exceeded');
+      const findings = [...scanFileName(current), ...scanText(readFileSync(current, 'utf8'))];
+      if (findings.length > 0) results.push({ file: redactDiagnostic(relative(dir, current)), findings });
     }
   };
-  walk(dir);
+  walk(dir, 0);
   return results;
 }
 
 // ---------------------------------------------------------------- CLI ----
 const invokedDirectly = process.argv[1] !== undefined && import.meta.url === pathToFileURL(process.argv[1]).href;
-if (invokedDirectly) {
+function runCli() {
   const dirs = process.argv.slice(2).length > 0 ? process.argv.slice(2) : ['dist'];
   const results = [];
   for (const dir of dirs) {
     if (!existsSync(dir)) {
-      console.error(`check-shipped-placeholders: '${dir}' not found — run \`npm run build\` first.`);
-      process.exit(1);
+      console.error(redactDiagnostic(`check-shipped-placeholders: '${dir}' not found — run \`npm run build\` first.`));
+      return 1;
     }
     results.push(...scanDir(dir).map((r) => ({ ...r, file: `${dir}/${r.file}` })));
   }
   if (results.length === 0) {
-    console.log(`check-shipped-placeholders: clean — no placeholders in ${dirs.join('/, ')}/`);
-    process.exit(0);
+    console.log(redactDiagnostic(`check-shipped-placeholders: clean — no placeholders in ${dirs.join('/, ')}/`));
+    return 0;
   }
   console.error(`\ncheck-shipped-placeholders: BUILD BLOCKED — placeholder content shipped\n`);
   for (const { file, findings } of results) {
     for (const f of findings) {
-      console.error(`  ${file}\n    [${f.rule}] ${f.message}\n    e.g. ${f.samples.join(' , ')}`);
+      console.error(redactDiagnostic(`  ${file}\n    [${f.rule}] ${f.message}\n    e.g. ${f.samples.join(' , ')}`));
     }
   }
   console.error('\nFix the source (see src/config/offers.ts for the checkout gate) and rebuild.\n');
-  process.exit(1);
+  return 1;
+}
+
+if (invokedDirectly) {
+  try {
+    process.exitCode = runCli();
+  } catch (error) {
+    // Uncaught Node errors echo their raw filesystem paths and bypass normal
+    // diagnostics. Keep the failure visible without copying key material.
+    console.error(redactDiagnostic(`check-shipped-placeholders: ${error instanceof Error ? error.message : String(error)}`));
+    process.exitCode = 1;
+  }
 }

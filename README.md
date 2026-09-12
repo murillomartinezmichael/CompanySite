@@ -82,31 +82,50 @@ npm run build          # → dist/
 npm run preview        # serve dist/
 ```
 
+For clean-clone setup, `./build.sh` (Bash) or `build.bat` (Windows) runs
+`npm ci`, the full build including its shipped-output fence, and the test suite.
+Both work from any caller directory and stop at the first failed command.
+
 ## Deploy — Cloudflare Pages
 
-Two paths — first-time uses **wrangler direct upload**, ongoing runs pick either.
+The supported direct-upload command builds, tests, rescans `dist/` and
+`functions/`, then invokes the installed Wrangler. Supply the target branch
+explicitly: `main` publishes production; another branch targets a preview.
+Production publication still requires Michael's existing release approval.
 
 ### First-time (Mike-hands, ~5 min)
 
 ```bash
 cd CompanySite
 npx wrangler login                                          # browser consent
-npm ci && npm run build
+npm ci
 npx wrangler pages project create m3-companysite \
   --production-branch main
-npx wrangler pages deploy dist \
-  --project-name=m3-companysite --branch=main
+npm run deploy -- --branch main
 ```
 
 Then in the dashboard:
 - **Settings → Environment variables** — add `RESEND_API_KEY` (production). Optional: `LEAD_TO`, `LEAD_FROM`.
 - **Custom domains** — attach `m3mm.net`.
 
-### Subsequent deploys (~30 sec)
+### Subsequent deploys
 
 Either:
-- `npx wrangler pages deploy dist --project-name=m3-companysite --branch=main` (direct upload from local `dist/`), or
-- Connect the GitHub repo in the dashboard → CF auto-deploys on every `main` push.
+- `npm run deploy -- --branch main` (fresh build, tests and scan before upload), or
+- Connect the GitHub repo in the dashboard with build command `npm run build`
+  and output `dist` → CF builds on each authorized `main` push. The build
+  command includes the same shipped-output fence; GitHub CI separately runs tests.
+
+`make deploy BRANCH=main` is an alias for the checked direct-upload command.
+For preview review, use `npm run deploy -- --branch review-name`. Raw Wrangler
+uploads of an existing `dist/` are not a supported release path: Wrangler itself
+does not run this repository's build checks. Account setup remains separate.
+
+The fleet-level `scripts/deploy.py ship CompanySite` also requires its configured
+build command: Pages uploads reject `--no-build` and missing build gates. Use
+the repository command above to include tests and the immediate output rescan.
+
+Wrangler branch/upload behavior: [Cloudflare Pages commands](https://developers.cloudflare.com/workers/wrangler/commands/pages/).
 
 Full step-by-step + first-live-buyer test-mode smoke checklist in [`RUNBOOK.md § 3`](RUNBOOK.md).
 
