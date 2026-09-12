@@ -10,29 +10,28 @@ const referral = referralOffer();
 ---
 
 <Layout
-  title="Thanks — I'll reply within 24 hours · M³"
+  title="Thanks — I'll reply within 24 hours · M3MM"
   description="Your intake landed. What happens next: a recorded video teardown from Michael, within 24 hours, no template reply."
   path="/thanks"
   noindex={true}
   breadcrumbs={[
-    { name: 'M³', url: '/' },
+    { name: 'M3MM', url: '/' },
     { name: 'Free site review', url: '/audit' },
     { name: 'Thanks', url: '/thanks' },
   ]}
 >
   <Header slot="header" minimal={true} path="/thanks" />
 
-  <section class="relative isolate overflow-hidden">
-    <div class="pointer-events-none absolute inset-x-0 top-0 h-[500px] bg-gradient-to-b from-clay/[0.10] via-transparent to-transparent"></div>
+  <section class="page-intro receipt-page relative isolate overflow-hidden">
 
-    <div class="container-page relative pb-24 pt-14 sm:pt-24">
+    <div class="container-page relative py-hq-section">
       <div class="max-w-3xl">
         <div class="mb-6 flex items-center gap-3">
           <span class="hairline"></span>
           <p class="kicker mono">// Sent · queued for personal review</p>
         </div>
 
-        <h1 class="text-display-lg">
+        <h1 class="text-hq-hero">
           Got it. <span class="text-bone-dim">Reply within</span>
           <span class="highlight-yellow"><span class="fg">24 hours.</span></span>
         </h1>
@@ -63,32 +62,31 @@ const referral = referralOffer();
           </li>
         </ol>
 
-        <!-- Client proof — mirrors Hero outcomes so /thanks reinforces trust
-             during the 24h wait. Same verifiable data, no invented numbers. -->
+        <!-- Client proof — same named outcomes rendered on the Hero. -->
         <div class="mt-16 border-t border-ink-line/60 pt-10">
           <p class="kicker mono mb-6">// Same review, real clients</p>
           <div class="grid gap-6 sm:grid-cols-2">
             <div class="panel flex flex-col gap-2 p-6">
               <span class="mono text-[10px] uppercase tracking-[0.22em] text-clay/80">Aries Outdoor Living</span>
               <p class="text-sm leading-snug text-bone-dim">
-                Same intake, same 24h review. <span class="text-bone">Sold at handoff</span> · first quote request 3 days after launch.
+                Same intake, same 24h review. <span class="text-bone">Deployed and sold</span> · first quote request 3 days after handoff.
               </p>
             </div>
             <div class="panel flex flex-col gap-2 p-6">
               <span class="mono text-[10px] uppercase tracking-[0.22em] text-clay/80">Big 7 Construction</span>
               <p class="text-sm leading-snug text-bone-dim">
-                Same intake. <span class="text-bone">Build + Repair lanes live</span> at big7construction.com — one intake owning both funnels.
+                Same intake. <span class="text-bone">Build + Repair test deployment complete</span> — official launch waits on real jobsite photography.
               </p>
             </div>
           </div>
         </div>
 
-        <!-- Escape hatches while they wait — real conversion is here. -->
+        <!-- While-you-wait links -->
         <div class="mt-16 border-t border-ink-line/60 pt-10">
           <p class="kicker mono mb-6">// While you wait</p>
           <div class="grid gap-6 sm:grid-cols-2">
             <a
-              href="/?intent=product:case-studies#proof"
+              href="/websites?intent=product:case-studies#proof"
               class="group panel flex flex-col gap-2 p-6 transition-colors hover:bg-ink-soft/60"
               data-cta="thanks-see-work"
               data-section="thanks"
@@ -109,13 +107,12 @@ const referral = referralOffer();
             >
               <span class="mono text-[10px] uppercase tracking-[0.22em] text-clay/80">→ Off-the-shelf templates</span>
               <p class="font-medium text-bone">SiteGuide storefront</p>
-              <p class="text-sm text-bone-dim">Twelve one-page templates you can preview + buy today.</p>
+              <p class="text-sm text-bone-dim">Preview twelve one-page templates while the storefront remains in testing.</p>
             </a>
           </div>
         </div>
 
-        <!-- Referral program — the visitor is warm right now; this is the
-             cheapest lead source on the site (zero CAC, past-client trust). -->
+        <!-- Referral block -->
         <div class="mt-14 rounded-2xl border border-ink-line bg-ink-soft/40 p-6 sm:p-8">
           <p class="kicker mono mb-3">// Referrals</p>
           <p class="text-lg font-medium text-bone">{referral.headline}</p>
@@ -128,15 +125,14 @@ const referral = referralOffer();
             data-intent="book:free-review"
           >
             Send them the review form
-            <span aria-hidden="true">→</span>
           </a>
         </div>
 
-        <!-- Urgency path — TikTok/IG DMers who need it faster than 24h -->
-        <div class="mt-14 rounded-2xl border border-clay/30 bg-ink-soft/40 p-6 sm:p-8">
+        <!-- Same-day path -->
+        <div class="panel mt-14 p-6 sm:p-8">
           <p class="kicker mono mb-3 text-clay/80">// If it's actually urgent</p>
           <p class="text-bone-dim">
-            You saw me on TikTok or IG and this can't wait a day —
+            This can't wait a day —
             <a
               href="/audit?intent=book:urgent-review#intake"
               class="underline decoration-clay/60 decoration-1 underline-offset-[6px] text-bone hover:text-clay"
@@ -157,14 +153,12 @@ const referral = referralOffer();
 
   <script is:inline>
     // Hydrate the urgent-email link to a real mailto: without leaving the
-    // address in HTML source. Same mechanism as Footer + Accessibility:
-    // a raw mailto: in server HTML triggers Cloudflare's Email Address
-    // Obfuscation, which injects cdn-cgi/scripts/…/email-decode.min.js —
-    // ~200 ms of render-blocking JS in the LCP critical chain (killed for
-    // Footer in perf strike #5 tick-10; this closes the /thanks regression).
-    // Without JS the link falls through to /audit#intake, so the CTA is
-    // never a dead-end. Visible link text stays "email me directly" so the
-    // surrounding sentence still reads naturally after hydration.
+    // address in HTML source. Same mechanism as Footer + Accessibility: a raw
+    // mailto: in server HTML trips Cloudflare's Email Address Obfuscation,
+    // which injects a render-blocking email-decode script (~200 ms in the LCP
+    // critical chain). Without JS the link falls through to /audit#intake, so
+    // the CTA is never a dead end. Visible link text stays "email me
+    // directly" so the sentence still reads naturally after hydration.
     (function () {
       var a = document.querySelector('a[data-cta="thanks-urgent-email"]');
       if (!a || !a.dataset.emU || !a.dataset.emH) return;

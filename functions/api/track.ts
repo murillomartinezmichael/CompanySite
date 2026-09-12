@@ -11,8 +11,9 @@
 // - Fields trim + cap; no downstream ingestion so this is defense in
 //   depth against absurd log-line lengths.
 
-import { checkRate } from '../_lib/rate';
+import { checkRate, rateKey } from '../_lib/rate';
 import { clean } from '../_lib/validate';
+import { withSecurityHeaders } from '../_lib/security-headers';
 
 type Env = {};
 
@@ -36,13 +37,28 @@ type CTAEvent = {
   ts?: number;
 };
 
-const noContent = () => new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store' } });
+// `public/_headers` does NOT reach Pages Functions responses — see
+// ../_lib/security-headers.ts. Every reply off this beacon sets them itself.
+const noContent = () =>
+  new Response(null, { status: 204, headers: withSecurityHeaders({ 'Cache-Control': 'no-store' }) });
 
-export const onRequestPost: PagesFunction<Env> = async ({ request }) => {
+// Same last-resort funnel as lead.ts: an unhandled throw would be answered by
+// Cloudflare's own error page, which carries none of these headers. A beacon
+// has nothing to report back, so the safe answer is the hardened 204 it would
+// have returned anyway.
+export const onRequestPost: PagesFunction<Env> = async (ctx) => {
+  try {
+    return await trackPost(ctx);
+  } catch {
+    return noContent();
+  }
+};
+
+const trackPost: PagesFunction<Env> = async ({ request }) => {
   const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
 
   // Soft rate — even a hostile client can't drown the tail.
-  if (!checkRate(ip, RATE_MAX, RATE_WINDOW_S).ok) return noContent();
+  if (!checkRate(rateKey('track', ip), RATE_MAX, RATE_WINDOW_S).ok) return noContent();
 
   const contentLengthRaw = request.headers.get('Content-Length');
   const contentLength = contentLengthRaw ? Number(contentLengthRaw) : NaN;
@@ -58,7 +74,14 @@ export const onRequestPost: PagesFunction<Env> = async ({ request }) => {
 
   let body: CTAEvent = {};
   try {
-    body = text ? JSON.parse(text) : {};
+    const parsed: unknown = text ? JSON.parse(text) : {};
+    // `null` is valid JSON and used to survive this parse, then throw on the
+    // first property read below — an unhandled throw the beacon answers with
+    // Cloudflare's own error page instead of the hardened 204. Anything that
+    // is not a plain object simply carries no fields worth reading.
+    if (parsed !== null && typeof parsed === 'object' && !Array.isArray(parsed)) {
+      body = parsed as CTAEvent;
+    }
   } catch {
     // sendBeacon sometimes delivers as text; try URLSearchParams as fallback.
     try {
@@ -86,7 +109,10 @@ export const onRequestPost: PagesFunction<Env> = async ({ request }) => {
 
 export const onRequest: PagesFunction<Env> = async ({ request }) => {
   if (request.method === 'OPTIONS') {
-    return new Response(null, { status: 204, headers: { Allow: 'POST, OPTIONS' } });
+    return new Response(null, { status: 204, headers: withSecurityHeaders({ Allow: 'POST, OPTIONS' }) });
   }
-  return new Response('Method Not Allowed', { status: 405, headers: { Allow: 'POST', 'Cache-Control': 'no-store' } });
+  return new Response('Method Not Allowed', {
+    status: 405,
+    headers: withSecurityHeaders({ Allow: 'POST', 'Cache-Control': 'no-store' }),
+  });
 };

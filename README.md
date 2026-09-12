@@ -1,11 +1,11 @@
 # CompanySite — m3mm.net
 
 **Status:** 🟢 LIVE at [https://m3mm.net](https://m3mm.net) (Cloudflare Pages, since 2026-07-06).
-**Design:** "Confident Studio" — dark, restrained, single clay accent (replaced the cyberpunk theme 2026-07-21, see `DECISIONS.md § D-CS-010`; the old single-file site is preserved read-only in `legacy/`).
+**Design:** Dark, restrained M3MM identity with a teal accent. The homepage and roadmap follow the measured [M3MM design system](docs/M3_DESIGN_SYSTEM.md). This branch's redesign is verified locally and awaiting release; the legacy cyberpunk page stays read-only in `legacy/`.
 **Perf:** Lighthouse desktop = 98/96/93/91 (2026-07-07 measurement). Measurement + strike ledger at [`docs/lighthouse-baseline.md`](docs/lighthouse-baseline.md).
 
-M³'s marketing site. Turns TikTok/Instagram traffic into DMs and quote requests.
-Visitors arrive already half-sold from a video; this site's only job is to close the loop.
+M3MM's company headquarters: released work, testing previews, departments and
+roadmap. The `/websites` department turns TikTok/Instagram traffic into quote requests.
 
 ## Offer Ladder
 
@@ -21,8 +21,8 @@ SiteGuide handles the DIY starter-company lane: templates, widgets, and bundles.
 
 ## Stack
 
-- **Astro 5** — static output, zero runtime JS by default
-- **Tailwind 3** — utility-first, design tokens in `tailwind.config.mjs`
+- **Astro 7** — static output; Node >=22.12, tested version in `.node-version`
+- **Tailwind 3** — PostCSS in `astro.config.mjs`, design tokens in `tailwind.config.mjs`
 - **Cloudflare Pages** — build + host + edge functions
 - **Cloudflare Pages Functions** (`functions/api/*.ts`) — serverless intake (`/api/lead` via Resend) + analytics beacon (`/api/track`)
 - **Fonts:** Space Grotesk (display) + Inter (body) — self-hosted variable WOFF2 served same-origin (no Google Fonts request at runtime); mono labels fall back to the system stack
@@ -40,8 +40,8 @@ CompanySite/
 │   │   ├── CaseStudy.astro        ← one card per case study
 │   │   ├── Services.astro         ← outcomes-framed services + from-pricing
 │   │   └── Intake.astro           ← lead form + client-side submit
+│   ├── content.config.ts          ← glob loader + case-study schema
 │   ├── content/
-│   │   ├── config.ts              ← case-study schema
 │   │   └── caseStudies/*.md       ← drop a .md file = new case study
 │   ├── assets/                    ← case-study screenshots (optimized at build)
 │   ├── lib/track.ts               ← CTA tracking helper (data-cta attribute)
@@ -82,31 +82,50 @@ npm run build          # → dist/
 npm run preview        # serve dist/
 ```
 
+For clean-clone setup, `./build.sh` (Bash) or `build.bat` (Windows) runs
+`npm ci`, the full build including its shipped-output fence, and the test suite.
+Both work from any caller directory and stop at the first failed command.
+
 ## Deploy — Cloudflare Pages
 
-Two paths — first-time uses **wrangler direct upload**, ongoing runs pick either.
+The supported direct-upload command builds, tests, rescans `dist/` and
+`functions/`, then invokes the installed Wrangler. Supply the target branch
+explicitly: `main` publishes production; another branch targets a preview.
+Production publication still requires Michael's existing release approval.
 
 ### First-time (Mike-hands, ~5 min)
 
 ```bash
 cd CompanySite
 npx wrangler login                                          # browser consent
-npm ci && npm run build
+npm ci
 npx wrangler pages project create m3-companysite \
   --production-branch main
-npx wrangler pages deploy dist \
-  --project-name=m3-companysite --branch=main
+npm run deploy -- --branch main
 ```
 
 Then in the dashboard:
 - **Settings → Environment variables** — add `RESEND_API_KEY` (production). Optional: `LEAD_TO`, `LEAD_FROM`.
 - **Custom domains** — attach `m3mm.net`.
 
-### Subsequent deploys (~30 sec)
+### Subsequent deploys
 
 Either:
-- `npx wrangler pages deploy dist --project-name=m3-companysite --branch=main` (direct upload from local `dist/`), or
-- Connect the GitHub repo in the dashboard → CF auto-deploys on every `main` push.
+- `npm run deploy -- --branch main` (fresh build, tests and scan before upload), or
+- Connect the GitHub repo in the dashboard with build command `npm run build`
+  and output `dist` → CF builds on each authorized `main` push. The build
+  command includes the same shipped-output fence; GitHub CI separately runs tests.
+
+`make deploy BRANCH=main` is an alias for the checked direct-upload command.
+For preview review, use `npm run deploy -- --branch review-name`. Raw Wrangler
+uploads of an existing `dist/` are not a supported release path: Wrangler itself
+does not run this repository's build checks. Account setup remains separate.
+
+The fleet-level `scripts/deploy.py ship CompanySite` also requires its configured
+build command: Pages uploads reject `--no-build` and missing build gates. Use
+the repository command above to include tests and the immediate output rescan.
+
+Wrangler branch/upload behavior: [Cloudflare Pages commands](https://developers.cloudflare.com/workers/wrangler/commands/pages/).
 
 Full step-by-step + first-live-buyer test-mode smoke checklist in [`RUNBOOK.md § 3`](RUNBOOK.md).
 

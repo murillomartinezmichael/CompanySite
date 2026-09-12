@@ -1,54 +1,41 @@
 ---
-interface Props {
-  minimal?: boolean;
-  path?: string;
-}
-const { minimal = false, path = '/' } = Astro.props;
-
-// CONVERSION_STANDARDS.md § 1 — no dead-end CTAs. Only `/`, `/audit`,
-// and the `/for/*` trade pages render <Intake>, so `#intake` on any other
-// page scrolls to the top — a broken promise. Route those clicks to
-// `/audit#intake` instead so the CTA actually lands the visitor in the form.
-const hasIntakeOnPage = path === '/' || path === '/audit' || path === '/start' || path.startsWith('/for/');
+interface Props { minimal?: boolean; path?: string; }
+const { path = '/' } = Astro.props;
+const hasIntakeOnPage = path === '/websites' || path === '/audit' || path === '/start' || path.startsWith('/for/');
 const intakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
+const links = [
+  { href: '/', label: 'Home', key: 'home' },
+  { href: '/websites', label: 'Websites', key: 'websites' },
+  { href: '/roadmap', label: 'Roadmap', key: 'roadmap-page' },
+  { href: '/resume', label: 'Resume', key: 'resume' },
+];
 ---
-
-<header class="relative z-30">
-  <div class="container-page flex items-center justify-between py-6">
-    <a href="/" class="group flex items-center gap-2.5" aria-label="M³ home" data-cta="logo" data-section="header">
-      <span
-        class="grid h-9 w-9 place-items-center overflow-hidden bg-ink-soft ring-1 ring-ink-line transition-all group-hover:ring-clay/60"
-        style="border-radius: 2px;"
-      >
-        <img
-          src="/mark-light.png"
-          alt=""
-          width="28"
-          height="28"
-          class="h-7 w-7 object-contain"
-          decoding="async"
-        />
-      </span>
-      <span class="hidden font-mono text-xs uppercase tracking-[0.18em] text-bone-muted sm:inline">Websites that get you customers</span>
+<header class="hub-header">
+  <div class="container-page header-inner">
+    <a href="/" class="brand" aria-label="M3MM home" data-cta="logo" data-section="header">
+      <img src="/official-logo.png" alt="" width="48" height="48" decoding="async" />
+      <span>M3MM<small>Modernize. Mobilize. Multiply.</small></span>
     </a>
-
-    {!minimal && (
-      <nav class="hidden items-center gap-8 text-sm text-bone-dim md:flex" aria-label="Primary">
-        <a href="#proof" class="transition-colors hover:text-bone" data-cta="nav-proof" data-section="header">Work</a>
-        <a href="#services" class="transition-colors hover:text-bone" data-cta="nav-services" data-section="header">Services</a>
-        <a href={intakeHref} class="transition-colors hover:text-bone" data-cta="nav-intake" data-section="header" data-intent="book:free-review">Contact</a>
-      </nav>
-    )}
-
-    <a
-      href={intakeHref}
-      class="inline-flex items-center gap-1.5 border border-clay bg-clay px-4 py-2 text-sm font-semibold text-ink transition-all duration-150 hover:bg-clay-glow hover:border-clay-glow hover:shadow-glow-clay"
-      style="border-radius: 6px; letter-spacing: 0.01em;"
-      data-cta="header-review"
-      data-section="header"
-      data-intent="book:free-review"
-    >
-      Free review ▸
-    </a>
+    <nav aria-label="Primary">
+      {links.map(link => <a href={link.href} aria-current={path === link.href ? 'page' : undefined} data-cta={`nav-${link.key}`} data-section="header">{link.label}</a>)}
+    </nav>
+    <a href={intakeHref} class="header-review" data-cta="header-review" data-section="header" data-intent="book:free-review">Free review <span aria-hidden="true">↗</span></a>
   </div>
 </header>
+<style>
+  .hub-header { position: relative; z-index: 30; border-bottom: 1px solid theme('colors.ink.line'); }
+  .header-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem; padding-block: 1rem; }
+  a { display: inline-flex; align-items: center; min-height: 44px; }
+  .brand { gap: .75rem; flex-shrink: 0; }
+  .brand img { width: 48px; height: 48px; object-fit: contain; }
+  .brand span { font: 700 1.375rem/1.2 theme('fontFamily.display'); letter-spacing: -.04em; }
+  .brand small { display: block; font: 400 .6875rem/1.5 theme('fontFamily.sans'); letter-spacing: 0; color: theme('colors.bone.muted'); margin-top: .25rem; }
+  nav { display: flex; flex-wrap: wrap; gap: .25rem 1.75rem; }
+  nav a { font-size: theme('fontSize.hq-small[0]'); color: theme('colors.bone.dim'); border-bottom: 2px solid transparent; }
+  nav a:hover { color: theme('colors.electric.DEFAULT'); }
+  nav a[aria-current="page"] { color: theme('colors.bone.DEFAULT'); border-color: theme('colors.electric.DEFAULT'); }
+  .header-review { justify-content: center; gap: .75rem; padding: .625rem 1rem; background: theme('colors.clay.DEFAULT'); color: theme('colors.ink.DEFAULT'); font-size: theme('fontSize.hq-small[0]'); font-weight: 600; border-radius: theme('borderRadius.hq-control'); }
+  .header-review:hover { background: theme('colors.clay.glow'); }
+  @media (max-width: 980px) { nav { order: 3; width: 100%; justify-content: space-between; } }
+  @media (max-width: 480px) { .brand small { display: none; } .brand img { width: 40px; height: 40px; } .brand span { font-size: 1.125rem; } nav { gap: .25rem .75rem; } }
+</style>

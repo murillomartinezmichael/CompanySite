@@ -1,4 +1,4 @@
-# M³ Trade Lead-Path — Client Offer Sheet
+# M3MM Trade Lead-Path — Client Offer Sheet
 
 *Internal reference for the client-facing one-pager. Draft this copy into whatever surface Michael
 chooses to publish it on later (see note at bottom) — not wired into the live site yet.*
@@ -48,7 +48,7 @@ and we'll confirm current pricing and availability rather than assuming a fixed 
 
 ---
 
-## Why M³
+## Why M3MM
 
 - We show you the problem before we ask for money.
 - Fixed, transparent pricing up to $2,000 — no surprise scope.

@@ -25,6 +25,25 @@ function gc(now: number, windowSeconds: number): void {
   }
 }
 
+/**
+ * The bucket key. NAMESPACE IT BY ROUTE.
+ *
+ * Pages compiles the whole `functions/` tree into ONE Worker, so this module's
+ * `buckets` Map is shared by every route that imports it. Keying on the bare IP
+ * therefore put `/api/track` (60/min) and `/api/lead` (5/min) in the SAME
+ * bucket: five analytics beacons filled the lead allowance and a real
+ * submission got a 429. `track.ts` fires on every `[data-cta]` click site-wide
+ * (24 of them on the home page) plus `intake_start` on first form focus, so
+ * four CTA clicks and a click into the form was enough — the ordinary
+ * high-intent path, not an edge case. Reproduced end-to-end, found by the
+ * 2026-08-12 Codex money-path review.
+ *
+ * Callers pass `rateKey('lead', ip)`, never a raw IP.
+ */
+export function rateKey(route: string, ip: string): string {
+  return `${route}:${ip}`;
+}
+
 export function checkRate(ip: string, maxPerWindow: number, windowSeconds: number): RateResult {
   const now = Date.now() / 1000;
   if (++sinceLastGc >= GC_EVERY) {

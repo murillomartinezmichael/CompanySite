@@ -1,0 +1,144 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+---
+
+<Layout
+  title="Company policies — M3MM"
+  description="M3MM company policies covering workplace vaccination, accessibility, and how policy updates are published."
+  path="/policies"
+  breadcrumbs={[
+    { name: 'M3MM', url: '/' },
+    { name: 'Company policies', url: '/policies' },
+  ]}
+>
+  <Header slot="header" minimal={true} path="/policies" />
+
+  <section class="page-intro relative isolate overflow-hidden py-hq-section">
+
+    <div class="container-page">
+      <div class="flex items-center gap-4">
+        <span class="grid h-12 w-12 flex-none place-items-center overflow-hidden bg-ink-soft ring-1 ring-ink-line" style="border-radius: 2px;">
+          <img src="/official-logo.png" alt="M3MM" width="38" height="38" class="h-9 w-9 object-contain" decoding="async" />
+        </span>
+        <div>
+          <p class="kicker mono">M3MM · Policy library</p>
+          <p class="mt-1 font-mono text-[10px] uppercase tracking-[0.17em] text-bone-muted">Modernize. Mobilize. Multiply.</p>
+        </div>
+      </div>
+
+      <h1 class="mt-10 max-w-4xl text-hq-hero">
+        Company policies,<br />
+        <span class="text-bone-dim">written in plain English.</span>
+      </h1>
+      <p class="mt-7 max-w-2xl text-lg leading-relaxed text-bone-dim">
+        The rules M3MM has formally adopted are published here so employees, contractors,
+        applicants, clients, and visitors know what to expect.
+      </p>
+
+      <div class="mt-14 grid gap-10 lg:grid-cols-[240px,minmax(0,1fr)] lg:gap-16">
+        <aside class="lg:sticky lg:top-24 lg:h-fit" aria-label="Policy index">
+          <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-bone-muted">Policy index</p>
+          <nav class="mt-4 border-l border-ink-line" aria-label="Company policies">
+            <a href="#covid-vaccination" data-cta="policies-jump-vaccination" data-section="policies" data-intent="product:company-policies" class="block border-l border-clay py-2 pl-4 text-sm text-bone transition-colors hover:text-clay">COVID-19 vaccination</a>
+            <a href="#accessibility" data-cta="policies-jump-accessibility" data-section="policies" data-intent="product:company-policies" class="block py-2 pl-4 text-sm text-bone-dim transition-colors hover:text-bone">Accessibility</a>
+            <a href="#updates" data-cta="policies-jump-updates" data-section="policies" data-intent="product:company-policies" class="block py-2 pl-4 text-sm text-bone-dim transition-colors hover:text-bone">Updates and scope</a>
+          </nav>
+        </aside>
+
+        <div class="space-y-10">
+          <article id="covid-vaccination" class="panel relative overflow-hidden p-6 sm:p-9" aria-labelledby="covid-policy-heading">
+            <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-clay to-transparent"></div>
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-ink-line pb-5">
+              <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-clay">Adopted policy</span>
+              <span class="font-mono text-[10px] uppercase tracking-[0.16em] text-bone-muted">Effective · August 18, 2026</span>
+            </div>
+
+            <h2 id="covid-policy-heading" class="mt-7 font-display text-3xl text-bone sm:text-4xl">COVID-19 vaccination</h2>
+            <p class="mt-5 text-lg leading-relaxed text-bone-dim">
+              M3MM does not require COVID-19 vaccination as a condition of employment,
+              contract work, or participation in company activities. Vaccination is a personal
+              choice. M3MM will not penalize or treat someone differently solely because they
+              choose not to receive a COVID-19 vaccine.
+            </p>
+
+            <div class="mt-7 border-l-2 border-clay bg-ink-soft/50 px-5 py-4">
+              <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-bone-muted">Definition</p>
+              <p class="mt-2 text-sm leading-relaxed text-bone-dim">
+                For this policy, “vaccination” refers to full vaccination against COVID-19, the
+                disease caused by the SARS-CoV-2 coronavirus.
+              </p>
+            </div>
+
+            <div class="mt-8 grid gap-7 sm:grid-cols-2">
+              <section>
+                <h3 class="font-medium text-bone">Medical privacy</h3>
+                <p class="mt-2 text-sm leading-relaxed text-bone-dim">
+                  M3MM will not request vaccination records unless applicable law or a
+                  client-controlled worksite requires them. Any information collected for that
+                  limited purpose will be handled as confidential medical information.
+                </p>
+              </section>
+              <section>
+                <h3 class="font-medium text-bone">Client and site requirements</h3>
+                <p class="mt-2 text-sm leading-relaxed text-bone-dim">
+                  A client-controlled location may set its own lawful health requirements. When
+                  that happens, M3MM will consider practical alternatives such as remote work,
+                  remote participation, or reassignment.
+                </p>
+              </section>
+              <section>
+                <h3 class="font-medium text-bone">Respect and non-retaliation</h3>
+                <p class="mt-2 text-sm leading-relaxed text-bone-dim">
+                  Personal medical decisions must be treated respectfully. Retaliation,
+                  harassment, or pressure based on vaccination status is not part of M3MM’s
+                  workplace culture.
+                </p>
+              </section>
+              <section>
+                <h3 class="font-medium text-bone">When someone is sick</h3>
+                <p class="mt-2 text-sm leading-relaxed text-bone-dim">
+                  Anyone experiencing symptoms of a contagious illness should avoid in-person
+                  work and use remote-work options when practical, regardless of vaccination status.
+                </p>
+              </section>
+            </div>
+
+            <div class="mt-8 border-t border-ink-line pt-6 text-xs leading-relaxed text-bone-muted">
+              <p>
+                Reference guidance:
+                <a data-cta="policies-osha" data-section="policies" data-intent="product:company-policies" href="https://www.osha.gov/common-respiratory-illnesses/general-recommendations" target="_blank" rel="noopener" class="text-clay underline decoration-clay/50 underline-offset-4 hover:text-bone">OSHA workplace recommendations</a>
+                and
+                <a data-cta="policies-eeoc" data-section="policies" data-intent="product:company-policies" href="https://www.eeoc.gov/federal-laws-protect-you-against-employment-discrimination-during-covid-19-pandemic" target="_blank" rel="noopener" class="text-clay underline decoration-clay/50 underline-offset-4 hover:text-bone">EEOC employment guidance</a>.
+              </p>
+            </div>
+          </article>
+
+          <section id="accessibility" class="panel p-6 sm:p-9" aria-labelledby="accessibility-policy-heading">
+            <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-clay">Public commitment</p>
+            <h2 id="accessibility-policy-heading" class="mt-4 font-display text-3xl text-bone">Accessibility</h2>
+            <p class="mt-4 max-w-2xl leading-relaxed text-bone-dim">
+              M3MM aims to make its website usable by as many people as possible, including
+              people with disabilities. The full statement documents the current standard,
+              completed work, known limits, and contact path.
+            </p>
+            <a href="/accessibility" class="mt-6 inline-flex text-sm text-clay underline decoration-clay/50 underline-offset-4 hover:text-bone" data-cta="policies-accessibility" data-section="policies">Read the accessibility statement →</a>
+          </section>
+
+          <section id="updates" class="border-t border-ink-line pt-8" aria-labelledby="updates-heading">
+            <h2 id="updates-heading" class="font-display text-2xl text-bone">Updates and scope</h2>
+            <p class="mt-4 max-w-2xl text-sm leading-relaxed text-bone-dim">
+              M3MM will add policies here as the company grows and new requirements are formally
+              adopted. The effective date shown on each policy controls. Applicable law and valid
+              contractual requirements take priority where they conflict with a published policy.
+            </p>
+            <p class="mt-6 font-mono text-[10px] uppercase tracking-[0.16em] text-bone-muted">Page last updated · August 18, 2026</p>
+          </section>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer slot="footer" path="/policies" />
+</Layout>

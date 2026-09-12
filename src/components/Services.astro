@@ -53,7 +53,7 @@ const services = [
       'Template polish and brand adjustments',
       'Widget config and launch setup',
       'Hosting/deploy handoff',
-      'Upgrade path into a custom M3 site later',
+      'Upgrade path into a custom M3MM site later',
     ],
     accent: 'cyber',
     cta: 'Customize SiteGuide',
@@ -92,11 +92,7 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
 };
 ---
 
-<section id="services" class="relative overflow-hidden py-24 sm:py-32">
-  <div class="pointer-events-none absolute inset-0 -z-10">
-    <div class="absolute inset-x-0 top-1/3 mx-auto h-64 max-w-4xl bg-clay/[0.03] blur-3xl"></div>
-  </div>
-
+<section id="services" class="relative overflow-hidden py-hq-section">
   <div class="container-page">
     <div class="reveal max-w-2xl">
       <div class="mb-6 flex items-center gap-3">
@@ -107,7 +103,7 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
         <span class="highlight-yellow"><span class="fg">Pick the lane</span></span>. <span class="text-bone-dim">No mystery pricing.</span>
       </h2>
       <p class="mt-6 text-lg text-bone-dim">
-        SiteGuide covers the starter-template lane. M3 covers custom business sites: $500 for simple, $1k-$2k for bounded company sites, quote-only when the scope is Aries or Big7 sized.
+        SiteGuide covers the starter-template lane. M3MM builds the custom business sites: $500 for simple, $1k-$2k for bounded company sites, quote-only when the scope is Aries or Big7 sized.
       </p>
     </div>
 
@@ -118,7 +114,7 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
         return (
           <a
             href={s.href}
-            class="group relative block py-10 transition-colors duration-500 hover:bg-ink-soft/40 sm:py-14"
+            class="service-option group relative block py-10 transition-colors duration-500 hover:bg-ink-soft/40 sm:py-14"
             data-cta={`service-${s.key}`}
             data-section="services"
             data-intent={s.intent}
@@ -129,9 +125,9 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
             <div class="grid gap-8 lg:grid-cols-[auto,1fr,auto] lg:items-start lg:gap-12">
               <!-- Big number -->
               <div class={`mono text-sm ${a.text} transition-transform duration-500 group-hover:translate-x-1 sm:text-base`}>
-                <span class="opacity-60">{s.number}</span>
-                <span class="ml-2 opacity-40">/</span>
-                <span class="ml-2 opacity-60">{services.length.toString().padStart(2, '0')}</span>
+                <span>{s.number}</span>
+                <span class="ml-2">/</span>
+                <span class="ml-2">{services.length.toString().padStart(2, '0')}</span>
               </div>
 
               <!-- Content -->
@@ -156,8 +152,7 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
                   ))}
                 </ul>
 
-                <!-- Payment-policy badge — mirrors the price-chip styling so the
-                     terms read as part of the offer, not a hidden disclaimer. -->
+                <!-- Payment-policy badge — mirrors the price-chip styling -->
                 {s.paymentPolicy && (
                   <p class={`mono mt-5 inline-flex items-center gap-2 rounded-sm border border-current/40 px-2 py-0.5 text-xs font-semibold uppercase tracking-[0.14em] ${a.text}`}>
                     <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -170,7 +165,7 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
               </div>
 
               <!-- CTA arrow -->
-              <div class="hidden items-center lg:flex">
+              <div class="flex items-center">
                 <span class={`mono text-xs uppercase tracking-[0.2em] ${a.text} ${a.hover} transition-all duration-500 group-hover:translate-x-1`}>
                   {s.cta}
                 </span>
@@ -189,8 +184,7 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
       I'll tell you that too.
     </p>
 
-    <!-- Downshift: budget under $500 -> SiteGuide off-the-shelf templates. Keeps low-budget visitors
-         from bouncing and hands them a warm path to the M³ template store instead. -->
+    <!-- Under-$500 template link -->
     <div class="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-bone-muted">
       <span class="mono text-[11px] uppercase tracking-[0.2em] text-clay/80">Budget under $500?</span>
       <a
@@ -202,9 +196,15 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
         target="_blank"
         rel="noopener"
       >
-        Grab an off-the-shelf template from SiteGuide
+        Preview the SiteGuide test storefront
         <svg class="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
     </div>
   </div>
 </section>
+
+<style>
+  #services { border-top: 1px solid theme('colors.ink.line'); }
+  .service-option { padding-inline: 1.25rem; border-left: 2px solid theme('colors.clay.DEFAULT'); }
+  .service-option:nth-child(even) { border-left-color: theme('colors.electric.DEFAULT'); }
+</style>

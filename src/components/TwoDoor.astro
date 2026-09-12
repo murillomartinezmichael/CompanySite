@@ -9,7 +9,7 @@
 // live demo storefront instead, on its own UTM lane.
 ---
 
-<section class="relative py-10 sm:py-14" aria-label="Two ways to get a site">
+<section class="two-door relative py-hq-section" aria-label="Two ways to get a site">
   <div class="container-page">
     <div class="reveal mb-6 flex items-center gap-3">
       <span class="hairline"></span>
@@ -17,7 +17,7 @@
     </div>
 
     <div class="reveal grid gap-4 sm:grid-cols-2">
-      <!-- Door 1 — custom build lane, lands in the on-page intake -->
+      <!-- Door 1 — custom build; anchors to the on-page intake -->
       <a
         href="#intake"
         class="group panel flex flex-col gap-2 p-6 transition-colors hover:bg-ink-soft/60"
@@ -25,7 +25,7 @@
         data-section="two-door"
         data-intent="book:free-review"
       >
-        <span class="mono text-[10px] uppercase tracking-[0.22em] text-clay/80">→ Built for you</span>
+        <span class="mono text-[10px] uppercase tracking-[0.22em] text-clay/80">Built for you</span>
         <p class="font-medium text-bone">Custom site, one engineer, from $500</p>
         <p class="text-sm text-bone-dim">
           Scoped, shipped, and handed off — no agency middlemen. Starts with the
@@ -33,7 +33,7 @@
         </p>
       </a>
 
-      <!-- Door 2 — sub-$500 template lane, routes to SiteGuide instead of bouncing -->
+      <!-- Door 2 — templates; links out to the SiteGuide storefront -->
       <a
         href="https://siteguide-production.up.railway.app/demos?utm_source=m3mm&utm_medium=two-door&utm_campaign=downshift&utm_content=hero-two-door"
         target="_blank"
@@ -43,13 +43,20 @@
         data-section="two-door"
         data-intent="product:siteguide"
       >
-        <span class="mono text-[10px] uppercase tracking-[0.22em] text-clay/80">→ Fast and cheap</span>
+        <span class="mono text-[10px] uppercase tracking-[0.22em] text-clay/80">Fast and cheap</span>
         <p class="font-medium text-bone">Off-the-shelf template, under $500</p>
         <p class="text-sm text-bone-dim">
-          Twelve one-page SiteGuide templates you can preview + buy today, with a
-          clean upgrade path into a custom M3 site later.
+          Twelve one-page SiteGuide templates in a working test storefront, with
+          a clean upgrade path into a custom M3MM site later.
         </p>
       </a>
     </div>
   </div>
 </section>
+
+<style>
+  .two-door a { position: relative; padding: 2rem; border-top: 3px solid theme('colors.clay.DEFAULT'); }
+  .two-door a:nth-child(2) { border-top-color: theme('colors.electric.DEFAULT'); }
+  .two-door a > p:first-of-type { font: 500 1.5rem/1.3 theme('fontFamily.display'); max-width: 24ch; margin-block: .5rem; }
+  .two-door a:hover { border-color: theme('colors.electric.DEFAULT'); }
+</style>

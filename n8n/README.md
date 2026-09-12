@@ -1,4 +1,4 @@
-# M³ Lead OS (n8n)
+# M3MM Lead OS (n8n)
 
 Turns every CompanySite intake (`POST /api/lead`) into a triage pipeline: score → hot alert → optional CRM row → 48h “did you reply?” nudge.
 

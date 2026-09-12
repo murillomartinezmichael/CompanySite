@@ -1,5 +1,6 @@
 # build output
 dist/
+output/
 .astro/
 .vercel/
 .netlify/
@@ -7,6 +8,8 @@ dist/
 
 # deps
 node_modules/
+__pycache__/
+*.pyc
 
 # env
 .env
@@ -20,3 +23,9 @@ Thumbs.db
 .vscode/
 .idea/
 *.log
+
+# Added 2026-08-19 (fleet-wide .gitignore audit): vitest is the test runner here,
+# so a `coverage/` report directory can appear; .vite/ is the Vite dep cache.
+# NOTE: deliberately NOT ignoring `build/` -- tests/build/ holds tracked specs.
+coverage/
+.vite/

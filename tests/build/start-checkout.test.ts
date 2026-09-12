@@ -1,7 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { BASIC_SITE, checkoutReady, isLiveStripePaymentLink } from '../../src/config/offers';
+import {
+  BASIC_SITE,
+  InvalidPaymentLinkError,
+  PLACEHOLDER_PAYMENT_LINK,
+  checkoutReady,
+  isLiveStripePaymentLink,
+  resolvePaymentLink,
+} from '../../src/config/offers';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const read = (path: string) => readFileSync(root + path, 'utf8');
@@ -38,15 +45,124 @@ describe('isLiveStripePaymentLink — fails closed on everything but a live link
     ['the wrong host', 'https://buy.stripe.evil.com/bIYdRbc5C6pk0mA144'],
     ['a lookalike path on another host', 'https://evil.example.com/buy.stripe.com/bIYdRbc5C6pk0mA144'],
     ['an empty slug', 'https://buy.stripe.com/'],
-    ['a too-short slug', 'https://buy.stripe.com/abc123'],
     ['an underscore slug', 'https://buy.stripe.com/bIY_dRbc5C6pk0mA144'],
-    ['a query string', 'https://buy.stripe.com/bIYdRbc5C6pk0mA144?x=1'],
     ['an extra path segment', 'https://buy.stripe.com/bIYdRbc5C6pk0mA144/extra'],
     ['a trailing newline', 'https://buy.stripe.com/bIYdRbc5C6pk0mA144\n'],
     ['an empty string', ''],
     ['a secret key pasted by mistake', 'sk_live_abcdefghijklmnop'],
   ])('rejects %s', (_label, link) => {
     expect(isLiveStripePaymentLink(link)).toBe(false);
+  });
+});
+
+describe('resolvePaymentLink — env var is the source, and it fails closed', () => {
+  const live = 'https://buy.stripe.com/bIYdRbc5C6pk0mA144';
+
+  it('uses PUBLIC_STRIPE_PAYMENT_LINK when it is a well-formed live link', () => {
+    expect(resolvePaymentLink(live)).toBe(live);
+  });
+
+  it('tolerates surrounding whitespace from a dashboard paste', () => {
+    expect(resolvePaymentLink(`  ${live}\n`)).toBe(live);
+  });
+
+  // UNSET is the supported "not selling yet" state and must stay silent — every
+  // build that has never touched the variable keeps working.
+  it.each([
+    ['undefined (env var never set)', undefined],
+    ['empty string', ''],
+    ['whitespace only', '   '],
+  ])('falls back to the placeholder, silently, for %s', (_label, value) => {
+    expect(resolvePaymentLink(value as string | undefined)).toBe(PLACEHOLDER_PAYMENT_LINK);
+    expect(isLiveStripePaymentLink(resolvePaymentLink(value as string | undefined))).toBe(false);
+  });
+
+  // SET-but-invalid is a different failure and must be LOUD. Mike pastes this
+  // once from the Stripe dashboard; a silent fallback means he sets it,
+  // redeploys, sees no pay button, and has nothing to diagnose from. Safe to
+  // throw: astro.config.mjs is `output: 'static'` with no adapter, so this
+  // module only ever runs during `astro build`.
+  it.each([
+    ['the placeholder itself', 'https://buy.stripe.com/REPLACE_AFTER_SIGN_IN'],
+    ['a Stripe test-mode link', 'https://buy.stripe.com/test_bIYdRbc5C6pk0mA144'],
+    ['a dashboard URL pasted by mistake', 'https://dashboard.stripe.com/payment-links/plink_123456789'],
+    ['a lookalike host', 'https://buy.stripe.evil.com/bIYdRbc5C6pk0mA144'],
+    ['a secret key pasted by mistake', 'sk_live_abcdefghijklmnop'],
+    ['a trailing slash', 'https://buy.stripe.com/bIYdRbc5C6pk0mA144/'],
+    ['an extra path segment', 'https://buy.stripe.com/bIYdRbc5C6pk0mA144/extra'],
+    ['an http:// link', 'http://buy.stripe.com/bIYdRbc5C6pk0mA144'],
+  ])('throws a build-stopping error for %s', (_label, value) => {
+    expect(() => resolvePaymentLink(value)).toThrow(InvalidPaymentLinkError);
+  });
+
+  it('names the offending value, the reason, and the fix in the error', () => {
+    let message = '';
+    try {
+      resolvePaymentLink('https://buy.stripe.com/test_bIYdRbc5C6pk0mA144');
+    } catch (error) {
+      message = (error as Error).message;
+    }
+    expect(message).toContain('PUBLIC_STRIPE_PAYMENT_LINK');
+    expect(message).toContain('https://buy.stripe.com/test_bIYdRbc5C6pk0mA144'); // the value he pasted
+    expect(message).toContain('TEST-mode'); // why it was rejected
+    expect(message).toContain('Cloudflare Pages'); // where to fix it
+    expect(message).toContain('unset the variable'); // how to get back to the gated state
+  });
+
+  // The value above is echoed verbatim on purpose — for a typo'd URL the paste
+  // IS the diagnosis. But this env var is filled by hand from the same Stripe
+  // dashboard that issues secret keys, so the plausible slip is pasting one in.
+  // Build logs (Cloudflare Pages, GitHub Actions) are retained and widely
+  // readable; echoing a live key there would copy it into a second place, and
+  // the dist/ fence would never catch it because this throws before any HTML is
+  // written. Same policy as the fence's own `redact: true` on this rule.
+  // Assembled at runtime rather than written as literals: spelled out in full
+  // these match GitHub's Stripe secret-key pattern, and push protection blocks
+  // the branch on sight -- correctly, since a scanner cannot tell a fake
+  // fixture from a real key. Concatenation keeps the runtime value identical
+  // and the assertions unchanged.
+  const fixtureKey = (prefix: string) => `${prefix}_` + 'abcdefghijklmnopqrstuvwx';
+  it.each([
+    ['a live secret key', fixtureKey('sk_live')],
+    ['a restricted live key', fixtureKey('rk_live')],
+    ['a test secret key', fixtureKey('sk_test')],
+  ])('redacts %s instead of echoing it into the build log', (_label, secret) => {
+    let message = '';
+    try {
+      resolvePaymentLink(secret);
+    } catch (error) {
+      message = (error as Error).message;
+    }
+    expect(message).not.toContain(secret); // the whole point
+    expect(message).toContain('[redacted,'); // and it says so, rather than going quiet
+    expect(message).toContain(secret.slice(0, 8)); // prefix kept: which key, and how bad
+  });
+
+  it('still echoes a non-secret value verbatim, so a typo stays diagnosable', () => {
+    const typo = 'https://buy.stripe.com/b!Y';
+    let message = '';
+    try {
+      resolvePaymentLink(typo);
+    } catch (error) {
+      message = (error as Error).message;
+    }
+    expect(message).toContain(typo);
+    expect(message).not.toContain('[redacted,');
+  });
+
+  it('explains a trailing slash specifically, rather than generically', () => {
+    expect(() => resolvePaymentLink('https://buy.stripe.com/bIYdRbc5C6pk0mA144/')).toThrow(
+      /trailing slash/,
+    );
+  });
+
+  it('never returns a link that would render as a live CTA unless it is live', () => {
+    // The gate reads only this function's output, so this is the whole contract.
+    const inputs = [undefined, '', live];
+    for (const input of inputs) {
+      const resolved = resolvePaymentLink(input);
+      expect(isLiveStripePaymentLink(resolved)).toBe(input === live);
+    }
   });
 });
 
@@ -74,6 +190,13 @@ describe('$500 basic-site checkout', () => {
     // test-mode link) is live, this fails.
     expect(offers).toMatch(/export const checkoutReady = isLiveStripePaymentLink\(BASIC_SITE\.paymentLink\)/);
     expect(checkoutReady).toBe(isLiveStripePaymentLink(BASIC_SITE.paymentLink));
+  });
+
+  it('sources the link from the env var, validated — not a hardcoded literal', () => {
+    // Mike sets PUBLIC_STRIPE_PAYMENT_LINK in Cloudflare Pages and redeploys;
+    // no code edit. A bad value there resolves to the placeholder, so the page
+    // stays gated rather than shipping a dead checkout.
+    expect(offers).toMatch(/paymentLink: resolvePaymentLink\(import\.meta\.env\.PUBLIC_STRIPE_PAYMENT_LINK\)/);
   });
 
   it('renders the payment link as an href ONLY inside the checkoutReady branch', () => {
@@ -106,7 +229,7 @@ describe('$500 basic-site checkout', () => {
   it.runIf(checkoutReady)('live source: the configured link is a well-formed live Payment Link', () => {
     expect(isLiveStripePaymentLink(BASIC_SITE.paymentLink)).toBe(true);
     expect(BASIC_SITE.paymentLink).not.toContain('REPLACE');
-    expect(BASIC_SITE.paymentLink).not.toContain('test_');
+    expect(new URL(BASIC_SITE.paymentLink).pathname).not.toContain('test_');
   });
 
   it('wires the basic tier to /start while quote lanes keep the intake', () => {

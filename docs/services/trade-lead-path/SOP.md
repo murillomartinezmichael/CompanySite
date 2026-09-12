@@ -1,4 +1,4 @@
-# M³ Trade Lead-Path Machine — Internal SOP
+# M3MM Trade Lead-Path Machine — Internal SOP
 
 Source scope: `the-grind/fleet-research/future-project-scopes/04-m3-trade-lead-path-machine.md`.
 This SOP packages what already ships across CompanySite, SiteAudit, and the n8n Lead OS into one
@@ -91,7 +91,7 @@ change this without Michael's sign-off; it's a business-terms decision, not a do
 
 ### Step 5 — n8n lead triage handoff
 
-1. Import `CompanySite/n8n/m3-lead-os.json` into the client's n8n instance (or a shared M³ n8n
+1. Import `CompanySite/n8n/m3-lead-os.json` into the client's n8n instance (or a shared M3MM n8n
    instance if the client doesn't run their own — decide per engagement, not assumed).
 2. Follow `CompanySite/n8n/README.md` setup: webhook path, shared secret, alert channel wiring
    (email/Discord/Slack/Sheets — client's existing tools, don't force a new one on them).
@@ -156,7 +156,7 @@ before automating it.
   in any teardown/TikTok content made from their site.
 - LAW #11 (accessibility): every delivered site meets the WCAG 2.1 AA baseline — retrofit on
   discovery, don't ask permission.
-- Brand: always "M³" in any client-facing copy generated from this SOP — never "Offload Labs."
+- Brand: always "M3MM" in any client-facing copy generated from this SOP — never "Offload Labs."
 
 ## 9. Manual gates this SOP generates
 

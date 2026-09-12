@@ -1,12 +1,21 @@
 # CompanySite — STATUS
 
 **Live URL:** `https://m3mm.net` (deployed via Cloudflare Pages, GitHub-connect auto-deploy)
-**Stack:** Astro 4 + Tailwind 3 + Cloudflare Pages + Pages Functions (Resend)
+**Stack:** Astro 5 + Tailwind 3 + Cloudflare Pages + Pages Functions (Resend/n8n)
+**Current release:** 2026-08-19 — release truth corrected: M3MM Hub is the sole official release, AriesOutdoorLiving is next, test deployments are previews, and Big7 is long-term pending jobsite photography.
 **Definition of Done:** bio link → page → form submission works end to end and looks expensive.
 **DoD hit:** 2026-07-05 (local, wrangler pages dev verified).
 **Deploy-ready:** 2026-07-06 (58/58 tests, `dist/` 22.5 KB gz, RUNBOOK § 3 paste-ready — waiting only on Mike's `wrangler login` + first-time project create).
 **Policy update (2026-07-20):** Owner-confirmed 20% down before work; down payment non-refundable, all other payments refundable before launch. Source/test/build/mobile+desktop visual checks green (239/239 tests, Astro 0/0/0, 7 pages).
 **Session 9 (2026-07-07):** Rung IV RE-STRIKE on mobile — PSI 87→97 / LCP −603 ms shipped in commits `d620884`+`90c95b4`. Ledger + raw JSONs in `docs/lighthouse-baseline.md` + `perf/psi-mobile-after-3fonts-2026-07-07_084044.json`. 3 commits (`5c19929`, `7d8a18d`, `7748a3d`) waiting on `scripts/auto-improve/GUARDS_ACTIVE` lift before push.
+
+## Current production evidence — 2026-08-19
+
+- The `/resume` download contract is pinned to Michael's exact supplied one-page PDF: 121,174 bytes, SHA-256 `f71d89ceaea7e488a2d4ad700a2d402067c284f6cfd79fdb1214af53ec6ab1ee`. CompanySite and the standalone ResumeSite now carry the same document.
+- Cloudflare Pages production tracks `origin/main` through the Git-connected build; the custom domain is `m3mm.net` and independently verified immutable build `35fe90a3.m3-companysite.pages.dev` remains available for comparison.
+- HTTP 200 verified on `/`, `/roadmap`, `/resume`, `/resume.pdf`, `/websites`, `/audit`, and `/for/construction` at both the immutable deployment URL and `https://m3mm.net`.
+- The public release model is standardized across the root, roadmap, website-sales pages, case studies, lead auto-reply, and HTML résumé: one official release, four Testing previews, AriesOutdoorLiving next, and Big7 waiting on jobsite photography. The PDF download is the owner-supplied résumé artifact above.
+- Local release gates: 13 pages built; shipped-placeholder scan clean; 461 tests passed, 2 dormant payment-link tests skipped; Astro check 0 errors/warnings/hints.
 
 ---
 

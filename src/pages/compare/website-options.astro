@@ -1,0 +1,120 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+
+const options = [
+  { name: 'Build it yourself with Wix', fit: 'You want to edit pages yourself and can spend time on content, layout and setup.',
+    cost: 'Compare the current plan, renewal price, domain and paid apps. Include the time you will spend building it.',
+    delivery: 'You choose the template, write the copy and test the contact path. Confirm the features your chosen plan includes.',
+    handoff: 'Wix sites run on Wix hosting. Owning your content or domain does not make the site portable to a different host.' },
+  { name: 'Hire a freelancer through Fiverr', fit: 'You have a clear brief and want to compare individual specialists for a bounded job.',
+    cost: 'Compare the actual offer: pages, revisions, content, hosting, source files and support. A headline package price may cover a different scope.',
+    delivery: 'Ask who writes the copy, supplies licensed assets, checks mobile layouts and fixes problems after delivery.',
+    handoff: 'Fiverr describes a default transfer of rights for delivered work, subject to its terms and offer exceptions. Confirm source files and account access in the offer.' },
+  { name: 'Work directly with M3MM', fit: 'You want a custom business site and a direct working relationship with the engineer building it.',
+    cost: 'Basic site or cleanup: $500. Bounded business-site package: $1,000–$2,000. Larger custom work is quoted after scoping.',
+    delivery: 'Agree on the scope, content, contact path and launch requirements before work starts. View the project examples before deciding.',
+    handoff: 'You own the delivered code. Confirm hosting, domain access, any third-party licenses and future changes in the project scope.' },
+  { name: 'Hire a full-service agency', fit: 'Your brief needs several disciplines, stakeholders or an ongoing marketing program.',
+    cost: 'Request an itemized proposal. Separate the build fee from recurring content, ads, hosting and support.',
+    delivery: 'Ask who is doing each part of the work, how approvals happen and what the launch acceptance checks include.',
+    handoff: 'Ownership, portability and ongoing commitments depend on the agreement and technology. Ask for the exit and handover process before signing.' },
+];
+---
+
+<Layout title="Website options for small businesses in 2026 — M3MM"
+  description="Compare website builders, freelancers, M3MM and agencies by scope, time, ownership and ongoing cost. Choose the website approach that fits your business."
+  path="/compare/website-options"
+  breadcrumbs={[{ name: 'M3MM', url: '/' }, { name: 'Websites', url: '/websites' }, { name: 'Website options', url: '/compare/website-options' }]}>
+  <Header slot="header" minimal={true} path="/compare/website-options" />
+  <article class="comparison container-page" aria-labelledby="comparison-heading">
+    <p class="meta">By Michael Murillo-Martinez · Updated September 9, 2026</p>
+    <h1 id="comparison-heading">Which website option fits your business?</h1>
+    <p class="lede">Choose based on the work you need done, the time you can put in, and what you want to own when it is finished.</p>
+    <p class="disclosure">This guide is written by M3MM, one of the options below. The fit assessments are our perspective, not an independent ranking.</p>
+
+    <section aria-labelledby="short-answer">
+      <h2 id="short-answer">Start with the job</h2>
+      <p>A business owner updating a few pages needs something different from a contractor separating several service lines or a team running an ongoing marketing program.</p>
+      <ul>
+        <li><strong>Want hands-on editing?</strong> Consider a hosted builder and budget your own time for setup.</li>
+        <li><strong>Have a precise, small brief?</strong> Compare freelancers on the same deliverables.</li>
+        <li><strong>Want a custom site with one engineer?</strong> Review M3MM’s scope and examples.</li>
+        <li><strong>Need several disciplines over time?</strong> Ask agencies for a proposal with named responsibilities.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="options-heading">
+      <h2 id="options-heading">Four ways to get it built</h2>
+      <div class="options">
+        {options.map(option => (
+          <section class="option">
+            <h3>{option.name}</h3>
+            <dl>
+              <div><dt>When it fits</dt><dd>{option.fit}</dd></div>
+              <div><dt>What to budget</dt><dd>{option.cost}</dd></div>
+              <div><dt>Who does the work</dt><dd>{option.delivery}</dd></div>
+              <div><dt>What you keep</dt><dd>{option.handoff}</dd></div>
+            </dl>
+          </section>
+        ))}
+      </div>
+      <p class="source-note">Platform details: <a href="https://support.wix.com/en/article/exporting-or-embedding-your-wix-site-elsewhere" data-cta="compare-wix-source" data-section="comparison" data-intent="product:website-options">Wix hosting and portability</a> and <a href="https://help.fiverr.com/hc/en-us/articles/360011454477-FAQs-for-clients" data-cta="compare-fiverr-source" data-section="comparison" data-intent="product:website-options">Fiverr’s client FAQ</a>. Checked September 9, 2026. Review the current provider terms and your specific offer before buying.</p>
+    </section>
+
+    <section aria-labelledby="quote-heading">
+      <h2 id="quote-heading">Compare the same scope</h2>
+      <p>Send each provider the same page list, contact requirements, content inventory and desired launch window. Ask these questions before comparing the totals:</p>
+      <ol>
+        <li>Who supplies copy, photos and any required licenses?</li>
+        <li>Which pages, forms, integrations and revisions are included?</li>
+        <li>How will mobile layouts, accessibility and form delivery be checked?</li>
+        <li>Which charges recur, and what happens if you stop paying for support?</li>
+        <li>Who controls the domain, hosting and source files at handover?</li>
+      </ol>
+      <p>For M3MM’s basic and bounded business-site packages, work starts after 20% down. The down payment is non-refundable; other payments are refundable before launch. Premium work sets its terms in the scoped agreement.</p>
+    </section>
+
+    <section class="next-step" aria-labelledby="next-heading">
+      <h2 id="next-heading">Use your current site as the starting point</h2>
+      <p>If you already have a website, it may need a focused repair rather than a rebuild. Bring the URL and the problem you want it to solve.</p>
+      <div class="actions">
+        <a class="primary" href="/audit#intake" data-cta="compare-review" data-section="comparison" data-intent="book:free-review">Request a free site review</a>
+        <a href="/websites#proof" data-cta="compare-proof" data-section="comparison" data-intent="product:case-studies">See M3MM’s project examples</a>
+      </div>
+    </section>
+  </article>
+  <Footer slot="footer" path="/compare/website-options" />
+</Layout>
+
+<style>
+  :global(body:has(.comparison)) { background: theme('colors.ink.DEFAULT'); }
+  :global(body:has(.comparison) footer) { padding-bottom: 5rem; }
+  .comparison { padding-block: theme('spacing.hq-section'); overflow-wrap: anywhere; }
+  .comparison h1 { @apply text-hq-hero; max-width: 18ch; margin-block: 1.5rem; }
+  .comparison h2 { @apply text-hq-section; max-width: 26ch; margin-bottom: 1.5rem; }
+  .comparison h3 { @apply text-hq-title; margin-bottom: 1.5rem; }
+  .comparison p, .comparison li, .comparison dd { color: theme('colors.bone.dim'); line-height: 1.65; max-width: 70ch; }
+  .comparison .lede { @apply text-hq-lede; max-width: 56ch; }
+  .comparison .meta, .comparison .disclosure, .comparison .source-note { @apply text-hq-small; }
+  .comparison .disclosure { margin-top: 1.5rem; }
+  .comparison > section { margin-top: theme('spacing.hq-section'); }
+  .comparison ul, .comparison ol { padding-left: 1.5rem; margin-block: 1.5rem; }
+  .comparison ul { list-style: disc; }
+  .comparison ol { list-style: decimal; }
+  .comparison li + li { margin-top: .75rem; }
+  .comparison strong { color: theme('colors.bone.DEFAULT'); font-weight: 600; }
+  .options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+  .option { border-top: 3px solid theme('colors.electric.DEFAULT'); background: theme('colors.ink.soft'); padding: 1.5rem; border-radius: theme('borderRadius.hq-panel'); }
+  .option dt { font-weight: 600; margin-bottom: .25rem; }
+  .option dl > div + div { margin-top: 1.25rem; }
+  .comparison .source-note { margin-top: 1.5rem; }
+  .comparison a { color: theme('colors.clay.DEFAULT'); text-decoration: underline; text-underline-offset: .25em; }
+  .comparison a:hover { color: theme('colors.clay.glow'); }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; margin-top: 1.5rem; }
+  .actions a { display: inline-flex; align-items: center; min-height: 3rem; }
+  .actions .primary { background: theme('colors.clay.DEFAULT'); color: theme('colors.ink.DEFAULT'); padding: .75rem 1.25rem; border-radius: theme('borderRadius.hq-control'); font-weight: 600; text-decoration: none; }
+  .actions .primary:hover { background: theme('colors.clay.glow'); }
+  @media (max-width: 768px) { .options { grid-template-columns: minmax(0, 1fr); } }
+</style>

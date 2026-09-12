@@ -7,19 +7,18 @@ import { BASIC_SITE, checkoutReady } from '@/config/offers';
 ---
 
 <Layout
-  title="Start your $500 business site — M³"
-  description="Reserve an M³ basic business-site build with a $100 non-refundable down payment, then send the project intake."
+  title="Start your $500 business site — M3MM"
+  description="Reserve an M3MM basic business-site build with a $100 non-refundable down payment, then send the project intake."
   path="/start"
   breadcrumbs={[
-    { name: 'M³', url: '/' },
+    { name: 'M3MM', url: '/' },
     { name: 'Start a basic site', url: '/start' },
   ]}
 >
   <Header slot="header" minimal={true} path="/start" />
 
   <div>
-    <section id="deposit-step" class="relative isolate overflow-hidden pb-20 pt-14 sm:pb-28 sm:pt-20">
-      <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[680px] bg-gradient-to-b from-clay/[0.10] to-transparent"></div>
+    <section id="deposit-step" class="page-intro relative isolate overflow-hidden py-hq-section">
       <div class="container-page">
         <div class="grid gap-12 lg:grid-cols-[1.1fr,0.9fr] lg:items-start lg:gap-20">
           <div class="max-w-3xl">
@@ -28,7 +27,7 @@ import { BASIC_SITE, checkoutReady } from '@/config/offers';
               <p class="kicker mono">Basic site · reserve the build</p>
             </div>
 
-            <h1 class="text-display-lg">
+            <h1 class="text-hq-hero">
               Start your <span class="highlight-yellow"><span class="fg">$500 site</span></span> with $100 down.
             </h1>
             <p class="mt-6 max-w-2xl text-lg text-bone-dim">
@@ -38,10 +37,10 @@ import { BASIC_SITE, checkoutReady } from '@/config/offers';
             </p>
 
             <ul class="mt-9 grid gap-3 text-sm text-bone-dim sm:grid-cols-2">
-              <li class="flex gap-3"><span class="text-clay">●</span><span>One-page business site or focused refresh</span></li>
-              <li class="flex gap-3"><span class="text-clay">●</span><span>Mobile-first layout and clear customer action</span></li>
-              <li class="flex gap-3"><span class="text-clay">●</span><span>Contact path, starter SEO, and share preview</span></li>
-              <li class="flex gap-3"><span class="text-clay">●</span><span>You own the finished code</span></li>
+              <li class="flex gap-3"><span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-clay" aria-hidden="true"></span><span>One-page business site or focused refresh</span></li>
+              <li class="flex gap-3"><span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-clay" aria-hidden="true"></span><span>Mobile-first layout and clear customer action</span></li>
+              <li class="flex gap-3"><span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-clay" aria-hidden="true"></span><span>Contact path, starter SEO, and share preview</span></li>
+              <li class="flex gap-3"><span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-clay" aria-hidden="true"></span><span>You own the finished code</span></li>
             </ul>
           </div>
 
@@ -87,7 +86,7 @@ import { BASIC_SITE, checkoutReady } from '@/config/offers';
                 </a>
                 <p class="mt-3 text-center mono text-[10px] uppercase tracking-[0.16em] text-bone-muted">Secure checkout hosted by Stripe</p>
 
-                <a href="#intake" class="mt-5 block text-center text-sm text-bone-dim underline decoration-clay/50 underline-offset-4" data-paid-intake-link>
+                <a href="#intake" data-cta="start-open-project-intake" data-section="start" data-intent="checkout:basic-deposit" class="mt-5 block text-center text-sm text-bone-dim underline decoration-clay/50 underline-offset-4" data-paid-intake-link>
                   Already paid? Open the project intake
                 </a>
               </>

@@ -1,20 +1,117 @@
 # Pending manual
 
-## www.m3mm.net returns 522 — Cloudflare zone fix (2026-08-07)
+## 2026-09-12 - www canonical-host repair
 
-- [ ] **Bind or redirect `www.m3mm.net` in the Cloudflare dashboard (zone changes are Mike-only).**
-  - **Diagnosis (VERIFIED 2026-08-07, read-only):** `https://m3mm.net/` returns 200 with the site's own `_headers` (CSP/HSTS present). `https://www.m3mm.net/` returns **522** with generic Cloudflare error headers. DNS for `www` resolves to the same proxied Cloudflare anycast IPs as the apex (104.21.76.226 / 172.67.201.235 via 1.1.1.1), so the record exists and is orange-clouded — but Cloudflare's edge has no origin for that hostname. The repo has **no** `wrangler.jsonc`/`wrangler.toml` (Pages project is dashboard-configured), and nothing in `dist` (canonical, og:url, sitemap.xml) or `dist/_redirects` references www — no content drift. **Likely cause (INFERRED, classic shape):** the `www` DNS record is proxied into the zone but `www.m3mm.net` is not attached as a custom domain on the Pages project, so no route/origin answers → 522.
-  - **Fix — Option A (recommended, matches canonical URLs which are all apex): zone-level 301 www → apex.**
-    Cloudflare dashboard → zone **m3mm.net** → **Rules** → **Redirect Rules** → **Create rule**:
-    - Rule name: `www to apex`
-    - If: Custom filter expression → Field **Hostname** equals `www.m3mm.net`
-    - Then: **Dynamic** redirect, expression `concat("https://m3mm.net", http.request.uri.path)`, status **301**, check **Preserve query string**
-    - Deploy. (Requires the `www` DNS record to stay **Proxied** — it already is.)
-  - **Fix — Option B (alternative): bind www to the Pages project.**
-    Dashboard → **Workers & Pages** → the CompanySite Pages project → **Custom domains** → **Set up a custom domain** → enter `www.m3mm.net` → Activate. Note: this serves the full site at www too; canonical tags already point at apex, so SEO is safe, but Option A keeps one URL per page.
-  - **Verify after either fix:** `curl -sI https://www.m3mm.net/` → Option A: `301` + `location: https://m3mm.net/`; Option B: `200` with the site CSP header.
-  - **Why blocked on him:** DNS/zone/Pages-domain changes are owner-gated this session (no dashboard access; zone changes are Mike-only by contract).
-  - **Resumes:** Anyone typing `www.m3mm.net` (or old links) reaches the site instead of a Cloudflare error page.
+- The owner authorized the production repair. Authenticated Pages metadata
+  confirmed `m3-companysite` bound only the active apex `m3mm.net` while `www`
+  returned HTTP 522. After adding `www.m3mm.net`, a subsequent scoped GET
+  confirmed both domains' status, validation and verification are `active`.
+  Public apex and www subsequently both returned HTTP 200; canonical redirection
+  remains pending the application release.
+- The actual `www` DNS record type/target remains unverified: the scoped DNS
+  read returned permission error `10000`. No DNS or redirect-rule write occurred.
+- PR #18 now supplies a Pages Functions redirect to the fixed apex, preserving
+  path/query (GET/HEAD 301; other methods 308). Next: review, test, release, then
+  verify active domain status plus public redirects and the apex response.
+  This supersedes the August owner-only dashboard instruction; no new manual
+  step is claimed unless provider activation actually requires one.
+- Production compatibility metadata is `2026-07-07` with no flags. The Functions
+  compiler warns about existing SDK dynamic Node imports. Local workerd fails
+  at startup identically for this branch and current main; no regression or
+  required flag change is established. Verify the Pages preview's static and
+  API OPTIONS responses before releasing middleware that covers static requests.
+
+## 2026-09-12 — payment fence release checks
+
+- [ ] Verify the real Payment Link in Michael's Stripe account: active, live,
+  correct merchant, USD and the $100 deposit. Confirm any custom payment domain
+  before adding it to the shared host allowlist. Confirm Pages uses `npm run build`
+  and review the combined branch before release. **Why Michael:** these facts
+  require his provider accounts and release decision; syntax tests cannot prove
+  them. **Resumes:** configure the verified link and approve production release.
+  Evidence: `docs/PAYMENT_FENCE_RECOVERY_2026-09-12.md`.
+
+## 2026-09-09 — performance redesign review
+
+- [ ] Review the local lime/blue/black site before choosing a release. Preview:
+  `http://127.0.0.1:4321`. Design authority: D-CS-011; evidence and limits:
+  `docs/PERFORMANCE_VERIFICATION_2026-09-09.md`. This redesign is not deployed.
+- [ ] Copy the prepared performance-redesign entry from `COCKPIT_QUEUE.md` into
+  the actual Cockpit Work Log. No browser localStorage write is claimed.
+
+The supplied logo is preserved at 804,005 bytes. It is reused from one cached
+URL; this pass intentionally makes no smaller or recolored derivative.
+
+
+## 2026-09-09 — Structure audit handoff
+
+- [ ] **Decide what a roadmap subscriber is actually promised.** The routing half
+  is done (2026-09-09): roadmap signups now land on `/roadmap/thanks` on both the
+  JS and no-JS paths, and that page deliberately promises nothing — it says the
+  request was received and went to M3MM, and stops there. The false promise is
+  gone. What is still open is whether you want to promise anything at all
+  (a cadence, "email on every release", a format). If yes, give the wording and
+  it goes in; if no, the page is already correct as-is and this can be closed.
+- [ ] **Review the local structure commit as part of the combined release.**
+  See `docs/STRUCTURE_AUDIT_2026-09-09.md` for the 14-page map, implemented fixes,
+  remaining style inventory and exact verification. No production writes or
+  outbound form/chat submissions were performed. Existing dependency, proof
+  asset and publication gates below still apply.
+
+## 2026-09-09 — TODO sweep handoff
+
+- [ ] **Review and release `codex/companysite-todo-2026-09-09`.** Includes the
+  preceding homepage/roadmap design plus Astro 7, API middleware, comparison page
+  and sales accessibility fixes. Resolve the npm advisory gate below first;
+  obtain the required independent money-path review before production. Confirm
+  the Pages build uses Node >=22.12 and Functions has `nodejs_compat` enabled
+  for the existing SDK imports; verify static routes and API headers after release.
+  Owner publication authority is required; this session made no production writes.
+- [ ] **Confirm product changes before implementing them.** The suggested new
+  flat-fee tier above $2,000 conflicts with the approved quote-only ceiling.
+  A named expanded guarantee/client board needs agreed terms and an actual board.
+  The instant AI homepage generator needs scope, provider/budget, output/retention
+  policy and agreement to change the human-review offer. These decisions unblock
+  bounded implementation; the present confirmed offer remains intact.
+- [ ] **Supply remaining proof assets.** Existing Aries video and founder
+  signature are already wired. Still needed: Big7 video/jobsite assets,
+  headshot/confirmed TikTok and IG URLs, approved real testimonials or review-profile evidence,
+  and the selected reel URL. Aries before/after needs client permission plus the
+  selected historical capture. Do not manufacture ratings or business results.
+- [ ] **Transcribe the Cockpit queue in the actual local browser state.** The
+  tick-23 entry exists in `COCKPIT_QUEUE.md`; copying it to another file is not
+  draining the work log. Preserve it until the actual write is verified.
+- [ ] **Verify live delivery and analytics with authorized account access.**
+  Local tests use mocks/empty bindings; they cannot prove delivered real email,
+  live n8n/Cockpit writes or conversion results. Follow the existing smoke
+  procedure only when outbound test submissions are authorized.
+
+The earlier design-only release item below is subsumed by this combined branch.
+
+## 2026-09-09 — npm patch-update failure
+
+- [ ] **Repair npm's dependency update failure, then apply available patches.**
+  - **What:** in a clean checkout or repaired npm environment, update Vitest to
+    >=4.1.11 and SVGO to >=4.0.3 (current 4.1.0), regenerate the lockfile and
+    rerun build/tests/audit. Do not use audit fix --force.
+  - **Why blocked:** npm update, explicit install, and package-lock-only install
+    each failed with `Cannot read properties of null (reading 'edgesOut')`.
+    Three fix attempts reached the fleet setup limit. The installed Astro 7
+    migration remains separately verifiable; failed patch specs were removed.
+  - **Resumes:** close the remaining @vitest/mocker + vitest moderate and svgo
+    high audit findings. Advisory references: GHSA-82fw-gwwq-j7x9,
+    GHSA-w27v-7q3p-w38r, GHSA-4vpr-x523-8j87.
+
+## M3MM homepage + roadmap release
+
+- [ ] **Approve production release of `design/m3-system-2026-09-08`.**
+  - **What:** review the completed local homepage/roadmap design commit, then
+    authorize the normal merge and production deployment.
+  - **Why Mike:** the current session authorizes local design work; production
+    publication remains an explicit owner gate under root CLAUDE.md.
+  - **Resumes:** release the verified change and check `/` and `/roadmap` live.
+    Local gates pass: 493 tests (2 existing skips), 13-page build, Astro clean,
+    axe zero violations on both routes at four widths.
 
 ## Competitor-research implementation gates (2026-07-19)
 
@@ -34,7 +131,20 @@
 
 - [ ] **Stripe Payment Link for the directly-buyable $500 Basic tier.**
   - **Status 2026-08-05 (supersedes 2026-07-21):** The `/start` page + `/start/thanks` + lead-capture wiring are built (`a81a7c1`). The placeholder no longer fails the suite OR renders a dead buy button: `checkoutReady` in `src/config/offers.ts` semantically validates the link (only a well-formed LIVE `https://buy.stripe.com/<slug>` passes; placeholder, `test_`-mode, and malformed values all fail closed) and /start gates to the free-review intake with honest "checkout opening soon" copy while it's false. `tests/build/start-checkout.test.ts` pins the validator (table of good/bad links), the source structure, and the built `dist/start/index.html`.
-  - **What to do:** Create a **live-mode** Stripe Payment Link for the $100 down payment (20% of the $500 Basic tier), label it non-refundable, paste the real URL into `src/config/offers.ts`'s `BASIC_SITE.paymentLink` (replacing `'https://buy.stripe.com/REPLACE_AFTER_SIGN_IN'` — a `test_` link will NOT unlock the gate), then **rebuild + redeploy** (`npm run build` && push or wrangler deploy — the site is static, so pasting the link alone changes nothing in production) and run RUNBOOK § 3.3's /start smoke.
+  - **Status 2026-08-12 (supersedes the paste-into-code step below):** the link now comes from an **env var**, so this is a dashboard-only action — no code edit, no commit. `src/config/offers.ts`'s `resolvePaymentLink()` reads `PUBLIC_STRIPE_PAYMENT_LINK`, validates it, and falls back to the placeholder (page stays gated on the free-review intake) if it is missing, blank, `test_`-mode, or malformed. `npm run build` now ends in `scripts/check-shipped-placeholders.mjs`, which **fails the Cloudflare Pages build** if any dead payment link or placeholder marker reaches `dist/` — the tests alone could not do that, because Pages never runs `npm test`.
+  - **Status 2026-08-31 (agent automation attempt — narrows the manual step to ONE authorization):**
+    - Stripe CLI is live-authenticated (account M3MM.dev, `acct_1Tsb7O0ktQ0lYq0W`, keys valid to 2026-11-19) but its restricted key has **no write permission** for products, prices, or payment links — probed live: `products create` and `prices create` both return `more_permissions_required`. So the link could not be created by script yet. Verified read-side: `payment_links list --live` = **0 links exist**; live catalog has `M3 — Basic Business Site` at $500 (full price, not the $100 deposit).
+    - Cloudflare side needs **no dashboard clicks**: the Pages project `m3-companysite` is git-connected (GitHub `murillomartinezmichael/CompanySite`, production branch `main`, deploys enabled), and the pre-authed Cloudflare API MCP can PATCH the Production env var and POST a new production deployment. Deployed prod commit `45f7577` == local `main` (verified 2026-08-31).
+    - Build plumbing verified 2026-08-31 on a clean clone of `main` (@`45f7577`): env var unset → build green + /start gated (fence clean); well-formed live-shaped link → `data-cta="start-pay-deposit"` renders, "Checkout opening soon" gone; `test_`-mode link → **build fails** with the TEST-mode reason (fence works). Live baseline curl: gate copy present, CTA absent — matches.
+    - **The one remaining Mike action:** grant script write access to Stripe live — either approve the Stripe MCP OAuth (one click, agent supplies the URL), or enable Products + Prices + Payment links **write** on the Stripe CLI's restricted key in Dashboard → API keys. After that single step, an agent finishes link-create → env var → redeploy → smoke unattended.
+  - **What to do (Mike only, ~5 min — or just the one authorization above):**
+    1. Stripe dashboard → **live mode** (not test) → Payment links → create a link for **$100 USD**, name it `M3MM Basic site — 20% down payment`, description noting the down payment is non-refundable and the $400 balance is due before launch.
+    2. Set the link's success/redirect URL to `https://m3mm.net/start?checkout=complete` (that query param is what reveals the project-intake step).
+    3. Copy the link — it looks like `https://buy.stripe.com/aBcD1234efGh5678` (a `test_` prefix will NOT unlock the gate).
+    4. Cloudflare Pages → the CompanySite project → **Settings → Environment variables → Production** → add `PUBLIC_STRIPE_PAYMENT_LINK` = that URL → Save.
+    5. **Redeploy** (Deployments → Retry deployment, or push). The site is static: the env var does nothing until a build runs.
+    6. Smoke it with RUNBOOK § 3.3's /start block — `data-cta="start-pay-deposit"` should now be 1 and `Checkout opening soon` 0.
+  - **If you'd rather keep it in code:** paste the URL as the fallback argument in `resolvePaymentLink()` instead. The env var is preferred because a bad paste in the dashboard costs a redeploy, not a commit on the money path.
   - **Why blocked on him:** Needs Mike's authenticated Stripe dashboard; the pricing policy itself was confirmed 2026-07-20.
   - **Resumes:** After paste + rebuild + redeploy, the paid CTA replaces the gated fallback on /start, the suite's dormant live-link tests activate, and the $500 tier is directly buyable.
 
@@ -71,3 +181,19 @@
   - **What to do:** Decide the cash paid per successful referral and the payout trigger, then set them in `functions/_lib/referral.ts` — `REFERRAL_PROGRAM.bountyUsd` (currently `null`) and `payoutTrigger` (currently `'when their build starts'`). That one edit lights up all four surfaces at once: the intake hint, `/thanks`, `/start/thanks`, and the auto-reply email. The research pattern (WebsiteDesignFor99) uses $100/referral; the field, the `?ref=` share links, and the admin-email attribution row are already live and capturing referrers today.
   - **Why blocked on him:** It is a cash commitment published on a live money-path site. Guessing the number would be fabrication (LAW 6), so the code deliberately ships in capture-only mode and `tests/build/referral-program.test.ts` fails if any payout figure reaches a public surface while `bountyUsd` is null.
   - **Resumes:** The program stops being "tell me who sent you" and becomes "get $X for sending someone" — the actual conversion mechanic. Also update the expectation in `tests/build/referral-program.test.ts` ("keeps the bounty unset until the owner confirms it") in the same commit as the decision.
+
+## 2026-09-09 — optional full tutorial review
+
+- [ ] Gemini sign-in is required to upload the supplied cinematic-websites MP4
+  through the fleet's native video-review route. On-screen frames were reviewed
+  locally; narration was not. Full video/audio review remains optional follow-up.
+  No upload or login was performed; implementation evidence distinguishes scope.
+
+### 2026-09-10 — existing proof-media content review before publication
+
+The larger viewer makes existing source-image details easier to read. The supplied
+Big7 screenshot includes a `(555)` phone number and a license line; the existing
+Aries walkthrough contains rating/project-count text. This pass did not invent,
+edit or independently verify those embedded statements. Michael must confirm the
+media is suitable for public proof or supply an approved replacement before publishing.
+Source assets: `src/assets/big7-live-site.jpg`, `public/videos/aries-scroll-v2.mp4`.

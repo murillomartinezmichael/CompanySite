@@ -1,7 +1,10 @@
 # Cloudflare Pages redirect table.
-# Keep this list short — most routing lives in src/pages/.
+# Keep this list short — most routing is file-based, from the pages tree.
 
 # Common typo / bio-link variants -> /audit
 /review        /audit        301
 /free-review   /audit        301
 /site-review   /audit        301
+
+# The former standalone hub is now the primary homepage.
+/hub           /             301

@@ -15,13 +15,13 @@ const read = (path: string) => readFileSync(root + path, 'utf8');
 // pricing claim the Services ladder doesn't back).
 
 describe('two-door chooser under the Hero', () => {
-  const index = read('src/pages/index.astro');
+  const websites = read('src/pages/websites.astro');
   const twoDoor = read('src/components/TwoDoor.astro');
 
-  it('renders between Hero and Proof on the homepage', () => {
-    expect(index).toMatch(/import TwoDoor from ['"]@\/components\/TwoDoor\.astro['"]/);
-    expect(index.indexOf('<Hero />')).toBeLessThan(index.indexOf('<TwoDoor />'));
-    expect(index.indexOf('<TwoDoor />')).toBeLessThan(index.indexOf('<Proof />'));
+  it('renders between Hero and Proof in the website department', () => {
+    expect(websites).toMatch(/import TwoDoor from ['"]@\/components\/TwoDoor\.astro['"]/);
+    expect(websites.indexOf('<Hero />')).toBeLessThan(websites.indexOf('<TwoDoor />'));
+    expect(websites.indexOf('<TwoDoor />')).toBeLessThan(websites.indexOf('<Proof />'));
   });
 
   it('custom door lands in the on-page intake with funnel metadata', () => {
@@ -36,8 +36,8 @@ describe('two-door chooser under the Hero', () => {
   it('price framing matches the Services ladder (no invented numbers)', () => {
     expect(twoDoor).toContain('from $500');
     expect(twoDoor).toContain('under $500');
-    // Established storefront fact (mirrors /thanks): twelve templates,
-    // preview + buy today. If SiteGuide's catalog changes, update both.
+    // Established storefront fact (mirrors /thanks): twelve templates in a
+    // working test storefront. If SiteGuide's catalog changes, update both.
     expect(twoDoor).toContain('Twelve one-page SiteGuide templates');
   });
 });

@@ -19,7 +19,7 @@ const {
   source = 'homepage',
   // CONVERSION_STANDARDS.md § 4 — every intake_submit must carry intent.
   // Visitors who scroll straight to the form without touching a CTA
-  // (common on /audit, the TikTok bio target) would otherwise submit
+  // (common on /audit, a common bio-link target) would otherwise submit
   // with intent=undefined. Any [data-intent] click still overrides via
   // wirePrefill() before submit.
   defaultIntent = 'book:free-review',
@@ -34,12 +34,7 @@ const {
 const referralFieldLabel = REFERRAL_FIELD_LABEL;
 ---
 
-<section id="intake" class="relative overflow-hidden py-24 sm:py-32">
-  <!-- Ambient glow -->
-  <div class="pointer-events-none absolute inset-x-0 top-16 -z-10 h-[400px]">
-    <div class="absolute left-1/4 top-0 h-[300px] w-[300px] rounded-full bg-clay/[0.06] blur-3xl"></div>
-  </div>
-
+<section id="intake" class="relative overflow-hidden py-hq-section">
   <div class="container-page grid gap-14 lg:grid-cols-[1fr,1.15fr] lg:gap-20">
     <!-- Left rail -->
     <div class="reveal lg:sticky lg:top-24 lg:h-fit">
@@ -47,7 +42,7 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
         <span class="hairline"></span>
         <p class="kicker mono">{eyebrow}</p>
       </div>
-      <h2 class="text-display-lg">{headline}</h2>
+      <h2 class="text-hq-section">{headline}</h2>
       <p class="mt-6 text-lg text-bone-dim">{sub}</p>
 
       <ol class="mt-10 space-y-5">
@@ -77,21 +72,11 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
       <!-- Signature card -->
       <div class="mt-10 flex items-center gap-4 rounded-2xl border border-ink-line bg-ink-soft/60 p-5 backdrop-blur-sm">
         <div class="grid h-11 w-11 flex-none place-items-center overflow-hidden rounded-full bg-ink-panel ring-1 ring-ink-line">
-          <img src="/mark-light.png" alt="" width="28" height="28" class="h-7 w-7 object-contain" decoding="async" />
+          <img src="/official-logo.png" alt="" width="28" height="28" class="h-7 w-7 object-contain" decoding="async" />
         </div>
         <div class="text-sm">
           <p class="font-medium text-bone">Michael Murillo-Martinez</p>
           <p class="mt-0.5 text-xs text-bone-muted mono">One engineer · reviewing personally</p>
-          <a
-            href="https://www.tiktok.com/@m3mm_dev"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="mt-1 inline-block text-xs text-clay hover:text-bone transition-colors"
-            data-cta="signature-tiktok"
-            data-section="intake"
-          >
-            @m3mm_dev on TikTok
-          </a>
         </div>
       </div>
     </div>
@@ -114,11 +99,8 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
 
       <input type="hidden" name="source" value={source} />
       <input type="hidden" name="intent" value={defaultIntent} />
-      <!-- UTM capture — CONVERSION_STANDARDS.md § 4. Bio-link UTMs must
-           travel with the lead POST so the admin email/log show which
-           TikTok video sourced the lead. applyUrlPrefill() populates these
-           from window.location.search on load; unset params stay empty
-           and validate cleanly. -->
+      <!-- UTM capture. Populated from window.location.search on load; unset
+           params stay empty and validate cleanly. -->
       <input type="hidden" name="utm_source" value="" />
       <input type="hidden" name="utm_medium" value="" />
       <input type="hidden" name="utm_campaign" value="" />
@@ -127,7 +109,7 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
 
       <div class="grid gap-6 sm:grid-cols-2">
         <label class="flex flex-col gap-2">
-          <span class="field-label"><span>Your name</span><span class="text-clay/60 mono">01</span></span>
+          <span class="field-label"><span>Your name</span><span class="text-clay mono">01</span></span>
           <input
             name="name"
             type="text"
@@ -139,7 +121,7 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
         </label>
 
         <label class="flex flex-col gap-2">
-          <span class="field-label"><span>Email</span><span class="text-clay/60 mono">02</span></span>
+          <span class="field-label"><span>Email</span><span class="text-clay mono">02</span></span>
           <input
             name="email"
             type="email"
@@ -154,7 +136,7 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
 
       <div class="grid gap-6 sm:grid-cols-2">
         <label class="flex flex-col gap-2">
-          <span class="field-label"><span>Business type</span><span class="text-clay/60 mono">03</span></span>
+          <span class="field-label"><span>Business type</span><span class="text-clay mono">03</span></span>
           <input
             name="businessType"
             type="text"
@@ -177,7 +159,7 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
       </div>
 
       <label class="flex flex-col gap-2">
-        <span class="field-label"><span>Biggest frustration</span><span class="text-clay/60 mono">04</span></span>
+        <span class="field-label"><span>Biggest frustration</span><span class="text-clay mono">04</span></span>
         <textarea
           name="frustration"
           rows="5"
@@ -192,7 +174,7 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
 
       {showStartWindow && (
         <label class="flex flex-col gap-2">
-          <span class="field-label"><span>Preferred start window</span><span class="text-clay/60 mono">05</span></span>
+          <span class="field-label"><span>Preferred start window</span><span class="text-clay mono">05</span></span>
           <select name="preferredStart" required class="field-input">
             <option value="">Choose a window</option>
             <option value="Next available build week">Next available build week</option>
@@ -206,11 +188,7 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
         </label>
       )}
 
-      <!-- Referral capture (2026-08-03). Optional, last, and deliberately
-           quiet so it adds zero friction to the required path. Prefilled
-           from `?ref=<name>` (src/lib/prefill.ts) when a past client shares
-           their own link, so the referrer gets credited without the visitor
-           typing anything. -->
+      <!-- Referral capture. Optional; prefilled from `?ref=<name>`. -->
       <label class="flex flex-col gap-2">
         <span class="field-label">
           <span>{referralFieldLabel}</span>
@@ -230,7 +208,6 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
         </span>
       </label>
 
-      <!-- honeypot — bots will fill it, humans can't see it -->
       <label class="hidden" aria-hidden="true">
         <span>Company website (leave blank)</span>
         <input type="text" name="company_website" tabindex="-1" autocomplete="off" />
@@ -238,7 +215,7 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
 
       <div class="flex flex-col gap-4 pt-2 sm:flex-row sm:items-center sm:justify-between">
         <p class="mono text-[11px] uppercase tracking-[0.18em] text-bone-muted">
-          <span class="text-clay/80">●</span> Encrypted in transit · Never sold
+          <span class="inline-block h-1.5 w-1.5 rounded-full bg-clay" aria-hidden="true"></span> Encrypted in transit · Never sold
         </p>
         <button
           type="submit"
@@ -358,3 +335,8 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
     });
   }
 </script>
+
+<style>
+  #intake { border-top: 1px solid theme('colors.ink.line'); background: theme('colors.ink.soft'); }
+  #intake form { background: theme('colors.ink.DEFAULT'); border: 1px solid theme('colors.ink.line'); border-top: 3px solid theme('colors.electric.DEFAULT'); border-radius: theme('borderRadius.hq-panel'); padding: clamp(1.25rem, 3vw, 2rem); }
+</style>

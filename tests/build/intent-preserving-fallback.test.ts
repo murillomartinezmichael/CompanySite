@@ -30,7 +30,7 @@ const CARRIERS: ReadonlyArray<{
   {
     file: 'src/pages/thanks.astro',
     cta: 'thanks-see-work',
-    destBase: '/',
+    destBase: '/websites',
     intent: 'product:case-studies',
     anchor: 'proof',
   },

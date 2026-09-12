@@ -1,6 +1,8 @@
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
+  // Tests supply their own fixtures; never load the operator's local .env files.
+  envDir: false,
   test: {
     include: ['tests/**/*.test.ts'],
     environment: 'node',
