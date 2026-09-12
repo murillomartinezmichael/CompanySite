@@ -1,5 +1,24 @@
 # CompanySite — TODO
 
+## 2026-09-12 - repository build/deploy entrypoints fixed
+
+- Bash and Windows setup now run npm ci, the actual Astro build/fence and tests;
+  they stop on any failed command, including negative Windows exit codes.
+  Make targets use real npm commands. Direct uploads require an explicit branch
+  and run build, tests and an immediate output rescan before local Wrangler.
+- 37 isolated command regressions pass, covering native Bash/cmd/GNU Make,
+  failure ordering, unrelated caller directories and branch injection rejection.
+  A tracked-source temporary copy built 15 pages and passed the output fence;
+  its full suite passed 567 tests with 2 existing live-checkout skips. Installed
+  dependencies were reused; a fresh npm ci install was not independently run.
+  No local env files copied, actual upload attempted or dashboard settings changed.
+  Independent final review is clean; README/RUNBOOK/CONTRIBUTING now match.
+- **Exact next action:** harden the fleet tool's explicit `ship --no-build`
+  bypass for CompanySite with isolated tests. Its default path runs the fence,
+  but it is separate from the repaired repository command. Raw Wrangler uploads
+  and that override are unsupported release paths. Keep scanner compatibility/
+  coverage and real Stripe ownership/amount/activation checks open.
+
 ## 2026-09-12 - scanner diagnostic redaction fixed
 
 - Central redaction protects overlapping rule samples, filenames, directory
@@ -11,9 +30,8 @@
   filesystem-error output. Full suite: 530 passed, 2 existing skips. All 52
   scanner tests pass; `npm run verify:dist` passes on existing dist/functions.
   Independent review is clean. No fresh Astro build or production deployment.
-- **Exact next action:** audit and repair the legacy build/deploy entry points
-  so every supported deployment route runs the current build fence. Keep the
-  URL compatibility/coverage limitations and real Stripe checks explicit.
+- Repository entrypoint follow-up completed above. Fleet explicit bypass,
+  URL compatibility/coverage limitations and real Stripe checks remain open.
 
 ## 2026-09-12 - recovered security reviews
 
@@ -26,7 +44,7 @@
 - Diagnostic redaction finding: fixed in the follow-up above, including
   overlapping matches and path/error messages. Synthetic CLI regressions pass.
 - The older placeholder review `20260812-214326-codex-4a959c` remains open:
-  documented legacy deploy paths can bypass the build fence; the bare-link
+  the fleet tool's explicit build-skip override can bypass the fence; the bare-link
   compatibility restriction and scanner coverage limits are not resolved by
   green unit tests. Stripe activation/ownership/amount checks stay manual.
 - Both August 5 checkout reviews are historically adjudicated, but their old

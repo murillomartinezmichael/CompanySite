@@ -69,8 +69,8 @@ non-2xx surfaced + network-error collapse + X-Cockpit-Kind header).
 
 ### 3.1 First-time deploy (Mike-hands-only, ~5 min)
 
-The Pages project doesn't exist yet. This one-time setup creates it and pushes
-the current `dist/`. Runs once, ever.
+For a new Pages project only, this one-time setup creates the project and runs
+the checked upload command. For the existing project, use section 3.2.
 
 ```bash
 cd C:/Users/Michael/Documents/GitHub/CompanySite
@@ -78,15 +78,14 @@ cd C:/Users/Michael/Documents/GitHub/CompanySite
 # 1. Auth (browser flow — opens dashboard consent)
 npx wrangler login
 
-# 2. Fresh production build
+# 2. Install the locked dependencies
 npm ci
-npm run build
 
 # 3. Create the Pages project (choose "None" for framework preset, "dist" as build output)
 npx wrangler pages project create m3-companysite --production-branch main
 
-# 4. First upload (this IS the deploy)
-npx wrangler pages deploy dist --project-name=m3-companysite --branch=main
+# 4. Build, test, rescan, then upload (this IS the production deploy)
+npm run deploy -- --branch main
 
 # 5. Dashboard follow-up (browser, 2 min):
 #    - Cloudflare → Pages → m3-companysite → Settings → Environment variables
@@ -105,13 +104,20 @@ Once the Pages project exists there are two paths:
 Cloudflare Pages sees the push, runs `npm ci && npm run build`, uploads
 `dist/` and mounts `functions/` at the edge.
 
-**Path B — direct upload via wrangler.** Sandbox-friendly, no GitHub round-trip:
+**Path B — checked direct upload.** Use the repository command after the
+existing release approval. It always builds, tests and rescans before upload:
 
 ```bash
 cd C:/Users/Michael/Documents/GitHub/CompanySite
-npm run build
-npx wrangler pages deploy dist --project-name=m3-companysite --branch=main
+npm run deploy -- --branch main
 ```
+
+Use `--branch review-name` for a preview target. No branch is inferred, extra
+Wrangler arguments are not forwarded, and the project/output are fixed to
+`m3-companysite`/`dist`. A failed build, test or rescan stops before Wrangler;
+an upload failure returns failure. `make deploy BRANCH=main` is the same path.
+Do not substitute a raw upload of an old `dist/`; it bypasses the local gates.
+The wrapper does not log in or create accounts/projects automatically.
 
 ### 3.3 Post-deploy smoke (any path)
 
@@ -140,7 +146,7 @@ curl -sSL https://m3mm.net/start | grep -c 'REPLACE_AFTER_SIGN_IN'
 
 ```bash
 cd C:/Users/Michael/Documents/GitHub/CompanySite
-npm run build           # expect "9 page(s) built" then
+npm run build           # expect Astro's build summary, then
                         # "check-shipped-placeholders: clean" — build FIRST: the
                         # test suite asserts the built dist/. The build FAILS if a
                         # placeholder (dead Stripe link, REPLACE marker, placeholder
@@ -148,12 +154,20 @@ npm run build           # expect "9 page(s) built" then
                         # shipped surface — dist/ or functions/. That fence also
                         # guards the Cloudflare Pages build, which never runs
                         # npm test.
-npm test                # as of 2026-08-12: expect 380 total = 378 passed + 2 skipped
-                        # (the dormant live-Stripe-link branches, source + built-HTML;
-                        # they activate, and the gated branches skip, once a real link lands)
+npm test                # all active tests must pass; two intentional skips cover
+                        # the dormant live-Stripe-link branches, source + built-HTML;
+                        # they activate, and the gated branches skip, once a real link lands
 ls -la dist/index.html dist/audit/index.html dist/_headers dist/_redirects
 # 4 files present; if any is missing, do NOT deploy.
 ```
+
+This section is the local readiness check. The direct-deploy command reruns
+build/tests and the scanner itself, so these checks cannot be replaced by a
+stale earlier pass. Git-integrated Pages builds must retain `npm run build`
+as their configured command; this repository does not change dashboard settings.
+The fleet deployment tool's explicit `--no-build` option still bypasses its
+build step and is unsupported for CompanySite releases. Use `npm run deploy`
+for direct uploads. Windows batch regressions additionally skip on other OSes.
 
 ---
 
