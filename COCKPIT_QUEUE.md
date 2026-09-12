@@ -7,6 +7,70 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-09-09 · CompanySite · Structure and navigation (local)
+
+**Card:** M3MM umbrella hub / website sales floor
+**State:** Local implementation complete; publication remains owner-gated.
+
+**Work:** Mapped all 14 routes, connected the three orphan trade pages, restored
+visible mobile/secondary navigation, added roadmap jumps, extracted repeated
+timeline rendering, and aligned shared spacing/panels/controls with tokens.
+Fixed footer hydration overwriting the urgent email label. Claims, prices,
+release data, server endpoints and both receipt URLs remain intact.
+
+**Verified:** 14-page build/placeholder fence; 512 tests passed, 2 existing skips;
+56 browser page/width combinations clean; 14 canonicals; Astro 0/0/0. Selected
+home, roadmap and sales screenshots inspected at 375/1440, urgent receipt at320.
+Full audit, file summary and exact output: `docs/STRUCTURE_AUDIT_2026-09-09.md`
+and `docs/STRUCTURE_VERIFICATION_2026-09-09.md`.
+
+**Next:** Michael confirms roadmap-specific receipt content/flow; existing
+dependency, proof-asset and production release gates remain. No deployment or
+outbound submission. This is a queued entry, not an actual browser Work Log write.
+
+---
+
+## 2026-08-19 · CompanySite · Exact résumé PDF restored
+
+**Card:** M3MM umbrella hub
+**Move to:** Done
+
+**What shipped:** Replaced the Hub's generated résumé substitute with Michael's
+exact supplied one-page PDF. Restored the vendored-master build path so
+`assets/resume/source.pdf` is copied byte-for-byte to the public, built, and
+review-artifact locations; removed the unnecessary `pdfkit` dependency. The
+Hub and standalone ResumeSite now use the same 121,174-byte document with
+SHA-256 `f71d89ceaea7e488a2d4ad700a2d402067c284f6cfd79fdb1214af53ec6ab1ee`.
+
+**Verified:** rendered page visually inspected · 13-page production build ·
+placeholder fence clean · full suite **461 passed / 2 skipped** · Astro
+**0 errors / 0 warnings / 0 hints** · source, public, dist, output, attachment,
+and standalone ResumeSite hashes all match.
+
+---
+
+## 2026-08-19 · CompanySite · Release truth corrected on m3mm.net
+
+**Card:** M3MM umbrella hub
+**Move to:** Done
+
+**What shipped:** Separated official launches from reachable test deployments
+across the homepage, full roadmap, counters, release ledger, website-sales
+pages, case studies, lead auto-reply, HTML résumé, and downloadable résumé PDF.
+M3MM Hub is the only official release; AriesOutdoorLiving is next; M3MM
+Websites, the career site, SiteGuide, and AIMA are labeled Testing; Big7 is
+long-term and waiting on real jobsite photography, with no public launch link.
+
+**Verified:** production build **13 pages** · placeholder fence clean · full
+suite **461 passed / 2 skipped** · Astro **0 errors / 0 warnings / 0 hints** ·
+Cloudflare Pages code source `d0df34c` verified Active · immutable build
+`35fe90a3` independently verified · HTTP 200 across the Hub, roadmap, résumé,
+PDF download, website-sales pages, and trade proof · the exact 1 released / 4
+testing / Aries next / Big7 long-term markers confirmed on both the immutable
+deployment URL and `https://m3mm.net`.
+
+---
+
 ## 2026-07-20 · CompanySite · Down-payment/refund policy corrected
 
 **Card:** CompanySite conversion pass
@@ -626,7 +690,7 @@ covers the semantic:
 
 - **`downshift:siteguide-templates` → `product:siteguide`** — 4
   outbound SiteGuide CTAs (Services / Footer / audit / thanks).
-  SiteGuide *is* an M³ product; the reserved `product:` namespace
+  SiteGuide *is* an M3MM product; the reserved `product:` namespace
   covers it exactly.
 - **`browse:case-studies` → `product:case-studies`** — thanks-page
   "See recent work" panel. Aggregate portfolio surface.
@@ -1507,3 +1571,37 @@ rung.
 **What shipped on `origin/main` (`efa2278`):** A six-question native FAQ now sits between Services and Intake, answers only confirmed pricing, ownership, budget, and review-process objections, and routes visitors either to the free review or the fully attributed SiteGuide under-$500 lane. Added source-level regression coverage for placement, semantics, confirmed claims, CTA metadata, UTMs, and keyboard-focus styling.
 
 **Verified:** Astro check 0 errors/warnings/hints; Vitest 211/211; Astro build 4 pages; canonical audit 4/4. Browser smoke at 375x812 and 1440x900 confirmed six disclosures, pointer toggling, visible focus rings, 8px clearance before answer copy, and zero FAQ-local overflow. Production returned 200 with `#faq`, both attributed FAQ CTA markers, and all six disclosures. A one-minute physical-keyboard toggle remains queued in `PENDING_MANUAL.md` because synthetic Enter/Space events did not invoke the browser's native default action.
+
+
+## 2026-09-09 — CompanySite performance redesign (draft; not entered)
+
+Implemented Michael's Scrambler-inspired lime/blue/black direction across the
+15-page M3MM site. Preserved his original logo byte-for-byte, all prices and
+release states. Added animated dimensional artwork with persistent pause,
+reduced-motion and offscreen controls, consistent navigation/breadcrumbs,
+mobile sales actions, home release strip and roadmap status filters. Exact
+local checks and screenshot review: docs/PERFORMANCE_VERIFICATION_2026-09-09.md.
+No production deployment or new push. Michael still owns the existing payment,
+proof-content, live-delivery and release gates.
+
+## 2026-09-09 — CompanySite orbital motion and roadmap (draft; not entered)
+
+CompanySite local refinement: flowing orbital artwork, cleaner shared structure,
+and roadmap next-launch spotlight, animated release path, native build details
+and status transitions. All 15 routes and source content preserved. Build passed;
+518 tests passed, 2 skipped; 60 axe combinations clean; 15 canonicals; Astro 0/0/0;
+interaction checks at 320/375/768/1440. Evidence in
+`docs/ORBIT_VERIFICATION_2026-09-09.md`. Local commit only, no push/deploy.
+Product design preference/standard recorded at fleet root; other UI rollouts pending.
+
+Draft only: Michael must enter this in Cockpit (press l). No browser localStorage
+write was performed by the agent.
+
+## 2026-09-10 — cinematic roadmap and proof (draft; not entered)
+
+Applied useful composition and interaction techniques from Michael's local tutorial:
+21-build coordinated roadmap stage, larger existing proof media, accessible native
+still viewers and user-controlled video. Source claims, prices, logo and routes
+preserved. Final checks and review limitations are in
+`docs/CINEMATIC_VERIFICATION_2026-09-10.md`. Shared reference/learning records updated.
+Local commits only; no push/deploy. Draft only: Michael enters this in Cockpit.

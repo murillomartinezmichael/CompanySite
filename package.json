@@ -3,26 +3,39 @@
   "type": "module",
   "version": "0.1.0",
   "private": true,
-  "description": "M³ marketing site — Astro + Tailwind on Cloudflare Pages",
+  "description": "M3MM marketing site — Astro + Tailwind on Cloudflare Pages",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "npm run resume:pdf && astro build && npm run verify:dist",
+    "deploy": "node scripts/deploy-pages.mjs",
+    "verify:dist": "node scripts/check-shipped-placeholders.mjs dist functions",
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest run",
     "test:watch": "vitest",
-    "audit:canonicals": "node scripts/audit-canonicals.mjs"
+    "audit:canonicals": "node scripts/audit-canonicals.mjs",
+    "resume:pdf": "node scripts/generate-resume-pdf.mjs",
+    "test:a11y": "node scripts/axe-home.mjs"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.120.0",
     "@astrojs/check": "^0.9.10",
-    "@astrojs/tailwind": "^6.0.2",
-    "astro": "^5.18.2",
+    "astro": "^7.3.2",
     "tailwindcss": "^3.4.15",
     "typescript": "^5.6.3"
   },
   "devDependencies": {
+    "axe-core": "^4.13.0",
+    "puppeteer-core": "^25.6.0",
     "vitest": "^4.1.10",
-    "wrangler": "^4.112.0"
+    "wrangler": "^4.112.0",
+    "autoprefixer": "^10.4.21"
+  },
+  "overrides": {
+    "sharp": "^0.35.2"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   }
 }

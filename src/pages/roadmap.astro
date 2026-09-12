@@ -1,0 +1,292 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import RoadmapStage from '@/components/RoadmapStage.astro';
+import SectionNav from '@/components/SectionNav.astro';
+import RoadmapFilters from '@/components/RoadmapFilters.astro';
+import RoadmapTimeline from '@/components/RoadmapTimeline.astro';
+import { DROPS, LAUNCH_STATS } from '@/config/roadmap';
+
+// Group drops by quarter label for the timeline sections.
+const grouped = DROPS.reduce<Record<string, typeof DROPS>>((acc, d) => {
+  (acc[d.quarter] ||= []).push(d);
+  return acc;
+}, {} as Record<string, typeof DROPS>);
+const quarterOrder = Array.from(new Set(DROPS.map((d) => d.quarter)));
+
+
+// Intake POST target. Reuses the site's existing lead endpoint so roadmap
+// subscribers flow through the same pipeline as any other intake.
+const intakePost = '/api/lead';
+---
+
+<Layout
+  title="Roadmap — M3MM"
+  description="M3MM's official release roadmap: the Hub is released, test deployments are labeled separately, Aries Outdoor Living is next, and Big7 is waiting on jobsite photography."
+  path="/roadmap"
+  breadcrumbs={[
+    { name: 'M3MM', url: '/' },
+    { name: 'Roadmap', url: '/roadmap' },
+  ]}
+>
+  <Header slot="header" minimal={true} path="/roadmap" />
+
+  <section class="roadmap-scope" aria-labelledby="roadmap-heading">
+    <div class="container-page py-hq-section">
+      <div class="roadmap-intro">
+        <div class="intro-copy">
+          <p class="intro-label">The M3MM release queue</p>
+          <h1 id="roadmap-heading" class="brand-display">Roadmap</h1>
+          <p class="lede"><strong>{LAUNCH_STATS.released} official release: the M3MM Hub.</strong> Testing previews stay separate from official releases.</p>
+          <p class="schedule-note">Planned dates are targets. Big7 remains long-term while M3MM waits for real jobsite photography.</p>
+          <ul class="stats" role="list">
+            <li class="stat"><b>{LAUNCH_STATS.total}</b><span>Tracked builds</span></li>
+            <li class="stat"><b>{LAUNCH_STATS.released}</b><span>Released</span></li>
+            <li class="stat"><b>{LAUNCH_STATS.testing}</b><span>Testing</span></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <RoadmapStage />
+
+      <div class="roadmap-board">
+        <aside class="roadmap-sidebar">
+      <SectionNav label="Jump to a release group" section="roadmap" links={[
+        ...quarterOrder.map((q, index) => ({ label: q, href: `#quarter-${index}`, cta: `roadmap-jump-${index}`, intent: 'product:roadmap' })),
+        { label: 'Follow a build', href: '#signup-heading', cta: 'roadmap-jump-signup', intent: 'book:roadmap-subscribe' },
+      ]} />
+
+        </aside>
+        <div class="roadmap-groups">
+      <RoadmapFilters />
+
+      {quarterOrder.map((q, index) => (
+        <section data-roadmap-quarter aria-labelledby={`quarter-${index}`}>
+          <h2 id={`quarter-${index}`} class="section-head">{q}<span class="group-count">{grouped[q].length} {grouped[q].length === 1 ? 'build' : 'builds'}</span></h2>
+          <RoadmapTimeline drops={grouped[q]} />
+        </section>
+      ))}
+
+        </div>
+      </div>
+
+      <section class="signup" aria-labelledby="signup-heading">
+        <h2 id="signup-heading" class="section-head">Follow a build</h2>
+        <p class="signup-copy">Leave your email and the builds you’re interested in. Your request goes directly to M3MM.</p>
+
+        <form
+          id="roadmap-signup"
+          action={intakePost}
+          method="POST"
+          class="signup-form"
+          data-success-path="/roadmap/thanks"
+        >
+          <input type="hidden" name="source" value="roadmap" />
+          <input type="hidden" name="intent" value="book:roadmap-subscribe" />
+          <input type="hidden" name="name" value="Roadmap subscriber" />
+          <input type="hidden" name="businessType" value="roadmap-subscriber" />
+          <!-- The endpoint requires a note field. With JS the submit handler
+               folds the "only tell me about" box into it; without JS this
+               default ships as-is, so a native POST is always a complete,
+               valid lead rather than a validation error. -->
+          <input
+            type="hidden"
+            name="frustration"
+            value="Roadmap subscriber — notify me on every drop."
+          />
+
+          <label class="field">
+            <span class="field-label"><span>Email</span></span>
+            <input
+              type="email"
+              name="email"
+              required
+              autocomplete="email"
+              placeholder="you@work.com"
+            />
+          </label>
+
+          <label class="field">
+            <span class="field-label"><span>Only tell me about</span></span>
+            <input
+              type="text"
+              name="topics"
+              maxlength="200"
+              placeholder="e.g. AIMA, SiteGuide, everything"
+            />
+          </label>
+
+          <!-- honeypot -->
+          <label class="hp" aria-hidden="true">
+            <span>Company website (leave blank)</span>
+            <input type="text" name="company_website" tabindex="-1" autocomplete="off" />
+          </label>
+
+          <button type="submit" class="signup-btn" data-cta="roadmap-subscribe" data-section="roadmap" data-intent="book:roadmap-subscribe">
+            Request updates
+          </button>
+        </form>
+
+        <p id="roadmap-status" class="signup-status" role="status" aria-live="polite" hidden></p>
+
+        <p class="fine">
+          This sends an update request. You can also return here to check release status.
+        </p>
+      </section>
+
+      <p class="foot-note">
+        Public test deployments stay marked Testing until the official launch. Schedule changes get logged here, not hidden.
+      </p>
+    </div>
+  </section>
+
+  <Footer slot="footer" path="/roadmap" />
+</Layout>
+
+<script>
+  import { track } from '@/lib/track';
+
+  const form = document.getElementById('roadmap-signup') as HTMLFormElement | null;
+  const status = document.getElementById('roadmap-status') as HTMLParagraphElement | null;
+
+  const DEFAULT_NOTE = 'Roadmap subscriber — notify me on every drop.';
+
+  if (form && status) {
+    const show = (text: string, kind: 'pending' | 'ok' | 'error') => {
+      status.textContent = text;
+      status.classList.remove('is-ok', 'is-error');
+      if (kind !== 'pending') status.classList.add(kind === 'ok' ? 'is-ok' : 'is-error');
+      status.hidden = false;
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = form.querySelector<HTMLButtonElement>('button[type=submit]');
+      const originalLabel = submitBtn?.textContent;
+      const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+
+      if (data.company_website) {
+        show('Sent — check your inbox.', 'ok');
+        return;
+      }
+
+      // The endpoint's note field has a 10-character floor, so the optional
+      // "only tell me about" box is folded into a sentence rather than sent raw.
+      const topics = String(data.topics || '').trim();
+      delete data.topics;
+      data.frustration = topics ? `Roadmap subscriber wants: ${topics}` : DEFAULT_NOTE;
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending…';
+      }
+      show('Sending…', 'pending');
+
+      try {
+        const res = await fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        track({
+          name: 'intake_submit',
+          section: 'roadmap',
+          intent: 'book:roadmap-subscribe',
+          meta: { source: 'roadmap', has_prefill: false, message_length: topics.length },
+        });
+        show('Got it. Redirecting…', 'ok');
+        form.reset();
+        const destination = form.dataset.successPath || '/thanks';
+        setTimeout(() => { window.location.href = destination; }, 450);
+      } catch {
+        track({
+          name: 'intake_error',
+          section: 'roadmap',
+          intent: 'book:roadmap-subscribe',
+          meta: { source: 'roadmap', has_prefill: false, message_length: topics.length },
+        });
+        show('Something broke on send. Email murillomartinezmichael@gmail.com and I\'ll pick it up manually.', 'error');
+      } finally {
+        if (submitBtn && originalLabel) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalLabel;
+        }
+      }
+    });
+  }
+</script>
+
+<style>
+  :global(body:has(.roadmap-scope)) {
+    background: theme('colors.ink.DEFAULT');
+  }
+  .roadmap-scope {
+    --accent: theme('colors.clay.DEFAULT');
+    --highlight: theme('colors.clay.glow');
+    --text: theme('colors.bone.DEFAULT');
+    --secondary: theme('colors.bone.dim');
+    --ink-mute: theme('colors.bone.muted');
+    --line: theme('colors.ink.line');
+    --outline: theme('colors.ink.outline');
+    --card: theme('colors.ink.soft');
+    --ground: theme('colors.ink.DEFAULT');
+    padding-bottom: 5rem;
+    color: var(--text);
+    overflow-wrap: anywhere;
+  }
+  .roadmap-scope .intro-label { @apply text-hq-small; color: var(--secondary); margin-bottom: 1.5rem; }
+  .roadmap-scope .brand-display { @apply font-display text-hq-hero font-medium; margin: 0; }
+  .roadmap-scope .lede { @apply text-hq-lede; max-width: 65ch; margin: 1.5rem 0 1rem; color: var(--secondary); }
+  .roadmap-scope .lede strong { color: var(--text); font-weight: 600; }
+  .roadmap-scope .schedule-note { @apply text-hq-small; color: var(--ink-mute); max-width: 65ch; }
+  .roadmap-scope .stats {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem;
+    margin: 2rem 0 0; padding: 1.5rem 0 0; border-top: 1px solid var(--line);
+    list-style: none;
+  }
+  .roadmap-scope .stat b { color: theme('colors.electric.DEFAULT'); @apply font-display text-hq-section font-medium; display: block; font-variant-numeric: tabular-nums; }
+  .roadmap-scope .stat:nth-child(2) b { color: theme('colors.clay.DEFAULT'); }
+  .roadmap-scope .stat span { @apply text-hq-small; display: block; margin-top: .5rem; color: var(--secondary); }
+  .roadmap-scope .section-head { @apply font-display text-hq-title font-medium; margin: theme('spacing.hq-section') 0 1.5rem; max-width: 26ch; }
+  .roadmap-scope .signup { margin: theme('spacing.hq-section') 0 1.5rem; padding: 2rem; background: var(--card); border-left: 3px solid theme('colors.electric.DEFAULT'); border-radius: theme('borderRadius.hq-panel'); }
+  .roadmap-scope .signup .section-head { margin-top: 0; }
+  .roadmap-scope .signup-copy { color: var(--secondary); max-width: 65ch; line-height: 1.65; }
+  .roadmap-scope .signup-form { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1rem; margin-top: 1.5rem; }
+  .roadmap-scope .field { flex: 1 1 16rem; min-width: 0; }
+  .roadmap-scope .field-label { @apply font-sans text-hq-small normal-case tracking-normal; display: block; margin-bottom: .5rem; }
+  .roadmap-scope .field input { width: 100%; min-height: 3rem; padding: .75rem; background: var(--ground); color: var(--text); border: 1px solid var(--outline); border-radius: theme('borderRadius.hq-control'); font: inherit; }
+  .roadmap-scope .field input::placeholder { color: var(--ink-mute); opacity: 1; }
+  .roadmap-scope .signup-btn { min-height: 3rem; padding: .75rem 1.5rem; background: var(--accent); color: var(--ground); border-radius: theme('borderRadius.hq-control'); font-weight: 600; cursor: pointer; }
+  .roadmap-scope .signup-btn:hover { background: var(--highlight); }
+  .roadmap-scope .signup-btn:disabled { cursor: wait; }
+  .roadmap-scope :is(a, input, button):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .roadmap-scope .signup-status { margin-top: 1rem; padding: .75rem; border: 1px solid var(--outline); border-radius: theme('borderRadius.hq-control'); }
+  .roadmap-scope .signup-status[hidden] { display: none; }
+  .roadmap-scope .fine, .roadmap-scope .foot-note { @apply text-hq-small; color: var(--ink-mute); margin-top: 1rem; max-width: 65ch; }
+  .roadmap-scope .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  @media (max-width: 640px) {
+    .roadmap-scope .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .roadmap-scope .signup { padding: 1.25rem; }
+    .roadmap-scope .signup-btn { width: 100%; }
+  }
+  .roadmap-intro .intro-copy { display: grid; grid-template-columns: 1fr 1fr; gap: 0 4rem; }
+  .roadmap-intro .intro-label, .roadmap-intro h1 { grid-column: 1; }
+  .roadmap-intro .lede { grid-column: 1; }
+  .roadmap-intro .schedule-note { grid-column: 1; }
+  .roadmap-intro .stats { grid-column: 2; grid-row: 2 / 5; align-self: center; }
+  .roadmap-board { display: grid; grid-template-columns: 205px minmax(0,1fr); gap: 3rem; margin-top: theme('spacing.hq-section'); align-items: start; }
+  .roadmap-sidebar { position: sticky; top: 2rem; }
+  .roadmap-sidebar :global(.section-nav) { margin: 0; border: 0; padding: 0; }
+  .roadmap-sidebar :global(.section-nav ul) { display: grid; gap: .25rem; }
+  .roadmap-sidebar :global(.section-nav a) { background: transparent; border: 0; padding: .5rem 0; text-decoration: none; color: var(--ink-mute); }
+  .roadmap-sidebar :global(.section-nav a:hover) { color: theme('colors.electric.DEFAULT'); }
+  .roadmap-groups { min-width: 0; }
+  .group-count { display: block; margin-top: .5rem; font: 400 .8125rem/1.5 theme('fontFamily.sans'); color: var(--ink-mute); letter-spacing: 0; }
+  [data-roadmap-quarter][hidden] { display: none; }
+  @media (max-width: 980px) { .roadmap-intro .intro-copy { display: block; } .roadmap-board { grid-template-columns: 1fr; gap: 1.5rem; } .roadmap-sidebar { position: static; } .roadmap-sidebar :global(.section-nav ul) { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; } }
+  @media (max-width: 640px) { .roadmap-scope .stat b { font-size: 2rem; } }
+</style>

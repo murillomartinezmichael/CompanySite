@@ -1,5 +1,5 @@
 {
-  "name": "M³ Lead OS — CompanySite intake",
+  "name": "M3MM Lead OS — CompanySite intake",
   "nodes": [
     {
       "parameters": {
@@ -127,6 +127,6 @@
   },
   "meta": {
     "templateCredsSetupCompleted": false,
-    "description": "M³ CompanySite lead OS: webhook → score/draft → hot branch → 48h reply reminder. Wire Email/Discord/Sheets after import."
+    "description": "M3MM CompanySite lead OS: webhook → score/draft → hot branch → 48h reply reminder. Wire Email/Discord/Sheets after import."
   }
 }

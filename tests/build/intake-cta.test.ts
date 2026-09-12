@@ -41,10 +41,12 @@ describe('Header + Footer thread `path` so intake CTAs never dead-end', () => {
     // dead-end on pages like /thanks and /accessibility.
     const pages: Array<{ file: string; expected: string }> = [
       { file: 'src/pages/index.astro', expected: '/' },
+      { file: 'src/pages/websites.astro', expected: '/websites' },
       { file: 'src/pages/audit.astro', expected: '/audit' },
       { file: 'src/pages/start.astro', expected: '/start' },
       { file: 'src/pages/thanks.astro', expected: '/thanks' },
       { file: 'src/pages/accessibility.astro', expected: '/accessibility' },
+      { file: 'src/pages/policies.astro', expected: '/policies' },
       // Trade landing pages (2026-07-19) — each mounts <Intake>, and
       // Header/Footer/Layout's hasIntakeOnPage now includes `/for/*` so
       // their CTAs stay same-page anchors instead of bouncing the visitor
@@ -88,7 +90,7 @@ describe('Header + Footer thread `path` so intake CTAs never dead-end', () => {
     // hasIntakeOnPage / intakeHref shape so the fallback lands the
     // visitor directly in the form.
     const src = read('src/layouts/Layout.astro');
-    expect(src).toMatch(/const\s+hasIntakeOnPage\s*=\s*path\s*===\s*['"]\/['"]\s*\|\|\s*path\s*===\s*['"]\/audit['"]\s*\|\|\s*path\s*===\s*['"]\/start['"]/);
+    expect(src).toMatch(/const\s+hasIntakeOnPage\s*=\s*path\s*===\s*['"]\/websites['"]\s*\|\|\s*path\s*===\s*['"]\/audit['"]\s*\|\|\s*path\s*===\s*['"]\/start['"]/);
     expect(src).toMatch(/const\s+stickyIntakeHref\s*=\s*hasIntakeOnPage\s*\?\s*['"]#intake['"]\s*:\s*['"]\/audit#intake['"]/);
     // The sticky anchor now uses the derived href — the literal bare
     // `/audit` fallback shape must be gone.

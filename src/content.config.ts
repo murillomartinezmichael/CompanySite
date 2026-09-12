@@ -1,7 +1,9 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 
 const caseStudies = defineCollection({
-  type: 'content',
+  loader: glob({ base: './src/content/caseStudies', pattern: '**/*.md' }),
   schema: ({ image }) =>
     z
       .object({
@@ -15,7 +17,7 @@ const caseStudies = defineCollection({
         // screenshot of the shipped site, optimized by astro:assets at build.
         image: image().optional(),
         imageAlt: z.string().optional(),
-        liveUrl: z.string().url().optional(),
+        liveUrl: z.url().optional(),
         problem: z.string(),
         outcome: z.string(),
         metrics: z.array(z.object({ label: z.string(), value: z.string() })).default([]),

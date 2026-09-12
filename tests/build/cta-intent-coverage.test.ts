@@ -42,11 +42,16 @@ function walkAstro(dir: string): string[] {
 
 const NAV_ONLY_CTAS: ReadonlySet<string> = new Set([
   'logo',              // Header: brand mark → /
-  'nav-proof',         // Header: in-page anchor → #proof
-  'nav-services',      // Header: in-page anchor → #services
+  'breadcrumb',        // Page hierarchy navigation, not a conversion.
+  'roadmap-motion-toggle', // Roadmap decorative motion preference.
+  'hq-motion-toggle',  // Decorative motion preference, not a conversion.
+  'sales-motion-toggle', // Same preference on the sales hero.
+  'footer-motion-toggle', // Accessible sitewide motion preference.
   'footer-a11y',       // Footer: nav → /accessibility statement page
-  'signature-tiktok',  // Intake signature card: outbound nav to founder's
-                       // TikTok profile — no conversion outcome to intent-tag.
+  'footer-policies',   // Footer: nav → /policies company-policy library
+  'policies-accessibility', // Policies: cross-link → accessibility statement
+  'chat-widget-open',  // ChatWidget: opens/closes the panel — a UI toggle,
+                       // not a conversion outcome to intent-tag.
 ]);
 
 const FORM_SUBMIT_CTAS: ReadonlySet<string> = new Set([

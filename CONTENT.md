@@ -15,6 +15,13 @@ One-line video ideas for the TikTok pipeline. The fleet's work IS the raw materi
 - **"Case study art (no MP4 yet)"** — pan over the Aries isometric deck-and-pergola SVG art. "This is not a stock illustration. It's the CSS I typed." 15s.
 - **"Editorial vs. Bootstrap-card services"** — split-screen: generic SaaS 3-column pricing grid vs. this site's editorial numbered rows. Same info, different feel. 20s.
 
+## Ready to post (draft stills, 2026-08-24) — LAW #8 human post only
+
+- **Hub TikTok/Reels still** — `public/social/m3mm-hub-tiktok.png` (9:16). Copy matches the live hub: Everything I'm building / One front door. Bio target stays m3mm.net.
+- **Hub Instagram square** — `public/social/m3mm-hub-square.png`.
+- **Hub loop (draft only)** — `public/social/m3mm-hub-loop.gif` (+ `.webm`). Dark navy + cyan trefoil, “One front door.” Not wired on `index.astro` — the hub is type-only and a decorative loop would fight it. Human post, never auto.
+- **Do not auto-publish.** Overlay your voice / on-camera if you record; the still is the card, not the video.
+
 ## Once deployed
 
 - **"m3mm.net going live"** — DNS propagation, Cloudflare Pages deploy log, first curl of `/api/lead`. 30s.

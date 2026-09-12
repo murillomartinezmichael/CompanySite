@@ -5,11 +5,11 @@ interface Props {
 const { path = '/' } = Astro.props;
 const year = new Date().getFullYear();
 
-// CONVERSION_STANDARDS.md § 1 — no dead-end CTAs. Only `/`, `/audit`, and
+// CONVERSION_STANDARDS.md § 1 — no dead-end CTAs. Only `/websites`, `/audit`, and
 // the `/for/*` trade pages render <Intake>, so `#intake` on any other page
 // silently scrolls to the top. Cross-navigate to `/audit#intake` on the
 // pages that lack it.
-const hasIntakeOnPage = path === '/' || path === '/audit' || path === '/start' || path.startsWith('/for/');
+const hasIntakeOnPage = path === '/websites' || path === '/audit' || path === '/start' || path.startsWith('/for/');
 const intakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
 
 // Split so CF's edge email regex can't match. Hydrated to a real mailto:
@@ -20,18 +20,25 @@ const EMAIL_SUBJECT = 'Free site review request — m3mm.net';
 const EMAIL_BODY = "Hey Mike,\n\nBusiness: \nCurrent site: \nWhat's frustrating me: \n\n— sent from m3mm.net footer";
 ---
 
-<footer class="mt-24 border-t border-ink-line/60">
+<footer class="site-footer mt-24 border-t border-ink-line/60">
   <div class="container-page flex flex-col gap-6 py-10 text-sm text-bone-muted sm:flex-row sm:items-center sm:justify-between">
     <div class="flex items-center gap-3">
-      <span class="grid h-7 w-7 place-items-center overflow-hidden rounded-md bg-ink-panel ring-1 ring-ink-line">
-        <img src="/mark-light.png" alt="" width="20" height="20" class="h-5 w-5 object-contain" decoding="async" />
+      <span class="grid h-12 w-12 shrink-0 place-items-center">
+        <img src="/official-logo.png" alt="M3MM" width="48" height="48" class="h-12 w-12 object-contain" decoding="async" />
       </span>
-      <span>© {year} M³ · Atlanta, GA</span>
+      <span class="flex flex-col gap-0.5">
+        <span class="font-mono text-[10px] uppercase tracking-[0.16em] text-bone-dim">Modernize. Mobilize. Multiply.</span>
+        <span>© {year} Michael Murillo-Martinez · Atlanta, GA</span>
+      </span>
     </div>
-    <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+    <nav class="flex flex-wrap items-center gap-x-6 gap-y-2" aria-label="Footer">
+      <a href="/" class="transition-colors hover:text-bone" data-cta="footer-home" data-section="footer" data-intent="product:company-hub">Home</a>
+      <a href="/roadmap" class="transition-colors hover:text-bone" data-cta="footer-roadmap" data-section="footer" data-intent="product:roadmap">Roadmap</a>
+      <a href="/resume" class="transition-colors hover:text-bone" data-cta="footer-resume" data-section="footer" data-intent="product:career">Resume</a>
+      <a href="/websites" class="transition-colors hover:text-bone" data-cta="footer-websites" data-section="footer" data-intent="product:website-services">Websites</a>
       <a
         href="/audit#intake"
-        class="transition-colors hover:text-bone"
+        class="max-w-full break-all transition-colors hover:text-bone"
         data-cta="footer-email"
         data-section="footer"
         data-intent="book:free-review"
@@ -50,19 +57,20 @@ const EMAIL_BODY = "Hey Mike,\n\nBusiness: \nCurrent site: \nWhat's frustrating 
         data-section="footer"
         data-intent="product:siteguide"
       >Templates ↗</a>
+      <a href="/policies" class="transition-colors hover:text-bone" data-cta="footer-policies" data-section="footer">Policies</a>
       <a href="/accessibility" class="transition-colors hover:text-bone" data-cta="footer-a11y" data-section="footer">Accessibility</a>
-    </div>
+    </nav>
   </div>
+  <div class="container-page"><button class="motion-toggle" type="button" data-motion-toggle hidden aria-pressed="false" data-cta="footer-motion-toggle" data-section="footer">Pause motion</button></div>
 </footer>
 
 <script is:inline>
   // Hydrate the footer email link to a real mailto: without leaving the
-  // address in HTML source. Raw emails trigger Cloudflare's Email Address
-  // Obfuscation, which injects a render-blocking cdn-cgi email-decode
-  // script on every page (~200ms wasted in the LCP critical chain, per
-  // perf/lh-mobile-baseline-tick10-…json → render-blocking-insight).
+  // address in HTML source. A raw address trips Cloudflare's Email Address
+  // Obfuscation, which injects a render-blocking cdn-cgi email-decode script
+  // on every page (~200 ms in the LCP critical chain).
   (function () {
-    var a = document.querySelector('a[data-em-u][data-em-h]');
+    var a = document.querySelector('footer a[data-cta="footer-email"]');
     if (!a) return;
     var u = a.dataset.emU, h = a.dataset.emH;
     var addr = u + '@' + h;
@@ -74,3 +82,13 @@ const EMAIL_BODY = "Hey Mike,\n\nBusiness: \nCurrent site: \nWhat's frustrating 
     a.textContent = addr;
   })();
 </script>
+
+<style>
+  .site-footer { border-top: 3px solid theme('colors.electric.DEFAULT'); background: theme('colors.ink.soft'); }
+  .site-footer > div:first-child { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.4fr); align-items: start; gap: 3rem; }
+  .site-footer nav { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .25rem 1.5rem; }
+  .site-footer nav a { display: inline-flex; align-items: center; min-height: 44px; color: theme('colors.bone.dim'); }
+  .site-footer nav a:hover { color: theme('colors.electric.DEFAULT'); }
+  .site-footer nav a[data-cta="footer-email"] { grid-column: 1 / -1; order: 1; }
+  @media (max-width: 768px) { .site-footer > div:first-child { grid-template-columns: 1fr; gap: 2rem; } .site-footer nav { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+</style>

@@ -6,28 +6,27 @@ import Intake from '@/components/Intake.astro';
 ---
 
 <Layout
-  title="Free site review — M³"
+  title="Free site review — M3MM"
   description="Two-minute intake. Free review of your business site — a 5-minute recorded video teardown, personally, within 24 hours."
   path="/audit"
   breadcrumbs={[
-    { name: 'M³', url: '/' },
+    { name: 'M3MM', url: '/' },
     { name: 'Free site review', url: '/audit' },
   ]}
 >
   <Header slot="header" minimal={true} path="/audit" />
 
-  <section class="relative isolate overflow-hidden">
-    <div class="pointer-events-none absolute inset-x-0 top-0 h-[600px] bg-gradient-to-b from-clay/[0.10] via-transparent to-transparent"></div>
+  <section class="page-intro relative isolate overflow-hidden">
 
-    <div class="container-page relative pb-4 pt-14 sm:pt-20">
+    <div class="container-page relative py-hq-section">
       <div class="max-w-3xl">
         <div class="mb-6 flex items-center gap-3">
           <span class="hairline"></span>
           <p class="kicker">You clicked the link. Now the actual value.</p>
         </div>
 
-        <h1 class="text-display-lg">
-          Turn your TikTok viewers into <span class="text-bone-dim">customers.</span>
+        <h1 class="text-hq-hero">
+          Turn your viewers into <span class="text-bone-dim">customers.</span>
         </h1>
 
         <p class="mt-6 max-w-2xl text-lg text-bone-dim">
@@ -41,9 +40,7 @@ import Intake from '@/components/Intake.astro';
           <li>✓ Free — actually free</li>
         </ul>
 
-        <!-- Downshift: visitor with $0 budget still leaves with a path to /demos.
-             Keeps cold TikTok traffic from bouncing when the free review's outcome
-             is "you need a real site" and they can't afford custom. -->
+        <!-- Under-$500 template link -->
         <div class="mt-8 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-bone-muted">
           <span class="mono text-[11px] uppercase tracking-[0.2em] text-clay/80">Budget under $500?</span>
           <a
@@ -55,26 +52,23 @@ import Intake from '@/components/Intake.astro';
             target="_blank"
             rel="noopener"
           >
-            Grab an off-the-shelf template from SiteGuide
+            Preview the SiteGuide test storefront
             <svg class="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
         </div>
 
-        <!-- Cold-traffic proof — /audit is the TikTok bio target, so visitors
-             here never saw the homepage Hero. Same verifiable client outcomes
-             as Hero + /thanks + reply email so messaging stays consistent
-             across every touchpoint. -->
+        <!-- Client proof — same named outcomes rendered on the Hero. -->
         <div class="mt-12 grid gap-5 border-t border-ink-line/60 pt-8 sm:grid-cols-2">
           <div class="panel flex flex-col gap-2 p-5">
             <span class="mono text-[10px] uppercase tracking-[0.22em] text-clay/80">Aries Outdoor Living</span>
             <p class="text-sm leading-snug text-bone-dim">
-              Same intake, same 24h review. <span class="text-bone">Sold at handoff</span> · first quote request 3 days after launch.
+              Same intake, same 24h review. <span class="text-bone">Deployed and sold</span> · first quote request 3 days after handoff.
             </p>
           </div>
           <div class="panel flex flex-col gap-2 p-5">
             <span class="mono text-[10px] uppercase tracking-[0.22em] text-clay/80">Big 7 Construction</span>
             <p class="text-sm leading-snug text-bone-dim">
-              Same intake. <span class="text-bone">Build + Repair lanes live</span> at big7construction.com — one intake owning both funnels.
+              Same intake. <span class="text-bone">Build + Repair test deployment complete</span> — official launch waits on real jobsite photography.
             </p>
           </div>
         </div>

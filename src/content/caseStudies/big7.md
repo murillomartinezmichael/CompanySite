@@ -9,7 +9,7 @@ year: 2026
 # poster: /videos/big7-poster.jpg
 image: ../../assets/big7-live-site.jpg
 imageAlt: >-
-  Cropped view of the live Big 7 Construction homepage hero — dark panel reading
+  Cropped view of the Big 7 Construction test-deployment homepage hero — dark panel reading
   "Commercial framing. Residential precision. Every trade, under one
   contract." beside an aerial photo of an active job site.
 liveUrl: https://big7construction.com
@@ -20,8 +20,9 @@ problem: >-
 outcome: >-
   A split-track marketing site: "Build with us" for the ground-up jobs,
   "Fix with us" for the repair funnel. Both routes share the same intake so
-  Big 7 owns every lead. Deployed on Railway, embedded AI guide for
-  after-hours questions.
+  Big 7 owns every lead. The Railway test deployment includes an embedded AI
+  guide for after-hours questions. Official launch waits on real jobsite
+  photography.
 metrics:
   - label: Buyer lanes
     value: 2 (Build + Repair)

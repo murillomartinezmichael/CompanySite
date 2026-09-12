@@ -1,0 +1,64 @@
+---
+import type { Drop } from '@/config/roadmap';
+interface Props { drops: Drop[]; }
+const { drops } = Astro.props;
+const statusLabels = { released: 'Released', next: 'Next', testing: 'Testing', upcoming: 'Planned' } as const;
+---
+<ol class="timeline">
+  {drops.map((d) => (
+    <li class={`item item-${d.status}`} data-roadmap-status={d.status}>
+      <details class="build-details" open={d.status === 'next' || d.status === 'released'}>
+        <summary data-cta="roadmap-build-details" data-section="roadmap" data-intent="product:roadmap-drop">
+          <h3 class="summary-layout">
+          <span class="date"><b>{d.dateLabel}</b><span>{d.year}</span></span>
+          <span class="build-title"><span class={`status status-${d.status}`}>{statusLabels[d.status]}<span class="category">{d.category}</span></span><span class="build-name">{d.name}</span></span>
+          <span class="expand-icon" aria-hidden="true"></span>
+          </h3>
+        </summary>
+        <div class="build-copy">
+          <p>{d.blurb}</p>
+          {d.url && <a href={d.url} rel={d.url.startsWith('http') ? 'noopener' : undefined} data-cta="roadmap-drop-open" data-section="roadmap" data-intent="product:roadmap-drop" data-release-status={d.status}>
+            {d.status === 'testing' ? 'Open testing preview' : d.status === 'released' ? 'Open released build' : 'Open current site'}
+            <span aria-hidden="true">↗</span>
+          </a>}
+        </div>
+      </details>
+    </li>
+  ))}
+</ol>
+<style>
+  .timeline { margin: 0; list-style: none; }
+  .item { position: relative; margin-bottom: .75rem; background: theme('colors.ink.soft'); border: 1px solid theme('colors.ink.line'); border-radius: theme('borderRadius.hq-panel'); }
+  .item[hidden] { display: none; }
+  .item-next { border-color: color-mix(in srgb, theme('colors.clay.DEFAULT') 60%, theme('colors.ink.line')); }
+  summary { cursor: pointer; list-style: none; border-radius: inherit; }
+  .summary-layout { display: grid; grid-template-columns: 5.5rem minmax(0,1fr) 1.25rem; gap: 1.25rem; align-items: center; padding: 1.5rem; font-weight: 400; }
+  summary::-webkit-details-marker { display: none; }
+  summary:hover .build-name { color: theme('colors.electric.DEFAULT'); }
+  .date { color: theme('colors.bone.muted'); font-size: theme('fontSize.hq-label[0]'); font-variant-numeric: tabular-nums; }
+  .date b { display: block; color: theme('colors.bone.dim'); font-weight: 500; margin-bottom: .25rem; }
+  .build-title { min-width: 0; }
+  .build-name { display: block; font-size: theme('fontSize.hq-lede[0]'); font-weight: 500; line-height: 1.3; margin-top: .5rem; transition: color 180ms ease; }
+  .status { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; color: theme('colors.clay.DEFAULT'); font-size: theme('fontSize.hq-label[0]'); }
+  .category { color: theme('colors.bone.muted'); }
+  .status-testing { color: theme('colors.electric.DEFAULT'); }
+  .status-upcoming { color: theme('colors.bone.muted'); }
+  .expand-icon { position: relative; width: 16px; height: 16px; color: theme('colors.bone.dim'); }
+  .expand-icon::before, .expand-icon::after { content: ''; position: absolute; top: 7px; left: 2px; width: 12px; height: 1px; background: currentColor; }
+  .expand-icon::after { transform: rotate(90deg); transition: transform 200ms ease; }
+  details[open] .expand-icon::after { transform: rotate(0); }
+  .build-copy { padding: 0 4rem 1.5rem 8.25rem; }
+  .build-copy p { color: theme('colors.bone.dim'); max-width: 65ch; line-height: 1.65; }
+  .build-copy a { display: inline-flex; gap: .75rem; align-items: center; min-height: 44px; margin-top: .75rem; color: theme('colors.electric.DEFAULT'); text-decoration: underline; text-underline-offset: .3em; font-size: theme('fontSize.hq-small[0]'); }
+  :global(html[data-motion="full"]) details[open] .build-copy { animation: details-enter 240ms ease-out; }
+  @keyframes details-enter { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: none; } }
+  @media (max-width: 640px) {
+    .summary-layout { grid-template-columns: minmax(0,1fr) 1.25rem; gap: .75rem 1rem; padding: 1.25rem; }
+    .date { display: flex; gap: .5rem; grid-column: 1; }
+    .date b { margin: 0; }
+    .build-title { grid-column: 1; }
+    .expand-icon { grid-column: 2; grid-row: 1 / 3; }
+    .build-copy { padding: 0 1.25rem 1.25rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { .build-copy { animation: none !important; } }
+</style>

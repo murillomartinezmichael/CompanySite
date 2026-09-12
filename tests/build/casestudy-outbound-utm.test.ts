@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 // attribution; § outbound also requires UTM triplets on third-party
 // destinations so referral traffic is legible in the target site's
 // analytics. Companion to outbound-utm.test.ts (SiteGuide downshift):
-// this one pins the CaseStudy "Visit the live site" link, which is
+// this one pins the CaseStudy "Open the project deployment" link, which is
 // constructed at build time from the frontmatter `liveUrl` via
 // URL.searchParams.set(). A rename/drop of any setter call would ship
 // unattributed outbound clicks to Aries / Big7 / future case-study clients.
@@ -20,7 +20,7 @@ const read = (p: string) => readFileSync(root + p, 'utf8');
 
 const CASE_STUDY = 'src/components/CaseStudy.astro';
 
-describe('CaseStudy outbound "Visit the live site" carries UTM attribution', () => {
+describe('CaseStudy outbound deployment link carries UTM attribution', () => {
   const src = read(CASE_STUDY);
 
   it('constructs the outbound URL via new URL(d.liveUrl)', () => {
@@ -49,7 +49,7 @@ describe('CaseStudy outbound "Visit the live site" carries UTM attribution', () 
     // Without utm_content, a client with multiple case studies (future
     // state) can't tell which one drove the visit. Slug-per-content
     // scopes it correctly today and future-proofs the loop.
-    expect(src).toMatch(/searchParams\.set\(\s*['"]utm_content['"],\s*entry\.slug\s*\)/);
+    expect(src).toMatch(/searchParams\.set\(\s*['"]utm_content['"],\s*entry\.id\s*\)/);
   });
 
   it('renders the anchor with data-cta / data-section / data-intent so the click side of the loop closes too', () => {
@@ -57,9 +57,9 @@ describe('CaseStudy outbound "Visit the live site" carries UTM attribution', () 
     // event on the SOURCE side (m3mm.net analytics) closes on data-cta
     // + data-intent — track.ts's wireCTAs pulls both. Missing either
     // makes proof-section funnel analysis a guess.
-    expect(src).toMatch(/data-cta=\{`casestudy-\$\{entry\.slug\}-visit`\}/);
+    expect(src).toMatch(/data-cta=\{`casestudy-\$\{entry\.id\}-visit`\}/);
     expect(src).toMatch(/data-section="proof"/);
-    expect(src).toMatch(/data-intent=\{`product:\$\{entry\.slug\}`\}/);
+    expect(src).toMatch(/data-intent=\{`product:\$\{entry\.id\}`\}/);
   });
 
   it('opens in a new tab with rel="noopener noreferrer"', () => {

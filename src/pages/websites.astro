@@ -1,0 +1,50 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import Hero from '@/components/Hero.astro';
+import TwoDoor from '@/components/TwoDoor.astro';
+import Proof from '@/components/Proof.astro';
+import Services from '@/components/Services.astro';
+import Faq from '@/components/Faq.astro';
+import Intake from '@/components/Intake.astro';
+import SectionNav from '@/components/SectionNav.astro';
+---
+
+<Layout
+  title="M3MM Websites — Websites that get you customers"
+  description="M3MM's website-services department: custom business websites, sellable templates, free site reviews, and lead-generating launch systems."
+  path="/websites"
+  breadcrumbs={[
+    { name: 'M3MM', url: '/' },
+    { name: 'Websites', url: '/websites' },
+  ]}
+>
+  <Header slot="header" path="/websites" />
+  <Hero />
+  <div class="container-page">
+    <SectionNav label="Explore website services" section="websites" links={[
+      { label: 'Project examples', href: '#proof', cta: 'sales-jump-proof', intent: 'product:case-studies' },
+      { label: 'Packages & pricing', href: '#services', cta: 'sales-jump-services', intent: 'product:website-services' },
+      { label: 'Questions', href: '#faq', cta: 'sales-jump-faq', intent: 'product:website-services' },
+      { label: 'Free review', href: '#intake', cta: 'sales-jump-intake', intent: 'book:free-review' },
+    ]} />
+  </div>
+  <TwoDoor />
+  <Proof />
+  <div class="container-page">
+    <SectionNav label="Websites for your trade" section="proof" links={[
+      { label: 'Construction companies', href: '/for/construction', cta: 'websites-trade-construction', intent: 'product:construction-websites' },
+      { label: 'Home-service pros', href: '/for/home-services', cta: 'websites-trade-home-services', intent: 'product:home-service-websites' },
+      { label: 'Outdoor-living companies', href: '/for/outdoor-living', cta: 'websites-trade-outdoor-living', intent: 'product:outdoor-living-websites' },
+    ]} />
+  </div>
+  <Services />
+  <p class="container-page pb-8 text-bone-dim">
+    Deciding between a builder, freelancer or custom site?
+    <a href="/compare/website-options" class="text-clay underline underline-offset-4" data-cta="websites-compare" data-section="services" data-intent="product:website-options">Compare your website options.</a>
+  </p>
+  <Faq />
+  <Intake />
+  <Footer slot="footer" path="/websites" />
+</Layout>

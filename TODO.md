@@ -1,10 +1,387 @@
 # CompanySite — TODO
 
+## 2026-09-12 - restore the required Make aliases
+
+- Restored `lint` (Astro diagnostics) and `clean` (only generated `dist` and `.astro`).
+  Cleanup resolves its own repository, validates all targets before deletion,
+  and refuses linked paths. Source and dependencies remain intact.
+- Nine isolated CLI/Make tests pass, including junction refusal and failure
+  propagation. All five targets required by verify.yml are present; diff check
+  passes. Full `npm test` in the isolated source: **601 passed, 2 existing skips**.
+  Actual `npm exec -- astro check`: **45 files, zero errors, warnings or hints**.
+  Verification used a sanitized environment; cleanup never ran on real repo output.
+- Next: review this CI-contract correction with the pending branch changes.
+
+## 2026-09-12 - shared payment policy and bounded scanner
+
+- [x] Shared parsed URL policy supports query parameters and explicit trusted
+  hosts; rejects encoded key material without printing it. Removed the arbitrary
+  slug-length promise. Scanner covers more text formats/encodings and refuses
+  links and traversal/size overruns. No actual Stripe configuration changed.
+- [x] Isolated 15-page builds with checkout enabled and disabled each pass the
+  fence and 592 tests/2 conditional skips. Independent final review is clean.
+  Fleet Pages build-skip bypass is fixed, with 87 offline deployment tests.
+- **Exact next action:** Michael's actual payment/release checks in
+  `PENDING_MANUAL.md`. Detection boundaries and complete evidence are in
+  `docs/PAYMENT_FENCE_RECOVERY_2026-09-12.md`; no production readiness inferred.
+
+## 2026-09-12 - repository build/deploy entrypoints fixed
+
+- Bash and Windows setup now run npm ci, the actual Astro build/fence and tests;
+  they stop on any failed command, including negative Windows exit codes.
+  Make targets use real npm commands. Direct uploads require an explicit branch
+  and run build, tests and an immediate output rescan before local Wrangler.
+- 37 isolated command regressions pass, covering native Bash/cmd/GNU Make,
+  failure ordering, unrelated caller directories and branch injection rejection.
+  A tracked-source temporary copy built 15 pages and passed the output fence;
+  its full suite passed 567 tests with 2 existing live-checkout skips. Installed
+  dependencies were reused; a fresh npm ci install was not independently run.
+  No local env files copied, actual upload attempted or dashboard settings changed.
+  Independent final review is clean; README/RUNBOOK/CONTRIBUTING now match.
+- Fleet build-skip follow-up and shared-policy verification completed above.
+  Raw Wrangler uploads remain unsupported release paths; live checks stay manual.
+
+## 2026-09-12 - scanner diagnostic redaction fixed
+
+- Central redaction protects overlapping rule samples, filenames, directory
+  messages and caught filesystem errors. Detection coverage stays unchanged;
+  clean exits remain 0 and findings/errors remain 1. Files are read by their
+  original paths; only diagnostic representations are masked.
+- Ten synthetic regressions failed against the old scanner and now pass,
+  including real CLI checks of stdout/stderr, partial key fragments and
+  filesystem-error output. Full suite: 530 passed, 2 existing skips. All 52
+  scanner tests pass; `npm run verify:dist` passes on existing dist/functions.
+  Independent review is clean. No fresh Astro build or production deployment.
+- Repository entrypoint and shared-policy follow-ups completed above; documented
+  detection limitations and real Stripe checks remain explicit.
+
+## 2026-09-12 - recovered security reviews
+
+- API security-header review `20260812-221943-codex-b0bea9` is integrated:
+  route-specific rate buckets, JSON object guards, header-case handling and
+  exception middleware address its material findings. Current gate: 520 tests
+  passed, 2 existing live-checkout skips. No production deployment.
+- Vitest now uses `envDir: false` so unit tests do not load the operator's
+  local environment files; fixtures remain test-owned.
+- Diagnostic redaction finding: fixed in the follow-up above, including
+  overlapping matches and path/error messages. Synthetic CLI regressions pass.
+- The older placeholder review `20260812-214326-codex-4a959c` remains open:
+  code findings are repaired and verified above; inherent scanner limits and
+  Stripe activation/ownership/amount checks remain release boundaries.
+- Both August 5 checkout reviews are historically adjudicated, but their old
+  fleet records have no registered verification command. Original receipts are
+  preserved; none establishes live-payment readiness.
+
+## 2026-09-10 — cinematic reference application
+
+- [x] Review sampled on-screen tutorial examples; record observations and review limits.
+- [x] Make the roadmap a source-driven, keyboard-operable 21-build stage with short coordinated transitions.
+- [x] Enlarge existing case-study media, add native still viewers and manual video playback.
+- [x] Suppress the floating review shortcut over interactive proof and roadmap areas.
+- [x] Verify build, 520 passing tests (2 existing skips), 60 axe combinations, 15 canonicals,
+  Astro diagnostics, and four-width interaction checks. Exact evidence and scoped modal
+  contrast review: `docs/CINEMATIC_VERIFICATION_2026-09-10.md`.
+- [x] Persist applied techniques and limits in shared product guidance and learning log.
+- [ ] Michael: review existing proof-media content before publication; see PENDING_MANUAL.md.
+- [ ] Optional full narrated tutorial review requires an available approved native-video seat.
+- [ ] Broader rollout remains parked: Aries V2, Resume-specific interaction and other products.
+  This pass adds shared proof improvements to home and Websites; no deployment or push.
+
+## 2026-09-09 — orbital motion and roadmap refinement
+
+- [x] Replace mechanical artwork with a bounded galaxy-like particle field and SVG fallback.
+- [x] Simplify shared type/surfaces and the homepage department directory.
+- [x] Spotlight the next roadmap launch; add an animated release path, desktop directory,
+  native expandable builds and short status-filter transitions.
+- [x] Verify build, 518 tests (2 existing skips), all 60 axe combinations, 15 canonicals,
+  Astro diagnostics and interaction checks at 320/375/768/1440.
+- [x] Inspect home/roadmap/sales at 375/1440; preserve logo, claims, prices and all routes.
+  Evidence: `docs/ORBIT_VERIFICATION_2026-09-09.md`.
+- [ ] Michael: publication remains separate; no new push or deployment in this pass.
+- [ ] Parked broader rollout: apply `../docs/PRODUCT_DESIGN_STANDARD.md` per product,
+  starting with a fresh Aries V2 inspection. No Aries V1 work is authorized here.
+
+## 2026-09-09 — performance redesign
+
+- [x] Implement Michael's requested lime/blue/black direction across the shared
+  shell and page families; record D-CS-011 and design system v2.
+- [x] Use the exact original logo, including its background; guard its public
+  and built bytes with the owner's SHA-256.
+- [x] Add custom decorative motion, persistent pause/OS override/offscreen stop,
+  consistent navigation/breadcrumbs, sales jumps and mobile package labels,
+  homepage release strip and useful department routing, roadmap status filters.
+- [x] Keep all 15 routes, pricing, release data and form behavior. No content
+  invented to clear proof or owner gates.
+- [x] Final local verification and commit closeout: see
+  `docs/PERFORMANCE_VERIFICATION_2026-09-09.md`. No deployment or new push.
+
+
+## 2026-09-09 — publication closeout
+
+Michael authorized committing and pushing current work. Preserved the existing
+`docs/proposals/harness-positioning-2026-09.md` as a dated proposal, not approved
+public copy. Build/placeholder gate and 512 tests passed (2 tests skipped).
+No prices, claims, logo files, live account settings or routes changed in this
+closeout. Local backup rasters and source frames are excluded. Existing payment,
+intake and publication-status decisions remain separate from pushing this branch.
+
 **Cold-start rule:** a fresh session should read this file and be productive in 60 seconds.
+
+## Current TODO sweep — 2026-09-09
+
+### Structure follow-through
+
+- [x] Audit all 14 routes and re-check the August audit against current source.
+  See `docs/STRUCTURE_AUDIT_2026-09-09.md` and its token inventory.
+- [x] Restore visible primary navigation on secondary/mobile pages, direct
+  Website services links, a trade directory and roadmap quarter/signup jumps.
+- [x] Extract the repeated roadmap timeline; align shared section, heading,
+  panel and field treatments with the current tokens. Preserve the headquarters
+  argument, sales ladder, release data and both receipt URLs.
+- [x] Fix footer email hydration selecting another page's contact link. Browser
+  coverage now verifies each email destination and the urgent link's label.
+- [x] Add built-site reachability/fragment/tracking checks and expand browser
+  coverage to all 14 routes at four widths. Exact final output is recorded in
+  `docs/STRUCTURE_VERIFICATION_2026-09-09.md`.
+- [x] Confirm a roadmap-specific receipt message/flow. **Fixed 2026-09-09:**
+  `/roadmap/thanks` now receives roadmap subscribers on both paths — the JS
+  handler via `data-success-path`, and the no-JS POST via a server-side
+  `INTENT_SUCCESS_PATHS` allowlist keyed on the lead's own intent (the
+  destination is still never read from the request, and four hostile-intent
+  cases are pinned in `tests/functions/lead-form-redirect.test.ts`). The new
+  receipt states only what is verifiable — the request was received and went to
+  M3MM — and makes **no** commitment about cadence, format or timing. That
+  commitment is still Michael's to write; narrowed entry in `PENDING_MANUAL.md`.
+  517 tests pass (2 skips), 15-page build clean, canonicals OK, receipt noindex
+  and absent from the sitemap.
+
+### Earlier actionable sweep (included in this branch)
+
+Branch: `codex/companysite-todo-2026-09-09`, based on design commit `0cc205e`.
+This checklist supersedes older next-action and parked notes below; those remain
+as history, not a second backlog. Changes are local, not published.
+
+- [x] Upgrade Astro 5 to 7.3.2 with Node 22, supported Tailwind 3 PostCSS wiring,
+  the glob content loader, and built-output case-study attribution regressions.
+- [x] Add shared API security middleware now that `/api/chat` is the third route.
+  Preserve streams, redirects, CORS and existing endpoint wrappers; sanitize
+  unexpected failures. Seven boundary tests added.
+- [x] Prepare the sourced, explicitly self-authored website-options comparison
+  at `/compare/website-options`, linked from `/websites` and in the sitemap.
+  Compare fit, cost and ownership without inventing independent rankings.
+- [x] Fix Services number contrast and decorative layers obscuring contrast
+  checks; adopt the solid page ground and verify mobile/desktop sales layouts.
+- [x] Add CI browser coverage for the hub, roadmap, sales and comparison pages
+  at 320/375/768/1440px, with evidence uploads and a pinned Node runtime.
+- [x] Reconcile older requests: fonts are self-hosted; sitemap + robots exist;
+  proof/results, founder signature, confirmed refund badge and `/start`
+  intake are already implemented. Aries has its MP4/poster; Big7 does not.
+- [ ] Repair npm patch updates: three attempts fail with `edgesOut`; Vitest and
+  SVGO advisories remain. Exact versions and recovery in `PENDING_MANUAL.md`.
+- [ ] Owner-approved release and post-deploy smoke, including API compatibility
+  settings. No push, merge, external submission or deployment in this sweep.
+- [ ] Owner/data gates: Stripe live write access/link; referral payout amount;
+  approved testimonials/ratings; Aries before/after permission and capture;
+  Big7 media; headshot/TikTok/IG and chosen reel/upload; live delivery/analytics evidence.
+  See `PENDING_MANUAL.md` for concrete steps.
+- [ ] Product decisions: a new public tier above $2,000, expanded guarantee or
+  client board, and an instant AI mockup generator require confirmed scope,
+  terms/provider/spend. Preserve the approved ladder and human review meanwhile.
+- [ ] Cross-repository follow-up: SiteGuide demo prefill, per-template OG and
+  Product schema belong to SiteGuide, not CompanySite. Audit its current source
+  and TODO before implementing; old tick notes here are not proof of missing work.
+- [ ] Cockpit work-log transcription remains local-browser state work; preserve
+  `COCKPIT_QUEUE.md`, including tick 23, until the actual log write is verified.
+
+**Next action:** resolve the dependency-patch environment gate in a clean
+checkout, rerun build/tests/audit, then obtain approval for the combined release.
+Do not unlock checkout, publish client claims, or mark the remaining gates done
+without their evidence. Older deployment questions and Astro spike versions
+below are historical; this section is the current handoff.
+
+## SESSION CLOSED — combined homepage + roadmap design
+
+The complete design change is saved in a local commit on
+`design/m3-system-2026-09-08`. This supersedes the uncommitted status in the
+work notes below. The reviewed commit includes the homepage, roadmap, shared
+tokens/navigation, browser runner and dependencies, tests, and design documentation.
+Release data and lead/payment APIs are unchanged. Unrelated proposals, image
+backups and social source assets are excluded.
+
+Final gates: 493 tests passed / 2 existing skips; 13-page build and placeholder
+fence clean; Astro 0 errors/warnings/hints; axe 0 violations and no overflow on
+home + roadmap at 320/375/768/1440px. Evidence: `output/design-qa/axe-home.json`
+and reviewed screenshots. No code changed after those checks.
+
+Exact next action: owner-approved merge and production release of this branch,
+then verify `/` and `/roadmap` on m3mm.net. Recorded in `PENDING_MANUAL.md`.
+No push, merge or deployment performed. Broader page restyling, the Astro major
+upgrade, and the existing Stripe/content gates remain parked.
+
+## COMPLETE LOCALLY — roadmap matches the homepage (2026-09-08)
+
+Michael authorized continuing from the prior agent's uncommitted homepage design.
+`/roadmap` now uses that same palette, type scale, solid ground and control styles.
+Removed the page-local hex palette, low-contrast testing labels, pulse/glow styling,
+tiny uppercase metadata and fixed fortnightly shipping promise. Planned dates are
+explicitly targets; signup describes an update request rather than promising an
+automated mailing/unsubscribe system. Release data, destinations and submission
+logic are preserved. All 21 builds remain in the existing release order.
+
+Verified: `npm test` 493 passed / 2 existing skips; `npm run build` 13 pages and
+clean placeholder fence; `npx astro check` 0 errors/warnings/hints; expanded
+`npm run test:a11y` checks `/` and `/roadmap/` at 320/375/768/1440px with zero
+violations and zero overflow. Keyboard skip/focus and reduced motion pass on both;
+homepage no-JS navigation still passes. Existing chat incomplete contrast finding
+is retained and independently measured by the runner. Reviewed roadmap screenshots
+include mobile hero, desktop testing list and narrow signup in `output/design-qa/`.
+
+Files touched this continuation: `src/pages/roadmap.astro`, `scripts/axe-home.mjs`,
+`tests/build/muted-text-contrast.test.ts`, `tests/README.md`,
+`docs/M3_DESIGN_SYSTEM.md`, `TODO.md`; root `SESSION_GOAL.md` records the scope change.
+
+Next action: review the combined homepage/roadmap branch and release through the
+owner-approved deployment flow. The roadmap depends on the existing uncommitted
+homepage tokens and browser tooling, so this continuation remains together with
+that work for review. Nothing pushed/deployed; pre-existing backups and proposals
+remain untouched. Broader page adoption and Astro migration remain parked.
+
+Cockpit draft: M3MM roadmap brought into the homepage design system; 493 tests,
+13-page build, Astro clean, axe zero violations across eight route/width pairs.
+
+## COMPLETE LOCALLY — M3MM homepage design system (2026-09-08)
+
+Branch: `design/m3-system-2026-09-08`. Changes are uncommitted for review; nothing
+pushed or deployed. The older review/merge entries below are historical; root
+TODO records their 2026-09-07 deployment.
+
+- Researched and documented `docs/M3_DESIGN_SYSTEM.md`, with a fleet entrypoint
+  at `../docs/M3_DESIGN_SYSTEM.md`: tokens, type scale, component rules, complete
+  approved contrast matrix, source references and Big7/ResumeSite boundaries.
+- Applied it to the headquarters homepage: sentence-case readable type,
+  centralized colors, visible mobile navigation, clearer release/preview sections,
+  and footer clearance for floating controls. Preserved release data, the supplied
+  logo, CTA destinations/intents and the `/websites` funnel.
+- Fixed the preview section's semantics and the shared floating CTA landmark and
+  hidden-focus behavior. Corrected stale AGENTS/README/test instructions.
+- Gates: `npm test` **493 passed / 2 existing skips**; `npm run build` **13 pages**
+  with a clean placeholder fence; `npx astro check` **0 errors/warnings/hints**;
+  `npm run test:a11y` **0 violations at 320/375/768/1440px**, no overflow, keyboard
+  skip/focus, reduced motion, and no-JavaScript mobile navigation pass.
+- Raw browser evidence and reviewed screenshots: `output/design-qa/`. Open chat's
+  one incomplete greeting contrast check remains recorded and is independently
+  verified (8.38:1 text, 6.90:1 link, unclipped); no violations are suppressed.
+- Existing npm audit debt: Astro and its Tailwind integration still produce one
+  high and one low package finding. Keep the already-scoped Astro major migration
+  separate; the added browser audit dependencies introduce no reported findings.
+
+**Exact next action:** review this branch's homepage and design document, then
+commit the explicit changed files and use the normal owner-approved merge/deploy
+flow. Re-run the four commands above if code changes. Do not stage the pre-existing
+`docs/proposals/`, backup OG files, or `public/social/_loop-src/`.
+
+**Parked:** other homepage-like surfaces adopting this type scale; Astro migration;
+Big7 and ResumeSite implementation (another session owns those repositories).
+
+**Cockpit Work Log draft:** M3MM homepage design system prepared locally; researched
+tokens and AA pairs, responsive navigation and release layout, 493 passing tests,
+13-page clean build, zero axe violations at four widths. Pending review/deploy.
+
+## REVIEWED, AWAITING MIKE'S MERGE + PUSH (2026-09-01 — Codex HOLD blockers verified closed; markdown now deny-by-default in the fence)
+
+Status: local commits only on branch `security/fence-scan-md-2026-09-01` (off `main`). Codex re-review 2026-09-01 returned **SHIP-WITH-FIXES**; all four fixes are applied in a follow-up commit. Nothing pushed, merged, or deployed — awaiting Mike.
+
+- Verified both blockers from the 2026-08-16 Codex HOLD on `fix/checkout-placeholder-fence` against the repo: **both were already fixed** by commit `2845413` (2026-08-16, in `main`) — `public/brand-ownership.md` moved to `docs/`, and `resolvePaymentLink()` redacts secret-shaped env values via the fence's own `redactSecret` + `stripe-key-material` rule (tests at `tests/build/start-checkout.test.ts` assert the redaction). The HOLD doc was stale; repo wins.
+- Hardened the fence (`scripts/check-shipped-placeholders.mjs`): `.md` added to the scan set, and — per the Codex re-review, since the historical `brand-ownership.md` carried no markers or keys and content rules alone would have missed it — **any `.md` present in shipped output is now a finding by itself** (`shipped-markdown`, deny-by-default, "markdown must not ship — internal docs belong in docs/"). This would have caught the original leak and moots code-fence false positives in shipped markdown.
+- Automated the proof in `tests/build/shipped-placeholders.test.ts`: fixture-level tests run `scanDir` and the real CLI against temp dirs — a placeholder-free `.md` blocks (exit 1) on presence alone, and a `.md` carrying a REPLACE marker + `sk_live_`-shaped key blocks with the key redacted from the log.
+- Gates: **490 passed / 2 skipped** (was 485/2 at the `main` baseline; +5 fixture tests); 13 pages built; fence clean; `dist/` contains zero `.md` files.
+
+## SHIPPED (2026-08-19 — exact owner-supplied résumé PDF restored)
+
+- Replaced the generated substitute at `/resume.pdf` with Michael's supplied one-page résumé, byte-for-byte.
+- Restored the vendored-document build contract: `assets/resume/source.pdf` is the authoritative PDF, and each build copies it unchanged to `public/`, `dist/`, and `output/pdf/`.
+- Removed the unnecessary `pdfkit` dependency from the normal Hub build. The exact document now matches the standalone ResumeSite copy: **121,174 bytes**, SHA-256 `f71d89ceaea7e488a2d4ad700a2d402067c284f6cfd79fdb1214af53ec6ab1ee`.
+- Verified the rendered one-page layout visually. Release gates: 13 pages built; placeholder fence clean; **461 passed / 2 skipped**; Astro **0/0/0**.
+
+## SHIPPED (2026-08-19 — official releases separated from test deployments)
+
+- Corrected the public launch model: M3MM Hub is the only official release and AriesOutdoorLiving is the next hard launch.
+- Added a distinct Testing state and preview lab for M3MM Websites, the career site, SiteGuide, and AIMA. Their reachable deployments no longer inflate the official release count.
+- Moved Big7 Construction to the long-term end of the roadmap and made the dependency explicit: real jobsite photography is required before official launch.
+- The homepage Released ledger, preview lab, roadmap queue, `/roadmap`, counters, public sales/proof pages, lead auto-reply, HTML résumé, and `RELEASES.yaml` now use the same definition of release. The downloadable résumé remains the exact owner-supplied job-application document.
+- Release gates: 13 pages built; placeholder fence clean; **461 passed / 2 skipped**; Astro **0/0/0**.
+- Production deployment: Cloudflare Pages activated Git source `d0df34c`; the independently verified immutable build is `35fe90a3.m3-companysite.pages.dev`, and the same code serves through `https://m3mm.net`. Both hosts returned HTTP 200 across the Hub, roadmap, résumé, website-sales pages, trade proof, and PDF download. Production contains one official release, four test previews, Aries next, and Big7 long-term without a launch link.
+
+## NEXT ACTION
+
+1. **Mike:** merge `security/fence-scan-md-2026-09-01` to `main` and make the session push (Codex verdict 2026-09-01: SHIP-WITH-FIXES; fixes applied and green). Merging also formally clears the stale 2026-08-16 HOLD, whose two blockers are already fixed in `main` (`2845413`).
+2. Then: prepare the AriesOutdoorLiving hard launch as the first client release after the Hub; keep Big7 parked until jobsite photography arrives and keep all test deployments labeled Preview/Testing until Michael explicitly promotes them.
+
+## PREVIOUSLY SHIPPED (2026-08-18 — m3mm.net umbrella hub live)
+
+- Replaced the single-department root with M3MM headquarters: company routing, a complete Released ledger, and a separate prominent Roadmap preview all live at `https://m3mm.net`.
+- Preserved the former website-sales homepage without reducing it: the complete Hero → TwoDoor → Proof → Services → FAQ → Intake funnel now lives at `https://m3mm.net/websites`.
+- Historical classification: this rollout counted seven reachable deployments as live releases. The 2026-08-19 correction above supersedes that classification; only the M3MM Hub is an official release.
+- Retired the duplicate `/hub` page with a permanent redirect to `/`; moved sales-floor anchor fallbacks, schema URLs, navigation, sitemap membership, and deployment preflight to `/websites`.
+- Release gates: 12 pages built; placeholder fence clean; **451 passed / 2 skipped**; Astro **0/0/0**; strict preflight READY locally and against production.
+- Production deployment: Cloudflare Pages `1cc09881.m3-companysite.pages.dev`, serving through `https://m3mm.net`. Historical verification confirmed the then-rendered seven rows; the release classification was superseded on 2026-08-19. The complete `/websites` funnel, M3MM-only branding, and `/hub` 301 were also confirmed.
+
+## PREVIOUSLY SHIPPED (2026-08-18 — M3MM brand, hub/roadmap, and company policies live)
+
+- Standardized the public and operational brand on `M3MM`, the supplied three-fold logo, and `Modernize. Mobilize. Multiply.` across pages, docs, lead email copy, n8n assets, and service materials.
+- Expanded `/hub` and `/roadmap`, added the indexed `/policies` library with voluntary COVID-19 vaccination and accessibility policies, and linked the new surface through navigation and sitemap coverage.
+- Replaced the retired Docker-era deploy checker with an Astro + Cloudflare Pages preflight that verifies built routes, Pages Functions, security headers, placeholder fences, retired URLs, M3MM-only public branding, and live release signatures.
+- Release gates: 12 pages built, placeholder fence clean, **447 passed / 2 skipped**, Astro **0/0/0**, preflight READY. Live checks passed for `/`, `/hub`, `/roadmap`, `/policies`, `/accessibility`, sitemap, and the `/api/lead` function boundary.
+- Production deployment: Cloudflare Pages deployment `39e1993a.m3-companysite.pages.dev`, serving through `https://m3mm.net`.
+
+## Completed locally 2026-09-09 — deferred API-security review
+
+The third route now exists. Shared middleware and its regression tests are added;
+the rationale below is historical. Platform-generated failures remain outside
+the middleware boundary.
+
+**Move the API security headers into `functions/api/_middleware.ts`.** Codex's
+"what I would do differently": one middleware boundary would harden all current
+AND future `/api/*` responses, and convert thrown exceptions into hardened 500s,
+instead of each handler applying `withSecurityHeaders` itself.
+
+Not done under the review, deliberately: it is a refactor of working, tested
+code on the live lead path, and it does NOT achieve the stated motive — a
+middleware still cannot touch Cloudflare's platform-generated 1101/1102/1027
+responses, which are produced outside the Worker. The per-handler wrap committed
+in `2015ba2` already closes the ordinary throw funnel. Do this when a THIRD
+`/api/*` route appears; two handlers do not justify the churn.
+
+*Also known, not a defect:* `scripts/verify-security-headers.py` stays RED on
+CompanySite until a Pages deploy. The header fix is committed locally only and
+production still ships bare. Do not suppress or ACK that finding to make the
+board green — it is correctly reporting reality.
+
 
 ---
 
-## NEXT ACTION
+## PRIOR NEXT ACTION (superseded 2026-08-19)
+
+**NEXT ACTION (2026-08-18):** choose the final M3MM career route or subdomain, map the already-live ResumeSite Worker there, then replace its single external URL in `src/config/roadmap.ts`. The umbrella migration and `/websites` department move are complete; do not move the working career URL until DNS and the replacement route can be smoke-tested together.
+
+**SHIPPED (2026-08-17 — accessibility retrofit + `/roadmap` signup dead-end):** Three fixes off the 2026-08-16 design audit, full method and measured pairs appended to `docs/DESIGN_AUDIT_2026-08-16.md § Remediation pass`.
+1. **Contrast (the complete WCAG AA debt on the site).** `--ink-mute` `#55555f` → `#8a8a99` on `/roadmap` + `/hub`: `.fine`/`.tile-date` **2.37:1 → 5.13:1** on `--card #191922`, `.foot-note` **2.62:1 → 5.67:1** on ground `#0D0E14`. Intake step numbers `text-clay/60` → `text-clay`: **3.52:1 → 7.47:1** on `#161A24`, which touches `/`, `/start`, `/audit`, `/for/*`. `#8a8a99` is the palette's floor, not a preference — `#808090` measures 4.49:1 and fails. Re-measured in real Chrome after the change: **0 failures on all 7 pages scanned**.
+2. **`hub.astro:40` shipped a literal `it\'s`** to production HTML. Unescaped. (The identical `\'` inside `<script>` blocks is correct JS and was left alone.)
+3. **`/roadmap`'s only CTA dead-ended on raw JSON** — and underneath that, it could not have succeeded at all: the endpoint requires `frustration` ≥ 10 chars and the form's only free-text box was optional. The page now has a submit handler mirroring `Intake.astro` (JSON POST → `/thanks`, live-region error state), a hidden note default so the no-JS POST is a valid lead, and `functions/api/lead.ts` answers **303 → /thanks** on any successful urlencoded submit — which hardens the documented no-JS path for every form on the site. Redirect target is a hard-coded constant, never read from the request.
+
+**Verified (local only, no push of `dist`, no deploy, no form submission):** `npm test` → **`Test Files 35 passed (35) · Tests 447 passed | 2 skipped (449)`** (baseline was 431/2/433; +16 in `tests/functions/lead-form-redirect.test.ts`, `tests/build/roadmap-signup.test.ts`, `tests/build/muted-text-contrast.test.ts`). `npm run build` → 11 pages + `check-shipped-placeholders: clean`. The lead endpoint was exercised in-process by vitest with an empty `env` (Resend/n8n/Cockpit all no-op) and the browser path driven in real Chrome with `/api/lead` intercepted at the network layer — **no production lead row was created.**
+
+**NEXT ACTION (2026-08-12):** Mike creates the live Stripe Payment Link and sets `PUBLIC_STRIPE_PAYMENT_LINK` in Cloudflare Pages, then redeploys — exact 6-step procedure in `PENDING_MANUAL.md § Stripe Payment Link`. Nothing else on the checkout path is agent-actionable. This commit is money-path code and **has not had its Codex second opinion yet** (root `CLAUDE.md § MULTI-AI ROOM` hard trigger) — run that before it ships. Not pushed, not deployed.
+
+**SHIPPED (2026-08-12 — placeholder-shipped-to-production fence + env-var payment link):** Audit follow-up on `MONEY_LADDER.md`'s 2026-08-03 finding ("m3mm.net/start/ serves `buy.stripe.com/REPLACE_AFTER_SIGN_IN`"). **That finding is stale — the dead checkout was already fixed by `9173c32` (2026-08-05) and live m3mm.net/start/ was re-verified today: HTTP 200, zero `buy.stripe.com`, zero `REPLACE_AFTER_SIGN_IN`, ships `Checkout opening soon` + `data-cta="start-free-review"` + the working `/api/lead` intake.** Two real gaps remained, both closed here:
+1. **The link had no env-var source.** `src/config/offers.ts` now exports `resolvePaymentLink(envValue, fallback)` and `BASIC_SITE.paymentLink` resolves from `import.meta.env.PUBLIC_STRIPE_PAYMENT_LINK`. Validated with the existing fail-closed `isLiveStripePaymentLink()`: missing, blank, whitespace, `test_`-mode, truncated, wrong-host, dashboard-URL, and pasted-secret-key values all fall back to the placeholder, which keeps /start on the free-review path — it can never render a dead checkout. Mike's manual gate is now a dashboard paste + redeploy instead of a commit on the money path.
+2. **Cloudflare Pages never runs `npm test`,** so the (good) checkout-gate tests could not actually have stopped the bad deploy. New `scripts/check-shipped-placeholders.mjs` scans `dist/` for the whole placeholder class — dead/test-mode Stripe links, `REPLACE_*`/`CHANGEME`/`YOUR_*` markers, placeholder GA4/GTM/UA ids, Stripe key material, `example.com` contact targets, 555-01xx phones — and `npm run build` now ends in it, so a placeholder fails the Pages build itself. Rules match placeholder *shapes*, not suspicious words: form `placeholder="you@business.com"`, the Tailwind `::placeholder` rule, `schema.org`/`w3.org`, and prose containing "replace" are all proven quiet (a false positive here would block a production deploy).
+
+**Class sweep result (the point of the exercise, not just the one bug):** grepped `dist/`, `public/`, `functions/`, `src/`, `n8n/` for payment links, form endpoints, phone numbers, emails, and tracking ids. **The only placeholder in shipped output is zero** — `dist/` contains exactly one email (`murillomartinezmichael@gmail.com`, real), one form action (`/api/lead`, real), no `tel:` links, no analytics ids, and no `example.com`. The single `REPLACE_AFTER_SIGN_IN` string in the repo lives in `src/config/offers.ts` as the deliberate gated fallback and never reaches `dist/`. Every n8n/Resend/Cockpit integration is env-gated with a documented no-op when unset.
+
+**Verified (local only, no push, no deploy):** `npm test` → **`Test Files 30 passed (30) · Tests 378 passed | 2 skipped (380)`** (+40 over the 338/340 baseline; the 2 skips are still the dormant live-link branches). Note the ladder's "211/211" is ~5 months of tests out of date. `npm run build` → 9 pages + `check-shipped-placeholders: clean`. Guard proven both ways, not assumed: pointed at a crafted dir containing the exact original bug it exits **1** with a named finding; built with `PUBLIC_STRIPE_PAYMENT_LINK=https://buy.stripe.com/bIYdRbc5C6pk0mA144` the real paid CTA ships and the gated fallback disappears; built with the `test_` variant of that same link the CTA vanishes and the free-review fallback returns. Docs synced: `PENDING_MANUAL.md` (dashboard procedure), `RUNBOOK.md § 3.4` (test counts 337→380, build fence), `CLAUDE.md` (env var + fence), `.env.example`.
+
+---
 
 **REVIEW BRANCH (2026-08-05 — professionalization pass):** Michael authorized committing and pushing the combined reviewed tree to an `agent/*` branch for a draft PR; production remains unchanged until merge/deploy. The branch combines the checkout, case-study proof, documentation, CI, and mobile-overflow changes described below. Three audit findings closed:
 
@@ -100,7 +477,7 @@ speculative).
 
 - **CONVERSION_STANDARDS.md § 2 gap closed.** CTA sweep across `src/` found 6 CTAs using intent namespaces not in the reserved set (`tier:` / `product:` / `feature:` / `plan:` / `book:` / `checkout:`) — `browse:`, `downshift:`, and `urgent:` were silently invented and violated the § 2 "don't invent new namespaces silently" rule.
 - **Remapped to reserved namespaces** (tick constraint bans shared-doc edits, so extending the reserved list at `../docs/CONVERSION_STANDARDS.md` was off-table):
-  - `downshift:siteguide-templates` → `product:siteguide` (4× — Services / Footer / audit / thanks). SiteGuide is an M³ product.
+  - `downshift:siteguide-templates` → `product:siteguide` (4× — Services / Footer / audit / thanks). SiteGuide is an M3MM product.
   - `browse:case-studies` → `product:case-studies` (thanks). Aggregate portfolio browse.
   - `urgent:direct-email` → `book:urgent-review` (thanks). Booking action, direct-email variant.
 - **Regression pinned by `tests/build/reserved-intent-namespaces.test.ts` (9 tests).** Walks every `.astro/.ts/.tsx/.html` in `src/`, extracts literal `data-intent` values, asserts each starts with a reserved namespace. Pins the two files allowed to use template-literal intents (`CaseStudy.astro` `product:${slug}` and `Services.astro` `{s.intent}`) so a future silent drift into interpolated intents fails CI. Also asserts `Services.astro`'s tier CATALOG intents remain reserved.

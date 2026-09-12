@@ -64,7 +64,7 @@ describe('§ 1 — page anchors resolve to sections on the same page', () => {
     ).toEqual([]);
   });
 
-  it('every page rendering <Header minimal={false}> (or default) also renders <Proof /> and <Services />', () => {
+  it('every non-minimal Header resolves the anchors for its page mode', () => {
     const missing: string[] = [];
     for (const file of PAGES) {
       const src = read(file);
@@ -73,11 +73,17 @@ describe('§ 1 — page anchors resolve to sections on the same page', () => {
       // `minimal={true}` prop suppresses the nav bar.
       const isMinimal = /<Header[^>]*\bminimal=\{true\}/.test(src);
       if (isMinimal) continue;
-      if (!componentUsed(src, 'Proof')) {
-        missing.push(`${file}: Header nav renders (minimal!=true) without <Proof /> — nav-proof (#proof) dead-ends`);
-      }
-      if (!componentUsed(src, 'Services')) {
-        missing.push(`${file}: Header nav renders (minimal!=true) without <Services /> — nav-services (#services) dead-ends`);
+      const isHubHome = /<Layout\b[\s\S]*?\bpath="\/"/.test(src);
+      if (isHubHome) {
+        if (!/id="released"/.test(src)) missing.push(`${file}: hub Header #released anchor dead-ends`);
+        if (!/id="roadmap"/.test(src)) missing.push(`${file}: hub Header #roadmap anchor dead-ends`);
+      } else {
+        if (!componentUsed(src, 'Proof')) {
+          missing.push(`${file}: sales Header renders without <Proof /> — nav-proof (#proof) dead-ends`);
+        }
+        if (!componentUsed(src, 'Services')) {
+          missing.push(`${file}: sales Header renders without <Services /> — nav-services (#services) dead-ends`);
+        }
       }
     }
     expect(
@@ -95,12 +101,12 @@ describe('§ 1 — page anchors resolve to sections on the same page', () => {
     expect(src).toMatch(/ctaHref\s*=\s*['"]#intake['"]/);
   });
 
-  it('Header.astro nav anchors stay same-page (invariant this test relies on)', () => {
-    // Same coupling as above — if Header nav switches to absolute URLs
-    // (e.g. `/services` as its own page), the second invariant is moot
-    // and this file needs updating with the new contract.
-    const src = read('src/components/Header.astro');
-    expect(src).toMatch(/href="#proof"/);
-    expect(src).toMatch(/href="#services"/);
+  it('sales section jumps preserve proof, services and intake destinations', () => {
+    const src = read('src/pages/websites.astro');
+    for (const anchor of ['#proof', '#services', '#intake']) expect(src).toContain(`href: '${anchor}'`);
+    // The global navigation now travels between pages; rendered reachability
+    // and fragment validity are checked across every route in site-structure.
+    expect(read('src/components/Header.astro')).toContain("href: '/websites'");
+    expect(read('src/components/Header.astro')).toContain("href: '/roadmap'");
   });
 });

@@ -10,8 +10,8 @@ interface Props {
 
 const { entry, index } = Astro.props;
 const d = entry.data;
-const flip = index % 2 === 1;
-const hideLiveHeader = entry.slug === 'big7';
+const hideLiveHeader = entry.id === 'big7';
+const previewStill = entry.id === 'aries' ? '/videos/aries-walkthrough-still.webp' : d.poster;
 
 // Attribution on outbound case-study visits so referral traffic from m3mm.net
 // is legible in the client site's analytics.
@@ -22,7 +22,7 @@ if (d.liveUrl) {
     u.searchParams.set('utm_source', 'm3mm.net');
     u.searchParams.set('utm_medium', 'case-study');
     u.searchParams.set('utm_campaign', 'proof');
-    u.searchParams.set('utm_content', entry.slug);
+    u.searchParams.set('utm_content', entry.id);
     outboundLiveUrl = u.toString();
   } catch {
     outboundLiveUrl = d.liveUrl;
@@ -30,20 +30,21 @@ if (d.liveUrl) {
 }
 ---
 
-<article class={`panel group relative overflow-hidden p-6 sm:p-10 ${flip ? 'lg:flex-row-reverse' : ''} lg:flex lg:items-center lg:gap-14`}>
+<article class="project-story" aria-labelledby={`case-study-${entry.id}-title`}>
   <!-- Media -->
-  <div class={`relative isolate mb-8 ${hideLiveHeader ? 'aspect-video' : 'aspect-[16/10]'} w-full overflow-hidden rounded-xl bg-ink-panel ring-1 ring-ink-line lg:mb-0 lg:w-1/2`}>
+  <div class="project-media">
     {d.video ? (
       <video
+        aria-label={`${d.client} website preview`}
+        aria-describedby={`case-study-${entry.id}-details`}
         class="h-full w-full object-cover"
         preload="none"
         playsinline
         muted
-        loop
-        poster={d.poster}
-        data-lazy
+        controls
+        poster={previewStill}
       >
-        <source data-src={d.video} type="video/mp4" />
+        <source src={d.video} type="video/mp4" />
       </video>
     ) : d.image ? (
       <Image
@@ -51,34 +52,37 @@ if (d.liveUrl) {
         alt={d.imageAlt ?? ''}
         class={`h-full w-full object-cover ${hideLiveHeader ? 'object-bottom' : 'object-top'}`}
         widths={[640, 960, 1280]}
-        sizes="(min-width: 1024px) 50vw, 100vw"
+        sizes="(min-width: 1280px) 1216px, 100vw"
         loading="lazy"
         decoding="async"
       />
     ) : (
-      <CaseStudyArt slug={entry.slug} client={d.client} />
+      <CaseStudyArt slug={entry.id} client={d.client} />
     )}
-    <!-- Vignette so text overlays read clean if we ever add one -->
-    <div class="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/5"></div>
+
   </div>
 
-  <!-- Copy -->
-  <div class="lg:w-1/2">
+  <div class="project-caption">
+    <p>{d.client} <span>· {d.video ? 'Website walkthrough' : 'Website preview'}</span></p>
+    {(d.poster || d.image) && <button type="button" class="inspect-button" hidden data-project-open={`project-view-${entry.id}`} data-cta={`casestudy-${entry.id}-inspect`} data-section="proof" data-intent={`product:${entry.id}`}>View larger still <span aria-hidden="true">↗</span></button>}
+  </div>
+  <!-- Existing proof copy stays alongside the media, independent of the viewer. -->
+  <div id={`case-study-${entry.id}-details`} class="project-copy">
     <div class="mb-4 flex flex-wrap items-baseline gap-3">
       <span class="kicker">{String(index + 1).padStart(2, '0')} · {d.year}</span>
       {d.location && <span class="text-xs text-bone-muted">{d.location}</span>}
     </div>
 
-    <h3 class="font-display text-3xl font-medium sm:text-4xl">{d.client}</h3>
+    <h3 id={`case-study-${entry.id}-title`} class="font-display text-3xl font-medium sm:text-4xl">{d.client}</h3>
     <p class="mt-1 text-sm text-bone-muted">{d.kind}</p>
 
-    <div class="mt-6 space-y-4">
+    <div class="project-argument mt-6">
       <div>
         <p class="kicker mb-1.5">The problem</p>
         <p class="text-bone-dim">{d.problem}</p>
       </div>
       <div>
-        <p class="kicker mb-1.5">What we shipped</p>
+        <p class="kicker mb-1.5">What we built</p>
         <p class="text-bone">{d.outcome}</p>
       </div>
     </div>
@@ -100,13 +104,67 @@ if (d.liveUrl) {
         target="_blank"
         rel="noopener noreferrer"
         class="mt-6 inline-flex items-center gap-1.5 text-sm text-clay transition-colors hover:text-clay-glow"
-        data-cta={`casestudy-${entry.slug}-visit`}
+        data-cta={`casestudy-${entry.id}-visit`}
         data-section="proof"
-        data-intent={`product:${entry.slug}`}
+        data-intent={`product:${entry.id}`}
       >
-        Visit the live site
+        Open the project deployment
         <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3h7v7m0-7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
       </a>
     )}
   </div>
 </article>
+{(d.poster || d.image) && <dialog id={`project-view-${entry.id}`} class="project-viewer" aria-labelledby={`viewer-title-${entry.id}`}>
+  <div class="viewer-heading">
+    <h2 id={`viewer-title-${entry.id}`}>{d.client} — website preview</h2>
+    <form method="dialog"><button class="viewer-close" data-cta="project-viewer-close" data-section="proof" data-intent="product:case-studies" autofocus>Close <span aria-hidden="true">×</span></button></form>
+  </div>
+  {d.image ? <Image src={d.image} alt={d.imageAlt ?? `${d.client} website preview`} widths={[960, 1440, 1920]} sizes="95vw" loading="lazy" decoding="async" /> : <img src={previewStill} alt={`${d.client} website walkthrough still`} loading="lazy" decoding="async" />}
+  <p class="viewer-caption">{d.kind} · {d.location} · {d.year}</p>
+</dialog>}
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-project-open]').forEach(button => {
+    const dialog = document.getElementById(button.dataset.projectOpen || '') as HTMLDialogElement | null;
+    if (!dialog || !dialog.showModal) return;
+    button.hidden = false;
+    button.addEventListener('click', () => {
+      document.querySelectorAll<HTMLVideoElement>('.project-story video').forEach(video => video.pause());
+      dialog.showModal();
+    });
+    dialog.addEventListener('close', () => button.focus({ preventScroll: true }));
+    dialog.addEventListener('click', event => {
+      if (event.target !== dialog) return;
+      const bounds = dialog.getBoundingClientRect();
+      if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dialog.close();
+    });
+  });
+  const videos = document.querySelectorAll<HTMLVideoElement>('.project-story video');
+  const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+    if (!entry.isIntersecting) (entry.target as HTMLVideoElement).pause();
+  }));
+  videos.forEach(video => observer.observe(video));
+  document.addEventListener('visibilitychange', () => { if (document.hidden) videos.forEach(video => video.pause()); });
+</script>
+<style>
+  .project-story { border-top: 1px solid theme('colors.ink.line'); padding-top: 1.5rem; }
+  .project-media { aspect-ratio: 16 / 9; overflow: hidden; background: theme('colors.ink.panel'); border: 1px solid theme('colors.ink.line'); border-radius: theme('borderRadius.hq-panel'); }
+  .project-media :global(img), .project-media video { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .project-media:has(video) { aspect-ratio: auto; height: clamp(360px, 70svh, 680px); }
+  .project-media video { object-fit: contain; }
+  .project-caption { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem 1rem; padding: .75rem 0 1.5rem; border-bottom: 1px solid theme('colors.ink.line'); font-size: theme('fontSize.hq-small[0]'); }
+  .project-caption span { color: theme('colors.bone.muted'); }
+  .inspect-button { display: inline-flex; align-items: center; gap: 1rem; min-height: 44px; color: theme('colors.electric.DEFAULT'); text-decoration: underline; text-underline-offset: .25em; }
+  .inspect-button[hidden] { display: none; }
+  .project-copy { padding-block: 2rem; }
+  .project-argument { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem 4rem; line-height: 1.65; }
+  .project-copy :global(a) { min-height: 44px; }
+  .project-viewer { margin: auto; width: min(1440px, 95vw); max-height: 92dvh; padding: 1rem; background: theme('colors.ink.soft'); color: theme('colors.bone.DEFAULT'); border: 1px solid theme('colors.ink.outline'); border-radius: theme('borderRadius.hq-panel'); }
+  .project-viewer::backdrop { background: color-mix(in srgb, theme('colors.ink.DEFAULT') 92%, transparent); }
+  .viewer-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+  .viewer-heading h2 { font-size: theme('fontSize.hq-lede[0]'); background: theme('colors.ink.soft'); }
+  .viewer-close { min-height: 44px; padding: .5rem 1rem; border: 1px solid theme('colors.ink.outline'); border-radius: theme('borderRadius.hq-control'); white-space: nowrap; }
+  .project-viewer :global(img) { display: block; width: 100%; max-height: 68dvh; object-fit: contain; background: theme('colors.ink.DEFAULT'); }
+  .viewer-caption { color: theme('colors.bone.dim'); padding-top: 1rem; font-size: theme('fontSize.hq-small[0]'); }
+  @media (max-width: 640px) { .project-argument { grid-template-columns: 1fr; gap: 1.5rem; } .project-viewer { padding: .75rem; } }
+</style>

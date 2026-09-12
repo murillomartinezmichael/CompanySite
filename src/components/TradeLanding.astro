@@ -23,25 +23,23 @@ interface Props {
 }
 const { trade, kicker, headline, headlineDim, sub, proofs } = Astro.props;
 
-// Single restrained accent — see the 2026-07-21 redesign note in
-// tailwind.config.mjs. Keys kept so ProofPanel['accent'] callers don't churn.
+// The owner-approved lime/blue palette shares the existing caller keys.
 const accentText: Record<ProofPanel['accent'], string> = {
   cyber: 'text-clay/80',
-  neon: 'text-clay/80',
+  neon: 'text-electric',
 };
 ---
 
-<section class="relative isolate overflow-hidden">
-  <div class="pointer-events-none absolute inset-x-0 top-0 h-[600px] bg-gradient-to-b from-clay/[0.10] via-transparent to-transparent"></div>
+<section class="page-intro trade-intro relative isolate overflow-hidden">
 
-  <div class="container-page relative pb-4 pt-14 sm:pt-20">
+  <div class="container-page relative py-hq-section">
     <div class="max-w-3xl">
       <div class="mb-6 flex items-center gap-3">
         <span class="hairline"></span>
         <p class="kicker">{kicker}</p>
       </div>
 
-      <h1 class="text-display-lg">
+      <h1 class="text-hq-hero">
         {headline} <span class="text-bone-dim">{headlineDim}</span>
       </h1>
 
@@ -72,8 +70,7 @@ const accentText: Record<ProofPanel['accent'], string> = {
         <li>✓ Free — actually free</li>
       </ul>
 
-      <!-- Trade-matched proof — same verifiable client outcomes rendered on
-           Hero + /audit + /thanks, filtered to the vertical this page sells. -->
+      <!-- Client proof for this trade -->
       <div class={`mt-12 grid gap-5 border-t border-ink-line/60 pt-8 ${proofs.length > 1 ? 'sm:grid-cols-2' : 'sm:max-w-xl'}`}>
         {proofs.map((p) => (
           <div class="panel flex flex-col gap-2 p-5">
@@ -86,7 +83,7 @@ const accentText: Record<ProofPanel['accent'], string> = {
       </div>
 
       <a
-        href="/?intent=product:case-studies#proof"
+        href="/websites?intent=product:case-studies#proof"
         class="group mt-6 inline-flex items-center gap-1.5 text-sm text-bone-dim underline decoration-clay/50 decoration-1 underline-offset-[6px] transition-colors hover:text-clay"
         data-cta="trade-see-work"
         data-section={`for-${trade}`}

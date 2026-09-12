@@ -5,23 +5,23 @@ import Footer from '@/components/Footer.astro';
 ---
 
 <Layout
-  title="Accessibility — M³"
-  description="Accessibility statement for M³. We aim to conform to WCAG 2.1 Level AA — email me if any part of the site is not usable for you."
+  title="Accessibility — M3MM"
+  description="Accessibility statement for M3MM. We aim to conform to WCAG 2.1 Level AA — email me if any part of the site is not usable for you."
   path="/accessibility"
   breadcrumbs={[
-    { name: 'M³', url: '/' },
+    { name: 'M3MM', url: '/' },
     { name: 'Accessibility', url: '/accessibility' },
   ]}
 >
   <Header slot="header" minimal={true} path="/accessibility" />
 
-  <section class="container-page py-16 lg:py-24 max-w-3xl">
+  <section class="reading-page container-page py-hq-section max-w-3xl">
     <p class="text-xs uppercase tracking-[0.24em] text-bone-muted">Statement · Accessibility</p>
     <h1 class="mt-4 font-display text-4xl sm:text-5xl leading-[1.05] text-bone">
       Accessibility <em class="text-clay italic">Statement</em>
     </h1>
     <p class="mt-6 text-lg text-bone-muted leading-relaxed">
-      M³ is committed to making this website usable by as many people as possible, including people
+      M3MM is committed to making this website usable by as many people as possible, including people
       with disabilities. This page explains what we are doing and how to reach us if any part of
       the site is not working for you.
     </p>
@@ -29,7 +29,7 @@ import Footer from '@/components/Footer.astro';
     <h2 class="mt-14 font-display text-2xl text-bone">Our commitment</h2>
     <p class="mt-4 text-bone-muted leading-relaxed">
       We aim to conform to the
-      <a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank" rel="noopener" class="text-clay underline underline-offset-4 hover:text-bone">
+      <a href="https://www.w3.org/WAI/WCAG21/quickref/" data-cta="accessibility-standard" data-section="accessibility" data-intent="product:accessibility" target="_blank" rel="noopener" class="text-clay underline underline-offset-4 hover:text-bone">
         Web Content Accessibility Guidelines (WCAG) 2.1 Level AA</a>.
       These guidelines cover readable text, sufficient color contrast, keyboard navigation, alt
       text on meaningful images, and clear labeling — the things that make a site work for people
@@ -63,7 +63,7 @@ import Footer from '@/components/Footer.astro';
         <strong>Email:</strong>
         <a
           href="/audit?intent=book:accessibility-report#intake"
-          class="text-clay underline underline-offset-4 hover:text-bone"
+          class="inline-block max-w-full break-all text-clay underline underline-offset-4 hover:text-bone"
           data-cta="accessibility-contact"
           data-section="accessibility"
           data-intent="book:accessibility-report"

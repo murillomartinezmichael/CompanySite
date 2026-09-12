@@ -1,22 +1,333 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import Header from '@/components/Header.astro';
+import KineticTrack from '@/components/KineticTrack.astro';
 import Footer from '@/components/Footer.astro';
-import Hero from '@/components/Hero.astro';
-import TwoDoor from '@/components/TwoDoor.astro';
-import Proof from '@/components/Proof.astro';
-import Services from '@/components/Services.astro';
-import Faq from '@/components/Faq.astro';
-import Intake from '@/components/Intake.astro';
+import { DROPS, LAUNCH_STATS } from '@/config/roadmap';
+
+const released = DROPS.filter((drop) => drop.status === 'released');
+const testing = DROPS.filter((drop) => drop.status === 'testing');
+const roadmapPreview = DROPS.filter((drop) => drop.status === 'next' || drop.status === 'upcoming').slice(0, 4);
+
+// Department content is independent of the shared site navigation.
+const departments = [
+  { number: '01', name: 'Website services', description: 'Custom business websites, project examples, and a free site review.', href: '/websites', action: 'Explore website services' },
+  { number: '02', name: 'Roadmap', description: 'The shipping queue, launch order, dates, and signup for future product drops.', href: '/roadmap', action: 'View full roadmap' },
+  { number: '03', name: 'Resume', description: 'Career surface: experience, the work behind it, and a downloadable resume.', href: '/resume', action: 'Open resume' },
+  { number: '04', name: 'Company policies', description: 'The public policy library, including workplace vaccination and accessibility.', href: '/policies', action: 'Read policies' },
+];
+
+const isExternal = (url?: string) => Boolean(url?.startsWith('http'));
 ---
 
-<Layout title="M³ — Websites that get you customers" path="/">
+<Layout
+  title="M3MM — The hub for everything Michael is building"
+  description="M3MM is Michael Murillo-Martinez's main company hub: the official release, test deployments, client work, career proof, company policies, and the public roadmap."
+  path="/"
+>
   <Header slot="header" path="/" />
-  <Hero />
-  <TwoDoor />
-  <Proof />
-  <Services />
-  <Faq />
-  <Intake />
+
+  <div class="hq-scope">
+
+    <section class="hero container-page" aria-labelledby="hub-heading">
+      <div class="hero-copy">
+        <div class="eyebrow"><span></span>M3MM headquarters in Atlanta</div>
+        <h1 id="hub-heading">Everything I’m building.<br />One front door.</h1>
+        <p class="meaning">Modernize. Mobilize. Multiply.</p>
+        <p class="hero-lede">
+          Products, client work, and the systems behind them. Explore the official
+          releases, try a preview, or see what I’m building next.
+        </p>
+        <div class="hero-actions">
+          <a href="#released" class="action action-live" data-cta="hq-released" data-section="hero" data-intent="product:released-work">
+            See what’s released
+          </a>
+          <a href="/roadmap" class="action action-ghost" data-cta="hq-roadmap" data-section="hero" data-intent="product:roadmap">
+            Open the roadmap
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <KineticTrack />
+        <button class="motion-toggle" type="button" data-motion-toggle hidden aria-pressed="false" data-cta="hq-motion-toggle" data-section="hero">Pause motion</button>
+      </div>
+    </section>
+
+    <div class="container-page release-overview">
+      <aside class="command-card" aria-label="M3MM release status">
+        <div class="command-head"><span>Release overview</span><span class="system-live">Public hub</span></div>
+        <div class="command-body">
+          <p class="command-label">Official releases</p>
+          <p class="command-number">{String(LAUNCH_STATS.released).padStart(2, '0')}</p>
+          <p class="command-caption">officially released</p>
+          <dl class="command-stats">
+            <div><dt>Next drop</dt><dd>{DROPS.find((drop) => drop.status === 'next')?.name ?? 'In review'}</dd></div>
+            <div><dt>Test lab</dt><dd>{LAUNCH_STATS.testing} preview builds</dd></div>
+            <div><dt>Roadmap</dt><dd>{LAUNCH_STATS.total} tracked builds</dd></div>
+          </dl>
+        </div>
+      </aside>
+    </div>
+
+    <section class="departments container-page" aria-labelledby="departments-heading">
+      <div class="section-intro">
+        <p class="section-code">Explore M3MM</p>
+        <h2 id="departments-heading">One company.<br />Clear doors.</h2>
+        <p>Use M3MM like a headquarters, not a single-purpose landing page.</p>
+      </div>
+      <ul class="department-grid">
+        {departments.map((department) => (
+          <li>
+            <a href={department.href} class="department-card" data-cta={`hq-department-${department.number}`} data-section="departments" data-intent="product:company-department">
+              <h3>{department.name}</h3>
+              <p>{department.description}</p>
+              <span class="department-action">{department.action}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="released" class="released container-page" aria-labelledby="released-heading">
+      <div class="ledger-title">
+        <div>
+          <p class="section-code section-code-live"><span></span> Official launches</p>
+          <h2 id="released-heading">Officially<br />released.</h2>
+        </div>
+        <p class="ledger-note">
+          Only officially launched work appears here. Builds that are still being tested
+          have their own preview section below.
+        </p>
+      </div>
+
+      <ol class="release-ledger" aria-label="All released M3MM work">
+        {released.map((drop, index) => (
+          <li class="release-row">
+            <div class="release-index">R-{String(index + 1).padStart(2, '0')}</div>
+            <div class="release-main">
+              <div class="release-meta">
+                <span class="live-pip" aria-hidden="true"></span>
+                <span>Released</span>
+                <span>{drop.category ?? 'M3MM build'}</span>
+              </div>
+              <h3>{drop.name}</h3>
+              <p>{drop.blurb}</p>
+            </div>
+            {drop.url && (
+              <a
+                href={drop.url}
+                class="launch-link"
+                target={isExternal(drop.url) ? '_blank' : undefined}
+                rel={isExternal(drop.url) ? 'noopener' : undefined}
+                data-cta="hq-release-launch"
+                data-section="released"
+                data-intent="product:released-work"
+                aria-label={`Open ${drop.name}`}
+              >Open</a>
+            )}
+          </li>
+        ))}
+      </ol>
+
+      <section class="preview-lab" aria-labelledby="preview-heading">
+        <div class="preview-title">
+          <p class="section-code section-code-preview"><span></span> Testing previews</p>
+          <h3 id="preview-heading">Reachable does not mean released.</h3>
+          <p>These builds can be opened for testing, but they do not count toward the official release total.</p>
+        </div>
+        <ol class="preview-list" aria-label="M3MM test deployments">
+          {testing.map((drop) => (
+            <li>
+              <div>
+                <span class="preview-status">Testing: {drop.category ?? 'M3MM build'}</span>
+                <h4>{drop.name}</h4>
+                <p>{drop.blurb}</p>
+              </div>
+              {drop.url && (
+                <a
+                  href={drop.url}
+                  target={isExternal(drop.url) ? '_blank' : undefined}
+                  rel={isExternal(drop.url) ? 'noopener' : undefined}
+                  data-cta="hq-preview-open"
+                  data-section="released"
+                  data-intent="product:test-preview"
+                  aria-label={`Preview ${drop.name}`}
+                >Preview</a>
+              )}
+            </li>
+          ))}
+        </ol>
+      </section>
+    </section>
+
+    <section id="roadmap" class="roadmap-preview" aria-labelledby="roadmap-heading">
+      <div class="container-page roadmap-grid">
+        <div class="roadmap-copy">
+          <p class="section-code section-code-roadmap"><span></span> Shipping queue</p>
+          <h2 id="roadmap-heading">What ships next matters.</h2>
+          <p>
+            The roadmap is a first-class part of M3MM. It shows the order, dates, and status of
+            every planned drop. A test deployment stays labeled Testing until
+            M3MM declares the official public release.
+          </p>
+          <a href="/roadmap" class="roadmap-button" data-cta="hq-roadmap-full" data-section="roadmap" data-intent="product:roadmap">
+            View the complete roadmap
+          </a>
+        </div>
+
+        <ol class="queue" aria-label="Next roadmap releases">
+          {roadmapPreview.map((drop, index) => (
+            <li class={drop.status === 'next' ? 'queue-item queue-next' : 'queue-item'}>
+              <div class="queue-order">{String(index + 1).padStart(2, '0')}</div>
+              <div class="queue-date"><b>{drop.dateLabel}</b><span>{drop.year}</span></div>
+              <div class="queue-body">
+                <span>{drop.status === 'next' ? 'Next drop' : drop.quarter}</span>
+                <h3>{drop.name}</h3>
+                <p>{drop.blurb}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="closing container-page" aria-labelledby="closing-heading">
+      <img src="/official-logo.png" alt="" width="84" height="84" decoding="async" />
+      <div>
+        <p class="section-code">Built in public</p>
+        <h2 id="closing-heading">The hub grows when the work ships.</h2>
+      </div>
+      <a href="/roadmap" data-cta="hq-roadmap-closing" data-section="closing" data-intent="product:roadmap">See what ships next</a>
+    </section>
+  </div>
+
   <Footer slot="footer" path="/" />
 </Layout>
+
+<style>
+  /* M3MM homepage implementation of docs/M3_DESIGN_SYSTEM.md.
+     Theme lookups keep the palette and type scale in tailwind.config.mjs. */
+  .hq-scope {
+    --hq-accent: theme('colors.clay.DEFAULT');
+    --hq-highlight: theme('colors.clay.glow');
+    --hq-card: theme('colors.ink.soft');
+    --hq-panel: theme('colors.ink.panel');
+    --hq-line: theme('colors.ink.line');
+    --hq-outline: theme('colors.ink.outline');
+    --hq-muted: theme('colors.bone.muted');
+    --hq-text: theme('colors.bone.DEFAULT');
+    --hq-dim: theme('colors.bone.dim');
+    --hq-ground: theme('colors.ink.DEFAULT');
+    --hq-space: theme('spacing.hq-section');
+    color: var(--hq-text);
+  }
+  .hq-scope :is(section, aside, li, .hero-copy, .queue-body) { min-width: 0; }
+  .hq-scope :is(h1,h2,h3,h4,p,dd,a) { overflow-wrap: anywhere; }
+  .hq-scope :is(section[id], h2[id]) { scroll-margin-top: 2rem; }
+  .hero { display: grid; grid-template-columns: minmax(0,1.15fr) minmax(0,1fr); gap: 3rem; align-items: center; padding-block: var(--hq-space); }
+  .eyebrow,.section-code,.release-meta,.command-label,.meaning { font-size: theme('fontSize.hq-label[0]'); line-height: 1.5; font-weight: 500; }
+  .eyebrow { color: var(--hq-muted); }
+  .eyebrow span { display: none; }
+  .hero h1 { margin: 1.5rem 0 0; font-size: theme('fontSize.hq-hero[0]'); line-height: 1.04; letter-spacing: -.035em; font-weight: 600; }
+  .meaning { margin: 1.5rem 0 0; color: var(--hq-accent); }
+  .hero-lede { max-width: 56ch; margin: 1rem 0 0; color: var(--hq-dim); font-size: theme('fontSize.hq-lede[0]'); line-height: 1.65; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+  .action,.roadmap-button { display: inline-flex; gap: 1rem; align-items: center; justify-content: space-between; min-height: 48px; padding: .75rem 1.25rem; border: 1px solid var(--hq-outline); border-radius: theme('borderRadius.hq-control'); font-weight: 600; text-decoration: none; transition: background 150ms ease, color 150ms ease; }
+  .action-live { color: var(--hq-ground); background: var(--hq-accent); border-color: var(--hq-accent); }
+  .action-live:hover { background: var(--hq-highlight); border-color: var(--hq-highlight); }
+  .action-ghost { color: var(--hq-text); }
+  .action-ghost:hover { background: var(--hq-panel); }
+  .command-card { display: grid; grid-template-columns: 1fr 3fr; border: 1px solid var(--hq-line); border-radius: theme('borderRadius.hq-panel'); background: var(--hq-card); overflow: hidden; }
+  .command-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem; padding: 1rem 1.5rem; font-size: theme('fontSize.hq-label[0]'); color: var(--hq-muted); }
+  .command-head { flex-direction: column; justify-content: center; border-right: 1px solid var(--hq-line); }
+  .system-live { color: var(--hq-accent); }
+  .command-body { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: .5rem 2rem; padding: 1.5rem; }
+  .command-label { grid-column: 1; }
+  .command-stats { grid-column: 2; grid-row: 1 / 4; }
+  .command-label { color: var(--hq-muted); }
+  .command-number { margin-top: 0; color: var(--hq-accent); font: 600 3rem/1 theme('fontFamily.display'); font-variant-numeric: tabular-nums; }
+  .command-caption { margin: 0; color: var(--hq-dim); }
+  .command-stats div { display: grid; grid-template-columns: 1fr 1.6fr; gap: .75rem; padding-block: .75rem; border-top: 1px solid var(--hq-line); font-size: theme('fontSize.hq-small[0]'); }
+  .command-stats dt { color: var(--hq-muted); }
+  .command-stats dd { text-align: right; }
+  .departments,.released { padding-block: var(--hq-space); }
+  .section-intro,.ledger-title { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 4rem; align-items: end; }
+  .section-code { margin: 0 0 1rem; color: var(--hq-muted); }
+  .section-intro .section-code { grid-column: 1 / -1; margin: 0; }
+  .section-intro h2,.ledger-title h2,.roadmap-copy h2,.closing h2 { margin: 0; font-size: theme('fontSize.hq-section[0]'); line-height: 1.12; letter-spacing: -.025em; }
+  .section-intro>p:last-child,.ledger-note { max-width: 48ch; color: var(--hq-dim); line-height: 1.65; }
+  .department-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0 3rem; list-style: none; padding: 0; margin-top: 2rem; }
+  .department-card { display: flex; flex-direction: column; height: 100%; padding: 2rem 0; border-bottom: 1px solid var(--hq-line); background: transparent; color: var(--hq-text); text-decoration: none; transition: background 150ms ease; }
+  .department-card:hover h3 { color: theme('colors.electric.DEFAULT'); }
+  .department-card h3 { transition: color 180ms ease; }
+  .department-card h3 { margin: 0; font-size: theme('fontSize.hq-title[0]'); line-height: 1.25; }
+  .department-card p { max-width: 46ch; margin: .75rem 0 1.25rem; font-size: 1rem; color: var(--hq-dim); line-height: 1.6; }
+  .department-action { color: theme('colors.electric.DEFAULT'); display: flex; justify-content: space-between; gap: .75rem; margin-top: auto; font-size: theme('fontSize.hq-small[0]'); font-weight: 600; }
+  .release-ledger,.preview-list,.queue { list-style: none; padding: 0; margin: 0; }
+  .release-ledger { margin-top: 2rem; border-top: 1px solid var(--hq-line); }
+  .release-row { display: grid; grid-template-columns: 3rem minmax(0,1fr) auto; gap: 1.5rem; align-items: center; padding-block: 2rem; border-bottom: 1px solid var(--hq-line); }
+  .release-index { align-self: start; color: var(--hq-muted); font-size: theme('fontSize.hq-label[0]'); font-variant-numeric: tabular-nums; }
+  .release-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; color: var(--hq-highlight); }
+  .release-meta span:last-child { color: var(--hq-muted); }
+  .live-pip { width: .5rem; height: .5rem; border-radius: 50%; background: currentColor; }
+  .release-main h3 { margin-top: .75rem; font-size: theme('fontSize.hq-title[0]'); }
+  .release-main p,.preview-list p,.preview-title>p:last-child { max-width: 65ch; margin-top: .75rem; color: var(--hq-dim); line-height: 1.65; }
+  .launch-link,.preview-list a { display: inline-flex; align-items: center; gap: 1rem; min-height: 44px; padding: .625rem 1rem; border: 1px solid var(--hq-outline); border-radius: theme('borderRadius.hq-control'); color: var(--hq-accent); font-weight: 600; text-decoration: none; }
+  .launch-link:hover,.preview-list a:hover { background: var(--hq-accent); color: var(--hq-ground); border-color: var(--hq-accent); }
+  .preview-lab { display: grid; grid-template-columns: minmax(0,.7fr) minmax(0,1.3fr); gap: 3rem; margin-top: 3rem; padding: 2rem; border-radius: theme('borderRadius.hq-panel'); background: var(--hq-panel); }
+  .preview-title h3 { font-size: theme('fontSize.hq-title[0]'); line-height: 1.25; }
+  .preview-list li { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 1.5rem; padding-block: 1.5rem; align-items: center; border-bottom: 1px solid var(--hq-line); }
+  .preview-list li:first-child { padding-top: 0; }
+  .preview-list li:last-child { border: 0; padding-bottom: 0; }
+  .preview-status { color: theme('colors.electric.DEFAULT'); font-size: theme('fontSize.hq-label[0]'); }
+  .preview-list h4 { margin-top: .5rem; font-size: 1.125rem; }
+  .preview-list p { font-size: theme('fontSize.hq-small[0]'); }
+  .roadmap-preview { background: var(--hq-card); }
+  .roadmap-grid { display: grid; grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); gap: 4rem; padding-block: var(--hq-space); }
+  .roadmap-copy>p:not(.section-code) { margin-top: 1.5rem; color: var(--hq-dim); line-height: 1.65; max-width: 60ch; }
+  .roadmap-button { margin-top: 1.5rem; color: var(--hq-ground); border-color: var(--hq-accent); background: var(--hq-accent); }
+  .roadmap-button:hover { background: var(--hq-highlight); }
+  .queue-item { display: grid; grid-template-columns: 1.5rem 4.5rem minmax(0,1fr); gap: 1rem; padding-block: 1.5rem; border-bottom: 1px solid var(--hq-line); }
+  .queue-item:first-child { padding-top: 0; }
+  .queue-order,.queue-date span { color: var(--hq-muted); font-size: theme('fontSize.hq-label[0]'); font-variant-numeric: tabular-nums; }
+  .queue-date { text-align: right; }
+  .queue-date b,.queue-date span { display: block; }
+  .queue-date b { font-size: theme('fontSize.hq-small[0]'); font-weight: 600; }
+  .queue-body>span { color: var(--hq-accent); font-size: theme('fontSize.hq-label[0]'); }
+  .queue-body h3 { margin-top: .5rem; font-size: 1.25rem; }
+  .queue-body p { margin-top: .5rem; color: var(--hq-dim); font-size: theme('fontSize.hq-small[0]'); line-height: 1.6; }
+  .closing { display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: 2rem; align-items: center; padding-top: var(--hq-space); }
+  .closing img { width: 4rem; height: 4rem; object-fit: contain; }
+  .closing a { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; color: var(--hq-accent); text-underline-offset: .3em; text-decoration: underline; }
+  @media (max-width: 980px) {
+    .hero,.ledger-title,.preview-lab,.roadmap-grid { grid-template-columns: 1fr; }
+    .hero { gap: 2rem; }
+    .command-stats div { grid-template-columns: 1fr 2fr; }
+    .department-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .closing { grid-template-columns: auto minmax(0,1fr); }
+    .closing a { grid-column: 2; justify-self: start; }
+  }
+  @media (max-width: 640px) {
+    .command-card { grid-template-columns: 1fr; }
+    .command-head { flex-direction: row; border-right: 0; border-bottom: 1px solid var(--hq-line); }
+    .command-body { gap: .5rem 1rem; }
+    .hero-visual { margin-top: -1rem; }
+    .hero-actions,.action { width: 100%; }
+    .section-intro,.department-grid { grid-template-columns: 1fr; }
+    .department-card { padding: 1.5rem 0; }
+    .release-row { grid-template-columns: minmax(0,1fr); gap: 1rem; }
+    .launch-link { justify-self: start; }
+    .preview-lab { padding: 1.5rem; gap: 2rem; }
+    .preview-list li { grid-template-columns: minmax(0,1fr); gap: 1rem; }
+    .preview-list a { justify-self: start; }
+    .queue-item { grid-template-columns: 3.5rem minmax(0,1fr); gap: 1rem; }
+    .queue-order { display: none; }
+    .queue-date { text-align: left; }
+    .closing { grid-template-columns: minmax(0,1fr); gap: 1.5rem; }
+    .closing a { grid-column: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hq-scope * { transition: none; }
+  }
+</style>

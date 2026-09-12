@@ -1,0 +1,73 @@
+# deploy.yaml — provisioning contract for scripts/deploy.py.
+# `python scripts/deploy.py plan CompanySite` shows the diff vs live (read-only).
+# `python scripts/deploy.py provision CompanySite --apply` applies it.
+# Values marked from_env are read from your environment or the gitignored
+# .env.deploy at the fleet root; real secrets never belong in this file.
+#
+# MONEY LADDER RUNG 1. The remaining gate is:
+#   1. create the LIVE Stripe Payment Link            (you, in Stripe)
+#   2. set PUBLIC_STRIPE_PAYMENT_LINK on Pages        (provision --apply)
+#   3. rebuild + redeploy — it is a BUILD-TIME var and
+#      is inert until the site is rebuilt              (ship)
+#
+# READ BEFORE APPLYING: Cloudflare REPLACES the env var map on write and returns
+# secrets redacted, so every live secret must be declared here AND resolvable
+# locally, or provision refuses to touch the config. That refusal is deliberate —
+# it is what stops a partial apply from deleting the n8n lead pipeline.
+
+target: cloudflare-pages
+
+# Must match the LIVE Pages project, not the repo folder. Taken from the
+# deployed hostname m3-companysite.pages.dev. A wrong name here would create a
+# second project instead of updating this one.
+name: m3-companysite
+
+repo: murillomartinezmichael/CompanySite
+branch: main
+
+build:
+  command: npm run build
+  output: dist
+
+domains:
+  - m3mm.net
+
+env:
+  # Build-time. Static site: changing this does nothing until the next build.
+  # Unset/blank/test-mode => /start gates to the free-review intake instead of
+  # rendering a checkout button, so an unset value is safe, just not earning.
+  PUBLIC_STRIPE_PAYMENT_LINK:
+    from_env: PUBLIC_STRIPE_PAYMENT_LINK
+    secret: false
+    required: true
+
+  # Runtime, used by the Pages Functions lead pipeline.
+  RESEND_API_KEY:
+    from_env: RESEND_API_KEY
+    secret: true
+    required: true
+  N8N_LEAD_WEBHOOK_URL:
+    from_env: N8N_LEAD_WEBHOOK_URL
+    secret: true
+    required: true
+  N8N_LEAD_WEBHOOK_SECRET:
+    from_env: N8N_LEAD_WEBHOOK_SECRET
+    secret: true
+    required: true
+  # Plain addresses, deliberately not secret_text so drift stays visible.
+  LEAD_TO:
+    from_env: LEAD_TO
+    secret: false
+    required: true
+  LEAD_FROM:
+    from_env: LEAD_FROM
+    secret: false
+    required: true
+
+  # Runtime, used by functions/api/chat.ts (the assistant widget, replaced
+  # SiteGuide 2026-08-20). Unset => the endpoint answers 503, never a faked
+  # reply — see chat.ts's LAW 6 comment.
+  ANTHROPIC_API_KEY:
+    from_env: ANTHROPIC_API_KEY
+    secret: true
+    required: true

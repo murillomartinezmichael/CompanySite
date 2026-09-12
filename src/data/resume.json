@@ -1,0 +1,130 @@
+{
+  "name": "Michael Murillo-Martinez",
+  "title": "Software Engineer II | Founder & Product Engineer",
+  "location": "Atlanta, GA",
+  "email": "murillomartinezmichael@gmail.com",
+  "linkedin": "linkedin.com/in/michael-murillo-martinez-912168194",
+  "github": "github.com/murillomartinezmichael",
+  "summary": "Software Engineer II and founder with 4+ years shipping production systems across regulated gaming, fintech, client services, and SaaS. Architected internal DevOps and release infrastructure at AGS, then designed, sold, deployed, and operated accessible web and automation products for real businesses. Full-stack across C#/.NET, Python, cloud, data, payments, and AI-assisted workflows.",
+  "experience": [
+    {
+      "company": "American Gaming Systems (AGS)",
+      "role": "Software Engineer II",
+      "location": "Atlanta, GA",
+      "start": "Aug 2022",
+      "end": "Present",
+      "summary": "Architected the company's DevOps portal and SVN release-tooling suite from the ground up, then owned end-to-end release management for regulated slot platforms across multiple gaming jurisdictions. AGS was subsequently acquired for $1B.",
+      "tech": ["C#", ".NET", "WPF", "C++", "SQL", "SVN", "Microservices"],
+      "bullets": [
+        "Architected and built the company's DevOps portal from the ground up — a unified hub connecting internal tools, release pipelines, compliance workflows, and documentation used daily by 5–10 engineers across QA and development. AGS was subsequently acquired for $1B.",
+        "Designed a microservices architecture that unified fragmented legacy programs into a connected system via a central hub, including a WPF decryption tool, File Handler, SVN automation services, email notification pipelines, and queue-based workflow processing.",
+        "Built SVN Tools suite — Branch Creator, Branch Unlocker, Build Validator, ChangeSet Manager, and Jurisdiction Map — eliminating manual release bottlenecks and enabling compliant delivery across multiple gaming jurisdictions.",
+        "Owned end-to-end release management across AGS slot platforms: coordinating engineering and QA, validating builds, tracking defects and smoke tests, and driving compliant delivery across jurisdictions.",
+        "Diagnosed and resolved production and field issues across firmware, UI, backend, and database layers on AGS slot platforms using C#, C++, Unity, Bash, SQL, XML, SAS, and JSON."
+      ]
+    },
+    {
+      "company": "M3MM",
+      "role": "Founder & Product Engineer",
+      "location": "Atlanta, GA · Independent client and product work",
+      "start": "2026",
+      "end": "Present",
+      "url": "https://m3mm.net",
+      "summary": "Founded the studio, delivered client builds, and deployed verified test versions of SiteGuide and AI Manual Assistant — plus an n8n lead-automation OS traced end to end in production. M3MM Hub is the studio's first official public release.",
+      "tech": ["Astro", "Cloudflare", "Python", "FastAPI", "Stripe", "Supabase", "Claude API", "React", "n8n"],
+      "bullets": [
+        "Founded M3MM to design and deploy web and automation systems for small businesses; delivered a sold Aries Outdoor Living site and built Big7 Construction's test deployment, which is waiting on jobsite photography before official launch.",
+        "Built m3mm.net on Astro and Cloudflare with an n8n Lead OS that scores, stores, alerts on, and auto-replies to inbound leads; traced the complete workflow successfully in production.",
+        "Built and tested SiteGuide, a template-storefront deployment with 19 sellable products and a verified Stripe checkout → webhook → entitlement → ZIP download → confirmation-email flow.",
+        "Built and tested AI Manual Assistant using FastAPI, Supabase/pgvector, Claude, React, Railway, and Netlify; verified the real PDF upload → question → cited-answer journey end to end."
+      ]
+    },
+    {
+      "company": "InComm Payments",
+      "role": "Software Engineer",
+      "location": "Atlanta, GA",
+      "start": "Nov 2021",
+      "end": "Aug 2022",
+      "summary": "Delivered front-end and back-end features across multiple fintech products in an Agile team, supporting Azure cloud integration and deployment automation on secure payment systems.",
+      "tech": ["C#", ".NET", "ASP.NET", "Angular", "Azure", "REST APIs"],
+      "bullets": [
+        "Delivered front-end and back-end features across multiple fintech products in an Agile team using C#, .NET, ASP.NET, Angular, HTML/CSS, and RESTful APIs.",
+        "Supported cloud integration and deployment automation through Azure and Octopus Deploy.",
+        "Collaborated with engineers across Scrum and Kanban workflows using Jira to ship secure, scalable payment solutions."
+      ]
+    }
+  ],
+  "liveWork": [
+    {
+      "name": "M3MM Client & Automation Studio",
+      "url": "https://m3mm.net",
+      "label": "Official public release",
+      "detail": "M3MM's released company Hub with accessible lead capture and n8n follow-through."
+    },
+    {
+      "name": "Aries Outdoor Living",
+      "url": "https://ariesoutdoorliving.com",
+      "label": "Deployed client site — next official launch",
+      "detail": "Custom deck design-and-build site for a 4.8-star Metro Atlanta contractor. Sold at handoff; first quote request 3 days later."
+    },
+    {
+      "name": "Big7 Construction",
+      "url": "https://big7construction.com",
+      "label": "Test deployment — waiting on jobsite photos",
+      "detail": "Multi-lane construction test deployment for commercial, residential, and repair buyers; not officially launched."
+    },
+    {
+      "name": "SiteGuide",
+      "url": "https://siteguide-production.up.railway.app",
+      "label": "Test deployment — storefront",
+      "detail": "19 sellable templates with a verified checkout, entitlement, download, and email-delivery flow."
+    },
+    {
+      "name": "AI Manual Assistant",
+      "url": "https://peaceful-kashata-9599e5.netlify.app",
+      "label": "Test deployment — RAG workflow",
+      "detail": "PDF knowledge bases with cited answers across React, FastAPI, Supabase/pgvector, and Claude."
+    },
+    {
+      "name": "QuoteMate AI",
+      "url": "https://quotemateai-production-7d56.up.railway.app",
+      "label": "Test deployment — contractor quoting",
+      "detail": "Job form to branded PDF quote in 60 seconds for deck builders, landscapers, and painters. Deterministic pure-Python pricing engine owns every dollar; Claude drafts scope-of-work copy only. Stripe subscriptions, JWT auth."
+    }
+  ],
+  "education": [
+    {
+      "school": "Georgia Gwinnett College",
+      "degree": "B.S. Information Technology — Software Development",
+      "detail": "Graduated May 2022 · Atlanta, GA"
+    }
+  ],
+  "skills": {
+    "production": [
+      "C#", ".NET / ASP.NET", "C++", "Python", "SQL", "REST APIs", "Microservices", "CI/CD", "Release management", "Compliance systems"
+    ],
+    "working": [
+      "Astro", "TypeScript / JavaScript", "FastAPI", "Docker", "Cloudflare Workers / Pages", "Railway", "Supabase / PostgreSQL", "Azure / Azure DevOps", "Angular", "Unity", "Stripe webhooks", "n8n"
+    ],
+    "learning": [
+      "AZ-204 (Azure Developer Associate)", "System design at scale"
+    ]
+  },
+  "community": [
+    {
+      "org": "Technology Ambassador — TAP @ Georgia Gwinnett College",
+      "detail": "tapggc.org",
+      "role": "Volunteer · Ongoing",
+      "bullets": [
+        "Served as a Technology Ambassador, teaching programming fundamentals and sparking interest in IT among students, youth, and underrepresented communities.",
+        "Expanded the TAP program's reach by establishing connections between Georgia Gwinnett College and other schools, growing the program's inter-institutional presence.",
+        "Built and demoed Tap TapIn — a virtual NFC business card experience used as an outreach tool to engage underrepresented youth in technology. (HTML, CSS, JavaScript, NFC)"
+      ]
+    }
+  ],
+  "credentials": [
+    "Microsoft Technology Associate — Networking Fundamentals (2022)",
+    "Georgia Tech Best ML Hack — DeepNote Prize, Tweety Project (2022)",
+    "Georgia Gwinnett College STARS — 3rd Place, Tap TapIn Project"
+  ]
+}

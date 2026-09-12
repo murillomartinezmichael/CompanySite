@@ -14,11 +14,12 @@
 // and logs the lead. Documented, not faked (LAW 6).
 
 import { LIMITS, validateLead, esc, UTM_FIELDS, type Lead } from '../_lib/validate';
-import { checkRate } from '../_lib/rate';
+import { checkRate, rateKey } from '../_lib/rate';
 import { sendToCockpit, leadIdempotencyKey } from '../_lib/cockpit-sink';
 import { sendToN8n } from '../_lib/n8n-sink';
 import { referralOffer, referralShareUrl, REFERRAL_FIELD_LABEL } from '../_lib/referral';
 import { originAllowed, corsResponseHeaders, preflightResponse } from '../_lib/cors';
+import { withSecurityHeaders, secureResponse } from '../_lib/security-headers';
 
 type Env = {
   RESEND_API_KEY?: string;
@@ -45,14 +46,50 @@ const RATE_MAX = 5;
 const RATE_WINDOW_S = 60;
 const RESEND_TIMEOUT_MS = 6_000;
 
+// A native (no-JS) <form> POST navigates the browser to this route, so a JSON
+// body is rendered to the visitor as raw text — a dead-end CTA. Every
+// successful urlencoded submit answers 303 to the thank-you page instead. The
+// destination is a hard-coded same-site path, never read from the request, so
+// the route can't be turned into an open redirect. JSON callers (the fetch
+// handlers on every page) are unaffected and still receive `{"ok":true}`.
+const FORM_SUCCESS_PATH = '/thanks';
+
+// Different flows earn different receipts. /thanks promises a recorded video
+// teardown within 24 hours, which is true of a site-review intake and false of
+// someone who only asked to follow the roadmap. The destination is chosen from
+// this server-side allowlist keyed on the lead's own intent -- never from a
+// request field -- so the open-redirect property above is unchanged.
+const INTENT_SUCCESS_PATHS: Record<string, string> = {
+  'book:roadmap-subscribe': '/roadmap/thanks',
+};
+
+function successPathFor(intent: string | undefined): string {
+  if (!intent) return FORM_SUCCESS_PATH;
+  return INTENT_SUCCESS_PATHS[intent] ?? FORM_SUCCESS_PATH;
+}
+
+function redirectResponse(location: string, extraHeaders: Record<string, string> = {}): Response {
+  return new Response(null, {
+    status: 303,
+    headers: withSecurityHeaders({
+      Location: location,
+      'Cache-Control': 'no-store',
+      ...extraHeaders,
+    }),
+  });
+}
+
 function jsonResponse(status: number, body: unknown, extraHeaders: Record<string, string> = {}): Response {
   return new Response(JSON.stringify(body), {
     status,
-    headers: {
+    // `public/_headers` does NOT reach Pages Functions responses — see
+    // ../_lib/security-headers.ts. Every reply off this route, including the
+    // 4xx ones, carries the five security headers explicitly.
+    headers: withSecurityHeaders({
       'Content-Type': 'application/json',
       'Cache-Control': 'no-store',
       ...extraHeaders,
-    },
+    }),
   });
 }
 
@@ -64,7 +101,7 @@ async function sendEmail(
   replyTo?: string,
 ): Promise<{ ok: boolean; skipped?: true; status?: number; error?: string }> {
   if (!env.RESEND_API_KEY) return { ok: false, skipped: true };
-  const from = env.LEAD_FROM || 'M³ Leads <onboarding@resend.dev>';
+  const from = env.LEAD_FROM || 'M3MM Leads <onboarding@resend.dev>';
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), RESEND_TIMEOUT_MS);
   try {
@@ -85,7 +122,36 @@ async function sendEmail(
   }
 }
 
-export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
+/**
+ * Last-resort funnel. Cloudflare answers an unhandled throw with ITS OWN error
+ * page — no security headers, no CORS, no JSON shape — which is the one
+ * response off this route we do not control. Wrapping the handler converts any
+ * future bug into a hardened 500 the browser can actually read, and keeps the
+ * "every funnel carries the headers" claim true by construction rather than by
+ * inspection. Added 2026-08-12 after the Codex review found a live example
+ * (a JSON `null` body).
+ */
+const handlePost: PagesFunction<Env> = async (ctx) => {
+  const origin = ctx.request.headers.get('Origin');
+  try {
+    return await leadPost(ctx);
+  } catch (e) {
+    console.log(JSON.stringify({
+      event: 'lead_unhandled_error',
+      error: e instanceof Error ? `${e.name}: ${e.message}` : 'unknown_error',
+      ts: Date.now(),
+    }));
+    return jsonResponse(
+      500,
+      { ok: false, error: 'internal_error' },
+      corsResponseHeaders(ctx.env, origin),
+    );
+  }
+};
+
+export const onRequestPost = handlePost;
+
+const leadPost: PagesFunction<Env> = async ({ request, env }) => {
   const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
   const origin = request.headers.get('Origin');
   const contentType = request.headers.get('Content-Type') || '';
@@ -109,13 +175,21 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return reply(415, { ok: false, error: 'unsupported_media_type' });
   }
 
+  // Success funnel. A fetch caller gets the JSON it parses; a native form POST
+  // gets a 303 to the thank-you page so the visitor never sees raw JSON.
+  // `intent` is looked up in the allowlist above, which only ever yields a
+  // hard-coded same-site constant, so passing an unvalidated value here cannot
+  // influence the Location header beyond picking one of our own receipts.
+  const succeed = (intent?: string) =>
+    isForm ? redirectResponse(successPathFor(intent), cors) : reply(200, { ok: true });
+
   const contentLengthRaw = request.headers.get('Content-Length');
   const contentLength = contentLengthRaw ? Number(contentLengthRaw) : NaN;
   if (Number.isFinite(contentLength) && contentLength > LIMITS.bodyBytes) {
     return reply(413, { ok: false, error: 'payload_too_large', limit: LIMITS.bodyBytes });
   }
 
-  const rate = checkRate(ip, RATE_MAX, RATE_WINDOW_S);
+  const rate = checkRate(rateKey('lead', ip), RATE_MAX, RATE_WINDOW_S);
   if (!rate.ok) {
     return reply(
       429,
@@ -138,11 +212,23 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   let body: Lead;
   if (isJson) {
+    let parsed: unknown;
     try {
-      body = raw ? JSON.parse(raw) : {};
+      parsed = raw ? JSON.parse(raw) : {};
     } catch {
       return reply(400, { ok: false, error: 'invalid_json' });
     }
+    // `null`, `[]`, `"x"` and `1` are all VALID JSON, so they sail past the
+    // catch above — and `null` then threw on the first property read below,
+    // taking the whole handler down. An unhandled throw here is answered by
+    // Cloudflare's own error page, which carries none of the security headers
+    // this route sets and is not a funnel we control. Reject non-objects as the
+    // 400 they always were. (Codex review 2026-08-12; reproduced with
+    // `-d 'null' -H 'Content-Type: application/json'` before fixing.)
+    if (parsed === null || typeof parsed !== 'object' || Array.isArray(parsed)) {
+      return reply(400, { ok: false, error: 'invalid_json' });
+    }
+    body = parsed as Lead;
   } else {
     // No-JS fallback: the <form> POSTs as URL-encoded when the client
     // has JS disabled. Parse into the same shape validateLead accepts.
@@ -169,7 +255,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   // Honeypot: bots gleefully fill the hidden field. Silent 200 so they
   // don't know they were caught.
   if (body.company_website) {
-    return reply(200, { ok: true });
+    return succeed(typeof body.intent === 'string' ? body.intent : undefined);
   }
 
   const result = validateLead(body);
@@ -207,7 +293,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     : '';
 
   const adminHtml = `
-    <h2 style="font-family:Georgia,serif;">New M³ intake — ${esc(lead.source)}</h2>
+    <h2 style="font-family:Georgia,serif;">New M3MM intake — ${esc(lead.source)}</h2>
     <p><b>Name:</b> ${esc(lead.name)}</p>
     <p><b>Email:</b> <a href="mailto:${esc(lead.email)}">${esc(lead.email)}</a></p>
     <p><b>Business:</b> ${esc(lead.businessType)}</p>
@@ -229,8 +315,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     ? `I have your project intake. I'll review the scope and your preferred timing, then confirm the build week before work begins.`
     : `I'll actually look at your site and reply with a 5-minute recorded video teardown &mdash; what's working, what's costing you customers, and whether it needs a rebuild or just a fix. If it turns out you don't need me, I'll tell you that too.`;
   const replySubject = isProjectIntake
-    ? 'Your M³ project intake is in'
-    : 'Got your review request — M³';
+    ? 'Your M3MM project intake is in'
+    : 'Got your review request — M3MM';
 
   // Referral CTA in the closing block — every reply turns the lead into a
   // potential referrer. Terms come from one config (functions/_lib/referral.ts)
@@ -250,8 +336,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
       <div style="margin:22px 0;padding:14px 16px;background:#faf7f0;border-left:3px solid #FF3B5C;">
         <p style="margin:0 0 6px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#888;">Recent client outcomes</p>
-        <p style="margin:0 0 4px;font-size:14px;"><b>Aries Outdoor Living</b> &mdash; sold at handoff, first quote request 3 days after launch.</p>
-        <p style="margin:0;font-size:14px;"><b>Big 7 Construction</b> &mdash; Build + Repair lanes live at big7construction.com.</p>
+        <p style="margin:0 0 4px;font-size:14px;"><b>Aries Outdoor Living</b> &mdash; deployed and sold at handoff; first quote request 3 days later. Its official M3MM launch is next.</p>
+        <p style="margin:0;font-size:14px;"><b>Big 7 Construction</b> &mdash; test deployment complete; official launch waits on real jobsite photography.</p>
       </div>
 
       <p style="margin:18px 0 6px;font-size:13px;color:#555;">
@@ -266,11 +352,11 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         <a href="${esc(referralLink)}" style="color:#FF3B5C;">Your share link: ${esc(referralLink)}</a>
       </div>
 
-      <p style="margin:24px 0 0;">&mdash; Michael<br/><span style="color:#888;font-size:13px;">M³ &middot; Atlanta, GA &middot; m3mm.net</span></p>
+      <p style="margin:24px 0 0;">&mdash; Michael<br/><span style="color:#888;font-size:13px;">M3MM &middot; Atlanta, GA &middot; m3mm.net</span></p>
     </div>
   `;
 
-  const adminResult = await sendEmail(env, to, `M³ intake · ${lead.name} (${lead.businessType})`, adminHtml, lead.email);
+  const adminResult = await sendEmail(env, to, `M3MM intake · ${lead.name} (${lead.businessType})`, adminHtml, lead.email);
   const replyResult = await sendEmail(env, lead.email, replySubject, replyHtml);
 
   // Fleet bond — forward to CockpitCloud kanban if configured. Env-gated,
@@ -302,17 +388,20 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     ts: Date.now(),
   }));
 
-  return reply(200, { ok: true });
+  return succeed(lead.intent);
 };
 
 // Catch-all for every method except POST (Pages routes POST to onRequestPost).
 // Needs `env` as well as `request`: the preflight decision reads ALLOWED_ORIGINS.
 export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
   if (request.method === 'OPTIONS') {
-    return preflightResponse(env, request);
+    // `secureResponse` (not `withSecurityHeaders`) because the CORS module owns
+    // the preflight's construction — the grant/deny decision stays entirely in
+    // cors.ts and this only layers headers on top of whatever it returned.
+    return secureResponse(preflightResponse(env, request));
   }
   return new Response('Method Not Allowed', {
     status: 405,
-    headers: { Allow: 'POST', 'Cache-Control': 'no-store' },
+    headers: withSecurityHeaders({ Allow: 'POST', 'Cache-Control': 'no-store' }),
   });
 };
