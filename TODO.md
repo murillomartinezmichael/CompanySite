@@ -1,5 +1,17 @@
 # CompanySite — TODO
 
+## 2026-09-12 - restore the required Make aliases
+
+- Restored `lint` (Astro diagnostics) and `clean` (only generated `dist` and `.astro`).
+  Cleanup resolves its own repository, validates all targets before deletion,
+  and refuses linked paths. Source and dependencies remain intact.
+- Nine isolated CLI/Make tests pass, including junction refusal and failure
+  propagation. All five targets required by verify.yml are present; diff check
+  passes. Full `npm test` in the isolated source: **601 passed, 2 existing skips**.
+  Actual `npm exec -- astro check`: **45 files, zero errors, warnings or hints**.
+  Verification used a sanitized environment; cleanup never ran on real repo output.
+- Next: review this CI-contract correction with the pending branch changes.
+
 ## 2026-09-12 - shared payment policy and bounded scanner
 
 - [x] Shared parsed URL policy supports query parameters and explicit trusted
