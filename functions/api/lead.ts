@@ -115,6 +115,9 @@ async function sendEmail(
       },
       body: JSON.stringify({ from, to, subject, html, ...(replyTo ? { reply_to: replyTo } : {}) }),
     });
+    // Only the status is needed. Release the unread body without waiting for
+    // provider cleanup or allowing cleanup failure to alter delivery acceptance.
+    void res.body?.cancel().catch(() => {});
     return { ok: res.ok, status: res.status };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.name : 'unknown_error' };

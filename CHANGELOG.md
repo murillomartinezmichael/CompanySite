@@ -8,6 +8,8 @@ Adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Fixed — inquiry reliability candidate (2026-09-18)
+- Release unused email/Cockpit/n8n response bodies after reading status, without
+  letting slow or rejected cleanup delay or change the delivery result.
 - Return a retryable intake failure when no operator delivery channel accepts
   the inquiry, and send visitor acknowledgments only after acceptance.
 - Preserve roadmap topics in native forms and separate roadmap acknowledgment

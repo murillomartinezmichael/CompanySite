@@ -1,6 +1,6 @@
 # CompanySite — Runbook
 
-**Last updated:** 2026-09-17
+**Last updated:** 2026-09-18
 **Owner:** Michael Martinez (murillomartinezmichael@gmail.com)
 **Project shape:** Astro static site + Cloudflare Pages Functions. Rebuilt 2026-07-05 from the previous single-file HTML (preserved at `legacy/2026-cyberpunk-index.html`).
 
@@ -69,6 +69,14 @@ remain silent success. Summary logs are diagnostic, not inquiry storage.
 This proves provider acceptance, not eventual email delivery or downstream
 workflow persistence. There is no durable retry queue, and ambiguous provider
 timeouts can still require operator reconciliation before retrying.
+
+**Provider resources** — the delivery senders use only response status and
+cancel unread response bodies on success and failure. Cancellation is best
+effort and is not awaited: a stalled or rejected cleanup must not change an
+accepted inquiry into failure. Regression coverage includes open streams,
+cleanup rejection/stalls and bodyless responses for all three senders.
+This follows [Cloudflare's response-body guidance](https://developers.cloudflare.com/workers/platform/limits/#simultaneous-open-connections).
+It is a resource cleanup fix, not a measured production throughput claim.
 
 **CockpitCloud fleet bond** — each validated inquiry becomes a compact JSON
 card (`source`, `kind`, `name`, `next_step`, `link`, `link_label`). Contact and

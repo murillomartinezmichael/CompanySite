@@ -1,5 +1,21 @@
 # CompanySite — TODO
 
+## 2026-09-18 — provider response cleanup before release
+
+- Quality follow-up to PR #27: email, Cockpit and n8n senders left provider
+  bodies unread after recording response status. They now cancel these streams
+  without buffering or waiting on cleanup. Delivery/receipt decisions are unchanged.
+- Regression proof: **12 failed / 3 passed before; all 15 pass after**.
+  Covers successful/failed delivery, rejected/stalled cancellation and bodyless
+  responses. Full suite: **748 passed / 2 existing skips, 55 files**.
+  Twelve isolated workerd delivery scenarios still pass; 15-page build/output
+  fence, Astro check (45 files, zero diagnostics), Functions compilation and
+  strict deploy preflight pass. Existing SDK Node-import warnings remain.
+- Next: push this focused follow-up to PR #27, require checks on its new head
+  and recheck the associated preview. Previous head `6ef6cba` had all six checks
+  green and browser evidence reviewed; those results do not certify a later head.
+  Production and real-provider acceptance remain owner gates in PENDING_MANUAL.
+
 ## 2026-09-18 — inquiry reliability release candidate
 
 - Prepared `codex/companysite-release-2026-09-18` from current main

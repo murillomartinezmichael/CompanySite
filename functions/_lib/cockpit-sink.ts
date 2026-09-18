@@ -118,6 +118,9 @@ export async function sendToCockpit(
       },
       body: JSON.stringify(body),
     });
+    // Only the status is needed. Release the unread body without waiting for
+    // provider cleanup or allowing cleanup failure to alter delivery acceptance.
+    void res.body?.cancel().catch(() => {});
     return res.ok ? { ok: true, status: res.status } : { ok: false, status: res.status };
   } catch (e) {
     // AbortError (timeout), network error, DNS — all collapse to a single
