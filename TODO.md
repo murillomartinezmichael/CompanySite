@@ -1,5 +1,39 @@
 # CompanySite — TODO
 
+## 2026-09-18 — inquiry reliability release candidate
+
+- Prepared `codex/companysite-release-2026-09-18` from current main
+  `978a2c6ac28df2e972d574783097a34e85898fec`. Preserved the original dirty
+  checkout, unrelated notes and media backups. No production release yet.
+- Intake now requires acceptance by operator email, Cockpit or n8n before
+  issuing a receipt; total delivery failure returns 503. Roadmap requests keep
+  their topics and get an acknowledgment without sales promises. Native text
+  forms, streamed byte caps and chat cancellation have regression coverage.
+- Fresh locked install and build: 15 pages, clean shipped-output fence.
+  `npm test -- --silent`: **733 passed, 2 existing skips, 54 files**.
+  `npm run astro -- check`: **45 files, zero errors/warnings/hints**.
+  Strict deploy preflight passes. Functions compile passes with existing SDK
+  Node-import warnings; this is not proof of hosted runtime compatibility.
+- The current candidate also passes twelve isolated workerd delivery scenarios:
+  all channel-acceptance combinations, both native failure encodings, fallback
+  receipt despite failed acknowledgment, and empty configuration. All outgoing
+  provider fetches were intercepted locally; no live inquiry was sent.
+- Updated the lockfile to Vitest 4.1.11, SVGO 4.1.0 and devalue 5.9.2;
+  `npm audit` reports **zero advisories**. npm 10's update resolver crashed;
+  npm 11 in an isolated temporary cache resolved the update. A subsequent
+  fresh `npm ci` with the existing npm 10 succeeds. No global tooling changed.
+- Added CI browser coverage for both forms at 375/1440px: failed delivery
+  retains input, shows the manual email fallback, and permits a deliberate
+  successful retry. Local Chrome could not start after three attempts; browser
+  execution must pass in the existing Linux CI job before release.
+- Next: publish the draft PR, require green checks on its exact commit, inspect
+  browser artifacts and smoke the Pages preview's static assets/API OPTIONS.
+  Then obtain the concrete production decision and verify real operator
+  delivery with Michael's approved test. See `PENDING_MANUAL.md`.
+- Parked: new features, downstream automation changes, live payments/model
+  calls, other dependency PRs and other products. No second-agent review is
+  claimed; Michael requested direct Codex work.
+
 ## 2026-09-12 - repair www canonical-host routing (PR #18)
 
 - Integrated main `534cd07` into the original PR branch, preserving current

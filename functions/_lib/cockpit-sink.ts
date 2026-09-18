@@ -6,11 +6,10 @@
 // Optional `COCKPIT_INGEST_TOKEN` becomes a `Authorization: Bearer <token>`
 // header so the CockpitCloud side can authenticate the incoming leads.
 //
-// Failure modes are non-blocking on the primary /api/lead response — the
-// helper returns a result object the caller structures into its log line,
-// but never throws or delays a 200 to the browser. If CockpitCloud is down
-// the visitor still gets their Resend admin/reply pair (or, without Resend,
-// still gets the honest 200 with graceful degrade).
+// The helper returns a result object instead of throwing. If CockpitCloud is
+// down, /api/lead can still succeed through operator email or n8n. The route
+// returns 503 only when every operator channel skips or fails; a summary log
+// alone cannot recover the contact details and inquiry.
 //
 // Idempotency: the caller supplies an id. Recommended shape (kept out of this
 // helper so it stays pure and testable): a hash of stable Lead fields so a
@@ -58,7 +57,9 @@ export function buildCockpitLeadCard(_id: string, lead: Lead, ip: string): Recor
   // next_step — the human-actionable summary. Mike glances this and knows
   // whether to reply now or later. Truncated at 4000 to satisfy the schema.
   const parts = [
-    lead.intent?.startsWith('checkout:') ? `Checkout intake — verify Stripe payment, then confirm scope and build week.` : `Reply within 24h.`,
+    lead.intent === 'book:roadmap-subscribe'
+      ? 'Roadmap update request — record the selected topics. No reply deadline or update schedule is promised.'
+      : lead.intent?.startsWith('checkout:') ? `Checkout intake — verify Stripe payment, then confirm scope and build week.` : `Reply within 24h.`,
     `Email: ${lead.email}`,
     lead.currentUrl ? `Their site: ${lead.currentUrl}` : null,
     lead.preferredStart ? `Preferred start: ${lead.preferredStart}` : null,

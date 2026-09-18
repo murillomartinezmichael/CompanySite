@@ -18,6 +18,7 @@ import { checkRate, rateKey } from '../_lib/rate';
 import { originAllowed, corsResponseHeaders, preflightResponse } from '../_lib/cors';
 import { withSecurityHeaders, secureResponse } from '../_lib/security-headers';
 import { CHAT_SYSTEM_PROMPT } from '../_lib/chat-system-prompt';
+import { readBodyText } from '../_lib/read-body';
 
 type Env = {
   ANTHROPIC_API_KEY?: string;
@@ -87,15 +88,14 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
     return jsonResponse(413, { ok: false, error: 'payload_too_large' }, cors);
   }
 
-  let text: string;
-  try {
-    text = await request.text();
-  } catch {
+  const bodyRead = await readBodyText(request, MAX_BODY_BYTES);
+  if (!bodyRead.ok) {
+    if (bodyRead.error === 'too_large') {
+      return jsonResponse(413, { ok: false, error: 'payload_too_large' }, cors);
+    }
     return jsonResponse(400, { ok: false, error: 'invalid_body' }, cors);
   }
-  if (text.length > MAX_BODY_BYTES) {
-    return jsonResponse(413, { ok: false, error: 'payload_too_large' }, cors);
-  }
+  const text = bodyRead.text;
 
   let parsed: unknown;
   try {
@@ -140,9 +140,29 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
   }
 
   const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+  const generation = new AbortController();
+  let stopped = false;
+  let removeAbortListener = () => {};
+  const stopGeneration = () => {
+    if (stopped) return;
+    stopped = true;
+    removeAbortListener();
+    generation.abort();
+  };
 
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
+      const onRequestAbort = () => {
+        if (stopped) return;
+        stopGeneration();
+        controller.close();
+      };
+      removeAbortListener = () => request.signal.removeEventListener('abort', onRequestAbort);
+      request.signal.addEventListener('abort', onRequestAbort, { once: true });
+      if (request.signal.aborted) {
+        onRequestAbort();
+        return;
+      }
       try {
         const anthropicStream = client.messages.stream({
           model: MODEL,
@@ -150,21 +170,28 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
           system: CHAT_SYSTEM_PROMPT,
           output_config: { effort: 'low' }, // snappy, low-cost — this is a Q&A widget, not a reasoning task
           messages: messages.map((m) => ({ role: m.role, content: m.content })),
-        });
+        }, { signal: generation.signal });
 
+        if (stopped) return;
         for await (const event of anthropicStream) {
+          if (stopped) return;
           if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
             controller.enqueue(ndjsonLine({ type: 'delta', text: event.delta.text }));
           }
         }
 
+        if (stopped) return;
         const final = await anthropicStream.finalMessage();
+        if (stopped) return;
         if (final.stop_reason === 'refusal') {
           controller.enqueue(ndjsonLine({ type: 'error', message: 'The assistant declined to answer that.' }));
         } else {
           controller.enqueue(ndjsonLine({ type: 'done' }));
         }
       } catch (err) {
+        // Cancellation already closed the response; late provider events/errors
+        // must not enqueue into it or turn a canceled request into a failure.
+        if (stopped) return;
         controller.enqueue(
           ndjsonLine({
             type: 'error',
@@ -172,8 +199,16 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
           }),
         );
       } finally {
-        controller.close();
+        removeAbortListener();
+        if (!stopped) {
+          stopped = true;
+          controller.close();
+        }
       }
+    },
+    cancel() {
+      // Abort the paid request immediately, without awaiting provider shutdown.
+      stopGeneration();
     },
   });
 

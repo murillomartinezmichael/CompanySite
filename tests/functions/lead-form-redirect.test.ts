@@ -6,11 +6,11 @@
 // Successful urlencoded submits now answer 303 to the thank-you page. JSON
 // callers are untouched: every page's fetch handler still parses `{ok:true}`.
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { onRequestPost as leadPost } from '../../functions/api/lead';
 import { __resetBuckets } from '../../functions/_lib/rate';
 
-const ctx = (r: Request) => ({ request: r, env: {} }) as unknown as Parameters<typeof leadPost>[0];
+const ctx = (r: Request) => ({ request: r, env: { RESEND_API_KEY: 'synthetic-fixture', LEAD_TO: 'operator@example.invalid' } }) as unknown as Parameters<typeof leadPost>[0];
 
 const FIELDS = {
   name: 'Roadmap subscriber',
@@ -44,7 +44,12 @@ const jsonPost = (ip = '198.51.100.21') =>
   });
 
 describe('no-JS form submits land on a page, not on raw JSON', () => {
-  beforeEach(() => __resetBuckets());
+  beforeEach(() => {
+    __resetBuckets();
+    vi.stubGlobal('fetch', vi.fn(async () => new Response('{}', { status: 202 })));
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+  });
+  afterEach(() => { vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 
   // The receipt now depends on the lead's intent: /thanks promises a recorded
   // video teardown within 24 hours, which is true of a site-review intake and
