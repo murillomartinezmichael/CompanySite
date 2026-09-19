@@ -1,5 +1,19 @@
 # CompanySite — Decisions
 
+## 2026-09-19 — direct delivery endpoints only
+
+The three delivery senders use `redirect: 'manual'`; their existing non-2xx
+handling rejects redirects and retains safe status diagnostics. A loopback
+negative control reproduced false intake success through login-page redirects,
+307/308 inquiry-body replay and n8n custom-secret forwarding. The actual local
+workerd repeated those findings; this installed version stripped cross-origin
+Authorization, so no broader observed credential-leak claim is made. Direct
+2xx, partial fallback, acknowledgment failure and deliberate retry remain valid.
+Final endpoint configuration is an operator responsibility; this adds no retry
+queue or delivery guarantee. Reference checked 2026-09-19:
+[Cloudflare Request redirect behavior](https://developers.cloudflare.com/workers/runtime-apis/request/#properties).
+
+
 Cross-cutting choices that took real thought. Cross-refs to the repo-wide ledger at `../docs/DECISIONS.md § D-*` where applicable.
 
 Format per entry: **D-CS-###** · date · one-line rule · why · reversibility.

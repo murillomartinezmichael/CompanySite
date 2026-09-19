@@ -70,6 +70,14 @@ This proves provider acceptance, not eventual email delivery or downstream
 workflow persistence. There is no durable retry queue, and ambiguous provider
 timeouts can still require operator reconciliation before retrying.
 
+**Delivery destinations** — email, Cockpit and n8n requests never follow HTTP
+redirects. A redirect is a failed channel, even when its destination would return
+200; a login or landing page cannot establish intake acceptance. Configure the
+final API/webhook endpoint directly. Other direct-success channels may still
+accept the inquiry. The visitor acknowledgment also rejects redirects without
+turning an already accepted inquiry into failure. Redirect locations, credentials
+and response bodies are not added to delivery diagnostics.
+
 **Provider resources** — the delivery senders use only response status and
 cancel unread response bodies on success and failure. Cancellation is best
 effort and is not awaited: a stalled or rejected cleanup must not change an

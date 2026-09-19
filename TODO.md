@@ -1,5 +1,36 @@
 # CompanySite — TODO
 
+## 2026-09-19 — reject provider redirects before release
+
+- Bounded audit from PR #27 head `3cfcb2c`: operator delivery requests followed
+  redirects into 200 login pages and falsely issued receipts. Cross-origin
+  307/308 replayed inquiry bodies; the synthetic n8n webhook secret also reached
+  the redirected endpoint. All three senders now use `redirect: 'manual'` and
+  their existing non-2xx handling. Final endpoint URLs must be configured directly.
+- Reproduction: **21 failed / 3 passed before; all 24 pass after** using real
+  Node fetch and two owned loopback origins. Tests cover all five redirect
+  statuses, same-origin login redirects, no false acknowledgment, complete direct
+  delivery, partial fallback, acknowledgment failure and deliberate retry.
+- Actual local workerd: **15 negative-control and 15 fixed scenarios pass** with
+  every outbound request intercepted. It reproduced false receipts, body replay
+  and n8n custom-secret forwarding; this installed version stripped cross-origin
+  Authorization. No real provider request or credential was used.
+- Verification: **772 passed / 2 existing skips, 56 files** after the required
+  15-page build; output fence, Astro check (45 files, zero diagnostics), Functions
+  compilation and strict deploy preflight pass. Existing SDK node:fs/node:path
+  warnings remain. The initial full-suite run lacked generated dist; building
+  and rerunning resolved those artifact checks. No dependencies or UI changed.
+- Release scope: three delivery senders, the new redirect regression test,
+  CHANGELOG, DECISIONS, RUNBOOK and these TODO notes. The existing PR #27
+  candidate includes this fix; require its updated exact-head CI and preview
+  verification before production. An independent agent implemented/reproduced
+  the fix; the integrating agent reviewed the diff and reran the regressions.
+- Remaining operational acceptance: the existing authorized synthetic inquiry
+  must reach and remain recoverable in an intended operator channel, with its
+  acknowledgment/roadmap triage checked. Provider 2xx still does not establish
+  eventual delivery, retention or a durable retry guarantee. All verification
+  used synthetic local fixtures; no production inquiry or provider send occurred.
+
 ## 2026-09-18 — provider response cleanup before release
 
 - Quality follow-up to PR #27: email, Cockpit and n8n senders left provider

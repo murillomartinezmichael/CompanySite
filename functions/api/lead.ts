@@ -108,6 +108,9 @@ async function sendEmail(
   try {
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
+      // A redirect is not delivery acceptance. Never forward the payload or
+      // credentials to a redirected endpoint, including a login page.
+      redirect: 'manual',
       signal: controller.signal,
       headers: {
         Authorization: `Bearer ${env.RESEND_API_KEY}`,

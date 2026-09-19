@@ -7,6 +7,11 @@ Adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed — delivery redirect boundary (2026-09-19)
+- Reject email/Cockpit/n8n redirects without forwarding inquiry data or credentials
+  to the redirect destination. A redirect ending at a 200 login page no longer
+  counts as acceptance or triggers a false receipt; direct-success fallbacks work.
+
 ### Fixed — inquiry reliability candidate (2026-09-18)
 - Release unused email/Cockpit/n8n response bodies after reading status, without
   letting slow or rejected cleanup delay or change the delivery result.

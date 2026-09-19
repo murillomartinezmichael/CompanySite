@@ -108,6 +108,9 @@ export async function sendToCockpit(
   try {
     const res = await fetchImpl(url, {
       method: 'POST',
+      // Accept only this endpoint's response; redirects must not forward PII
+      // or credentials, or turn a login page into a successful delivery.
+      redirect: 'manual',
       signal: controller.signal,
       headers: {
         'Content-Type': 'application/json',
