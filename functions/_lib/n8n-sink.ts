@@ -2,7 +2,8 @@
 //
 // When `N8N_LEAD_WEBHOOK_URL` is set (Cloudflare Pages env), every accepted
 // intake POSTs a compact JSON payload to that webhook. Unset = no-op (same
-// feature-flag pattern as CockpitCloud). Never blocks the visitor 200.
+// feature-flag pattern as CockpitCloud). The route can still succeed through
+// another operator channel; it rejects only when none accepts the lead.
 //
 // Optional `N8N_LEAD_WEBHOOK_SECRET` is sent as `X-M3-Webhook-Secret` so the
 // n8n side can reject random internet noise (Header Auth / IF node).
@@ -21,8 +22,11 @@ export type N8nSinkResult =
 
 export const N8N_SINK_TIMEOUT_MS = 6_000;
 
-/** Score 0–100 for triage. Higher = reply sooner. Pure + unit-tested. */
+/** Score 0–100 for sales triage. Higher = reply sooner. Pure + unit-tested. */
 export function scoreLead(lead: Lead): number {
+  // Following the roadmap expresses no purchase/review intent. Keep it out of
+  // sales urgency even if its URL, topics or attribution look like a warm lead.
+  if (lead.intent === 'book:roadmap-subscribe') return 0;
   let score = 20;
   const frustration = lead.frustration.trim();
   if (frustration.length >= 40) score += 15;
@@ -55,6 +59,7 @@ export function buildN8nLeadPayload(
   lead: Lead,
   ip: string,
 ): Record<string, unknown> {
+  const isRoadmapRequest = lead.intent === 'book:roadmap-subscribe';
   const score = scoreLead(lead);
   const hot = score >= 60;
   return {
@@ -62,9 +67,9 @@ export function buildN8nLeadPayload(
     id,
     score,
     hot,
-    triage: hot
-      ? 'HOT — reply within a few hours if you can.'
-      : 'Normal — reply within 24h.',
+    triage: isRoadmapRequest
+      ? 'Roadmap update request — record the selected topics; no reply deadline or update schedule is promised.'
+      : hot ? 'HOT — reply within a few hours if you can.' : 'Normal — reply within 24h.',
     lead: {
       name: lead.name,
       email: lead.email,
@@ -83,12 +88,14 @@ export function buildN8nLeadPayload(
     },
     ip,
     receivedAt: new Date().toISOString(),
-    replyHint: lead.intent?.startsWith('checkout:')
+    replyHint: isRoadmapRequest
+      ? `Hey ${lead.name.split(/\s+/)[0] || lead.name} — M3MM received your roadmap update request. Current releases and previews are at https://m3mm.net/roadmap.`
+      : lead.intent?.startsWith('checkout:')
       ? `Verify the Stripe payment, then reply: Hey ${lead.name.split(/\s+/)[0] || lead.name} — I have your project intake and preferred start window (${lead.preferredStart || 'not specified'}). I’ll confirm the scope and actual build week before work begins.`
       : [
         `Hey ${lead.name.split(/\s+/)[0] || lead.name} — got your note about ${lead.businessType}.`,
         lead.currentUrl
-          ? `I peeked at ${lead.currentUrl} and have 2–3 concrete fixes that would help.`
+          ? `Thanks for sharing ${lead.currentUrl}. I’ll review it before suggesting changes.`
           : `Send me the site URL (or a screenshot) and I’ll give you a blunt 3-bullet take.`,
         `Want a 5-min review this week, or should I just email the notes?`,
       ].join(' '),

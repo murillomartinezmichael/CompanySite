@@ -13,12 +13,12 @@
 // clicks plus clicking into the form was enough to burn the lead's budget
 // before it was ever submitted.
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { onRequestPost as leadPost } from '../../functions/api/lead';
 import { onRequestPost as trackPost } from '../../functions/api/track';
 import { __resetBuckets } from '../../functions/_lib/rate';
 
-const ctx = (r: Request) => ({ request: r, env: {} }) as unknown as Parameters<typeof leadPost>[0];
+const ctx = (r: Request) => ({ request: r, env: { RESEND_API_KEY: 'synthetic-fixture', LEAD_TO: 'operator@example.invalid' } }) as unknown as Parameters<typeof leadPost>[0];
 
 const LEAD_RATE_MAX = 5;
 const IP = '198.51.100.77';
@@ -47,7 +47,12 @@ const validLead = (ip: string) =>
   });
 
 describe('the analytics beacon must not spend the lead allowance', () => {
-  beforeEach(() => __resetBuckets());
+  beforeEach(() => {
+    __resetBuckets();
+    vi.stubGlobal('fetch', vi.fn(async () => new Response('{}', { status: 202 })));
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+  });
+  afterEach(() => { vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 
   it('a real lead still lands after enough CTA beacons to exhaust its old budget', async () => {
     for (let i = 0; i < LEAD_RATE_MAX; i++) {
@@ -55,14 +60,14 @@ describe('the analytics beacon must not spend the lead allowance', () => {
     }
     // Before the fix this was 429 and the lead was dropped.
     const res = await leadPost(ctx(validLead(IP)));
-    expect(res.status).not.toBe(429);
+    expect(res.status).toBe(200);
   });
 
   it('a real lead survives far more beacons than the lead limit', async () => {
     for (let i = 0; i < LEAD_RATE_MAX * 4; i++) {
       await trackPost(ctx(beacon(IP)));
     }
-    expect((await leadPost(ctx(validLead(IP)))).status).not.toBe(429);
+    expect((await leadPost(ctx(validLead(IP)))).status).toBe(200);
   });
 
   it('the lead limit itself still works — this is isolation, not removal', async () => {
@@ -72,6 +77,7 @@ describe('the analytics beacon must not spend the lead allowance', () => {
     }
     expect(statuses.filter((s) => s === 429)).toHaveLength(1);
     expect(statuses[statuses.length - 1]).toBe(429);
+    expect(statuses.slice(0, LEAD_RATE_MAX)).toEqual(Array(LEAD_RATE_MAX).fill(200));
   });
 
   it('the track limit still works on its own key', async () => {
@@ -80,11 +86,11 @@ describe('the analytics beacon must not spend the lead allowance', () => {
     // Still 204 (the beacon never surfaces an error to the page) but the lead
     // path must remain completely unaffected by it.
     expect((await trackPost(ctx(beacon(IP)))).status).toBe(204);
-    expect((await leadPost(ctx(validLead(IP)))).status).not.toBe(429);
+    expect((await leadPost(ctx(validLead(IP)))).status).toBe(200);
   });
 
   it('rate buckets stay separated per IP as well as per route', async () => {
     for (let i = 0; i < LEAD_RATE_MAX; i++) await leadPost(ctx(validLead('203.0.113.9')));
-    expect((await leadPost(ctx(validLead('203.0.113.10')))).status).not.toBe(429);
+    expect((await leadPost(ctx(validLead('203.0.113.10')))).status).toBe(200);
   });
 });

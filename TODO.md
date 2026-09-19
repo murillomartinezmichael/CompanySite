@@ -1,5 +1,260 @@
 # CompanySite — TODO
 
+## 2026-09-18 — quality follow-up: release provider response streams
+
+- PR #27 now points to `3cfcb2cabd37a8eed08586f158390cfce3c610ad`.
+  Email, Cockpit and n8n cancel unused response bodies after reading status,
+  without buffering or awaiting cleanup. Cleanup cannot change acceptance.
+- Fifteen regressions: 12 failed / 3 passed before, all 15 pass after. Full
+  suite: 748 passed / 2 existing skips, 55 files. Twelve isolated workerd
+  scenarios, build/output fence, zero Astro diagnostics, Functions compilation
+  and strict preflight pass. Existing SDK compile warnings remain.
+- New preview `https://a5cf78a2.m3-companysite.pages.dev` passes all nine
+  GET/OPTIONS smoke checks. All six checks pass on the updated head; Linux CI
+  has 741 passes / 9 skips (seven Windows-only), 60 page/viewport checks,
+  15 no-JavaScript checks and four delivery/retry cases. Evidence reviewed:
+  both desktop screenshots match the reviewed prior artifacts; new mobile
+  screenshots inspected. Zero accessibility violations.
+- Changes are committed/pushed in the release worktree; this original checkout
+  is preserved and no longer contains the newest fix. Next: the tracked
+  production decision and approved live delivery check.
+  No production merge or measured capacity claim.
+
+## 2026-09-18 — verified release candidate published
+
+- [Draft PR #27](https://github.com/murillomartinezmichael/CompanySite/pull/27), commit `6ef6cba32c6eb79d43722c1d3e409c64b596cd96`,
+  on `codex/companysite-release-2026-09-18` in the isolated
+  `.worktrees/companysite-release-2026-09-18` checkout. All six GitHub/Pages
+  checks pass; 24 explicit files, clean worktree, pushed once. No production merge.
+- Includes the pending inquiry-delivery, native-form, byte-cap, roadmap-triage
+  and chat-cancellation fixes, preserving current main's newer changes.
+  Lockfile fixes Vitest/SVGO/devalue advisories; fresh install, build, preflight,
+  Astro check and **zero npm audit findings** verified.
+- Local: **733 tests passed / 2 existing skips**, twelve isolated workerd
+  scenarios. [Linux CI](https://github.com/murillomartinezmichael/CompanySite/actions/runs/35352132031): **726 passed / 9 skipped**; seven Windows-only
+  cases are exercised locally. All **60 page/viewport checks**, 15 no-JavaScript
+  navigation checks and four delivery failure/retry browser cases pass.
+  Reviewed the evidence JSON and all four delivery screenshots; no accessibility
+  violations. This clears the previously blocked local browser release check.
+- [Hosted preview](https://23b370d0.m3-companysite.pages.dev): five HTML routes and a compiled asset return 200;
+  lead/chat/track OPTIONS return 204 with security headers. Existing SDK compile
+  warnings remain, but preview startup is verified. No real provider submission
+  or production disconnect/billing behavior is claimed.
+- Next: Michael's exact production decision and approved real-channel delivery
+  check in `PENDING_MANUAL.md`. Preserve this original dirty checkout and its
+  media backups; continue release work in the candidate worktree or PR.
+  Fleet inventory/evidence: `../docs/research/release-2026-09-18/`.
+  New features and other dependency PRs remain parked.
+
+## 2026-09-17 - fail visibly when inquiry delivery fails
+
+- `/api/lead` now requires a 2xx response from operator email, Cockpit or n8n
+  before reporting success. If all channels skip/fail, JSON and both native form
+  encodings return hardened `503 delivery_unavailable`, without a receipt redirect.
+  Logs use `lead_delivery_failed`; no contact/message recovery data was added.
+- Acknowledgments only follow operator acceptance. A failed operator email can
+  fall back to Cockpit/n8n before sending the acknowledgment; an acknowledgment
+  failure alone does not reject an accepted inquiry. Honeypot, validation,
+  rate/CORS/security rules and successful JSON/redirect contracts remain intact.
+- Twenty-one new regressions: **11 failed / 10 passed before; all 21 pass after**.
+  All eight operator-success combinations, absent/malformed config, network and
+  timeout failures, acknowledgment failures and native forms are covered.
+  Redirect/rate tests now use synthetic successful delivery, and rate tests
+  require actual 200 responses instead of merely accepting any non-429 status.
+- **92 focused tests**, **712 full-suite passes / 2 existing skips**, 53 files;
+  twelve isolated workerd scenarios; sanitized 275-file / 15-page build and
+  output fence; 45-file Astro check with zero diagnostics. Providers were fully
+  intercepted; dependencies reused, env files excluded and child home/env isolated.
+- Browser check is **unverified**: three isolated headless Chrome launches failed
+  before page interaction, reported by Puppeteer as a profile-already-running
+  error. No existing browser was modified. The unchanged JS error/retain-input
+  path was reviewed in source; manual browser release check is recorded.
+- Evidence and probe sources:
+  `%TEMP%/companysite-delivery-kO91yT/verification-{runtime,build,check,browser}.log`.
+  Files: `functions/api/lead.ts`, comments in `functions/_lib/{cockpit,n8n}-sink.ts`,
+  `tests/functions/lead-delivery.test.ts`, `lead-form-redirect.test.ts`,
+  `rate-isolation.test.ts`, `RUNBOOK.md`, this TODO, `COCKPIT_QUEUE.md`, local/root
+  `PENDING_MANUAL.md`, and root `SESSION_GOAL.md`/`TODO.md`. Prior changes preserved.
+  Codex implemented, tested and self-reviewed directly, without delegation.
+- Limits: provider acceptance is not proof of eventual delivery/persistence;
+  ambiguous timeouts can still require reconciliation. No durable queue or
+  automatic retry was added. Native error pages remain JSON. No live messages,
+  account/config changes, commit, push or deployment. Existing release gates apply.
+
+## 2026-09-17 - truthful roadmap and sales follow-up instructions
+
+- Cockpit and n8n now identify the exact validated roadmap intent as an update
+  request, without sales urgency, a review deadline or an update-cadence promise.
+  Its sales score is 0 / `hot: false`, even with a URL, long topics, referral and
+  social attribution. All captured contact/topic/attribution data and existing
+  payload fields remain present. Similar-looking intents keep existing handling.
+- n8n's ordinary sales reply draft now says the site will be reviewed before
+  suggesting changes; it no longer invents a completed inspection or 2–3 findings.
+  Missing-URL requests and checkout payment/scope/build-week instructions remain.
+- Twelve new regressions: **6 failed / 6 passed before; all 12 pass after**.
+  **74 focused tests** and **691 full-suite passes / 2 existing skips**, 52 files.
+  Eleven isolated workerd scenarios verify the transmitted payloads through JSON,
+  URL-encoded and multipart routes plus ordinary sales/checkout and prior intake
+  regressions. Every outbound request was intercepted locally.
+- Sanitized 274-file copy: 15-page build/output fence and 45-file Astro check
+  pass, zero diagnostics. Installed dependencies reused, env files excluded,
+  child home/env isolated. Evidence and probe source:
+  `%TEMP%/companysite-triage-ZJua2H/verification-{runtime,build,check}.log`.
+- Files: `functions/_lib/n8n-sink.ts`, `functions/_lib/cockpit-sink.ts`,
+  `tests/functions/lead-triage.test.ts`, this TODO, `COCKPIT_QUEUE.md`, local/root
+  `PENDING_MANUAL.md`, and root `SESSION_GOAL.md`/`TODO.md`. Prior changes preserved.
+  Codex implemented, tested and self-reviewed directly; no delegation.
+- Local payload behavior is verified. Actual downstream workflows were not
+  inspected or changed; release checks must confirm score-0 roadmap requests are
+  retained and no separate automation reintroduces review/deadline emails.
+  No subscription service activated, live messages, commit, push or deployment.
+
+## 2026-09-17 - cancel abandoned chat generation
+
+- Request abort or response-stream cancellation now aborts the upstream SDK
+  signal immediately. Already-aborted requests never start generation; late
+  provider tokens/errors are ignored and request listeners are removed. Normal
+  completion, refusal and redacted error responses retain their NDJSON format.
+- Ten new lifecycle regressions failed before the fix and pass afterward;
+  **56 focused tests** and **679 full-suite passes / 2 existing skips**, 51 files.
+  Five offline scenarios using the actual installed Anthropic SDK (0.120.0)
+  verify cancellation before/after tokens, request abort, normal completion and
+  already-aborted requests. Fetch was replaced entirely with synthetic SSE;
+  no model/network requests were permitted by the probe.
+- Sanitized 273-file copy: 15-page build/output fence and 45-file Astro check
+  pass, zero diagnostics. Existing dependencies reused; env files excluded and
+  child environment/home isolated. Evidence and SDK probe source:
+  `%TEMP%/companysite-chat-cancel-nm2GGg/verification-{runtime,build,check}.log`.
+- Files: `functions/api/chat.ts`, `tests/functions/chat-cancellation.test.ts`,
+  this TODO, `COCKPIT_QUEUE.md`, local/root `PENDING_MANUAL.md`, and root
+  `SESSION_GOAL.md`/`TODO.md`. Prior intake/request-limit work remains intact.
+  Self-review complete; Codex handled all work directly without delegation.
+- Limits: closing the widget still only hides it. Actual Pages disconnection
+  propagation and provider billing effects need release-environment evidence;
+  no production behavior or cost savings are claimed. Existing SDK compatibility
+  check remains in PENDING_MANUAL. No live provider, commit, push or deployment.
+
+## 2026-09-17 - preserve roadmap topics without JavaScript
+
+- Native URL-encoded and multipart roadmap forms now fold the selected `topics`
+  into the same note used by the JS flow. Email, Cockpit and n8n retain the choice.
+  Exact trimmed intent controls this mapping; unrelated intake notes are unchanged,
+  and the existing 4,000-character note limit still applies. Blank selections use
+  a neutral request note on both paths instead of the hidden "every drop" request.
+- Eight added regressions reproduced four failures before the fix; all now pass.
+  Final combined verification: **63 focused tests**, **669 full-suite passes / 2
+  existing skips**, 15-page sanitized build/output fence, 45-file Astro check
+  with zero diagnostics, and eight isolated workerd scenarios. The runtime probe
+  also inspects fresh built HTML/JS and confirms topic delivery through all three
+  operator channels. All outgoing requests were intercepted locally.
+- Evidence: `%TEMP%/companysite-receipt-6xpGYb/verification-{build,check,runtime}.log`.
+  Existing installed dependencies were reused; env files excluded, child home/env
+  isolated. No production runtime claim, live email, commit, push or deployment.
+  Codex handled implementation, tests and self-review directly, without delegation.
+- Combined roadmap files: `functions/api/lead.ts`, `src/pages/roadmap.astro`,
+  `tests/functions/lead-confirmation.test.ts`, `tests/build/roadmap-signup.test.ts`;
+  notes in this TODO, `PENDING_MANUAL.md`, `COCKPIT_QUEUE.md`, and root
+  `SESSION_GOAL.md`/`TODO.md`. Prior request-limit/multipart edits remain intact.
+- Next: review the combined local intake changes and existing release checks.
+  The actual roadmap update cadence remains Michael's decision; downstream
+  automation configuration was not inspected or changed by these local fixes.
+
+## 2026-09-17 - truthful roadmap confirmation email
+
+- Roadmap requests now receive a short acknowledgment and a fixed public-roadmap
+  link instead of the website-review teardown/deadline email. Exact validated
+  intent selects the template; ordinary review and project-intake copy stays intact.
+  No update cadence, payment, subscription activation or response deadline is promised.
+- Thirteen new mocked-delivery regressions: **5 failed / 8 passed before, all 13
+  pass after**. All 47 focused intake tests pass; full suite **661 passed / 2
+  existing skips**. Sanitized 15-page build/output fence and six local workerd
+  scenarios pass, including the actual generated roadmap email. Outbound requests
+  were intercepted locally. Codex performed implementation, tests and self-review.
+- Evidence: `%TEMP%/companysite-receipt-6xpGYb/verification-{build,runtime}.log`.
+  Files: `functions/api/lead.ts`, `tests/functions/lead-confirmation.test.ts`, this
+  TODO and root `SESSION_GOAL.md`; closeout notes follow the combined roadmap work.
+- The native `topics` loss found during this review is corrected and verified
+  in the follow-up above. Production/cadence decisions remain in PENDING_MANUAL.
+
+## 2026-09-17 - repair multipart lead submissions
+
+- `/api/lead` advertised multipart support but sent its boundary-delimited body
+  through URLSearchParams, rejecting valid native FormData. Multipart now uses
+  the platform parser after the existing 16 KiB streamed-byte check, with the
+  original case-sensitive boundary intact. Both form encodings use the existing
+  field mapping and first-value semantics. Malformed forms and file parts return
+  a hardened `400 invalid_form` before delivery; text-only intake remains the scope.
+- Added 15 synthetic route regressions: **12 failed / 3 passed before, all 15
+  pass after**. The 34 focused intake tests pass. Full `npm test -- --silent`:
+  **648 passed / 2 existing skips**, 49 files. Existing JSON/URL-encoded behavior,
+  receipts, attribution, honeypot, CORS and security headers remain covered.
+- Sanitized 271-file source copy: 15-page build/output fence passed; Astro check
+  found zero diagnostics across 45 files. Five local workerd scenarios also pass
+  at compatibility date `2024-11-01`: Unicode delivery, malformed boundary,
+  file rejection, byte cap and honeypot. Every outgoing fetch was intercepted by
+  a local stub. This proves the isolated lead handler, not production settings or
+  the entire Pages application. Existing SDK compatibility release check remains.
+- Evidence: `%TEMP%/companysite-multipart-zvHMRV/verification-{build,check,runtime}.log`;
+  runtime probe source is beside those logs. Installed dependencies were reused;
+  env files were excluded and child environment/home isolated. No live provider,
+  commit, push or deployment. Codex implemented, tested and reviewed this directly
+  per Michael's no-delegation instruction; no independent-agent review is claimed.
+- Files this pass: `functions/api/lead.ts`, `tests/functions/lead-multipart.test.ts`,
+  this TODO and `COCKPIT_QUEUE.md`; root `SESSION_GOAL.md` and `TODO.md` hold the
+  fleet handoff. Existing edits and untracked assets remain intact.
+- Next: review the combined local request-limit/multipart change for release and
+  confirm the account/configuration checks already in `PENDING_MANUAL.md`.
+
+## 2026-09-17 - share streamed byte limits across lead, chat and analytics
+
+- Extended the verified intake reader to `/api/chat` (16 KiB) and `/api/track`
+  (4 KiB). All three routes share `functions/_lib/read-body.ts`; overflow stops
+  reads before parsing, delivery, paid SDK construction or analytics logging.
+  Route-specific responses, headers, rate checks and normal parsing stay intact.
+- New chat/track regressions: **17 failed / 4 passed before, 21 passed after**.
+  All 65 focused route tests pass; full `npm test`: **633 passed / 2 existing
+  skips** across 48 files. Synthetic provider mocks forbid real network calls.
+  Independent money-path review found no actionable issue.
+- Sanitized source copy: **15-page build + output fence pass**, Astro check:
+  **45 files, zero diagnostics**. Wrangler 4.125.0 bundles the actual Functions.
+  It warns about the Anthropic SDK's `node:fs`/`node:path` imports; the same
+  warnings reproduce with HEAD's original handlers. Verify actual Pages Node
+  compatibility before release; see `PENDING_MANUAL.md`. No runtime claim.
+- Build evidence: `%TEMP%/companysite-api-limits-XozpCT/verification-*.log`.
+  Installed dependencies were reused, env files excluded, child environment and
+  user home isolated. Application buffering is bounded; upstream chunk allocation,
+  upload-duration limits and live Cloudflare transport remain outside this fix.
+- Files this follow-up: `functions/_lib/read-body.ts`, `functions/api/{lead,chat,track}.ts`,
+  `tests/functions/chat-track-body-limit.test.ts`, this TODO, `PENDING_MANUAL.md`
+  and `COCKPIT_QUEUE.md`; root `SESSION_GOAL.md`, `TODO.md`, `PENDING_MANUAL.md`
+  track the fleet handoff. Prior lead regression tests remain green and retained.
+- Next: review the combined local diff and confirm release configuration. No
+  commit, push, deployment, live lead/chat call or unrelated asset change.
+
+## 2026-09-17 - enforce the intake limit on streamed bytes
+
+- Fixed `/api/lead` accepting oversized UTF-8 bodies when Content-Length was
+  absent or understated. It now counts each byte chunk before copying into a
+  fixed 16 KiB buffer, rejects overflow with the existing hardened 413, cancels
+  without waiting on an unresponsive source and releases the reader. Valid JSON,
+  UTF-8 fields, native forms and redirects retain their behavior.
+- Eleven synthetic regression tests cover size boundaries, lying headers,
+  split UTF-8, cancellation rejection/noncompletion, read failures and no delivery
+  on rejection. Before the fix, 9 of 11 failed; afterward all 19 focused tests
+  (including existing redirects) pass. Full `npm test`: **612 passed, 2 existing
+  skips**. Independent money-path review found no actionable issue.
+- A temporary copy of tracked source plus the new test, excluding env files and
+  using sanitized build variables, passed `npm run build` (15 pages plus output
+  fence) and `npm run astro -- check` (45 files, zero diagnostics). Existing
+  installed dependencies were reused; no fresh dependency install was claimed.
+- Files: `functions/api/lead.ts`, `tests/functions/lead-body-limit.test.ts`, this
+  TODO. Existing untracked images/loop sources remain untouched. No live lead,
+  commit, push or deployment. Cloudflare transport behavior and upload-duration
+  limits were not tested or changed; existing multipart parsing is outside scope.
+- Follow-up above supersedes this entry's original three-file release scope.
+  Keep unrelated assets out of any commit/release. Stripe activation/account facts
+  remain in `PENDING_MANUAL.md` and do not alter this verified local result.
+
 ## 2026-09-12 - restore the required Make aliases
 
 - Restored `lint` (Astro diagnostics) and `clean` (only generated `dist` and `.astro`).

@@ -7,6 +7,129 @@ so Claude sessions can't inject entries directly — LAW #6, never fake it.
 
 ---
 
+## 2026-09-18 · CompanySite · Release candidate and preview
+
+**Quality follow-up:** PR #27 now has `3cfcb2c`: email/Cockpit/n8n cancel unused
+provider response bodies without buffering or waiting. Fifteen regressions pass
+(12 failed before), full suite 748 passed / 2 skips, twelve workerd scenarios,
+build/check/preflight and nine updated-preview GET/OPTIONS probes pass. All six
+new-head checks and browser verification pass. No production merge, live provider test or measured
+capacity claim. This entry remains queued for the actual Work Log.
+
+**Card:** Website-sales inquiry reliability
+**State:** Draft PR/preview verified; production decision and real delivery remain.
+**Work:** Published [PR #27](https://github.com/murillomartinezmichael/CompanySite/pull/27) at `6ef6cba` from current main; 24 explicit
+files; original checkout preserved. Cleared four dependency audit findings.
+**Verified:** 733 local tests / 2 skips; Linux CI 726 / 9 (seven Windows-only);
+60 page/viewport checks, 15 no-JavaScript checks, four delivery/retry cases and
+screenshots; twelve isolated workerd scenarios; zero audit findings; preview
+static/API smoke. All six checks green. Codex implementation and review only.
+**Boundary:** No production merge, live inquiry/model/payment call or account change.
+**Next:** Exact owner decisions in PENDING_MANUAL. This entry is queued, not
+written into Cockpit's actual Work Log.
+
+---
+
+## 2026-09-17 · CompanySite · Inquiry delivery failure handling (local)
+
+**Card:** Website-sales inquiry reliability
+**State:** API implementation verified locally; browser/release checks remain.
+**Work:** Require acceptance by operator email, Cockpit or n8n before success
+or acknowledgment. All-channel failure returns 503 and a diagnostic failure event.
+Working fallbacks still accept inquiries; acknowledgment failure alone does not
+reject them. No contact/message data added to logs.
+**Verified:** 712 tests passed / 2 existing skips; 92 focused tests; twelve local
+workerd scenarios; 15-page sanitized build/output fence; zero Astro diagnostics.
+Codex handled implementation, testing and self-review directly.
+**Limit:** Headless Chrome startup failed in three isolated attempts; browser
+failure/retained-input/retry check remains unverified. Provider acceptance also
+does not prove eventual delivery. Release checks are in PENDING_MANUAL.
+No live messages, config changes, commit or deployment. Work Log entry queued.
+
+---
+
+## 2026-09-17 · CompanySite · Truthful intake follow-up (local)
+
+**Card:** Website-sales intake / operator follow-up
+**State:** Local implementation verified; publication remains owner-gated.
+**Work:** Roadmap requests receive roadmap-specific Cockpit/n8n instructions and
+zero sales urgency without losing captured topics or contact details. Sales
+reply drafts no longer claim a completed website inspection. Checkout instructions
+and payload schemas remain intact.
+**Verified:** 691 tests passed / 2 existing skips; 74 focused tests; eleven local
+workerd scenarios with outgoing calls intercepted; 15-page sanitized build/output
+fence; zero Astro diagnostics. Codex implemented, tested and self-reviewed alone.
+**Next:** Combined release review; confirm actual downstream workflows retain
+score-0 roadmap requests and do not send separate review/deadline promises.
+No live messages, workflow changes, commit or deployment. Work Log entry queued.
+
+---
+
+## 2026-09-17 · CompanySite · Chat cancellation (local)
+
+**Card:** Website-sales assistant / API cost control
+**State:** Local implementation verified; publication remains owner-gated.
+**Work:** Propagate request abort and response cancellation to the upstream SDK;
+ignore late events and remove listeners while preserving normal NDJSON replies.
+**Verified:** 679 tests passed / 2 existing skips; 56 focused tests; five offline
+real-SDK scenarios; 15-page sanitized build/output fence; zero Astro diagnostics.
+Codex performed implementation, tests and self-review directly, no delegation.
+**Limits:** Widget close remains hide-only; actual Pages disconnect propagation
+and billing effects are unverified. No live provider calls, commit or deployment.
+**Next:** Combined release review and existing Pages/account checks.
+This entry is queued for the actual Work Log.
+
+---
+
+## 2026-09-17 · CompanySite · Roadmap request consistency (local)
+
+**Card:** M3MM roadmap / intake trust
+**State:** Local implementation verified; publication remains owner-gated.
+**Work:** Roadmap confirmations acknowledge the follow request without promising
+a website teardown or response deadline. Native forms retain selected topics in
+operator email, Cockpit and n8n. Blank selections no longer imply "every drop."
+Review/project-intake emails and other intake notes retain their behavior.
+**Verified:** 669 tests passed / 2 existing skips; 63 focused tests; 15-page
+sanitized build/output fence; zero Astro diagnostics; eight local workerd
+scenarios with outbound calls intercepted and built HTML/JS defaults checked.
+Codex performed implementation, tests and self-review directly; no delegation.
+**Next:** Combined release review and existing account/configuration checks.
+No live email, commit or deployment; this entry awaits the actual Work Log.
+
+---
+
+## 2026-09-17 · CompanySite · Multipart intake correction (local)
+
+**Card:** M3MM website-sales intake
+**State:** Local implementation verified; publication remains owner-gated.
+**Work:** Repaired valid native multipart forms being parsed as URL-encoded text.
+Preserved bounded body reads, attribution, validation, honeypot and receipt
+redirects; rejected malformed multipart and file attachments before delivery.
+**Verified:** 648 tests passed / 2 existing skips; 34 focused intake tests;
+15-page sanitized build/output fence; zero Astro diagnostics; five local workerd
+scenarios with outbound fetches intercepted. Codex handled implementation,
+testing and self-review directly. No live provider calls, commit or deployment.
+**Next:** Combined release review and the existing provider/configuration checks.
+This is a queued entry, not an actual browser Work Log write.
+
+---
+
+## 2026-09-17 · CompanySite · Request byte limits (local)
+
+**Card:** M3MM website-sales funnel / chat cost protection
+**State:** Local implementation verified; publication remains owner-gated.
+**Work:** Shared bounded stream reader protects intake/chat at 16 KiB and
+analytics at 4 KiB even when Content-Length is absent or understated. Oversized
+input stops before delivery, paid SDK construction or logging.
+**Verified:** 633 tests passed / 2 existing skips; 65 focused route tests;
+independent review clean; sanitized 15-page build/output fence; zero Astro
+diagnostics. Functions bundle compiles with pre-existing SDK Node-compatibility
+warnings requiring a configuration check. No live calls, commits or deployment.
+**Next:** See `TODO.md` and `PENDING_MANUAL.md` for release scope and checks.
+This is a queued entry, not an actual browser Work Log write.
+
+---
+
 ## 2026-09-09 · CompanySite · Structure and navigation (local)
 
 **Card:** M3MM umbrella hub / website sales floor

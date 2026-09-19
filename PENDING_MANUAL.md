@@ -1,5 +1,56 @@
 # Pending manual
 
+## 2026-09-18 — CompanySite production decision
+
+- [ ] Review [PR #27](https://github.com/murillomartinezmichael/CompanySite/pull/27) at commit `3cfcb2cabd37a8eed08586f158390cfce3c610ad`
+  and approve this CompanySite release. The response-cleanup follow-up passes
+  748 local tests, all six checks and browser verification on this exact head.
+  [Updated preview](https://a5cf78a2.m3-companysite.pages.dev) passes nine GET/OPTIONS checks.
+  **Why Michael:** production publication is an owner decision under root
+  `CLAUDE.md` (When to decide vs. ask); the broad fleet request does not choose
+  a production release for every repository. **Resumes:** merge this reviewed
+  candidate and verify the corresponding production deployment.
+- [ ] Approve and verify one synthetic inquiry through a real configured operator
+  channel, including retained inquiry details, acknowledgment and roadmap triage.
+  **Why Michael:** this sends outward and needs account-side evidence. Local
+  tests intercept every provider request; a 2xx alone is not proof of final
+  delivery or downstream durability. **Resumes:** live intake acceptance check.
+- Browser failure/retained-input/retry verification is now complete in Linux CI;
+  all four mobile/desktop cases and screenshots were reviewed. Preview startup
+  also passes. These supersede the browser/startup uncertainty below, not the
+  real-delivery or production decision. Actual chat generation/disconnect and
+  production configuration parity remain unverified; no billing savings claimed.
+
+## 2026-09-17 - Pages compatibility and API release
+
+- [ ] Confirm the deployed Pages compatibility date/flags support the installed
+  Anthropic SDK's Node imports, then review the combined local API changes
+  before release. Local Wrangler Functions builds compile but warn about
+  `node:fs`/`node:path` without `nodejs_compat`; the same warning reproduces with
+  HEAD's unchanged handlers. **Why Michael:** actual Pages configuration and
+  production release remain account/owner decisions. This is not proof of a live
+  outage. Also verify disconnect propagation in the actual release environment
+  before claiming chat cancellation saves provider spend; offline tests prove
+  SDK signal propagation only. **Resumes:** configuration-aware runtime
+  verification and release.
+- [ ] Copy the prepared entries in `COCKPIT_QUEUE.md` into the actual
+  Cockpit Work Log. Only the local draft is recorded here.
+- [ ] Before releasing the triage correction, verify the actual n8n/Cockpit
+  workflows retain score-0 roadmap requests and do not send separate site-review
+  or deadline emails for `book:roadmap-subscribe`. Local payloads are tested;
+  provider-side workflow behavior is unverified. **Why Michael:** authenticated
+  workflow configuration and release approval. **Resumes:** end-to-end release
+  verification without inventing a roadmap update service or cadence.
+- [ ] Complete the delivery-failure release checks: confirm at least one real
+  operator channel is configured and actually retains/delivers accepted inquiries.
+  On a local preview with outbound requests intercepted, force `/api/lead` to
+  return `503 delivery_unavailable`; verify the 375px/desktop form preserves
+  entered fields, shows its manual-email fallback and succeeds on a deliberate
+  mocked retry. **Why Michael:** provider-account/release verification; automated
+  browser QA was blocked by three fresh-profile Chrome startup failures.
+  **Resumes:** browser-verified combined intake release. Backend evidence:
+  `TODO.md` and `%TEMP%/companysite-delivery-kO91yT/verification-*.log`.
+
 ## 2026-09-12 — payment fence release checks
 
 - [ ] Verify the real Payment Link in Michael's Stripe account: active, live,
@@ -31,6 +82,10 @@ URL; this pass intentionally makes no smaller or recolored derivative.
   gone. What is still open is whether you want to promise anything at all
   (a cadence, "email on every release", a format). If yes, give the wording and
   it goes in; if no, the page is already correct as-is and this can be closed.
+  **2026-09-17 local follow-up:** the confirmation email now follows the same
+  no-schedule acknowledgment. Native topic selections are preserved, and both
+  hidden/default notes now record an update request without inventing a cadence.
+  This fixes capture/receipt behavior; it does not decide the update service.
 - [ ] **Review the local structure commit as part of the combined release.**
   See `docs/STRUCTURE_AUDIT_2026-09-09.md` for the 14-page map, implemented fixes,
   remaining style inventory and exact verification. No production writes or
