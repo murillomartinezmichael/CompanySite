@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { createHash } from 'node:crypto';
 import puppeteer from 'puppeteer-core';
+import { checkIntakeDelivery } from './check-intake-delivery.mjs';
 
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
 const DIST = join(ROOT, 'dist');
@@ -277,6 +278,7 @@ try {
   }
   console.log('PASS keyboard skip, focus outline, reduced motion, and mobile navigation without JavaScript');
   await noScript.close();
+  evidence.push(...await checkIntakeDelivery(browser, origin, artifacts));
 } finally {
   await browser.close();
   server.close();

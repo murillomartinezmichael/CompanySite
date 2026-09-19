@@ -7,6 +7,25 @@ Adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed — delivery redirect boundary (2026-09-19)
+- Reject email/Cockpit/n8n redirects without forwarding inquiry data or credentials
+  to the redirect destination. A redirect ending at a 200 login page no longer
+  counts as acceptance or triggers a false receipt; direct-success fallbacks work.
+
+### Fixed — inquiry reliability candidate (2026-09-18)
+- Release unused email/Cockpit/n8n response bodies after reading status, without
+  letting slow or rejected cleanup delay or change the delivery result.
+- Return a retryable intake failure when no operator delivery channel accepts
+  the inquiry, and send visitor acknowledgments only after acceptance.
+- Preserve roadmap topics in native forms and separate roadmap acknowledgment
+  and triage from sales review promises.
+- Bound lead/chat/analytics request bodies by streamed bytes, support multipart
+  text intake, and abort chat generation when the request or response is canceled.
+- Add regression tests and intercepted browser failure/retry coverage for the
+  website and roadmap forms at mobile and desktop widths.
+- Update locked Vitest, SVGO and devalue dependencies to clear reported
+  advisories; the verified locked install reports no npm audit findings.
+
 ### Added
 - test: `functions/_lib/track-parse.ts` extracted from `functions/api/track.ts` as a pure helper with 14 unit tests (`tests/functions/track-parse.test.ts`). Suite grew 44 → **58 passed / 58 total** in 347ms. Behavior-preserving — no runtime change to `/api/track`.
 

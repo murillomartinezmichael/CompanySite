@@ -1,6 +1,6 @@
 # CompanySite — Runbook
 
-**Last updated:** 2026-07-05
+**Last updated:** 2026-09-18
 **Owner:** Michael Martinez (murillomartinezmichael@gmail.com)
 **Project shape:** Astro static site + Cloudflare Pages Functions. Rebuilt 2026-07-05 from the previous single-file HTML (preserved at `legacy/2026-cyberpunk-index.html`).
 
@@ -46,22 +46,54 @@ mode — that's expected. Client-side error handling shows a graceful fallback.
 
 | Var | Required | Purpose |
 |---|---|---|
-| `RESEND_API_KEY` | For real emails | Bearer token for the Resend API. Get one at resend.com. Without it, `/api/lead` still returns 200 (logs the lead) but no email is sent. |
+| `RESEND_API_KEY` | For real emails | Bearer token for Resend. Without it, email is skipped; successful intake then requires acceptance by Cockpit or n8n. |
 | `LEAD_TO` | No | Recipient of intake notifications. Defaults to `murillomartinezmichael@gmail.com`. |
 | `LEAD_FROM` | No | Sender address. Must be a verified sender in Resend. Defaults to Resend's sandbox address. |
-| `COCKPIT_INGEST_URL` | No | CockpitCloud ingestion endpoint. When set, every submitted lead POSTs a `kind:"lead"` card to this URL so it lands in the kanban instead of only in email. When unset the sink is silently skipped — no user-facing change. Malformed URLs are treated as unset (typo guard). |
+| `COCKPIT_INGEST_URL` | Optional delivery channel | CockpitCloud ingestion endpoint. Every validated lead POSTs a `kind:"lead"` card. Unset or malformed URLs skip this channel; another operator channel must accept the inquiry for success. |
 | `COCKPIT_INGEST_TOKEN` | No | Bearer token added as `Authorization: Bearer <token>` when POSTing to `COCKPIT_INGEST_URL`. Omit for open ingest endpoints. Only sent when the URL var is also set. |
+| `N8N_LEAD_WEBHOOK_URL` | Optional delivery channel | n8n lead webhook. An accepted request can preserve intake when operator email or Cockpit fails. Unset or malformed URLs skip this channel. |
+| `N8N_LEAD_WEBHOOK_SECRET` | If the webhook requires it | Sent as `X-M3-Webhook-Secret`; configure the matching receiver authentication. |
 
 Set these in Cloudflare Pages → Settings → Environment variables. No `.env` file
 is needed for the static build itself.
 
-**CockpitCloud fleet bond** — `/api/lead` forwards every validated lead as a
-compact JSON card (`kind`, `id` idempotency-key, `at` ISO ts, `source`, `name`,
-`email`, `businessType`, `currentUrl`, `frustration`, `meta`) alongside its
-Resend send. Fully env-gated: ships dark until Mike deploys CockpitCloud +
-sets the two vars above. Test coverage: `tests/functions/cockpit-sink.test.ts`
-(14 tests — pure helper + env-off skip + POST shape + Bearer token +
-non-2xx surfaced + network-error collapse + X-Cockpit-Kind header).
+**Delivery acceptance** — `/api/lead` succeeds only after operator email,
+Cockpit or n8n returns a 2xx response. The visitor acknowledgment is sent only
+after such acceptance; its own failure does not reject an already accepted
+inquiry. If all operator channels skip/fail, JSON and native forms receive
+`503 {"ok":false,"error":"delivery_unavailable"}` with no receipt redirect.
+The existing JS form shows its manual-email fallback and retains entered data.
+Native form errors remain JSON, as with validation failures. Honeypot responses
+remain silent success. Summary logs are diagnostic, not inquiry storage.
+
+This proves provider acceptance, not eventual email delivery or downstream
+workflow persistence. There is no durable retry queue, and ambiguous provider
+timeouts can still require operator reconciliation before retrying.
+
+**Delivery destinations** — email, Cockpit and n8n requests never follow HTTP
+redirects. A redirect is a failed channel, even when its destination would return
+200; a login or landing page cannot establish intake acceptance. Configure the
+final API/webhook endpoint directly. Other direct-success channels may still
+accept the inquiry. The visitor acknowledgment also rejects redirects without
+turning an already accepted inquiry into failure. Redirect locations, credentials
+and response bodies are not added to delivery diagnostics.
+
+**Provider resources** — the delivery senders use only response status and
+cancel unread response bodies on success and failure. Cancellation is best
+effort and is not awaited: a stalled or rejected cleanup must not change an
+accepted inquiry into failure. Regression coverage includes open streams,
+cleanup rejection/stalls and bodyless responses for all three senders.
+This follows [Cloudflare's response-body guidance](https://developers.cloudflare.com/workers/platform/limits/#simultaneous-open-connections).
+It is a resource cleanup fix, not a measured production throughput claim.
+
+**CockpitCloud fleet bond** — each validated inquiry becomes a compact JSON
+card (`source`, `kind`, `name`, `next_step`, `link`, `link_label`). Contact and
+inquiry text are included in `next_step`, subject to its existing length cap.
+The generated lead ID is logged and sent to n8n; it is not in the Cockpit card
+body, so this sender alone does not prove Cockpit deduplication. Delivery and
+failure coverage: `tests/functions/cockpit-sink.test.ts` and
+`tests/functions/lead-delivery.test.ts`. No provider credentials are needed for
+these synthetic tests.
 
 ---
 
@@ -198,8 +230,10 @@ Zero DB, zero state — rollback is always safe.
 
 ### 5.2 Prod logs
 
-Cloudflare dashboard → Pages → CompanySite → **Functions** → tail. Every
-intake fires a `lead_received` log line with the payload summary. Every CTA
+Cloudflare dashboard → Pages → CompanySite → **Functions** → tail. Accepted
+intake emits `lead_received`; all operator channels skipped/failed emits
+`lead_delivery_failed`. Both include per-channel results and a summary, not the
+full contact details/message. Do not treat logs as a recovery store. Every CTA
 fires a `cta` log line.
 
 ### 5.3 Common failure modes
@@ -207,6 +241,7 @@ fires a `cta` log line.
 | Symptom | Likely cause | Fix |
 |---|---|---|
 | Form submits but no email arrives | `RESEND_API_KEY` unset OR sender not verified | Check Cloudflare env; verify sender in Resend |
+| Form returns `503 delivery_unavailable` | No operator channel accepted the inquiry | Inspect `lead_delivery_failed` channel results and provider configuration; use manual contact while delivery is unavailable. No receipt email is sent by this route. |
 | CSP violation in browser console | New third-party script/font added | Update `public/_headers` CSP directive |
 | Case study renders "coming soon" | `public/videos/<slug>-scroll.mp4` missing | Drop the MP4 + `<slug>-poster.jpg` in `public/videos/` |
 | Rate limit 429 in dev testing | Same-IP rate limit hit (5/60s) | Wait 60s or bump `RATE_MAX` in `functions/api/lead.ts` |

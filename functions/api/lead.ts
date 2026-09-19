@@ -2,7 +2,7 @@
 //
 // Hardening (Rung 1, 2026-07-05):
 // - 16 KB body cap (reject bombs before parse)
-// - Content-Type must be application/json
+// - JSON, URL-encoded and multipart text forms supported
 // - Origin allowlist (m3mm.net + localhost dev variants)
 // - Per-IP rate limit 5 req / 60s with Retry-After
 // - Field trim + cap + validation with structured error codes
@@ -10,8 +10,8 @@
 // - 6s AbortSignal timeout on each Resend fetch (avoid hung workers)
 // - Structured single-line log per lead (Cloudflare tail friendly)
 //
-// Graceful degradation: with no RESEND_API_KEY the endpoint still 200s
-// and logs the lead. Documented, not faked (LAW 6).
+// Success requires acceptance by operator email, Cockpit or n8n. A summary
+// log is not a recoverable inquiry: all channels skipped/failed -> 503.
 
 import { LIMITS, validateLead, esc, UTM_FIELDS, type Lead } from '../_lib/validate';
 import { checkRate, rateKey } from '../_lib/rate';
@@ -20,6 +20,7 @@ import { sendToN8n } from '../_lib/n8n-sink';
 import { referralOffer, referralShareUrl, REFERRAL_FIELD_LABEL } from '../_lib/referral';
 import { originAllowed, corsResponseHeaders, preflightResponse } from '../_lib/cors';
 import { withSecurityHeaders, secureResponse } from '../_lib/security-headers';
+import { readBodyText } from '../_lib/read-body';
 
 type Env = {
   RESEND_API_KEY?: string;
@@ -107,6 +108,9 @@ async function sendEmail(
   try {
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
+      // A redirect is not delivery acceptance. Never forward the payload or
+      // credentials to a redirected endpoint, including a login page.
+      redirect: 'manual',
       signal: controller.signal,
       headers: {
         Authorization: `Bearer ${env.RESEND_API_KEY}`,
@@ -114,6 +118,9 @@ async function sendEmail(
       },
       body: JSON.stringify({ from, to, subject, html, ...(replyTo ? { reply_to: replyTo } : {}) }),
     });
+    // Only the status is needed. Release the unread body without waiting for
+    // provider cleanup or allowing cleanup failure to alter delivery acceptance.
+    void res.body?.cancel().catch(() => {});
     return { ok: res.ok, status: res.status };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.name : 'unknown_error' };
@@ -198,17 +205,14 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
     );
   }
 
-  // Read the body with a hard byte cap even if Content-Length was absent/lying.
-  let raw: string;
-  try {
-    const text = await request.text();
-    if (text.length > LIMITS.bodyBytes) {
+  const bodyRead = await readBodyText(request, LIMITS.bodyBytes);
+  if (!bodyRead.ok) {
+    if (bodyRead.error === 'too_large') {
       return reply(413, { ok: false, error: 'payload_too_large', limit: LIMITS.bodyBytes });
     }
-    raw = text;
-  } catch {
     return reply(400, { ok: false, error: 'body_unreadable' });
   }
+  const raw = bodyRead.text;
 
   let body: Lead;
   if (isJson) {
@@ -230,15 +234,36 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
     }
     body = parsed as Lead;
   } else {
-    // No-JS fallback: the <form> POSTs as URL-encoded when the client
-    // has JS disabled. Parse into the same shape validateLead accepts.
-    const params = new URLSearchParams(raw);
+    // Both native form encodings use the same field mapping. Parse multipart
+    // only after the byte cap, retaining the original boundary's case/quotes.
+    let params: URLSearchParams;
+    if (ct.includes('multipart/form-data')) {
+      try {
+        const fields = await new Response(raw, {
+          headers: { 'Content-Type': contentType },
+        }).formData();
+        params = new URLSearchParams();
+        for (const [name, value] of fields) {
+          // Intake accepts text fields, not attachments or File coercions.
+          if (typeof value !== 'string') return reply(400, { ok: false, error: 'invalid_form' });
+          params.append(name, value);
+        }
+      } catch {
+        return reply(400, { ok: false, error: 'invalid_form' });
+      }
+    } else {
+      params = new URLSearchParams(raw);
+    }
+    // Match the roadmap's JS submit handler when the browser posts natively.
+    // Only that exact intent may fold its optional topics into the intake note.
+    const roadmapTopics = params.get('intent')?.trim() === 'book:roadmap-subscribe'
+      ? params.get('topics')?.trim() : undefined;
     body = {
       name: params.get('name') || undefined,
       email: params.get('email') || undefined,
       businessType: params.get('businessType') || undefined,
       currentUrl: params.get('currentUrl') || undefined,
-      frustration: params.get('frustration') || undefined,
+      frustration: roadmapTopics ? `Roadmap subscriber wants: ${roadmapTopics}` : params.get('frustration') || undefined,
       preferredStart: params.get('preferredStart') || undefined,
       source: params.get('source') || undefined,
       referredBy: params.get('referredBy') || undefined,
@@ -311,12 +336,13 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
   const deadlineDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
   const deadlineStr = deadlineDate.toUTCString().replace(/^[A-Z][a-z]{2}, /, '');
   const isProjectIntake = lead.intent === 'checkout:basic-deposit';
+  const isRoadmapRequest = lead.intent === 'book:roadmap-subscribe';
   const replyIntro = isProjectIntake
     ? `I have your project intake. I'll review the scope and your preferred timing, then confirm the build week before work begins.`
     : `I'll actually look at your site and reply with a 5-minute recorded video teardown &mdash; what's working, what's costing you customers, and whether it needs a rebuild or just a fix. If it turns out you don't need me, I'll tell you that too.`;
-  const replySubject = isProjectIntake
-    ? 'Your M3MM project intake is in'
-    : 'Got your review request — M3MM';
+  const replySubject = isRoadmapRequest
+    ? 'Your M3MM roadmap request is in'
+    : isProjectIntake ? 'Your M3MM project intake is in' : 'Got your review request — M3MM';
 
   // Referral CTA in the closing block — every reply turns the lead into a
   // potential referrer. Terms come from one config (functions/_lib/referral.ts)
@@ -326,7 +352,19 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
   // person they send never has to know it and the credit can't be lost.
   const referralLink = referralShareUrl(lead.name);
 
-  const replyHtml = `
+  // Match /roadmap/thanks: acknowledging a follow request does not promise a
+  // teardown, reply deadline or update cadence. Those are separate services.
+  const replyHtml = isRoadmapRequest ? `
+    <div style="font-family:Georgia,serif;max-width:560px;color:#111;line-height:1.55;">
+      <h2 style="margin:0 0 14px;font-size:22px;">Got it, ${esc(lead.name)}.</h2>
+      <p style="margin:0 0 14px;">Your roadmap update request was received by M3MM.</p>
+      <p style="margin:0 0 20px;font-size:14px;color:#555;">
+        See current releases and previews on the
+        <a href="https://m3mm.net/roadmap" style="color:#FF3B5C;">public roadmap</a>.
+      </p>
+      <p style="margin:24px 0 0;">&mdash; Michael<br/><span style="color:#888;font-size:13px;">M3MM &middot; Atlanta, GA &middot; m3mm.net</span></p>
+    </div>
+  ` : `
     <div style="font-family:Georgia,serif;max-width:560px;color:#111;line-height:1.55;">
       <h2 style="margin:0 0 14px;font-size:22px;">Got it, ${esc(lead.name)}.</h2>
       <p style="margin:0 0 14px;">${replyIntro}</p>
@@ -357,18 +395,27 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
   `;
 
   const adminResult = await sendEmail(env, to, `M3MM intake · ${lead.name} (${lead.businessType})`, adminHtml, lead.email);
-  const replyResult = await sendEmail(env, lead.email, replySubject, replyHtml);
+  // A receipt must follow operator-channel acceptance. Preserve the normal
+  // email order; if admin delivery fails, wait for a fallback before replying.
+  let replyResult = adminResult.ok
+    ? await sendEmail(env, lead.email, replySubject, replyHtml)
+    : { ok: false, skipped: true as const };
 
   // Fleet bond — forward to CockpitCloud kanban if configured. Env-gated,
-  // never blocks the visitor's 200. Idempotency key is deterministic on
+  // an individual failure does not reject an otherwise accepted lead.
+  // Idempotency key is deterministic on
   // stable lead fields so any Cloudflare double-invocation dedupes at the
   // CockpitCloud side.
   const cockpitId = leadIdempotencyKey(lead);
   const cockpitResult = await sendToCockpit(env, cockpitId, lead, ip);
   const n8nResult = await sendToN8n(env, cockpitId, lead, ip);
+  const operatorAccepted = adminResult.ok || cockpitResult.ok || n8nResult.ok;
+  if (!adminResult.ok && operatorAccepted) {
+    replyResult = await sendEmail(env, lead.email, replySubject, replyHtml);
+  }
 
   console.log(JSON.stringify({
-    event: 'lead_received',
+    event: operatorAccepted ? 'lead_received' : 'lead_delivery_failed',
     source: lead.source,
     business: lead.businessType,
     hasUrl: Boolean(lead.currentUrl),
@@ -388,6 +435,9 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
     ts: Date.now(),
   }));
 
+  if (!operatorAccepted) {
+    return reply(503, { ok: false, error: 'delivery_unavailable' });
+  }
   return succeed(lead.intent);
 };
 

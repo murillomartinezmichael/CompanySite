@@ -14,6 +14,7 @@
 import { checkRate, rateKey } from '../_lib/rate';
 import { clean } from '../_lib/validate';
 import { withSecurityHeaders } from '../_lib/security-headers';
+import { readBodyText } from '../_lib/read-body';
 
 type Env = {};
 
@@ -64,13 +65,9 @@ const trackPost: PagesFunction<Env> = async ({ request }) => {
   const contentLength = contentLengthRaw ? Number(contentLengthRaw) : NaN;
   if (Number.isFinite(contentLength) && contentLength > MAX_BODY_BYTES) return noContent();
 
-  let text: string;
-  try {
-    text = await request.text();
-  } catch {
-    return noContent();
-  }
-  if (text.length > MAX_BODY_BYTES) return noContent();
+  const bodyRead = await readBodyText(request, MAX_BODY_BYTES);
+  if (!bodyRead.ok) return noContent();
+  const text = bodyRead.text;
 
   let body: CTAEvent = {};
   try {

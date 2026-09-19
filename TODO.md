@@ -1,5 +1,86 @@
 # CompanySite — TODO
 
+## 2026-09-19 — reject provider redirects before release
+
+- Bounded audit from PR #27 head `3cfcb2c`: operator delivery requests followed
+  redirects into 200 login pages and falsely issued receipts. Cross-origin
+  307/308 replayed inquiry bodies; the synthetic n8n webhook secret also reached
+  the redirected endpoint. All three senders now use `redirect: 'manual'` and
+  their existing non-2xx handling. Final endpoint URLs must be configured directly.
+- Reproduction: **21 failed / 3 passed before; all 24 pass after** using real
+  Node fetch and two owned loopback origins. Tests cover all five redirect
+  statuses, same-origin login redirects, no false acknowledgment, complete direct
+  delivery, partial fallback, acknowledgment failure and deliberate retry.
+- Actual local workerd: **15 negative-control and 15 fixed scenarios pass** with
+  every outbound request intercepted. It reproduced false receipts, body replay
+  and n8n custom-secret forwarding; this installed version stripped cross-origin
+  Authorization. No real provider request or credential was used.
+- Verification: **772 passed / 2 existing skips, 56 files** after the required
+  15-page build; output fence, Astro check (45 files, zero diagnostics), Functions
+  compilation and strict deploy preflight pass. Existing SDK node:fs/node:path
+  warnings remain. The initial full-suite run lacked generated dist; building
+  and rerunning resolved those artifact checks. No dependencies or UI changed.
+- Release scope: three delivery senders, the new redirect regression test,
+  CHANGELOG, DECISIONS, RUNBOOK and these TODO notes. The existing PR #27
+  candidate includes this fix; require its updated exact-head CI and preview
+  verification before production. An independent agent implemented/reproduced
+  the fix; the integrating agent reviewed the diff and reran the regressions.
+- Remaining operational acceptance: the existing authorized synthetic inquiry
+  must reach and remain recoverable in an intended operator channel, with its
+  acknowledgment/roadmap triage checked. Provider 2xx still does not establish
+  eventual delivery, retention or a durable retry guarantee. All verification
+  used synthetic local fixtures; no production inquiry or provider send occurred.
+
+## 2026-09-18 — provider response cleanup before release
+
+- Quality follow-up to PR #27: email, Cockpit and n8n senders left provider
+  bodies unread after recording response status. They now cancel these streams
+  without buffering or waiting on cleanup. Delivery/receipt decisions are unchanged.
+- Regression proof: **12 failed / 3 passed before; all 15 pass after**.
+  Covers successful/failed delivery, rejected/stalled cancellation and bodyless
+  responses. Full suite: **748 passed / 2 existing skips, 55 files**.
+  Twelve isolated workerd delivery scenarios still pass; 15-page build/output
+  fence, Astro check (45 files, zero diagnostics), Functions compilation and
+  strict deploy preflight pass. Existing SDK Node-import warnings remain.
+- Next: push this focused follow-up to PR #27, require checks on its new head
+  and recheck the associated preview. Previous head `6ef6cba` had all six checks
+  green and browser evidence reviewed; those results do not certify a later head.
+  Production and real-provider acceptance remain owner gates in PENDING_MANUAL.
+
+## 2026-09-18 — inquiry reliability release candidate
+
+- Prepared `codex/companysite-release-2026-09-18` from current main
+  `978a2c6ac28df2e972d574783097a34e85898fec`. Preserved the original dirty
+  checkout, unrelated notes and media backups. No production release yet.
+- Intake now requires acceptance by operator email, Cockpit or n8n before
+  issuing a receipt; total delivery failure returns 503. Roadmap requests keep
+  their topics and get an acknowledgment without sales promises. Native text
+  forms, streamed byte caps and chat cancellation have regression coverage.
+- Fresh locked install and build: 15 pages, clean shipped-output fence.
+  `npm test -- --silent`: **733 passed, 2 existing skips, 54 files**.
+  `npm run astro -- check`: **45 files, zero errors/warnings/hints**.
+  Strict deploy preflight passes. Functions compile passes with existing SDK
+  Node-import warnings; this is not proof of hosted runtime compatibility.
+- The current candidate also passes twelve isolated workerd delivery scenarios:
+  all channel-acceptance combinations, both native failure encodings, fallback
+  receipt despite failed acknowledgment, and empty configuration. All outgoing
+  provider fetches were intercepted locally; no live inquiry was sent.
+- Updated the lockfile to Vitest 4.1.11, SVGO 4.1.0 and devalue 5.9.2;
+  `npm audit` reports **zero advisories**. npm 10's update resolver crashed;
+  npm 11 in an isolated temporary cache resolved the update. A subsequent
+  fresh `npm ci` with the existing npm 10 succeeds. No global tooling changed.
+- Added CI browser coverage for both forms at 375/1440px: failed delivery
+  retains input, shows the manual email fallback, and permits a deliberate
+  successful retry. Local Chrome could not start after three attempts; browser
+  execution must pass in the existing Linux CI job before release.
+- Next: publish the draft PR, require green checks on its exact commit, inspect
+  browser artifacts and smoke the Pages preview's static assets/API OPTIONS.
+  Then obtain the concrete production decision and verify real operator
+  delivery with Michael's approved test. See `PENDING_MANUAL.md`.
+- Parked: new features, downstream automation changes, live payments/model
+  calls, other dependency PRs and other products. No second-agent review is
+  claimed; Michael requested direct Codex work.
+
 ## 2026-09-12 - repair www canonical-host routing (PR #18)
 
 - Integrated main `534cd07` into the original PR branch, preserving current

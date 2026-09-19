@@ -73,6 +73,15 @@ describe('/roadmap signup reaches the same success page as every other form', ()
     expect(src).not.toMatch(/novalidate/);
   });
 
+  it('uses the same neutral request note with or without JavaScript', () => {
+    const nativeNote = src.match(/name="frustration"\s+value="([^"]+)"/)?.[1];
+    const scriptNote = src.match(/const DEFAULT_NOTE = '([^']+)'/)?.[1];
+    expect(nativeNote).toBeTruthy();
+    expect(scriptNote).toBe(nativeNote);
+    expect(nativeNote).toMatch(/request/i);
+    expect(nativeNote).not.toMatch(/every drop|weekly|daily|all updates/i);
+  });
+
   it('the built page actually ships the handler', () => {
     const page = `${root}dist/roadmap/index.html`;
     if (!existsSync(page)) return;
