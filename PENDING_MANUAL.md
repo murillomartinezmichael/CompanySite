@@ -1,5 +1,22 @@
 # Pending manual
 
+## 2026-09-18 — release the inquiry reliability candidate
+
+- [ ] **Approve the exact CompanySite candidate for production after CI and
+  preview checks pass.** Candidate: `codex/companysite-release-2026-09-18`;
+  scope and local evidence: `TODO.md`, with behavior documented in `RUNBOOK.md`.
+  **Why Michael:** production publication is an owner decision. Draft PR and
+  preview preparation do not authorize merging or deploying every fleet repo.
+  **Resumes:** merge the reviewed commit and verify its production deployment.
+- [ ] **Verify an approved synthetic inquiry reaches a real operator channel.**
+  Confirm at least one configured channel (Resend admin email, Cockpit or n8n)
+  accepts and retains the inquiry; check the acknowledgment and downstream
+  roadmap triage. Keep credentials and contact data out of Git and logs.
+  **Why Michael:** real account/delivery evidence and permission to send an
+  outward test are required; local tests intercept every provider request.
+  **Resumes:** conclude the live intake acceptance check. A provider 2xx alone
+  does not prove final delivery or downstream durability.
+
 ## 2026-09-12 - www canonical-host repair
 
 - The owner authorized the production repair. Authenticated Pages metadata
