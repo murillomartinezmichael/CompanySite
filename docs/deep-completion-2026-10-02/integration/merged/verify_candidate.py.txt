@@ -1,0 +1,55 @@
+"""This checkpoint's isolated environment and exact native command runner."""
+from pathlib import Path
+import hashlib,json,os,subprocess,sys,tempfile
+from datetime import datetime
+OUT=Path(__file__).resolve().parent;ROOT=OUT.parents[3]
+REPO=ROOT/'.worktrees/companysite-unified-inquiry-2026-09-24'
+NODE=Path('C:/Program Files/nodejs/node.exe')
+NPM=Path('C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js')
+def git(*a,cwd=REPO):return subprocess.check_output(['git',*a],cwd=cwd,text=True).strip()
+mode=sys.argv[1]
+if mode=='bind':
+    paths=git('diff','--name-only').splitlines()+git('ls-files','--others','--exclude-standard').splitlines()
+    allowed=[p for p in paths if Path(p).name!='PENDING_MANUAL.md']
+    assert all(not Path(p).name.startswith(('.env','.dev.vars')) for p in allowed)
+    sources={p:hashlib.sha256((REPO/p).read_bytes()).hexdigest() for p in allowed}
+    prior=json.loads((REPO/'docs/deep-completion-2026-10-02/retry-lifecycle/TASK_RETURN.json').read_text())
+    matched={r['path']:sources[r['path']]==r['current_sha256'] for r in prior['source_files']}
+    assert all(matched.values())
+    st=(REPO/'PENDING_MANUAL.md').stat()
+    private=[p.name for p in REPO.iterdir() if (p.name.startswith(('.env','.dev.vars')) and p.name!='.env.example') or p.name=='.npmrc']
+    assert not private,private
+    binding={'head':git('rev-parse','HEAD'),'branch':git('branch','--show-current'),'main':git('rev-parse','main'),'origin_main':git('rev-parse','origin/main'),'index':git('ls-files','--stage'),'root_index':git('ls-files','--stage',cwd=ROOT),'primary_head':git('rev-parse','HEAD',cwd=ROOT/'CompanySite'),'primary_status':git('status','--porcelain',cwd=ROOT/'CompanySite'),'source_sha256':sources,'prior_review_matches':matched,'private_pending_preserved_metadata':{'size':st.st_size,'mtime_ns':st.st_mtime_ns},'dotenv_or_project_npmrc_present':private}
+    (OUT/'BINDING.json').write_text(json.dumps(binding,indent=2)+'\n')
+    path=REPO/'SESSION_GOAL.md';old=path.read_text(encoding='utf-8')
+    path.write_text('DATE: 2026-10-02\nPROJECT: CompanySite unified inquiry candidate\nOWNER: Codex /root integration; release owner preserved\nGOAL: Qualify, commit and locally integrate exact reviewed inquiry changes and upstream dependencies.\nBUDGET:90minutes/80tools,3 corrections per failing phase\nSTATUS: IN_PROGRESS\nBOUNDARY: No private pending/env/customer data, actual sends, accounts, push or production.\nNEXT: Root companysite/integration/WORK_ORDER.md.\n\nPRESERVED PRIOR SESSION RECORD:\n'+old,encoding='utf-8')
+    print(json.dumps({'bound':len(sources),'review_source_hashes_match':len(matched),'private_content_read':False}))
+    raise SystemExit(0)
+scratch=Path(tempfile.mkdtemp(prefix='companysite-native-integration-20261002-'))
+env={k:os.environ[k] for k in ('SystemRoot','SYSTEMROOT','WINDIR','COMSPEC','PATH','PATHEXT') if k in os.environ}
+env.update({k:str(scratch) for k in ('TEMP','TMP','USERPROFILE','APPDATA','LOCALAPPDATA','HOME')})
+for name in ('user.npmrc','global.npmrc'):(scratch/name).write_text('')
+env.update(ASTRO_TELEMETRY_DISABLED='1',WRANGLER_SEND_METRICS='false',CI='1',npm_config_userconfig=str(scratch/'user.npmrc'),npm_config_globalconfig=str(scratch/'global.npmrc'),npm_config_registry='https://registry.npmjs.org/',npm_config_audit='false',npm_config_fund='false',npm_config_update_notifier='false')
+commands={
+    'build':[str(NODE),str(NPM),'run','build'],
+    'types':[str(NODE),str(NPM),'run','astro','--','check'],
+    'test':[str(NODE),str(REPO/'node_modules/vitest/vitest.mjs'),'run','--silent=true','--reporter=default','--reporter=json','--outputFile='+str(OUT/'vitest-results.json')],
+    'compile':[str(NODE),str(REPO/'node_modules/wrangler/bin/wrangler.js'),'pages','functions','build','functions','--outdir=output/runtime'],
+    'worker':[str(NODE),'scripts/check-inbox-runtime.mjs'],
+    'capture':[str(NODE),'--experimental-vm-modules','scripts/check-receiver-contract.mjs','capture'],
+    'receipts':[str(NODE),'--experimental-vm-modules','scripts/check-receiver-contract.mjs','receipts',sys.argv[2] if len(sys.argv)>2 else ''],
+    'restore':[str(NODE),str(NPM),'ci','--ignore-scripts','--no-audit','--no-fund','--registry=https://registry.npmjs.org/'],
+}
+assert mode in commands
+if mode=='restore':
+    assert (REPO/'node_modules').resolve().is_relative_to(REPO.resolve())
+    assert not (REPO/'.npmrc').exists()
+before={p:hashlib.sha256((REPO/p).read_bytes()).hexdigest() for p in ('package.json','package-lock.json')}
+started=datetime.now().astimezone().isoformat()
+with (OUT/(mode+'.log')).open('w',encoding='utf-8') as log:
+    result=subprocess.run(commands[mode],cwd=REPO,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=420)
+assert all(hashlib.sha256((REPO/p).read_bytes()).hexdigest()==h for p,h in before.items())
+receipt={'mode':mode,'started':started,'finished':datetime.now().astimezone().isoformat(),'command':commands[mode],'exit':result.returncode,'profile':str(scratch),'package_hashes':before,'environment':'Only OS launcher variables inherited; no provider/account variables. Temporary profiles/empty npm configs, telemetry disabled.'}
+(OUT/(mode+'-receipt.json')).write_text(json.dumps(receipt,indent=2)+'\n')
+print(json.dumps(receipt,indent=2));print(json.dumps({'log_tail':(OUT/(mode+'.log')).read_text(encoding='utf-8')[-3000:]},ensure_ascii=True))
+raise SystemExit(result.returncode)

@@ -1,0 +1,99 @@
+{
+  "task": "COMPANYSITE-MERGED-INTEGRATION-2026-10-02",
+  "owner": "Codex /root",
+  "at": "2026-10-02T14:44:58.599073-04:00",
+  "status": "CHECKPOINTED",
+  "source_merge_commit": "b18aa2c26f72a5b71eb6d9a572bfa295b8970acc",
+  "parents": [
+    "ebceca09f30eb55a424d15b6205b0298e679dbca",
+    "ae8362d3254e0fca36d0f3a80c16722ca9aeb9b1"
+  ],
+  "source_sha256": {
+    "functions/_lib/cors.ts": "f3b089ca00b5d5abd6a76329398b3b6b7f92746c4c51f9fb1c6f0194c9590f5b",
+    "functions/api/lead.ts": "030077732d083f71cf382805d06d9f0d5df3441138a915f5fa4af50ea3967657",
+    "scripts/axe-home.mjs": "870cbfa118b326ec5a31a5d29ec87d94e8fe9f1abd22e62b51679b56f4629c88",
+    "scripts/check-intake-delivery.mjs": "064c52c9fc8aa2bac39d71b6b5d2313dc8d587c7dce27339d5cd69584a120f5d",
+    "src/components/Intake.astro": "e2ec44dc4eec8840c6dc5b90a343b488a3d2334e9d2fb6480e02cba850a0cbf3",
+    "src/pages/roadmap.astro": "d44bda15a24d2da5488e3b8d2db386e835590a67ce45de25b3a619d55bc7b81f",
+    "tests/build/referral-program.test.ts": "f7bb0eaae31dfc6b15dd3dc6633b1f7a2c62372b1765fcd06787df23148ea0de",
+    "tests/build/roadmap-signup.test.ts": "a7750e01413f60a35f55219c20eabc85fc58ad711480b39079bfa196f787f24e",
+    "tests/functions/cors.test.ts": "d6775033d60209960ebd92c95e52286bb7d5f1acac3aea87a4d2dafff53b18ae",
+    "functions/_lib/cockpit-inbox.ts": "a6aa1a5d7976bad2be5a982c88a2e2560bbb76882d361c8bda0fafcba9c07f58",
+    "functions/_lib/inquiry-confirmation.ts": "9694aad3fe6d94a8b8431ae7e454b6f434d97ce7743c04b8bedeb4b491186eea",
+    "scripts/check-inbox-runtime.mjs": "846b84db497004fe770d2acab630cbaaf32874f86be042a8c64257d0a2e52654",
+    "scripts/check-inquiry-cors.mjs": "44f2a4a883fdf0a546550c84981a376feefc664b2f036630772d520791f92bb3",
+    "scripts/check-inquiry-retry.mjs": "2947f56588cfddb55a8fdfb531c17b47d5861fa6f9af67f4d7dfaa89d06686a9",
+    "scripts/check-receiver-contract.mjs": "4b20df940fa2b8caa22757af7c3be260b1866d341b690fd6bec278f74ed170c6",
+    "src/lib/inquiry-submission.ts": "208bf5390b560eed69ad3a456c36454a9c2de66104b62c36ced7096442e35f88",
+    "tests/functions/cockpit-inbox.test.ts": "a4d95b369e65903a5f53aba3c04a62ef360c2550ed4923266db2326afd6ddd12",
+    "tests/functions/lead-inbox.test.ts": "e674990fae7bbdfb233caea05dbe1873b56577ac889a61fc38889d82b68befb7",
+    "tests/functions/lead-native-retry.test.ts": "18733f3b88fd5da37fe9b36e75b3024bc6bdaf35888e0d6eac65b41ecfad62e0",
+    "tests/inquiry-reload.test.ts": "e2afe9ce351a5bf67318f12d7c824b3094302ffcc47229749795a954e127cad4",
+    "tests/inquiry-submission.test.ts": "d867cc1f9c730b384d6ed73c9287a10c26c1307a235249822ab98b613b671ebe"
+  },
+  "package_hashes": {
+    "package.json": "187df356a76c449001f698cc0fb7351555cf6fda5dccb2bf56133549b6c8cced",
+    "package-lock.json": "70d857de3d46fcef08b63e0de6960e6128173cdb168460cf65a36e5dcc32d1f0"
+  },
+  "versions": {
+    "astro": "7.3.2",
+    "vitest": "4.1.11",
+    "wrangler": "4.131.1",
+    "puppeteer-core": "25.10.0",
+    "miniflare": "5.20260911.0-alpha",
+    "workerd": "1.20260911.1"
+  },
+  "node": "22.23.2",
+  "pinned_node": "22.23.1",
+  "receiver_commit": "16092e69a6326891a819efcd5ca9487c9c1e74fe",
+  "checks": {
+    "native_passes": 956,
+    "windows_skips": 2,
+    "test_files": 61,
+    "build_pages": 15,
+    "output_fence": "PASS",
+    "astro_files": 46,
+    "astro_diagnostics": 0,
+    "workerd_scenarios": 12,
+    "linked_inquiries": 2,
+    "linked_receipts": 2,
+    "linked_jobs": 4,
+    "compiled_receipt_checks": 8,
+    "receiver_boundary_controls": 10,
+    "receiver_violations": 0
+  },
+  "review": "Current full root review plus unchanged hashes for 15 earlier independently reviewed lifecycle sources; no new independent worker.",
+  "dependency_safety": "Git automatic merge exactly matches semantic three-way preparation; local patch versions preserved. Existing shared node_modules junction moved intact into ignored candidate output; target untouched. Candidate npm ci used public registry, empty config, temporary profile and no lifecycle scripts. One nonfatal optional-package cleanup warning retained.",
+  "preservation": {
+    "root_index": true,
+    "primary_checkout": true,
+    "private_pending_metadata": true,
+    "pending_content_read": false,
+    "original_application_source": true
+  },
+  "remaining": [
+    "Browser evidence remains earlier source-bound evidence; updated Puppeteer was not browser-tested.",
+    "Node meets >=22.12 but differs from the exact patch pin.",
+    "Actual credentials, destinations, backup custody, schema/history/retention, one-sender cutover, exact outward send and production checks remain M02-M06/A30/A33.",
+    "Production nodejs_compat/host configuration remains unverified; compilation warnings are retained.",
+    "Dirty private PENDING_MANUAL and primary marketing/UI are held uncommitted; fleet remains in progress."
+  ],
+  "publication": {
+    "source_committed": true,
+    "origin_main_merged_locally": true,
+    "local_main_advanced": false,
+    "pushed": false,
+    "deployed": false
+  },
+  "logs": {
+    "build.log": "39d4ab1a9a9a37558c0d27f1d34326f574f7fbcf73c4c621d9e749b1cc989e62",
+    "capture.log": "b5d3e33d622d3c1f2f9e8774f8aecb6fdd30809566be3105909d33f5251ab48e",
+    "compile.log": "2d9973aae76b5e1c39e145f5f056d171ff19ccae54ec4319e1c4a4cb6c664842",
+    "receipts.log": "537fecd660126148317b20fe679253430ce3a64b9e8b24956945ab6231fc539d",
+    "restore.log": "276cc69e3599f11d24369dd45a504928d8bc1e5a4651c190da720cfc9c6f999b",
+    "test.log": "d9ef6fa63d3139dc1091d6519b50c09024f1fc3d86d6739ab5a720d522aeb68c",
+    "types.log": "5ec0b9037a722b36bc461322c7090ba326d2d93eda530c8476e9d500b10f15e1",
+    "worker.log": "f35ba14185736e86517d986bfc8efad9d47703e16569ca97c5e8169523ebe98b"
+  },
+  "log_policy": "Logs are local-only and Git-ignored. Receipts, synthetic proofs, source hashes and results are durable committed evidence."
+}

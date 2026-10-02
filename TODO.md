@@ -3,7 +3,7 @@
 - [x] Full existing source reviewed;15 independently reviewed lifecycle hashes match. Native956pass/2skip,15-page build/output fence,46-file Astro check0diagnostics,12 compiled-worker fixture cases.
 - [x] Fresh actual Cockpit3.12/JWT/SQLite contract:2 inquiries/2 receipts/4 recoverable jobs and8 compiled receipt checks;10 controls/0violations. Source16092e6 locally integrated; no provider send.
 - [x] RUNBOOK corrected to current sessionStorage/native-confirmation/CORS behavior; old incomplete-build statement superseded with dated evidence.
-- [ ] Commit exact reviewed scope, merge current origin/mainae8362d preserving local lock patches, qualify updated Wrangler/Puppeteer and finish local integration.
+- [x] Reviewed inquiry commit ebceca0 merged with origin/main ae8362d as b18aa2c; exact merged dependencies qualified with 956 passes/2 skips, build/types and compiled/linked contract. Local-main integration is recorded in the final Git receipt.
 - [ ] M02-M06, A30/A33 operational custody/credentials/destinations/retention/send/cutover remain. Prior browser proof is historical source-bound evidence; no deployment or exhaustion claim. Preserve unread dirty PENDING_MANUAL and primary marketing/UI.
 - Evidence: docs/deep-completion-2026-10-02/integration/TASK_RETURN.json and later merge receipt.
 

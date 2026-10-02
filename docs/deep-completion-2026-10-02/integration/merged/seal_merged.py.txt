@@ -1,0 +1,72 @@
+"""Seal this exact CompanySite merge's non-production evidence; no private reads."""
+from pathlib import Path
+from datetime import datetime
+import hashlib,json,shutil,subprocess
+
+OUT=Path(__file__).resolve().parent;ROOT=OUT.parents[3]
+REPO=ROOT/'.worktrees/companysite-unified-inquiry-2026-09-24'
+DEST=REPO/'docs/deep-completion-2026-10-02/integration/merged'
+SOURCE='b18aa2c26f72a5b71eb6d9a572bfa295b8970acc'
+def git(*a,cwd=REPO):return subprocess.check_output(['git',*a],cwd=cwd,text=True).strip()
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+b=json.loads((OUT/'BINDING.json').read_text())
+assert git('rev-parse','HEAD')==SOURCE
+assert not git('diff','--cached','--name-only')
+assert git('ls-files','--stage',cwd=ROOT)==b['root_index']
+assert git('status','--porcelain',cwd=ROOT/'CompanySite')==b['primary_status']
+s=(REPO/'PENDING_MANUAL.md').stat()
+assert {'size':s.st_size,'mtime_ns':s.st_mtime_ns}==b['private_pending_preserved_metadata']
+source={p:sha(REPO/p) for p in b['source_sha256'] if p.startswith(('functions/','src/','tests/','scripts/'))}
+assert all(h==b['source_sha256'][p] for p,h in source.items())
+packages={p:sha(REPO/p) for p in ('package.json','package-lock.json')}
+DEST.mkdir(exist_ok=False)
+for mode in ('restore','build','test','types','compile','worker','capture','receipts'):
+    receipt=json.loads((OUT/(mode+'-receipt.json')).read_text())
+    assert receipt['exit']==0 and receipt['package_hashes']==packages
+    for suffix in ('-receipt.json','.log'):shutil.copyfile(OUT/(mode+suffix),DEST/(mode+suffix))
+for name in ('WORK_ORDER.md','LOCK_MERGE_REVIEW.json','ACTUAL_LOCK_MERGE.json','DEPENDENCY_JUNCTION.json','vitest-results.json','verify_candidate.py.txt','verify_current_receiver.py','seal_merged.py.txt'):
+    shutil.copyfile(OUT/name,DEST/name)
+proof=Path('C:/Users/Michael/AppData/Local/Temp/cockpit-receiver-deep-20261002-integration-5jd1hfwz/contract-proof.json')
+for src,name in ((proof,'receiver-proof.json'),(REPO/'output/receiver-contract/producer-capture.json','producer-capture.json'),(REPO/'output/receiver-contract/producer-acceptance.json','producer-acceptance.json'),(REPO/'output/runtime/inbox-runtime.json','workerd-proof.json')):shutil.copyfile(src,DEST/name)
+receiver=json.loads((DEST/'receiver-proof.json').read_text());producer=json.loads((DEST/'producer-acceptance.json').read_text())
+assert len(receiver['controls'])==10 and not receiver['violations'] and receiver['python']=='3.12.14'
+assert producer['receiver_proof_sha256']==sha(DEST/'receiver-proof.json')
+assert all(sha(ROOT/'CockpitCloud'/p)==h for p,h in receiver['source_sha256'].items())
+worker=json.loads((DEST/'workerd-proof.json').read_text())
+assert len(worker['evidence'])==12 and worker['workerSha256']==producer['worker_sha256']
+tests=json.loads((DEST/'vitest-results.json').read_text())
+assert tests['numPassedTests']==956 and tests['numFailedTests']==0 and tests['numPendingTests']==2
+versions={p:json.loads((REPO/'node_modules'/p/'package.json').read_text())['version'] for p in ('astro','vitest','wrangler','puppeteer-core','miniflare','workerd')}
+assert versions['wrangler']=='4.131.1' and versions['puppeteer-core']=='25.10.0'
+assert (REPO/'node_modules').resolve()==REPO/'node_modules'
+result={'task':'COMPANYSITE-MERGED-INTEGRATION-2026-10-02','owner':'Codex /root','at':datetime.now().astimezone().isoformat(),'status':'CHECKPOINTED','source_merge_commit':SOURCE,'parents':git('show','-s','--format=%P','HEAD').split(),'source_sha256':source,'package_hashes':packages,'versions':versions,'node':'22.23.2','pinned_node':'22.23.1','receiver_commit':git('rev-parse','HEAD',cwd=ROOT/'CockpitCloud'),
+'checks':{'native_passes':956,'windows_skips':2,'test_files':61,'build_pages':15,'output_fence':'PASS','astro_files':46,'astro_diagnostics':0,'workerd_scenarios':12,'linked_inquiries':2,'linked_receipts':2,'linked_jobs':4,'compiled_receipt_checks':8,'receiver_boundary_controls':10,'receiver_violations':0},
+'review':'Current full root review plus unchanged hashes for 15 earlier independently reviewed lifecycle sources; no new independent worker.',
+'dependency_safety':'Git automatic merge exactly matches semantic three-way preparation; local patch versions preserved. Existing shared node_modules junction moved intact into ignored candidate output; target untouched. Candidate npm ci used public registry, empty config, temporary profile and no lifecycle scripts. One nonfatal optional-package cleanup warning retained.',
+'preservation':{'root_index':True,'primary_checkout':True,'private_pending_metadata':True,'pending_content_read':False,'original_application_source':True},
+'remaining':['Browser evidence remains earlier source-bound evidence; updated Puppeteer was not browser-tested.','Node meets >=22.12 but differs from the exact patch pin.','Actual credentials, destinations, backup custody, schema/history/retention, one-sender cutover, exact outward send and production checks remain M02-M06/A30/A33.','Production nodejs_compat/host configuration remains unverified; compilation warnings are retained.','Dirty private PENDING_MANUAL and primary marketing/UI are held uncommitted; fleet remains in progress.'],
+'publication':{'source_committed':True,'origin_main_merged_locally':True,'local_main_advanced':False,'pushed':False,'deployed':False},
+'logs':{p.name:sha(p) for p in DEST.glob('*.log')},'log_policy':'Logs are local-only and Git-ignored. Receipts, synthetic proofs, source hashes and results are durable committed evidence.'}
+(DEST/'TASK_RETURN.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
+(DEST/'TASK_RETURN.md').write_text('''# CompanySite merged inquiry candidate
+
+Owner: Codex /root. Source merge b18aa2c26f72a5b71eb6d9a572bfa295b8970acc joins reviewed inquiry commit ebceca0 and origin/main ae8362d. Git resolved the merge without conflicts; the lockfile exactly matches the reviewed semantic three-way merge and preserves unrelated local patch versions.
+
+Post-merge acceptance uses the exact installed lock: Node 22.23.2, Astro 7.3.2, Vitest 4.1.11, Wrangler 4.131.1 and Puppeteer 25.10.0. All 956 native tests pass, with two Windows skips; 61 test files pass. The 15-page build/output fence and 46-file Astro check pass with zero diagnostics. Twelve actual compiled-workerd scenarios pass. Two compiled inquiry payloads pass through Cockpit 16092e6's real JWT/ASGI/SQLite implementation on Python 3.12.14, producing two receipts/four recoverable jobs. Its responses pass eight compiled producer checks; ten receiver controls pass with zero violations. This is file-linked acceptance, not a simultaneous browser-to-production transaction or provider delivery.
+
+The dependency preflight caught a shared node_modules junction before npm ran. Its directory entry was preserved under ignored output/dependency-backup-20261002; the shared target was untouched. This candidate now has independent exact-lock dependencies. Installation used an empty temporary npm/profile environment, public registry and disabled lifecycle scripts. One nonfatal optional-package cleanup warning is retained in the local log.
+
+The unchanged lifecycle sources retain earlier independent and browser evidence. No new browser or independent worker run is claimed. Node meets the engines range but differs from .node-version 22.23.1. Existing compile compatibility warnings remain; production nodejs_compat is unverified. Legacy delivery behavior is unchanged, and the new inbox route remains opt-in/unconfigured.
+
+Next integration step: commit this evidence and fast-forward the unoccupied local main after verifying ancestry. Remaining release gates M02-M06/A30/A33 cover actual credential lifecycle, approved destinations, backup custody/history/schema/retention, one-sender cutover and exact outward test/production validation. No push, deployment, real send or account action occurred. The private dirty PENDING_MANUAL and primary marketing/UI edits remain held unchanged. CHECKPOINTED does not mean exhausted or released.
+
+Receipts and synthetic proofs are committed with this packet. Raw logs remain ignored/local with hashes in TASK_RETURN.json. Earlier pre-merge evidence remains historical and unchanged.
+''',encoding='utf-8')
+todo=REPO/'TODO.md'
+text=todo.read_text(encoding='utf-8').replace('- [ ] Commit exact reviewed scope, merge current origin/mainae8362d preserving local lock patches, qualify updated Wrangler/Puppeteer and finish local integration.','- [x] Reviewed inquiry commit ebceca0 merged with origin/main ae8362d as b18aa2c; exact merged dependencies qualified with 956 passes/2 skips, build/types and compiled/linked contract. Local-main integration is recorded in the final Git receipt.')
+todo.write_text(text,encoding='utf-8')
+session=REPO/'SESSION_GOAL.md';old=session.read_text(encoding='utf-8')
+session.write_text('DATE: 2026-10-02\nPROJECT: CompanySite unified inquiry integration\nOWNER: Codex /root; release owner preserved\nSTATUS: CHECKPOINTED\nRESULT: Source merge b18aa2c qualified with exact dependencies; 956 native passes/2 skips, build/types/compiled worker/linked receiver passed.\nNEXT: Commit merged evidence and fast-forward unoccupied local main; operational gates remain M02-M06/A30/A33.\nBOUNDARY: No private reads, actual sends, push or production.\n\nPRESERVED PRIOR SESSION RECORD:\n'+old,encoding='utf-8')
+paths=['TODO.md']+[str(p.relative_to(REPO)).replace('\\','/') for p in DEST.iterdir() if p.is_file() and p.suffix!='.log']
+(OUT/'MERGED_STAGE_PATHS.json').write_text(json.dumps(sorted(paths),indent=2)+'\n')
+print(json.dumps({'source_commit':SOURCE,'stage_paths':len(paths),'checks':result['checks'],'preservation':result['preservation']},indent=2))
