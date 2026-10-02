@@ -1,0 +1,78 @@
+{
+  "merge_base": "978a2c6ac28df2e972d574783097a34e85898fec",
+  "semantic_conflicts": [],
+  "changes": [
+    {
+      "path": "",
+      "before": "0.1.0",
+      "after": "0.1.0"
+    },
+    {
+      "path": "node_modules/@cloudflare/workerd-darwin-64",
+      "before": "1.20260820.1",
+      "after": "1.20260911.1"
+    },
+    {
+      "path": "node_modules/@cloudflare/workerd-darwin-arm64",
+      "before": "1.20260820.1",
+      "after": "1.20260911.1"
+    },
+    {
+      "path": "node_modules/@cloudflare/workerd-linux-64",
+      "before": "1.20260820.1",
+      "after": "1.20260911.1"
+    },
+    {
+      "path": "node_modules/@cloudflare/workerd-linux-arm64",
+      "before": "1.20260820.1",
+      "after": "1.20260911.1"
+    },
+    {
+      "path": "node_modules/@cloudflare/workerd-windows-64",
+      "before": "1.20260820.1",
+      "after": "1.20260911.1"
+    },
+    {
+      "path": "node_modules/@puppeteer/browsers",
+      "before": "3.2.0",
+      "after": "3.2.2"
+    },
+    {
+      "path": "node_modules/devtools-protocol",
+      "before": "0.0.1653615",
+      "after": "0.0.1666840"
+    },
+    {
+      "path": "node_modules/miniflare",
+      "before": "5.20260820.0-alpha",
+      "after": "5.20260911.0-alpha"
+    },
+    {
+      "path": "node_modules/puppeteer-core",
+      "before": "25.6.0",
+      "after": "25.10.0"
+    },
+    {
+      "path": "node_modules/webdriver-bidi-protocol",
+      "before": "0.4.2",
+      "after": "0.4.3"
+    },
+    {
+      "path": "node_modules/workerd",
+      "before": "1.20260820.1",
+      "after": "1.20260911.1"
+    },
+    {
+      "path": "node_modules/wrangler",
+      "before": "4.125.0",
+      "after": "4.131.1"
+    }
+  ],
+  "preserved_local_patches": [
+    "vitest4.1.11",
+    "devalue5.9.2"
+  ],
+  "all_package_sources": "https://registry.npmjs.org",
+  "sha256": "70d857de3d46fcef08b63e0de6960e6128173cdb168460cf65a36e5dcc32d1f0",
+  "not_installed_or_applied": true
+}

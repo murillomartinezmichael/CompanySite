@@ -1,0 +1,441 @@
+{
+  "checkedAt": "2026-10-02T18:27:13.176280+00:00",
+  "cases": [
+    {
+      "name": "website",
+      "key": "companysite:00000000-0000-4000-8000-000000000101",
+      "id": "d70d15c5b2d94e53ae3690a77a31dbd9",
+      "responses": [
+        {
+          "name": "created",
+          "status": 201,
+          "body": {
+            "id": "d70d15c5b2d94e53ae3690a77a31dbd9",
+            "name": "Synthetic Ren\u00e9e \ud83d\ude00",
+            "email": "website@example.invalid",
+            "phone": "",
+            "message": "Synthetic A&B, \"quotes\" and caf\u00e9 \ud83d\ude00 inquiry; never delivered.",
+            "lane": "",
+            "status": "new",
+            "followupSent": false,
+            "company": "m3mm",
+            "projectType": "Synthetic caf\u00e9 and workshop services Synthetic caf\u00e9 and workshop",
+            "budget": "",
+            "location": "",
+            "source": "companysite",
+            "created_at": "2026-10-02T18:27:13.007453",
+            "context": {
+              "businessType": "Synthetic caf\u00e9 and workshop services Synthetic caf\u00e9 and workshop services Synthetic caf\u00e9 and workshop services",
+              "currentUrl": "https://example.invalid/current?view=one&label=caf\u00e9",
+              "intent": "book:free-review",
+              "originalSource": "website",
+              "preferredStart": "Next quarter",
+              "referredBy": "Synthetic referral",
+              "utm_campaign": "synthetic-campaign",
+              "utm_content": "synthetic-content",
+              "utm_medium": "referral",
+              "utm_source": "synthetic-source",
+              "utm_term": "synthetic-term"
+            },
+            "notifications": [
+              "acknowledgment_email",
+              "operator_email"
+            ],
+            "deliveries": [
+              {
+                "id": "e4fe287b00604264856c3772c04d949b",
+                "channel": "acknowledgment_email",
+                "state": "pending",
+                "attempts": 0,
+                "provider_receipt": "",
+                "error": ""
+              },
+              {
+                "id": "8f9886254cd9411ba02f8ba5abd3a3a7",
+                "channel": "operator_email",
+                "state": "pending",
+                "attempts": 0,
+                "provider_receipt": "",
+                "error": ""
+              }
+            ]
+          }
+        },
+        {
+          "name": "replayed",
+          "status": 200,
+          "body": {
+            "id": "d70d15c5b2d94e53ae3690a77a31dbd9",
+            "name": "Synthetic Ren\u00e9e \ud83d\ude00",
+            "email": "website@example.invalid",
+            "phone": "",
+            "message": "Synthetic A&B, \"quotes\" and caf\u00e9 \ud83d\ude00 inquiry; never delivered.",
+            "lane": "",
+            "status": "new",
+            "followupSent": false,
+            "company": "m3mm",
+            "projectType": "Synthetic caf\u00e9 and workshop services Synthetic caf\u00e9 and workshop",
+            "budget": "",
+            "location": "",
+            "source": "companysite",
+            "created_at": "2026-10-02T18:27:13.007453",
+            "context": {
+              "businessType": "Synthetic caf\u00e9 and workshop services Synthetic caf\u00e9 and workshop services Synthetic caf\u00e9 and workshop services",
+              "currentUrl": "https://example.invalid/current?view=one&label=caf\u00e9",
+              "intent": "book:free-review",
+              "originalSource": "website",
+              "preferredStart": "Next quarter",
+              "referredBy": "Synthetic referral",
+              "utm_campaign": "synthetic-campaign",
+              "utm_content": "synthetic-content",
+              "utm_medium": "referral",
+              "utm_source": "synthetic-source",
+              "utm_term": "synthetic-term"
+            },
+            "notifications": [
+              "acknowledgment_email",
+              "operator_email"
+            ],
+            "deliveries": [
+              {
+                "id": "e4fe287b00604264856c3772c04d949b",
+                "channel": "acknowledgment_email",
+                "state": "pending",
+                "attempts": 0,
+                "provider_receipt": "",
+                "error": ""
+              },
+              {
+                "id": "8f9886254cd9411ba02f8ba5abd3a3a7",
+                "channel": "operator_email",
+                "state": "pending",
+                "attempts": 0,
+                "provider_receipt": "",
+                "error": ""
+              }
+            ]
+          }
+        },
+        {
+          "name": "conflict",
+          "status": 409,
+          "body": {
+            "detail": "Idempotency-Key was already used for a different lead payload"
+          }
+        },
+        {
+          "name": "recoverable_outbox",
+          "status": 200,
+          "body": {
+            "id": "d70d15c5b2d94e53ae3690a77a31dbd9",
+            "name": "Synthetic Ren\u00e9e \ud83d\ude00",
+            "email": "website@example.invalid",
+            "phone": "",
+            "message": "Synthetic A&B, \"quotes\" and caf\u00e9 \ud83d\ude00 inquiry; never delivered.",
+            "lane": "",
+            "status": "new",
+            "followupSent": false,
+            "company": "m3mm",
+            "projectType": "Synthetic caf\u00e9 and workshop services Synthetic caf\u00e9 and workshop",
+            "budget": "",
+            "location": "",
+            "source": "companysite",
+            "created_at": "2026-10-02T18:27:13.007453",
+            "context": {
+              "businessType": "Synthetic caf\u00e9 and workshop services Synthetic caf\u00e9 and workshop services Synthetic caf\u00e9 and workshop services",
+              "currentUrl": "https://example.invalid/current?view=one&label=caf\u00e9",
+              "intent": "book:free-review",
+              "originalSource": "website",
+              "preferredStart": "Next quarter",
+              "referredBy": "Synthetic referral",
+              "utm_campaign": "synthetic-campaign",
+              "utm_content": "synthetic-content",
+              "utm_medium": "referral",
+              "utm_source": "synthetic-source",
+              "utm_term": "synthetic-term"
+            },
+            "notifications": [
+              "acknowledgment_email",
+              "operator_email"
+            ],
+            "deliveries": [
+              {
+                "id": "e4fe287b00604264856c3772c04d949b",
+                "channel": "acknowledgment_email",
+                "state": "uncertain",
+                "attempts": 1,
+                "provider_receipt": "",
+                "error": "transport_uncertain"
+              },
+              {
+                "id": "8f9886254cd9411ba02f8ba5abd3a3a7",
+                "channel": "operator_email",
+                "state": "failed",
+                "attempts": 1,
+                "provider_receipt": "",
+                "error": "provider_rejected"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "roadmap",
+      "key": "companysite:00000000-0000-4000-8000-000000000102",
+      "id": "c582432cf1cd412fb3dfa31ad6b29678",
+      "responses": [
+        {
+          "name": "created",
+          "status": 201,
+          "body": {
+            "id": "c582432cf1cd412fb3dfa31ad6b29678",
+            "name": "Roadmap subscriber",
+            "email": "roadmap@example.invalid",
+            "phone": "",
+            "message": "Roadmap subscriber wants: synthetic previews, caf\u00e9 \ud83d\ude00 updates",
+            "lane": "",
+            "status": "new",
+            "followupSent": false,
+            "company": "m3mm",
+            "projectType": "roadmap-subscriber",
+            "budget": "",
+            "location": "",
+            "source": "companysite",
+            "created_at": "2026-10-02T18:27:13.043075",
+            "context": {
+              "businessType": "roadmap-subscriber",
+              "currentUrl": "",
+              "intent": "book:roadmap-subscribe",
+              "originalSource": "roadmap",
+              "preferredStart": "",
+              "referredBy": "",
+              "utm_campaign": "synthetic-roadmap",
+              "utm_content": "",
+              "utm_medium": "",
+              "utm_source": "synthetic-source",
+              "utm_term": ""
+            },
+            "notifications": [
+              "acknowledgment_email",
+              "operator_email"
+            ],
+            "deliveries": [
+              {
+                "id": "a99913b5c64f48f69ce789a1fa08f06f",
+                "channel": "acknowledgment_email",
+                "state": "pending",
+                "attempts": 0,
+                "provider_receipt": "",
+                "error": ""
+              },
+              {
+                "id": "eda7b8a391c542e18cfebb1d574a2e13",
+                "channel": "operator_email",
+                "state": "pending",
+                "attempts": 0,
+                "provider_receipt": "",
+                "error": ""
+              }
+            ]
+          }
+        },
+        {
+          "name": "replayed",
+          "status": 200,
+          "body": {
+            "id": "c582432cf1cd412fb3dfa31ad6b29678",
+            "name": "Roadmap subscriber",
+            "email": "roadmap@example.invalid",
+            "phone": "",
+            "message": "Roadmap subscriber wants: synthetic previews, caf\u00e9 \ud83d\ude00 updates",
+            "lane": "",
+            "status": "new",
+            "followupSent": false,
+            "company": "m3mm",
+            "projectType": "roadmap-subscriber",
+            "budget": "",
+            "location": "",
+            "source": "companysite",
+            "created_at": "2026-10-02T18:27:13.043075",
+            "context": {
+              "businessType": "roadmap-subscriber",
+              "currentUrl": "",
+              "intent": "book:roadmap-subscribe",
+              "originalSource": "roadmap",
+              "preferredStart": "",
+              "referredBy": "",
+              "utm_campaign": "synthetic-roadmap",
+              "utm_content": "",
+              "utm_medium": "",
+              "utm_source": "synthetic-source",
+              "utm_term": ""
+            },
+            "notifications": [
+              "acknowledgment_email",
+              "operator_email"
+            ],
+            "deliveries": [
+              {
+                "id": "a99913b5c64f48f69ce789a1fa08f06f",
+                "channel": "acknowledgment_email",
+                "state": "pending",
+                "attempts": 0,
+                "provider_receipt": "",
+                "error": ""
+              },
+              {
+                "id": "eda7b8a391c542e18cfebb1d574a2e13",
+                "channel": "operator_email",
+                "state": "pending",
+                "attempts": 0,
+                "provider_receipt": "",
+                "error": ""
+              }
+            ]
+          }
+        },
+        {
+          "name": "conflict",
+          "status": 409,
+          "body": {
+            "detail": "Idempotency-Key was already used for a different lead payload"
+          }
+        },
+        {
+          "name": "recoverable_outbox",
+          "status": 200,
+          "body": {
+            "id": "c582432cf1cd412fb3dfa31ad6b29678",
+            "name": "Roadmap subscriber",
+            "email": "roadmap@example.invalid",
+            "phone": "",
+            "message": "Roadmap subscriber wants: synthetic previews, caf\u00e9 \ud83d\ude00 updates",
+            "lane": "",
+            "status": "new",
+            "followupSent": false,
+            "company": "m3mm",
+            "projectType": "roadmap-subscriber",
+            "budget": "",
+            "location": "",
+            "source": "companysite",
+            "created_at": "2026-10-02T18:27:13.043075",
+            "context": {
+              "businessType": "roadmap-subscriber",
+              "currentUrl": "",
+              "intent": "book:roadmap-subscribe",
+              "originalSource": "roadmap",
+              "preferredStart": "",
+              "referredBy": "",
+              "utm_campaign": "synthetic-roadmap",
+              "utm_content": "",
+              "utm_medium": "",
+              "utm_source": "synthetic-source",
+              "utm_term": ""
+            },
+            "notifications": [
+              "acknowledgment_email",
+              "operator_email"
+            ],
+            "deliveries": [
+              {
+                "id": "a99913b5c64f48f69ce789a1fa08f06f",
+                "channel": "acknowledgment_email",
+                "state": "failed",
+                "attempts": 1,
+                "provider_receipt": "",
+                "error": "provider_rejected"
+              },
+              {
+                "id": "eda7b8a391c542e18cfebb1d574a2e13",
+                "channel": "operator_email",
+                "state": "uncertain",
+                "attempts": 1,
+                "provider_receipt": "",
+                "error": "transport_uncertain"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "case": "website",
+      "auth": "actual JWT/current_user, no overrides",
+      "create": 201,
+      "replay": 200,
+      "changed_content": 409,
+      "changed_plan": 409,
+      "counts": [
+        1,
+        1,
+        2
+      ],
+      "context_and_roles_preserved": true
+    },
+    {
+      "case": "roadmap",
+      "auth": "actual JWT/current_user, no overrides",
+      "create": 201,
+      "replay": 200,
+      "changed_content": 409,
+      "changed_plan": 409,
+      "counts": [
+        2,
+        2,
+        4
+      ],
+      "context_and_roles_preserved": true
+    },
+    {
+      "scenario": "persisted failed/uncertain outbox",
+      "counts": [
+        2,
+        2,
+        4
+      ],
+      "auto_retry": false,
+      "payloads_preserved": true,
+      "readable_by_owner": true,
+      "actual_provider_attempts": 0
+    }
+  ],
+  "controls": [
+    "pending-manual",
+    "dev-vars",
+    "real-database-uri",
+    "real-database",
+    "connect",
+    "listen",
+    "DNS",
+    "process",
+    "private-read",
+    "outside-write"
+  ],
+  "violations": [],
+  "counts": [
+    2,
+    2,
+    4
+  ],
+  "capture_sha256": "5639b3332bc7f9d2109d20677b1874f98116ac855042998021e920448b690d89",
+  "source_sha256": {
+    "Backend/main.py": "4eed99e4dc74e200ee63fa1145c6447ef811d476af07c6cd1a74a28b1a5ca6c7",
+    "Backend/auth.py": "27db6fcce7e88f8709456176a0558d96fc911b5390620056b0867793452bddf2",
+    "Backend/config.py": "479aff38457aa50984c3589030d6745594b573b12c79b45391e87378a87797a6",
+    "Backend/db.py": "7066d926f79853fa2f42c07cad1c8d90a8b611f76c66a3da15442e4c771e9c02",
+    "Backend/routes_leads.py": "554f5a4ab9c5b480644c4177249df9696171319ba6375da4d7fb4b25cc9d97b5",
+    "Backend/models.py": "2f0a8c08989e84d1c2f399720d345139a8770f8c9cf741196d360be5bb52333b",
+    "Backend/schemas.py": "1a93ff9537990eaa72300541b817f561cd90a07d06c27e60b3146d20f66160ca",
+    "Backend/lead_delivery.py": "8ce48e5279202be37c83845e5bbda71200c7209133f4f53c06fff8d80aac76ba"
+  },
+  "guard_sha256": "03cd656053e68e04120bbe3fdc062503b5585439e47e34f4b6f250206d1099e0",
+  "guard_reuse": "Unchanged prefix before import pytest; all10 controls and isolation applied.",
+  "runner_sha256": "5a5a7d816c16b8550180b8111811b91222ac9461293b16545820a4c5647dc6ae",
+  "python": "3.12.14",
+  "temporary_database": true,
+  "productionVerified": false,
+  "limits": "Actual ASGI/JWT/SQLite intake and service; transport-free synthetic state transitions. Linked files, no simultaneous socket bridge, server, real data or provider delivery."
+}

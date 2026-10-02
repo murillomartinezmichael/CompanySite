@@ -1,0 +1,16 @@
+{
+  "mode": "worker",
+  "started": "2026-10-02T14:23:30.672106-04:00",
+  "finished": "2026-10-02T14:23:31.826800-04:00",
+  "command": [
+    "C:\\Program Files\\nodejs\\node.exe",
+    "scripts/check-inbox-runtime.mjs"
+  ],
+  "exit": 0,
+  "profile": "C:\\Users\\Michael\\AppData\\Local\\Temp\\companysite-native-integration-20261002-b4p6ahy4",
+  "package_hashes": {
+    "package.json": "4cc748a749f2cab4d012353c7fd177933daac6c73dbdfbf1bd0e487edf9cf5ca",
+    "package-lock.json": "55f9e029ed79c4e2182c7e172eb6fe620931fca48046676704c27c9f4c7c9ca1"
+  },
+  "environment": "Only OS launcher variables inherited; no provider/account variables. Temporary profiles/empty npm configs, telemetry disabled."
+}

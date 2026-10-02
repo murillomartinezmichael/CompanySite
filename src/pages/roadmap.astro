@@ -146,6 +146,7 @@ const intakePost = '/api/lead';
 
 <script>
   import { track } from '@/lib/track';
+  import { createInquirySubmission, isInquiryAccepted, InquiryRetryError, inquiryErrorMessage, showInquiryRecovery } from '@/lib/inquiry-submission';
 
   const form = document.getElementById('roadmap-signup') as HTMLFormElement | null;
   const status = document.getElementById('roadmap-status') as HTMLParagraphElement | null;
@@ -153,6 +154,9 @@ const intakePost = '/api/lead';
   const DEFAULT_NOTE = 'Roadmap subscriber update request.';
 
   if (form && status) {
+    const submission = createInquirySubmission(undefined, { scope: 'roadmap' });
+    let sending = false;
+    let accepted = false;
     const show = (text: string, kind: 'pending' | 'ok' | 'error') => {
       status.textContent = text;
       status.classList.remove('is-ok', 'is-error');
@@ -162,6 +166,7 @@ const intakePost = '/api/lead';
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (sending || accepted) return;
       const submitBtn = form.querySelector<HTMLButtonElement>('button[type=submit]');
       const originalLabel = submitBtn?.textContent;
       const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
@@ -177,6 +182,7 @@ const intakePost = '/api/lead';
       delete data.topics;
       data.frustration = topics ? `Roadmap subscriber wants: ${topics}` : DEFAULT_NOTE;
 
+      sending = true;
       if (submitBtn) {
         submitBtn.disabled = true;
         submitBtn.textContent = 'Sending…';
@@ -184,12 +190,20 @@ const intakePost = '/api/lead';
       show('Sending…', 'pending');
 
       try {
+        const attempt = await submission.prepare(data);
+        if (attempt.accepted) throw new InquiryRetryError('confirmed');
         const res = await fetch('/api/lead', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          redirect: 'error',
+          headers: {
+            'Content-Type': 'application/json',
+            'Idempotency-Key': attempt.key,
+          },
           body: JSON.stringify(data),
         });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!(await isInquiryAccepted(res))) throw new Error(`Unconfirmed inquiry: HTTP ${res.status}`);
+        accepted = true;
+        const recoverySaved = submission.markAccepted(attempt.key);
 
         track({
           name: 'intake_submit',
@@ -197,20 +211,28 @@ const intakePost = '/api/lead';
           intent: 'book:roadmap-subscribe',
           meta: { source: 'roadmap', has_prefill: false, message_length: topics.length },
         });
-        show('Got it. Redirecting…', 'ok');
+        show(recoverySaved ? 'Got it. Redirecting…' : 'Got it. Your inquiry was confirmed, but this browser could not save its retry reference. Do not resend. Redirecting…', 'ok');
         form.reset();
         const destination = form.dataset.successPath || '/thanks';
         setTimeout(() => { window.location.href = destination; }, 450);
-      } catch {
+      } catch (error) {
         track({
           name: 'intake_error',
           section: 'roadmap',
           intent: 'book:roadmap-subscribe',
           meta: { source: 'roadmap', has_prefill: false, message_length: topics.length },
         });
-        show('Something broke on send. Email murillomartinezmichael@gmail.com and I\'ll pick it up manually.', 'error');
+        show(inquiryErrorMessage(error), 'error');
+        showInquiryRecovery(form, status, error, () => {
+          const current = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+          const selectedTopics = String(current.topics || '').trim();
+          delete current.topics;
+          current.frustration = selectedTopics ? `Roadmap subscriber wants: ${selectedTopics}` : DEFAULT_NOTE;
+          return submission.allowSeparate(current);
+        });
       } finally {
-        if (submitBtn && originalLabel) {
+        sending = false;
+        if (!accepted && submitBtn && originalLabel) {
           submitBtn.disabled = false;
           submitBtn.textContent = originalLabel;
         }

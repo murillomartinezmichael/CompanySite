@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { inquiryErrorMessage } from '../../src/lib/inquiry-submission';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const read = (p: string) => readFileSync(root + p, 'utf8');
@@ -58,7 +59,8 @@ describe('/roadmap signup reaches the same success page as every other form', ()
   it('surfaces a failure to the visitor rather than swallowing it', () => {
     expect(src).toMatch(/id="roadmap-status"/);
     expect(src).toMatch(/aria-live="polite"/);
-    expect(src).toMatch(/catch\s*\{[\s\S]{0,400}murillomartinezmichael@gmail\.com/);
+    expect(src).toMatch(/catch\s*\(error\)\s*\{[\s\S]{0,400}show\(inquiryErrorMessage\(error\), 'error'\)/);
+    expect(inquiryErrorMessage(new Error('Synthetic transport failure'))).toContain('murillomartinezmichael@gmail.com');
   });
 
   it('always sends a note field, so the no-JS POST is a valid lead too', () => {

@@ -1,0 +1,198 @@
+{
+  "standard": "M3MM-STD-DELIVERY-001",
+  "task": "CompanySite A30/A33 retry lifecycle",
+  "status": "CHECKPOINTED",
+  "client_date": "2026-10-02",
+  "recorded_at": "2026-10-02T05:35:17.004226+00:00",
+  "implementation_owner": "Codex /root/companysite_retry_lifecycle",
+  "integration_owner": "Codex /root",
+  "candidate": "C:\\Users\\Michael\\Documents\\GitHub\\.worktrees\\companysite-unified-inquiry-2026-09-24",
+  "branch": "codex/unified-inquiry-2026-09-24",
+  "base_head": "2ee04be1e2c4038ed147daaab2a76f838e5a93f0",
+  "source_files": [
+    {
+      "path": "src/lib/inquiry-submission.ts",
+      "current_sha256": "208bf5390b560eed69ad3a456c36454a9c2de66104b62c36ced7096442e35f88",
+      "before_text_sha256": "f7a71ffa282a06815d1ebb579325bbd027285b55a6592ba9aee9e0292ab43a3b",
+      "before_provenance": "pre-edit byte snapshot"
+    },
+    {
+      "path": "src/components/Intake.astro",
+      "current_sha256": "e2ec44dc4eec8840c6dc5b90a343b488a3d2334e9d2fb6480e02cba850a0cbf3",
+      "before_text_sha256": "374ca9ed052ad16198ed7ba6abf8ff3b433efff1917e238b663295eef98d1df0",
+      "before_provenance": "pre-edit byte snapshot"
+    },
+    {
+      "path": "src/pages/roadmap.astro",
+      "current_sha256": "d44bda15a24d2da5488e3b8d2db386e835590a67ce45de25b3a619d55bc7b81f",
+      "before_text_sha256": "9939560b516ca6ec40bc2f4c9ad1f05678d71aa596abc25865c8bde40a5560d7",
+      "before_provenance": "pre-edit byte snapshot"
+    },
+    {
+      "path": "functions/api/lead.ts",
+      "current_sha256": "030077732d083f71cf382805d06d9f0d5df3441138a915f5fa4af50ea3967657",
+      "before_text_sha256": "0490d0032c3b0165007ae562cd8ca8f40decdcaf37f228c40338795904bd4b9f",
+      "before_provenance": "pre-edit byte snapshot"
+    },
+    {
+      "path": "functions/_lib/inquiry-confirmation.ts",
+      "current_sha256": "9694aad3fe6d94a8b8431ae7e454b6f434d97ce7743c04b8bedeb4b491186eea",
+      "before_text_sha256": null,
+      "before_provenance": "new file"
+    },
+    {
+      "path": "tests/inquiry-submission.test.ts",
+      "current_sha256": "d867cc1f9c730b384d6ed73c9287a10c26c1307a235249822ab98b613b671ebe",
+      "before_text_sha256": "967a82d51f40166941aa9244dca40e4aedc1278de064aa6130170f5dc2cd1ee6",
+      "before_provenance": "pre-edit byte snapshot"
+    },
+    {
+      "path": "tests/inquiry-reload.test.ts",
+      "current_sha256": "e2afe9ce351a5bf67318f12d7c824b3094302ffcc47229749795a954e127cad4",
+      "before_text_sha256": null,
+      "before_provenance": "new file"
+    },
+    {
+      "path": "tests/functions/lead-inbox.test.ts",
+      "current_sha256": "e674990fae7bbdfb233caea05dbe1873b56577ac889a61fc38889d82b68befb7",
+      "before_text_sha256": "5dd6bb2c9d9d0be9a27185791a3bff936c0f0cec3d148c7d76edec914dbe4f3f",
+      "before_provenance": "pre-edit byte snapshot"
+    },
+    {
+      "path": "tests/functions/lead-native-retry.test.ts",
+      "current_sha256": "18733f3b88fd5da37fe9b36e75b3024bc6bdaf35888e0d6eac65b41ecfad62e0",
+      "before_text_sha256": null,
+      "before_provenance": "new file"
+    },
+    {
+      "path": "tests/build/roadmap-signup.test.ts",
+      "current_sha256": "a7750e01413f60a35f55219c20eabc85fc58ad711480b39079bfa196f787f24e",
+      "before_text_sha256": "506887dcc3127ef2f5988cdfa6efa044cd0119e2d8eb0adec8ca38eb1d5e959a",
+      "before_provenance": "pre-edit byte snapshot"
+    },
+    {
+      "path": "scripts/check-inbox-runtime.mjs",
+      "current_sha256": "846b84db497004fe770d2acab630cbaaf32874f86be042a8c64257d0a2e52654",
+      "before_text_sha256": "0dbea2dca7adcf30c0cda95652214798056fd1364817688613642ebb45736630",
+      "before_provenance": "full pre-edit source read; exact owned hunk reversed for patch, no contemporaneous byte hash"
+    },
+    {
+      "path": "scripts/check-inquiry-retry.mjs",
+      "current_sha256": "2947f56588cfddb55a8fdfb531c17b47d5861fa6f9af67f4d7dfaa89d06686a9",
+      "before_text_sha256": null,
+      "before_provenance": "new file"
+    },
+    {
+      "path": "functions/_lib/cors.ts",
+      "current_sha256": "f3b089ca00b5d5abd6a76329398b3b6b7f92746c4c51f9fb1c6f0194c9590f5b",
+      "before_text_sha256": "6aae424c368c605f70ca0e04c37dfd4df820788764459b4cdf2276eb4577ed88",
+      "before_provenance": "pre-edit byte snapshot"
+    },
+    {
+      "path": "tests/functions/cors.test.ts",
+      "current_sha256": "d6775033d60209960ebd92c95e52286bb7d5f1acac3aea87a4d2dafff53b18ae",
+      "before_text_sha256": "5912d4b9173ff8a95850d0fa1dea63a16bdd44bd010026e578d36f8cf0b25da0",
+      "before_provenance": "pre-edit byte snapshot"
+    },
+    {
+      "path": "scripts/check-inquiry-cors.mjs",
+      "current_sha256": "44f2a4a883fdf0a546550c84981a376feefc664b2f036630772d520791f92bb3",
+      "before_text_sha256": null,
+      "before_provenance": "new file"
+    }
+  ],
+  "patch": "retry-lifecycle.incremental.patch",
+  "patch_sha256": "30bb035d4efb5e185b65f1abc79e34d8ed246763037f6f472bcedd324298eef0",
+  "patch_reverse_check": {
+    "exit": 0,
+    "command": "git apply --check --reverse docs/deep-completion-2026-10-02/retry-lifecycle/retry-lifecycle.incremental.patch"
+  },
+  "patch_contract": "Incremental against pre-task dirty candidate. Already present in this worktree. Not an A33 patch or complete application. Preserve prior root WIP and dependency functions/_lib/cockpit-inbox.ts.",
+  "tests": {
+    "passed": 956,
+    "failed": 0,
+    "skipped": 2,
+    "files_passed": 61,
+    "new_regressions": 34,
+    "browser_compiled_route_scenarios": 10,
+    "compiled_worker_scenarios": 12,
+    "axe_page_viewport_combinations": 60,
+    "astro_files": 46,
+    "astro_errors": 0
+  },
+  "verification_commands": [
+    "npm run build",
+    "npm run astro -- check",
+    "npm test -- --silent=true --reporter=default --reporter=json --outputFile=output/retry-lifecycle/vitest-results.json",
+    "$env:WRANGLER_SEND_METRICS = \"false\"; node node_modules/wrangler/bin/wrangler.js pages functions build functions --outdir=output/runtime",
+    "node scripts/check-inbox-runtime.mjs",
+    "node scripts/check-inquiry-retry.mjs",
+    "node scripts/check-inquiry-cors.mjs --expect-blocked (pre-correction compiled worker only)",
+    "node scripts/check-inquiry-cors.mjs",
+    "node scripts/axe-home.mjs",
+    "git diff --check"
+  ],
+  "reproduced_and_fixed": [
+    "Actual Chrome native confirmation POST sent Origin:null under no-referrer, causing403 before receiver. Changed confirmation only to same-origin; origin allowlist unchanged.",
+    "Historical roadmap source-regex expected inline error text; updated to assert helper wiring and actual manual-contact fallback.",
+    "Independent review found required retry header missing from existing allowed-origin preflight. Browser reproduced failure; route-specific lead opt-in fixes it, without adding origins, credentials or unknown-header grants."
+  ],
+  "limits": [
+    "Session storage can be lost on tab closure/clear. Only key/fingerprint/status retained, no original contact/message body; user must restore exact details. Missing storage after a reload cannot identify an earlier attempt.",
+    "Map bounded16, no silent eviction. Confirmed identical intentional new inquiry explicitly supersedes that accepted identity. Changing uncertain input requires deliberate separate-inquiry confirmation.",
+    "Native retry survives replay of confirmation POST; starting over, closing the confirmation or loss before confirmation arrives has no cross-browser identity recovery.",
+    "UUID is not authentication; existing validation, antiabuse, CORS and authenticated receiver remain required.",
+    "Legacy default remains enabled unless owner configures inbox; legacy does not gain durable server dedupe from these client keys.",
+    "Browser/worker receiver is synthetic memory map, not actual CockpitCloud database, provider delivery, retention/restore migration or production proof.",
+    "Existing compiler node:fs/node:path warnings remain; local runtime used installed workerd-supported2026-08-27 with nodejs_compat.",
+    "Axe covers60 existing page/viewport combinations before final uncertainty-copy clarification; refreshed browser checks bind final source hashes. Native confirmation rendered/visually inspected, not included in60 static-page axe count."
+  ],
+  "remaining": [
+    {
+      "owner": "Codex /root",
+      "action": "Review incremental patch and independent source review, reconcile existing CompanySite/CockpitCloud candidate and canonical A30/A33 tracking",
+      "manual": false,
+      "acceptance": "Source-hash-matched review/check receipts; same inquiries/jobs in actual receiver contract; do not equate synthetic retained map to DB acceptance"
+    },
+    {
+      "owner": "Codex /root and existing CockpitCloud owner",
+      "action": "Complete current receiver schema/recovery/capacity/integration work and native actual receiver acceptance without sends where authorized",
+      "manual": false,
+      "acceptance": "Current compatible DB tests, rollback/restore and one writer/notification ownership evidence"
+    },
+    {
+      "owner": "Michael / account or production owner",
+      "gate_ids": [
+        "M02",
+        "M03",
+        "M04",
+        "M05",
+        "M06"
+      ],
+      "action": "Existing destination/custody/account/exact-send/cutover gates stay held",
+      "manual": true,
+      "acceptance": "Previously defined non-secret evidence; no new credentials requested"
+    }
+  ],
+  "changed_configuration": false,
+  "committed": false,
+  "pushed": false,
+  "deployed": false,
+  "provider_sends": 0,
+  "independent_review": {
+    "owner": "Codex /root/siteguide_consistency_review",
+    "outcome": "No remaining blocking finding in bounded review; CORS P2 corrected and closed",
+    "evidence": "Returned review messages/tool evidence, not an independent app integration rerun",
+    "checks": [
+      "Isolated browser-helper invariants",
+      "18 native confirmation safety checks",
+      "17 CORS/source-wiring checks"
+    ],
+    "verified_hashes": {
+      "functions/_lib/cors.ts": "f3b089ca00b5d5abd6a76329398b3b6b7f92746c4c51f9fb1c6f0194c9590f5b",
+      "functions/api/lead.ts": "030077732d083f71cf382805d06d9f0d5df3441138a915f5fa4af50ea3967657",
+      "tests/functions/cors.test.ts": "d6775033d60209960ebd92c95e52286bb7d5f1acac3aea87a4d2dafff53b18ae"
+    }
+  },
+  "tracking": "Parent retains canonical TODO/SESSION_GOAL/PENDING_MANUAL and claim. This return adds candidate-local task output only."
+}

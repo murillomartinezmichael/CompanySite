@@ -290,3 +290,92 @@ du -h dist/_astro/*.css
 - **CTA + intake standard:** `../docs/CONVERSION_STANDARDS.md`
 - **Hosting choice:** `../docs/HOSTING_STANDARDS.md`
 - **Legacy single-file site:** `legacy/2026-cyberpunk-index.html`
+
+## Unified Cockpit inbox candidate — 2026-09-25 (local only)
+
+This isolated branch is a candidate for one Cockpit product, not a deployed merger.
+The existing release candidate remains unchanged at 2ee04be. Keep the new mode
+unconfigured until the receiver, authentication lifecycle and release gates pass.
+
+- `COCKPIT_LEAD_INBOX_URL` is opt-in: exact HTTPS `/v1/leads/ingest`, without query,
+  fragment or URL credentials. Undefined preserves the existing delivery path;
+  defined-but-invalid fails closed. `COCKPIT_INGEST_TOKEN` is mandatory in this mode.
+  The current receiver uses expiring owner JWTs. An approved server credential,
+  least-privilege/lifetime/rotation plan and ownership proof are activation gates;
+  no credential was read, created or installed here.
+- The receiver stores the entire validated inquiry and 11 context fields before
+  email/workflow attempts. A 200/201 must echo the complete stored record with the
+  receiver's 32-hex identifier and timestamp. Headers alone are insufficient.
+  Reads are bounded to 64KiB and six seconds including the response body; redirects
+  are not followed. Storage failure returns503; reused key with changed data409.
+- Both JavaScript forms retain random retry keys, SHA-256 payload fingerprints
+  and uncertain/accepted status in sessionStorage; no inquiry body is stored.
+  Reloading the same tab with the same details reuses the key. Changed details
+  require explicit separate-inquiry confirmation; earlier unresolved identities
+  remain available for A→B→A recovery. The map holds at most16 references without
+  silent eviction. Closing the tab or clearing storage can lose this recovery.
+  Accepted submissions cannot silently send again. The backend prefixes keys
+  with `companysite:`. Legacy delivery does not gain durable server deduplication.
+- Native no-JavaScript inbox submissions first receive a no-store confirmation
+  page with a hidden retry UUID and escaped original details. This first response
+  sends nothing to the receiver. Confirm/retry posts retain the UUID; conflicts
+  require review rather than a replacement key. Closing/starting over loses this
+  reference. Only confirmed storage redirects303. The confirmation's same-origin
+  referrer policy preserves native Origin checks without cross-origin disclosure.
+- Lead-only allowed-origin CORS preflight permits Idempotency-Key. Existing
+  origin/method policy remains; chat and other routes do not inherit that grant.
+- `company=m3mm` and `source=companysite` are server controlled. The display-only
+  projectType uses64 Unicode code points; full businessType/source/URL/timing/
+  referral/intent/UTMs remain in context. Existing field validation limits remain.
+  No raw IP enters the inbox payload. Context is untrusted metadata, not commands.
+- `COCKPIT_NOTIFICATION_CHANNELS` selects the durable role plan: absent means
+  `acknowledgment_email,operator_email`; an empty string means storage only.
+  An explicit comma-separated plan may also include `workflow`. Duplicate,
+  unknown or empty members fail closed. This mode requires matching role receipts
+  and unique job IDs from the receiver, including on replay.
+- Both new receipts and replays return after durable storage confirmation. Inbox
+  mode performs no inline email, old Cockpit event-card or n8n dispatch. The
+  receiver's separate default-disabled worker owns processing. Queue acceptance
+  does not mean mail delivery; failed/uncertain jobs remain visible in the inbox.
+- n8n remains optional; this change does not replace existing deployments with
+  Flowforge or configure any outward route. No local boards or accounts moved.
+
+Earlier September25 verification:170 selected receiver/worker tests;336 selected CompanySite
+tests and zero scoped helper/test TypeScript diagnostics. Job600eb6 proves six
+actual Python pending/accepted/replay responses across two email/all-three plans
+against the compiled current adapter. Independent source review closes the
+receiver/worker findings; earlier receipt-ID/Unicode corrections remain intact.
+24 existing loopback-server redirect cases were blocked
+by the deny-listen boundary and excluded from the final selected run; no guard was
+weakened. Full Astro/Cloudflare build and native browser/live delivery remain unrun.
+
+Before activation: verify receiver schema and backup/restore; if a pre-context
+lead_receipts table exists, migrate context_json and existing hash semantics under
+an approved plan. Prove legacy ownership without guessing. Rehearse the actual
+historical-schema restore under a separate approved scope; verify appropriate credentials, production runtime/browser checks,
+retention/deletion and exact operator/ack/workflow destinations. Michael approves
+configuration, one synthetic outward inquiry and deployment separately. No send or
+activation occurred. Keep the existing CompanySite release owner.
+
+September26 checkpoint supersedes those local test counts:286 backend tests with
+two Windows symlink skips establish synthetic audited reconciliation/restore;
+358 selected producer tests and scoped strict inline-form/test types pass. Intake
+uses the endpoint's actual validator and limits before sending or allocating a
+retry key. Native required/type checks are enabled; editing clears stale transport
+errors while preserving pending-send feedback. Source review closes the finding.
+The actual-source component fixture passes34 native Chrome scenarios at1366/390,
+including field messages/focus, correction, retry identity, success redirect and
+no-JS required/type/minlength constraints. Default props only; simplified fixture
+CSS does not prove deployed layout, whole-site accessibility or CSP. Browser
+requests are intercepted; these checks do not prove live notification delivery.
+
+The September26 guarded-build attempt stopped after its two setup corrections;
+it remains historical failure evidence. October2's separate native qualification
+now passes the actual resume/build15pages/output fence,956 tests with2 Windows
+skips,46-file Astro check with0 diagnostics and12 compiled-workerd fixture cases.
+The15 lifecycle source files match the earlier reviewed browser/worker return.
+Current environment:Node22.23.2 meets the declared >=22.12 range; .node-version
+still names22.23.1, so this is not an exact-patch claim. Subsequent dependency
+integration must rerun affected checks and record its actual lock/runtime.
+These tests use synthetic/intercepted transports. Prior compiled browser checks
+do not establish deployed behavior, real delivery or the actual backup/cutover.

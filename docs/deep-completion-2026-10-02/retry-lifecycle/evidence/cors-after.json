@@ -1,0 +1,41 @@
+{
+  "checkedAt": "2026-10-02T05:32:05.314Z",
+  "browser": "Chrome/154.0.8037.95",
+  "expectedBlocked": false,
+  "traffic": [
+    {
+      "method": "OPTIONS",
+      "origin": "http://127.0.0.1:61452",
+      "requestedHeaders": "content-type,idempotency-key",
+      "status": 204,
+      "allowedHeaders": "Content-Type, Idempotency-Key",
+      "allowCredentials": null
+    },
+    {
+      "method": "POST",
+      "origin": "http://127.0.0.1:61452",
+      "status": 200,
+      "allowedHeaders": null,
+      "allowCredentials": null
+    },
+    {
+      "method": "POST",
+      "origin": "http://127.0.0.1:61452",
+      "status": 200,
+      "allowedHeaders": null,
+      "allowCredentials": null
+    },
+    {
+      "method": "OPTIONS",
+      "origin": "http://127.0.0.1:61452",
+      "requestedHeaders": "authorization,content-type,idempotency-key",
+      "status": 204,
+      "allowedHeaders": null,
+      "allowCredentials": null
+    }
+  ],
+  "receiverCalls": 2,
+  "retainedInquiries": 1,
+  "workerSha256": "010e9159bb4e1234049af93f2ffb25740087f1bf95a14cee27216dfb46bd5a6b",
+  "productionVerified": false
+}

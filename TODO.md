@@ -1,4 +1,50 @@
+## 2026-10-02 — current inquiry candidate qualified for local integration
+
+- [x] Full existing source reviewed;15 independently reviewed lifecycle hashes match. Native956pass/2skip,15-page build/output fence,46-file Astro check0diagnostics,12 compiled-worker fixture cases.
+- [x] Fresh actual Cockpit3.12/JWT/SQLite contract:2 inquiries/2 receipts/4 recoverable jobs and8 compiled receipt checks;10 controls/0violations. Source16092e6 locally integrated; no provider send.
+- [x] RUNBOOK corrected to current sessionStorage/native-confirmation/CORS behavior; old incomplete-build statement superseded with dated evidence.
+- [ ] Commit exact reviewed scope, merge current origin/mainae8362d preserving local lock patches, qualify updated Wrangler/Puppeteer and finish local integration.
+- [ ] M02-M06, A30/A33 operational custody/credentials/destinations/retention/send/cutover remain. Prior browser proof is historical source-bound evidence; no deployment or exhaustion claim. Preserve unread dirty PENDING_MANUAL and primary marketing/UI.
+- Evidence: docs/deep-completion-2026-10-02/integration/TASK_RETURN.json and later merge receipt.
+
 # CompanySite — TODO
+
+## Local unified-inbox candidate — 2026-09-26
+
+- [x] Isolated CompanySite producer, lossless context and same-page retry keys.
+- [x] Review corrections: actual receiver UUID.hex identifiers; Unicode-safe display truncation.
+- [x] Current producer verification:358 selected tests; strict inline form/test
+  TypeScript0 diagnostics. Guarded runs used existing dependencies and synthetic data.
+- [x] Receiver reconciliation checkpoint:286 backend tests/two Windows skips;
+  actual two-/three-role replay contracts pass through the current TS adapter.
+- [x] Durable per-destination jobs requested; no inline sends in inbox mode.
+  Replays preserve original jobs; failed/uncertain states remain visible.
+- [x] Synthetic backup/restore/resume and audited held-job reconciliation accepted
+  locally; no real restore, worker activation or delivery performed.
+- [x] Intake restores required/type/length constraints and shares endpoint validation.
+  Invalid input does not allocate a retry key or send; editing clears stale errors
+  while pending-send feedback stays visible. Independent source review closes P2.
+- [x] Actual-source component fixture:34 native Chrome scenarios at1366/390 pass,
+  including correction/retry/thanks and no-JS native field constraints. Baseline
+  and intermediate stale-error bugs reproduced. Full-site rendering remains unproved.
+- [ ] Full build/runtime and compiled-site browser acceptance. September26 scratch
+  resume phase passed; Astro failed under25 process/two outside-read denials.
+  Two harness corrections exhausted; no further full-build retry in this scope.
+  Resolver/guard interaction is a hypothesis, not an established product defect.
+ 24 local-server redirect cases remain excluded under deny-listen, not passing here.
+- [ ] Receiver schema/hash migration and backup/restore/legacy ownership proof where needed.
+- [ ] Owner-approved credential lifecycle, destinations, retention/deletion, one external
+  test send, integration and deployment. New mode remains unconfigured.
+- [ ] Later local board import: prove mapping/conflicts/rollback before copying any data.
+
+Root Codex owns this integration candidate; existing CompanySite release owner and
+frozen release worktree remain preserved. See RUNBOOK unified-inbox section and root
+chatgpt-handoffs/15-whole-fleet-delivery-2026-09-24.md. No commit/push/release performed.
+
+Next: review a separately
+bounded resolver-only diagnostic with sanitized denial metadata and unchanged
+permissions. Component checks do not replace compiled-site acceptance. Preserve
+the source candidate and existing release owner; keep activation/send gates held.
 
 ## 2026-09-19 — reject provider redirects before release
 

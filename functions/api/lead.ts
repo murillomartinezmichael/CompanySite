@@ -16,6 +16,8 @@
 import { LIMITS, validateLead, esc, UTM_FIELDS, type Lead } from '../_lib/validate';
 import { checkRate, rateKey } from '../_lib/rate';
 import { sendToCockpit, leadIdempotencyKey } from '../_lib/cockpit-sink';
+import { storeInCockpit, SUBMISSION_ID } from '../_lib/cockpit-inbox';
+import { inquiryConfirmation } from '../_lib/inquiry-confirmation';
 import { sendToN8n } from '../_lib/n8n-sink';
 import { referralOffer, referralShareUrl, REFERRAL_FIELD_LABEL } from '../_lib/referral';
 import { originAllowed, corsResponseHeaders, preflightResponse } from '../_lib/cors';
@@ -33,6 +35,10 @@ type Env = {
   // CockpitCloud + sets these env vars.
   COCKPIT_INGEST_URL?: string;
   COCKPIT_INGEST_TOKEN?: string;
+  // Opt-in canonical inbox. Requires authenticated /v1/leads/ingest receipt.
+  COCKPIT_LEAD_INBOX_URL?: string;
+  // Unset queues both emails; empty explicitly stores only; workflow is opt-in.
+  COCKPIT_NOTIFICATION_CHANNELS?: string;
   // Optional n8n Lead OS — Production webhook URL from the imported workflow.
   // Unset = skip. Secret is optional header auth for the n8n IF / Header Auth.
   N8N_LEAD_WEBHOOK_URL?: string;
@@ -215,6 +221,7 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
   const raw = bodyRead.text;
 
   let body: Lead;
+  let nativeSubmissionId: string | null = null;
   if (isJson) {
     let parsed: unknown;
     try {
@@ -254,6 +261,12 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
     } else {
       params = new URLSearchParams(raw);
     }
+    // Duplicate/empty references are invalid, never permission to generate a new
+    // identity. The UUID identifies a public submission; it is not authorization.
+    if (params.has('submissionId')) {
+      if (params.getAll('submissionId').length !== 1) return reply(400, { ok: false, error: 'invalid_submission_id' });
+      nativeSubmissionId = params.get('submissionId');
+    }
     // Match the roadmap's JS submit handler when the browser posts natively.
     // Only that exact intent may fold its optional topics into the intake note.
     const roadmapTopics = params.get('intent')?.trim() === 'book:roadmap-subscribe'
@@ -288,6 +301,37 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
     return reply(400, { ok: false, error: 'validation', errors: result.errors });
   }
   const lead = result.lead;
+
+  // The inbox atomically stores the complete record and requested notification jobs.
+  // Native forms confirm before the first inbox request, keeping a hidden UUID
+  // for deliberate retries of the same POST. No JavaScript or new store needed.
+  if (env.COCKPIT_LEAD_INBOX_URL !== undefined) {
+    const headerId = request.headers.get('Idempotency-Key');
+    if (headerId !== null && nativeSubmissionId !== null && headerId.toLowerCase() !== nativeSubmissionId.toLowerCase()) {
+      return reply(400, { ok: false, error: 'invalid_submission_id' });
+    }
+    const suppliedId = headerId ?? nativeSubmissionId;
+    if (suppliedId !== null && !SUBMISSION_ID.test(suppliedId)) {
+      return reply(400, { ok: false, error: 'invalid_submission_id' });
+    }
+    if (suppliedId === null) {
+      if (isForm) return inquiryConfirmation(lead, crypto.randomUUID(), 'confirm', cors);
+      return reply(428, { ok: false, error: 'submission_id_required' });
+    }
+    const submissionId = suppliedId.toLowerCase();
+    const inboxResult = await storeInCockpit(env, submissionId, lead);
+    if (!inboxResult.ok) {
+      console.log(JSON.stringify({ event: 'lead_inbox_unconfirmed', error: inboxResult.error, ts: Date.now() }));
+      if (isForm) return inquiryConfirmation(lead, submissionId, inboxResult.error === 'conflict' ? 'conflict' : 'uncertain', cors);
+      return reply(inboxResult.error === 'conflict' ? 409 : 503, {
+        ok: false, error: inboxResult.error === 'conflict' ? 'submission_conflict' : 'delivery_unavailable',
+      });
+    }
+    // Success means durable receipt, not delivered email. Only the inbox worker
+    // owns notification attempts, including retries and uncertain/failed jobs.
+    console.log(JSON.stringify({ event: 'lead_inbox_received', replayed: inboxResult.replayed, receiptId: inboxResult.receiptId, ts: Date.now() }));
+    return succeed(lead.intent);
+  }
 
   const to = env.LEAD_TO || 'murillomartinezmichael@gmail.com';
 
@@ -448,7 +492,7 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
     // `secureResponse` (not `withSecurityHeaders`) because the CORS module owns
     // the preflight's construction — the grant/deny decision stays entirely in
     // cors.ts and this only layers headers on top of whatever it returned.
-    return secureResponse(preflightResponse(env, request));
+    return secureResponse(preflightResponse(env, request, { inquiryRetry: true }));
   }
   return new Response('Method Not Allowed', {
     status: 405,

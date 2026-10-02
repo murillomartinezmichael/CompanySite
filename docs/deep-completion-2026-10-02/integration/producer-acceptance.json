@@ -1,0 +1,129 @@
+{
+  "mode": "receipts",
+  "checkedAt": "2026-10-02T18:28:14.179Z",
+  "node": "v22.23.2",
+  "worker_sha256": "cb940ee7075ab35491c7277bb57d668a3f2aed4a4310a2f8d73e3d91d833f953",
+  "script_sha256": "4b20df940fa2b8caa22757af7c3be260b1866d341b690fd6bec278f74ed170c6",
+  "issued": 1790965410,
+  "expires": 1790969010,
+  "owner": "11111111111111111111111111111111",
+  "authorization_sha256": "267bff255b538178656125bac3bf91330934b7704803303a3b74392f3741e860",
+  "cases": [
+    {
+      "name": "website",
+      "id": "00000000-0000-4000-8000-000000000101",
+      "data": {
+        "name": "Synthetic Renée 😀",
+        "email": "website@example.invalid",
+        "businessType": "Synthetic café and workshop services Synthetic café and workshop services Synthetic café and workshop services ",
+        "currentUrl": "https://example.invalid/current?view=one&label=café",
+        "frustration": "Synthetic A&B, \"quotes\" and café 😀 inquiry; never delivered.",
+        "preferredStart": "Next quarter",
+        "source": "website",
+        "referredBy": "Synthetic referral",
+        "intent": "book:free-review",
+        "utm_source": "synthetic-source",
+        "utm_medium": "referral",
+        "utm_campaign": "synthetic-campaign",
+        "utm_content": "synthetic-content",
+        "utm_term": "synthetic-term"
+      },
+      "outbound": {
+        "url": "https://cockpit.example.invalid/v1/leads/ingest",
+        "method": "POST",
+        "redirect": "manual",
+        "body": "{\"name\":\"Synthetic Renée 😀\",\"email\":\"website@example.invalid\",\"message\":\"Synthetic A&B, \\\"quotes\\\" and café 😀 inquiry; never delivered.\",\"phone\":\"\",\"lane\":\"\",\"status\":\"new\",\"followupSent\":false,\"company\":\"m3mm\",\"projectType\":\"Synthetic café and workshop services Synthetic café and workshop\",\"budget\":\"\",\"location\":\"\",\"source\":\"companysite\",\"notifications\":[\"acknowledgment_email\",\"operator_email\"],\"context\":{\"businessType\":\"Synthetic café and workshop services Synthetic café and workshop services Synthetic café and workshop services\",\"currentUrl\":\"https://example.invalid/current?view=one&label=café\",\"preferredStart\":\"Next quarter\",\"referredBy\":\"Synthetic referral\",\"intent\":\"book:free-review\",\"originalSource\":\"website\",\"utm_source\":\"synthetic-source\",\"utm_medium\":\"referral\",\"utm_campaign\":\"synthetic-campaign\",\"utm_content\":\"synthetic-content\",\"utm_term\":\"synthetic-term\"}}",
+        "headers": {
+          "Content-Type": "application/json",
+          "Idempotency-Key": "companysite:00000000-0000-4000-8000-000000000101"
+        },
+        "authorization_sha256": "267bff255b538178656125bac3bf91330934b7704803303a3b74392f3741e860"
+      }
+    },
+    {
+      "name": "roadmap",
+      "id": "00000000-0000-4000-8000-000000000102",
+      "data": {
+        "name": "Roadmap subscriber",
+        "email": "roadmap@example.invalid",
+        "businessType": "roadmap-subscriber",
+        "source": "roadmap",
+        "intent": "book:roadmap-subscribe",
+        "frustration": "Roadmap subscriber wants: synthetic previews, café 😀 updates",
+        "utm_source": "synthetic-source",
+        "utm_campaign": "synthetic-roadmap"
+      },
+      "outbound": {
+        "url": "https://cockpit.example.invalid/v1/leads/ingest",
+        "method": "POST",
+        "redirect": "manual",
+        "body": "{\"name\":\"Roadmap subscriber\",\"email\":\"roadmap@example.invalid\",\"message\":\"Roadmap subscriber wants: synthetic previews, café 😀 updates\",\"phone\":\"\",\"lane\":\"\",\"status\":\"new\",\"followupSent\":false,\"company\":\"m3mm\",\"projectType\":\"roadmap-subscriber\",\"budget\":\"\",\"location\":\"\",\"source\":\"companysite\",\"notifications\":[\"acknowledgment_email\",\"operator_email\"],\"context\":{\"businessType\":\"roadmap-subscriber\",\"currentUrl\":\"\",\"preferredStart\":\"\",\"referredBy\":\"\",\"intent\":\"book:roadmap-subscribe\",\"originalSource\":\"roadmap\",\"utm_source\":\"synthetic-source\",\"utm_medium\":\"\",\"utm_campaign\":\"synthetic-roadmap\",\"utm_content\":\"\",\"utm_term\":\"\"}}",
+        "headers": {
+          "Content-Type": "application/json",
+          "Idempotency-Key": "companysite:00000000-0000-4000-8000-000000000102"
+        },
+        "authorization_sha256": "267bff255b538178656125bac3bf91330934b7704803303a3b74392f3741e860"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "name": "website",
+      "receiverScenario": "created",
+      "producerStatus": 200,
+      "receiptAccepted": true
+    },
+    {
+      "name": "website",
+      "receiverScenario": "replayed",
+      "producerStatus": 200,
+      "receiptAccepted": true
+    },
+    {
+      "name": "website",
+      "receiverScenario": "conflict",
+      "producerStatus": 409,
+      "receiptAccepted": false
+    },
+    {
+      "name": "website",
+      "receiverScenario": "recoverable_outbox",
+      "producerStatus": 200,
+      "receiptAccepted": true
+    },
+    {
+      "name": "roadmap",
+      "receiverScenario": "created",
+      "producerStatus": 200,
+      "receiptAccepted": true
+    },
+    {
+      "name": "roadmap",
+      "receiverScenario": "replayed",
+      "producerStatus": 200,
+      "receiptAccepted": true
+    },
+    {
+      "name": "roadmap",
+      "receiverScenario": "conflict",
+      "producerStatus": 409,
+      "receiptAccepted": false
+    },
+    {
+      "name": "roadmap",
+      "receiverScenario": "recoverable_outbox",
+      "producerStatus": 200,
+      "receiptAccepted": true
+    }
+  ],
+  "violations": [],
+  "controls": [
+    "no process global",
+    "no require global",
+    "string code generation denied",
+    "module imports denied",
+    "single synthetic fetch function"
+  ],
+  "limits": "Exact compiled worker under Node VM/web APIs, not workerd runtime or a networked bridge. Synthetic JWT hash only; no live token/secret retained.",
+  "receiver_proof_sha256": "715f325cef57ba1c4da5d98a6da7727f8b356aeaee49636560a2bad8ae1ea818"
+}

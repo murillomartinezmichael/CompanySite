@@ -1,0 +1,1094 @@
+diff --git a/src/lib/inquiry-submission.ts b/src/lib/inquiry-submission.ts
+--- a/src/lib/inquiry-submission.ts
++++ b/src/lib/inquiry-submission.ts
+@@ -1,4 +1,33 @@
+ type InquiryPayload = Readonly<Record<string, string | number | boolean | null>>;
++
++type RetryState = { key: string; fingerprint: string; status: 'uncertain' | 'accepted' };
++type RetryStorage = Pick<Storage, 'getItem' | 'setItem'>;
++type RetryOptions = { scope: string; storage?: () => RetryStorage };
++const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
++const HASH = /^[0-9a-f]{64}$/;
++const MAX_ATTEMPTS = 16;
++const canonical = (data: InquiryPayload) => JSON.stringify(Object.keys(data).sort().map(key => [key, data[key]]));
++
++export class InquiryRetryError extends Error {
++  constructor(readonly code: 'changed' | 'confirmed' | 'storage' | 'invalid' | 'limit' | 'secure') { super(code); }
++}
++
++async function fingerprint(data: InquiryPayload): Promise<string> {
++  try {
++    const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(canonical(data)));
++    return Array.from(new Uint8Array(bytes), byte => byte.toString(16).padStart(2, '0')).join('');
++  } catch { throw new InquiryRetryError('secure'); }
++}
++
++export function inquiryErrorMessage(error: unknown): string {
++  if (error instanceof InquiryRetryError) {
++    if (error.code === 'changed') return 'The earlier inquiry may already be saved. Restore its original details to retry, or deliberately start a separate inquiry below.';
++    if (error.code === 'confirmed') return 'This inquiry was already confirmed in this tab. No new request was made. Start a separate inquiry below only if you intend another request.';
++    if (error.code === 'limit') return 'This tab has reached its retry-reference limit. Earlier inquiries may already be saved. Keep this tab open and use the email contact option.';
++    return 'No request was made this time because the browser could not safely retain the retry reference. Earlier attempts may already be saved. Keep this tab open and email murillomartinezmichael@gmail.com for help.';
++  }
++  return 'Something broke on send. Delivery was not confirmed; the inquiry may already be saved. Retry the same details in this tab. Closing it or clearing browser data loses the retry reference. Email murillomartinezmichael@gmail.com for help.';
++}
+ 
+ /** Only the lead endpoint's explicit application receipt confirms submission. */
+ export async function isInquiryAccepted(response: Response): Promise<boolean> {
+@@ -11,15 +40,56 @@
+   } catch { return false; }
+ }
+ 
+-/** Same-page retry identity only; contact data is never persisted to browser storage. */
+-export function createInquirySubmission(createUUID: () => string = () => crypto.randomUUID()) {
++/** Storage contains only random keys, one-way fingerprints and status. Closing the
++ * tab or clearing its storage loses recovery; no inquiry payload is persisted. */
++export function createInquirySubmission(createUUID: () => string = () => crypto.randomUUID(), options?: RetryOptions) {
+   // An earlier attempt may have been stored even when its response was lost.
+   // Remember every attempted payload until success, including edited/reverted ones.
+   const attempts = new Map<string, string>();
++  let records: RetryState[] = [];
++  let separateFingerprint: string | undefined;
++  const storageKey = `m3.inquiry.retry.v1:${options?.scope}`;
++
++  function read(): RetryState[] {
++    let raw: string | null;
++    try { raw = (options?.storage?.() ?? window.sessionStorage).getItem(storageKey); }
++    catch { throw new InquiryRetryError('storage'); }
++    if (raw === null) {
++      // Clearing storage mid-session must not silently allocate replacement IDs.
++      if (records.length) throw new InquiryRetryError('storage');
++      return [];
++    }
++    try {
++      if (raw.length > 4096) throw new Error();
++      const value: unknown = JSON.parse(raw);
++      if (!Array.isArray(value) || !value.length || value.length > MAX_ATTEMPTS) throw new Error();
++      const keys = new Set<string>(); const hashes = new Set<string>();
++      for (const record of value) {
++        if (!record || typeof record !== 'object' || Array.isArray(record)
++          || Object.keys(record).sort().join(',') !== 'fingerprint,key,status'
++          || typeof record.key !== 'string' || !UUID.test(record.key)
++          || typeof record.fingerprint !== 'string' || !HASH.test(record.fingerprint)
++          || !['uncertain', 'accepted'].includes(record.status)
++          || keys.has(record.key.toLowerCase()) || hashes.has(record.fingerprint)) throw new Error();
++        keys.add(record.key.toLowerCase()); hashes.add(record.fingerprint);
++      }
++      // Detect replacement/removal, including another form instance on this page.
++      if (records.some(old => !value.some(next => old.key === next.key && old.fingerprint === next.fingerprint))) throw new Error();
++      return value as RetryState[];
++    } catch { throw new InquiryRetryError('invalid'); }
++  }
++  function write(next: RetryState[]): void {
++    try {
++      const storage = options?.storage?.() ?? window.sessionStorage;
++      const raw = JSON.stringify(next);
++      storage.setItem(storageKey, raw);
++      if (storage.getItem(storageKey) !== raw) throw new Error();
++    } catch { throw new InquiryRetryError('storage'); }
++  }
+ 
+   return {
+     keyFor(data: InquiryPayload): string {
+-      const payload = JSON.stringify(Object.keys(data).sort().map((key) => [key, data[key]]));
++      const payload = canonical(data);
+       let key = attempts.get(payload);
+       if (key === undefined) {
+         key = createUUID();
+@@ -27,8 +97,59 @@
+       }
+       return key;
+     },
++    async prepare(data: InquiryPayload): Promise<{ key: string; accepted: boolean }> {
++      if (!options) return { key: this.keyFor(data), accepted: false };
++      const hash = await fingerprint(data);
++      records = read();
++      let record = records.find(item => item.fingerprint === hash);
++      if (record?.status === 'accepted' && separateFingerprint === hash) {
++        // Explicit separate inquiry supersedes only this confirmed identity.
++        record = { key: createUUID(), fingerprint: hash, status: 'uncertain' };
++        if (!UUID.test(record.key)) throw new InquiryRetryError('secure');
++        records = records.map(item => item.fingerprint === hash ? record! : item);
++      }
++      if (!record) {
++        if (records.length && separateFingerprint !== hash) throw new InquiryRetryError('changed');
++        if (records.length >= MAX_ATTEMPTS) throw new InquiryRetryError('limit');
++        record = { key: createUUID(), fingerprint: hash, status: 'uncertain' };
++        if (!UUID.test(record.key)) throw new InquiryRetryError('secure');
++        records = [...records, record];
++      }
++      write(records); // Read-back proof BEFORE network; failure sends nothing this time.
++      separateFingerprint = undefined;
++      return { key: record.key, accepted: record.status === 'accepted' };
++    },
++    async allowSeparate(data: InquiryPayload): Promise<void> {
++      // Called only after the visitor confirms; never erases older A→B→A IDs.
++      separateFingerprint = await fingerprint(data);
++    },
++    markAccepted(key: string): boolean {
++      if (!options) return true;
++      records = records.map(record => record.key === key ? { ...record, status: 'accepted' } : record);
++      // The server has accepted. Storage failure must NEVER turn that into a
++      // false "nothing sent" error or unlock the current page for a new send.
++      try { const saved = read(); write(saved.map(record => record.key === key ? { ...record, status: 'accepted' } : record)); return true; }
++      catch { return false; }
++    },
+     reset(): void {
+       attempts.clear();
+     },
+   };
+ }
++
++/** Explicitly authorizes a separate payload; the button itself sends nothing. */
++export function showInquiryRecovery(form: HTMLFormElement, status: HTMLElement, error: unknown, allow: () => Promise<void>): void {
++  form.ownerDocument.getElementById(`${form.id}-new-inquiry`)?.remove();
++  if (!(error instanceof InquiryRetryError) || !['changed', 'confirmed'].includes(error.code)) return;
++  const button = form.ownerDocument.createElement('button');
++  button.type = 'button'; button.id = `${form.id}-new-inquiry`;
++  button.dataset.cta = 'separate-inquiry'; button.className = 'btn-primary';
++  button.textContent = 'Start a separate inquiry';
++  button.addEventListener('click', async () => {
++    if (form.querySelector<HTMLButtonElement>('button[type=submit]')?.disabled) return;
++    if (!window.confirm('The earlier inquiry may already be saved. Start a genuinely separate inquiry? This can create a duplicate.')) return;
++    try { await allow(); status.textContent = 'Review these details, then press Send. This button has not sent a request.'; button.remove(); }
++    catch (cause) { status.textContent = inquiryErrorMessage(cause); }
++  });
++  status.insertAdjacentElement('afterend', button);
++}
+diff --git a/src/components/Intake.astro b/src/components/Intake.astro
+--- a/src/components/Intake.astro
++++ b/src/components/Intake.astro
+@@ -249,14 +249,14 @@
+ <script>
+   import { track } from '@/lib/track';
+   import { isPriorPrefill } from '@/lib/prefill';
+-  import { createInquirySubmission, isInquiryAccepted } from '@/lib/inquiry-submission';
++  import { createInquirySubmission, isInquiryAccepted, InquiryRetryError, inquiryErrorMessage, showInquiryRecovery } from '@/lib/inquiry-submission';
+   import { validateLead } from '../../functions/_lib/validate';
+ 
+   const form = document.getElementById('intake-form') as HTMLFormElement | null;
+   const status = document.getElementById('intake-status') as HTMLDivElement | null;
+ 
+   if (form && status) {
+-    const submission = createInquirySubmission();
++    const submission = createInquirySubmission(undefined, { scope: 'intake' });
+     let sending = false;
+     let accepted = false;
+     // Release custom field errors as the visitor corrects their input, allowing
+@@ -330,18 +330,21 @@
+       const source = String(data.source || 'unknown');
+ 
+       try {
++        const attempt = await submission.prepare(data);
++        if (attempt.accepted) throw new InquiryRetryError('confirmed');
+         const res = await fetch('/api/lead', {
+           method: 'POST',
++          redirect: 'error',
+           headers: {
+             'Content-Type': 'application/json',
+-            'Idempotency-Key': submission.keyFor(data),
++            'Idempotency-Key': attempt.key,
+           },
+           body: JSON.stringify(data),
+         });
+ 
+         if (!(await isInquiryAccepted(res))) throw new Error(`Unconfirmed inquiry: HTTP ${res.status}`);
+         accepted = true;
+-        submission.reset();
++        const recoverySaved = submission.markAccepted(attempt.key);
+ 
+         track({
+           name: 'intake_submit',
+@@ -349,7 +352,7 @@
+           intent,
+           meta: { source, has_prefill: hasPrefill, message_length: message.length },
+         });
+-        status.textContent = 'Got it. Redirecting…';
++        status.textContent = recoverySaved ? 'Got it. Redirecting…' : 'Got it. Your inquiry was confirmed, but this browser could not save its retry reference. Do not resend. Redirecting…';
+         status.classList.remove('border-clay/40', 'bg-clay/10');
+         status.classList.add('border-emerald-400/40', 'bg-emerald-500/10');
+         form.reset();
+@@ -358,14 +361,15 @@
+         // gives the analytics beacon a beat to flush before navigation.
+         const destination = form.dataset.successPath || '/thanks';
+         setTimeout(() => { window.location.href = destination; }, 450);
+-      } catch {
++      } catch (error) {
+         track({
+           name: 'intake_error',
+           section: 'intake',
+           intent,
+           meta: { source, has_prefill: hasPrefill, message_length: message.length },
+         });
+-        status.textContent = 'Something broke on send. Email murillomartinezmichael@gmail.com and I\'ll pick it up manually.';
++        status.textContent = inquiryErrorMessage(error);
++        showInquiryRecovery(form, status, error, () => submission.allowSeparate(Object.fromEntries(new FormData(form).entries()) as Record<string, string>));
+         status.classList.remove('border-clay/40', 'bg-clay/10');
+         status.classList.add('border-red-400/40', 'bg-red-500/10');
+       } finally {
+diff --git a/src/pages/roadmap.astro b/src/pages/roadmap.astro
+--- a/src/pages/roadmap.astro
++++ b/src/pages/roadmap.astro
+@@ -146,7 +146,7 @@
+ 
+ <script>
+   import { track } from '@/lib/track';
+-  import { createInquirySubmission, isInquiryAccepted } from '@/lib/inquiry-submission';
++  import { createInquirySubmission, isInquiryAccepted, InquiryRetryError, inquiryErrorMessage, showInquiryRecovery } from '@/lib/inquiry-submission';
+ 
+   const form = document.getElementById('roadmap-signup') as HTMLFormElement | null;
+   const status = document.getElementById('roadmap-status') as HTMLParagraphElement | null;
+@@ -154,7 +154,7 @@
+   const DEFAULT_NOTE = 'Roadmap subscriber update request.';
+ 
+   if (form && status) {
+-    const submission = createInquirySubmission();
++    const submission = createInquirySubmission(undefined, { scope: 'roadmap' });
+     let sending = false;
+     let accepted = false;
+     const show = (text: string, kind: 'pending' | 'ok' | 'error') => {
+@@ -190,17 +190,20 @@
+       show('Sending…', 'pending');
+ 
+       try {
++        const attempt = await submission.prepare(data);
++        if (attempt.accepted) throw new InquiryRetryError('confirmed');
+         const res = await fetch('/api/lead', {
+           method: 'POST',
++          redirect: 'error',
+           headers: {
+             'Content-Type': 'application/json',
+-            'Idempotency-Key': submission.keyFor(data),
++            'Idempotency-Key': attempt.key,
+           },
+           body: JSON.stringify(data),
+         });
+         if (!(await isInquiryAccepted(res))) throw new Error(`Unconfirmed inquiry: HTTP ${res.status}`);
+         accepted = true;
+-        submission.reset();
++        const recoverySaved = submission.markAccepted(attempt.key);
+ 
+         track({
+           name: 'intake_submit',
+@@ -208,18 +211,25 @@
+           intent: 'book:roadmap-subscribe',
+           meta: { source: 'roadmap', has_prefill: false, message_length: topics.length },
+         });
+-        show('Got it. Redirecting…', 'ok');
++        show(recoverySaved ? 'Got it. Redirecting…' : 'Got it. Your inquiry was confirmed, but this browser could not save its retry reference. Do not resend. Redirecting…', 'ok');
+         form.reset();
+         const destination = form.dataset.successPath || '/thanks';
+         setTimeout(() => { window.location.href = destination; }, 450);
+-      } catch {
++      } catch (error) {
+         track({
+           name: 'intake_error',
+           section: 'roadmap',
+           intent: 'book:roadmap-subscribe',
+           meta: { source: 'roadmap', has_prefill: false, message_length: topics.length },
+         });
+-        show('Something broke on send. Email murillomartinezmichael@gmail.com and I\'ll pick it up manually.', 'error');
++        show(inquiryErrorMessage(error), 'error');
++        showInquiryRecovery(form, status, error, () => {
++          const current = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
++          const selectedTopics = String(current.topics || '').trim();
++          delete current.topics;
++          current.frustration = selectedTopics ? `Roadmap subscriber wants: ${selectedTopics}` : DEFAULT_NOTE;
++          return submission.allowSeparate(current);
++        });
+       } finally {
+         sending = false;
+         if (!accepted && submitBtn && originalLabel) {
+diff --git a/functions/api/lead.ts b/functions/api/lead.ts
+--- a/functions/api/lead.ts
++++ b/functions/api/lead.ts
+@@ -17,6 +17,7 @@
+ import { checkRate, rateKey } from '../_lib/rate';
+ import { sendToCockpit, leadIdempotencyKey } from '../_lib/cockpit-sink';
+ import { storeInCockpit, SUBMISSION_ID } from '../_lib/cockpit-inbox';
++import { inquiryConfirmation } from '../_lib/inquiry-confirmation';
+ import { sendToN8n } from '../_lib/n8n-sink';
+ import { referralOffer, referralShareUrl, REFERRAL_FIELD_LABEL } from '../_lib/referral';
+ import { originAllowed, corsResponseHeaders, preflightResponse } from '../_lib/cors';
+@@ -220,6 +221,7 @@
+   const raw = bodyRead.text;
+ 
+   let body: Lead;
++  let nativeSubmissionId: string | null = null;
+   if (isJson) {
+     let parsed: unknown;
+     try {
+@@ -259,6 +261,12 @@
+     } else {
+       params = new URLSearchParams(raw);
+     }
++    // Duplicate/empty references are invalid, never permission to generate a new
++    // identity. The UUID identifies a public submission; it is not authorization.
++    if (params.has('submissionId')) {
++      if (params.getAll('submissionId').length !== 1) return reply(400, { ok: false, error: 'invalid_submission_id' });
++      nativeSubmissionId = params.get('submissionId');
++    }
+     // Match the roadmap's JS submit handler when the browser posts natively.
+     // Only that exact intent may fold its optional topics into the intake note.
+     const roadmapTopics = params.get('intent')?.trim() === 'book:roadmap-subscribe'
+@@ -295,16 +303,26 @@
+   const lead = result.lead;
+ 
+   // The inbox atomically stores the complete record and requested notification jobs.
+-  // Headerless native forms remain supported, without cross-request retry identity.
++  // Native forms confirm before the first inbox request, keeping a hidden UUID
++  // for deliberate retries of the same POST. No JavaScript or new store needed.
+   if (env.COCKPIT_LEAD_INBOX_URL !== undefined) {
+-    const suppliedId = request.headers.get('Idempotency-Key');
++    const headerId = request.headers.get('Idempotency-Key');
++    if (headerId !== null && nativeSubmissionId !== null && headerId.toLowerCase() !== nativeSubmissionId.toLowerCase()) {
++      return reply(400, { ok: false, error: 'invalid_submission_id' });
++    }
++    const suppliedId = headerId ?? nativeSubmissionId;
+     if (suppliedId !== null && !SUBMISSION_ID.test(suppliedId)) {
+       return reply(400, { ok: false, error: 'invalid_submission_id' });
+     }
+-    const submissionId = suppliedId?.toLowerCase() ?? crypto.randomUUID();
++    if (suppliedId === null) {
++      if (isForm) return inquiryConfirmation(lead, crypto.randomUUID(), 'confirm', cors);
++      return reply(428, { ok: false, error: 'submission_id_required' });
++    }
++    const submissionId = suppliedId.toLowerCase();
+     const inboxResult = await storeInCockpit(env, submissionId, lead);
+     if (!inboxResult.ok) {
+       console.log(JSON.stringify({ event: 'lead_inbox_unconfirmed', error: inboxResult.error, ts: Date.now() }));
++      if (isForm) return inquiryConfirmation(lead, submissionId, inboxResult.error === 'conflict' ? 'conflict' : 'uncertain', cors);
+       return reply(inboxResult.error === 'conflict' ? 409 : 503, {
+         ok: false, error: inboxResult.error === 'conflict' ? 'submission_conflict' : 'delivery_unavailable',
+       });
+@@ -474,7 +492,7 @@
+     // `secureResponse` (not `withSecurityHeaders`) because the CORS module owns
+     // the preflight's construction — the grant/deny decision stays entirely in
+     // cors.ts and this only layers headers on top of whatever it returned.
+-    return secureResponse(preflightResponse(env, request));
++    return secureResponse(preflightResponse(env, request, { inquiryRetry: true }));
+   }
+   return new Response('Method Not Allowed', {
+     status: 405,
+diff --git a/functions/_lib/inquiry-confirmation.ts b/functions/_lib/inquiry-confirmation.ts
+new file mode 100644
+--- /dev/null
++++ b/functions/_lib/inquiry-confirmation.ts
+@@ -0,0 +1,38 @@
++import { esc, type Lead } from './validate';
++import { withSecurityHeaders } from './security-headers';
++
++/** UUID is a non-authentication retry identity. Public intake remains public;
++ * origin/rate/body/field validation and receiver authentication still apply.
++ * No token, PII or query parameters are put into a redirect URL. */
++export function inquiryConfirmation(
++  lead: Required<Omit<Lead, 'company_website'>>, submissionId: string,
++  state: 'confirm' | 'uncertain' | 'conflict', cors: Record<string, string>,
++): Response {
++  const message = state === 'confirm'
++    ? 'Your inquiry has not been sent by this confirmation step. Confirm below to send it. If the result is uncertain, retry this same confirmation instead of starting over.'
++    : state === 'uncertain'
++      ? 'Delivery was not confirmed. Your inquiry may already be saved. Retry this same inquiry without changing its contents.'
++      : 'This retry reference was used with different contents. The original inquiry may already be saved. Do not start over just to retry; contact us for help.';
++  const fields = Object.entries(lead).map(([name, value]) =>
++    `<input type="hidden" name="${esc(name)}" value="${esc(value)}">`).join('');
++  const form = state === 'conflict' ? '' : `<form action="/api/lead" method="post" enctype="application/x-www-form-urlencoded">
++    ${fields}<input type="hidden" name="submissionId" value="${esc(submissionId)}">
++    <button type="submit" data-cta="confirm-inquiry">${state === 'confirm' ? 'Confirm and send inquiry' : 'Retry this same inquiry'}</button></form>`;
++  return new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8">
++    <meta name="viewport" content="width=device-width, initial-scale=1"><title>M3MM inquiry confirmation</title></head>
++    <body><a href="#main">Skip to main content</a><main id="main"><h1>M3MM inquiry confirmation</h1>
++    <p role="status">${message}</p>${form}<p>Keep this page open until you receive confirmation.
++    This page contains your inquiry details. Closing it or returning to a fresh form loses this retry reference.</p>
++    <p><a href="mailto:murillomartinezmichael@gmail.com">Email M3MM for help</a> · <a href="/accessibility">Accessibility</a></p>
++    </main></body></html>`, {
++    status: state === 'confirm' ? 200 : state === 'uncertain' ? 503 : 409,
++    headers: withSecurityHeaders({ ...cors,
++      'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store',
++      // no-referrer makes Chrome send Origin:null on a native POST. Keep the
++      // existing origin gate intact and disclose no referrer cross-origin.
++      'Referrer-Policy': 'same-origin', 'X-Robots-Tag': 'noindex, nofollow',
++      'Content-Security-Policy': "default-src 'none'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'",
++      ...(state === 'uncertain' ? { 'Retry-After': '5' } : {}),
++    }),
++  });
++}
+diff --git a/tests/inquiry-submission.test.ts b/tests/inquiry-submission.test.ts
+--- a/tests/inquiry-submission.test.ts
++++ b/tests/inquiry-submission.test.ts
+@@ -2,7 +2,7 @@
+ import { readFileSync } from 'node:fs';
+ import { runInNewContext } from 'node:vm';
+ import ts from 'typescript';
+-import { createInquirySubmission, isInquiryAccepted } from '../src/lib/inquiry-submission';
++import { createInquirySubmission, isInquiryAccepted, InquiryRetryError, inquiryErrorMessage } from '../src/lib/inquiry-submission';
+ import { validateLead } from '../functions/_lib/validate';
+ 
+ const inquiry = {
+@@ -145,7 +145,7 @@
+     runInNewContext(code, {
+       exports: {},
+       require: (name: string) => {
+-        if (name === '@/lib/inquiry-submission') return { createInquirySubmission: () => createInquirySubmission(uuid), isInquiryAccepted };
++        if (name === '@/lib/inquiry-submission') return { createInquirySubmission: () => createInquirySubmission(uuid), isInquiryAccepted, InquiryRetryError, inquiryErrorMessage, showInquiryRecovery: vi.fn() };
+         if (name === '@/lib/track') return { track };
+         if (name === '@/lib/prefill') return { isPriorPrefill: () => false };
+         if (name === '../../functions/_lib/validate') return { validateLead };
+@@ -234,7 +234,7 @@
+     const fetch = vi.fn().mockResolvedValue({ ok: false, status: 503 });
+     runInNewContext(code, {
+       exports: {}, require: (name: string) => {
+-        if (name === '@/lib/inquiry-submission') return { createInquirySubmission: () => createInquirySubmission(uuid), isInquiryAccepted };
++        if (name === '@/lib/inquiry-submission') return { createInquirySubmission: () => createInquirySubmission(uuid), isInquiryAccepted, InquiryRetryError, inquiryErrorMessage, showInquiryRecovery: vi.fn() };
+         if (name === '@/lib/track') return { track: vi.fn() };
+         if (name === '@/lib/prefill') return { isPriorPrefill: () => false };
+         if (name === '../../functions/_lib/validate') return { validateLead };
+diff --git a/tests/inquiry-reload.test.ts b/tests/inquiry-reload.test.ts
+new file mode 100644
+--- /dev/null
++++ b/tests/inquiry-reload.test.ts
+@@ -0,0 +1,114 @@
++import { describe, expect, it, vi } from 'vitest';
++import { createInquirySubmission, InquiryRetryError, inquiryErrorMessage } from '../src/lib/inquiry-submission';
++
++const original = { email: 'private@example.invalid', frustration: 'Private synthetic note, never retained.', intent: 'book:free-review' };
++const changed = { ...original, frustration: 'A separate synthetic inquiry.' };
++
++function fixture() {
++  let serial = 0;
++  const data = new Map<string, string>();
++  const storage = { getItem: vi.fn((key: string) => data.get(key) ?? null), setItem: vi.fn((key: string, value: string) => { data.set(key, value); }) };
++  const uuid = vi.fn(() => `00000000-0000-4000-8000-${String(++serial).padStart(12, '0')}`);
++  const create = () => createInquirySubmission(uuid, { scope: 'test', storage: () => storage });
++  return { data, storage, uuid, create };
++}
++
++describe('privacy-limited reload retry lifecycle', () => {
++  it('persists only key/fingerprint/status before a request and reuses after reload', async () => {
++    const f = fixture();
++    const first = await f.create().prepare(original);
++    expect(first.accepted).toBe(false);
++    const raw = [...f.data.values()][0];
++    expect(raw).not.toContain(original.email);
++    expect(raw).not.toContain(original.frustration);
++    expect(raw).not.toContain('book:free-review');
++    expect(JSON.parse(raw)[0]).toEqual({ key: first.key, fingerprint: expect.stringMatching(/^[a-f0-9]{64}$/), status: 'uncertain' });
++    expect(await f.create().prepare(Object.fromEntries(Object.entries(original).reverse()))).toEqual(first);
++    expect(f.uuid).toHaveBeenCalledOnce();
++  });
++
++  it('requires an explicit separate inquiry for changed input and preserves A→B→A across reload', async () => {
++    const f = fixture(); const state = f.create();
++    const a = await state.prepare(original);
++    await expect(state.prepare(changed)).rejects.toMatchObject({ code: 'changed' });
++    expect(f.uuid).toHaveBeenCalledOnce();
++    await state.allowSeparate(changed);
++    const b = await state.prepare(changed);
++    expect(b.key).not.toBe(a.key);
++    expect(await state.prepare(original)).toEqual(a);
++    expect(await f.create().prepare(changed)).toEqual(b);
++    expect(await f.create().prepare(original)).toEqual(a);
++  });
++
++  it('binds the deliberate separate approval to exactly the reviewed payload', async () => {
++    const state = fixture().create();
++    await state.prepare(original); await state.allowSeparate(changed);
++    await expect(state.prepare({ ...changed, email: 'other@example.invalid' })).rejects.toMatchObject({ code: 'changed' });
++  });
++
++  it('retains acceptance after reload; an identical new inquiry requires explicit intent', async () => {
++    const f = fixture(); const state = f.create(); const first = await state.prepare(original);
++    expect(state.markAccepted(first.key)).toBe(true);
++    const reloaded = f.create();
++    expect(await reloaded.prepare(original)).toEqual({ key: first.key, accepted: true });
++    await reloaded.allowSeparate(original);
++    const next = await reloaded.prepare(original);
++    expect(next.accepted).toBe(false); expect(next.key).not.toBe(first.key);
++    expect(await f.create().prepare(original)).toEqual(next);
++  });
++
++  it.each(['read', 'write', 'readback'])('refuses network preparation when storage %s fails', async phase => {
++    const f = fixture();
++    if (phase === 'read') f.storage.getItem.mockImplementation(() => { throw new Error('blocked'); });
++    if (phase === 'write') f.storage.setItem.mockImplementation(() => { throw new Error('quota'); });
++    if (phase === 'readback') f.storage.setItem.mockImplementation(() => {});
++    await expect(f.create().prepare(original)).rejects.toMatchObject({ code: 'storage' });
++  });
++
++  it.each(['read', 'write', 'missing', 'replaced'])('does not throw or report nothing sent when post-acceptance storage is %s', async phase => {
++    const f = fixture(); const state = f.create(); const first = await state.prepare(original);
++    if (phase === 'read') f.storage.getItem.mockImplementation(() => { throw new Error('blocked'); });
++    if (phase === 'write') f.storage.setItem.mockImplementation(() => { throw new Error('quota'); });
++    if (phase === 'missing') f.data.clear();
++    if (phase === 'replaced') f.data.set('m3.inquiry.retry.v1:test', '[]');
++    expect(state.markAccepted(first.key)).toBe(false);
++    if (phase === 'write') {
++      f.storage.setItem.mockImplementation((key, value) => { f.data.set(key, value); });
++      expect((await f.create().prepare(original)).key).toBe(first.key);
++    }
++  });
++
++  it('refuses silent identity replacement after storage disappears mid-page', async () => {
++    const f = fixture(); const state = f.create(); await state.prepare(original); f.data.clear();
++    await expect(state.prepare(original)).rejects.toMatchObject({ code: 'storage' });
++    expect(f.uuid).toHaveBeenCalledOnce();
++  });
++
++  it.each(['{}', '[]', 'null', '[null]', 'not json', 'x'.repeat(4097),
++    JSON.stringify([{ key: 'not-a-uuid', fingerprint: 'a'.repeat(64), status: 'uncertain' }]),
++    JSON.stringify([{ key: '00000000-0000-4000-8000-000000000001', fingerprint: 'a'.repeat(64), status: 'uncertain', email: original.email }]),
++  ])('fails closed for corrupt/unexpected storage %s', async raw => {
++    const f = fixture(); f.data.set('m3.inquiry.retry.v1:test', raw);
++    await expect(f.create().prepare(original)).rejects.toMatchObject({ code: 'invalid' });
++    expect(f.uuid).not.toHaveBeenCalled();
++  });
++
++  it('never evicts old unresolved identities when the bounded map is full', async () => {
++    const f = fixture(); const state = f.create();
++    const a = await state.prepare(original);
++    for (let i = 1; i < 16; i++) {
++      const data = { ...original, frustration: `Synthetic separate inquiry ${i}` };
++      await state.allowSeparate(data); await state.prepare(data);
++    }
++    await state.allowSeparate(changed);
++    await expect(state.prepare(changed)).rejects.toMatchObject({ code: 'limit' });
++    expect(await f.create().prepare(original)).toEqual(a);
++  });
++
++  it('explains before-send failure without denying an earlier uncertain send', () => {
++    const message = inquiryErrorMessage(new InquiryRetryError('storage'));
++    expect(message).toContain('No request was made this time');
++    expect(message).toContain('Earlier attempts may already be saved');
++    expect(inquiryErrorMessage(new Error('transport'))).toContain('Delivery was not confirmed');
++  });
++});
+diff --git a/tests/functions/lead-inbox.test.ts b/tests/functions/lead-inbox.test.ts
+--- a/tests/functions/lead-inbox.test.ts
++++ b/tests/functions/lead-inbox.test.ts
+@@ -117,13 +117,24 @@
+     expect(fetch).not.toHaveBeenCalled();
+   });
+ 
+-  it('retains no-JS native roadmap redirect and creates a server-side UUID', async () => {
++  it('confirms a no-JS roadmap inquiry before sending, then redirects with the same key', async () => {
+     const result = await invoke(null, env, true, { intent: 'book:roadmap-subscribe', topics: 'synthetic topic' });
+-    expect(result.status).toBe(303);
+-    expect(result.headers.get('Location')).toBe('/roadmap/thanks');
++    expect(result.status).toBe(200);
++    expect(fetch).not.toHaveBeenCalled();
++    const html = await result.text();
++    const key = html.match(/name="submissionId" value="([^"]+)"/)![1];
++    const confirmed = await invoke(null, env, true, { intent: 'book:roadmap-subscribe', topics: 'synthetic topic', submissionId: key });
++    expect(confirmed.status).toBe(303);
++    expect(confirmed.headers.get('Location')).toBe('/roadmap/thanks');
+     const init = vi.mocked(fetch).mock.calls[0][1]!;
+     expect(new Headers(init.headers).get('Idempotency-Key')).toMatch(/^companysite:[0-9a-f-]{36}$/);
+     expect(JSON.parse(String(init.body)).message).toBe('Roadmap subscriber wants: synthetic topic');
++    expect(new Headers(init.headers).get('Idempotency-Key')).toBe(`companysite:${key}`);
++  });
++
++  it('requires a stable key for JSON inbox requests', async () => {
++    expect((await invoke(null)).status).toBe(428);
++    expect(fetch).not.toHaveBeenCalled();
+   });
+ 
+   it('keeps bot handling silent without persisting or notifying', async () => {
+diff --git a/tests/functions/lead-native-retry.test.ts b/tests/functions/lead-native-retry.test.ts
+new file mode 100644
+--- /dev/null
++++ b/tests/functions/lead-native-retry.test.ts
+@@ -0,0 +1,88 @@
++import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
++import { onRequestPost } from '../../functions/api/lead';
++import { __resetBuckets } from '../../functions/_lib/rate';
++
++const fields = { name: 'Renée 😀', email: 'synthetic@example.invalid', businessType: 'Synthetic café',
++  frustration: 'Keep "quotes", <script>bad()</script>, A&B and 😀 intact.', source: 'synthetic',
++  currentUrl: 'https://example.invalid/?a=1&b=2', preferredStart: 'Next month', referredBy: 'Synthetic referrer',
++  intent: 'book:free-review', utm_source: 'synthetic', utm_medium: 'referral', utm_campaign: 'synthetic campaign',
++  utm_content: 'one & two', utm_term: 'term' };
++const id = '00000000-0000-4000-8000-000000000001';
++const env = { COCKPIT_LEAD_INBOX_URL: 'https://cockpit.example.invalid/v1/leads/ingest',
++  COCKPIT_INGEST_TOKEN: 'synthetic-only', RESEND_API_KEY: 'synthetic-no-send' };
++let mode = 'ok';
++const saved = new Map<string, Record<string, unknown>>();
++const fetchMock = vi.fn(async (_url: unknown, init?: RequestInit) => {
++  expect(String(_url)).toBe(env.COCKPIT_LEAD_INBOX_URL);
++  const key = new Headers(init?.headers).get('Idempotency-Key')!;
++  const payload = JSON.parse(String(init?.body));
++  const old = saved.get(key);
++  if (mode === 'conflict' || old && JSON.stringify(old.payload) !== JSON.stringify(payload)) return new Response('{}', { status: 409 });
++  const receipt = old?.receipt ?? { ...payload, id: id.replaceAll('-', ''), created_at: '2026-10-02T00:00:00Z',
++    deliveries: payload.notifications.map((channel: string, i: number) => ({ id: String(i + 1).padStart(32, '0'), channel,
++      state: 'pending', attempts: 0, provider_receipt: '', error: '' })) };
++  saved.set(key, { payload, receipt });
++  if (mode === 'lost') throw new Error('Synthetic response lost after retention');
++  return Response.json(receipt, { status: old ? 200 : 201 });
++});
++
++function decodedFields(html: string) {
++  const decode = (s: string) => s.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
++  return Object.fromEntries([...html.matchAll(/<input type="hidden" name="([^"]*)" value="([^"]*)">/g)].map(match => [decode(match[1]), decode(match[2])]));
++}
++async function post(data: Record<string, string> | URLSearchParams = fields, multipart = false, headers: Record<string, string> = {}) {
++  const entries = data instanceof URLSearchParams ? data.entries() : Object.entries(data);
++  const body = multipart ? new FormData() : new URLSearchParams();
++  for (const [key, value] of entries) body.append(key, value);
++  const request = new Request('https://m3mm.net/api/lead', { method: 'POST',
++    headers: { Origin: 'https://m3mm.net', ...headers }, body });
++  return onRequestPost({ request, env } as unknown as Parameters<typeof onRequestPost>[0]);
++}
++beforeEach(() => { __resetBuckets(); mode = 'ok'; saved.clear(); fetchMock.mockClear(); vi.stubGlobal('fetch', fetchMock); vi.spyOn(console, 'log').mockImplementation(() => {}); });
++afterEach(() => { vi.unstubAllGlobals(); vi.restoreAllMocks(); });
++
++describe('native inbox retry confirmation', () => {
++  it.each([false, true])('preserves all validated fields, encoding and same key across lost receipt/retry (multipart=%s)', async multipart => {
++    const confirmation = await post(fields, multipart);
++    expect(confirmation.status).toBe(200); expect(fetchMock).not.toHaveBeenCalled();
++    const html = await confirmation.text(); const data = decodedFields(html);
++    expect(html).not.toContain('<script>bad()');
++    expect(html).not.toMatch(/<script|\sonclick=|<base/i);
++    expect(html).toContain('action="/api/lead"');
++    for (const [key, value] of Object.entries(fields)) expect(data[key]).toBe(value);
++    expect(data.submissionId).toMatch(/^[a-f0-9-]{36}$/);
++    expect(confirmation.headers.get('Cache-Control')).toBe('no-store');
++    expect(confirmation.headers.get('Referrer-Policy')).toBe('same-origin');
++    expect(confirmation.headers.get('Content-Security-Policy')).toContain("form-action 'self'");
++    mode = 'lost'; const uncertain = await post(data, multipart);
++    expect(uncertain.status).toBe(503);
++    const recovery = decodedFields(await uncertain.text());
++    expect(recovery).toEqual(data); expect(saved.size).toBe(1);
++    mode = 'ok'; const accepted = await post(recovery, multipart);
++    expect(accepted.status).toBe(303); expect(accepted.headers.get('Location')).toBe('/thanks');
++    expect(saved.size).toBe(1); expect(fetchMock).toHaveBeenCalledTimes(2);
++    expect(new Headers(fetchMock.mock.calls[0][1]?.headers).get('Idempotency-Key')).toBe(new Headers(fetchMock.mock.calls[1][1]?.headers).get('Idempotency-Key'));
++  });
++
++  it('does not offer a blind retry after a same-key content conflict', async () => {
++    mode = 'conflict'; const response = await post({ ...fields, submissionId: id });
++    expect(response.status).toBe(409); const html = await response.text();
++    expect(html).toContain('original inquiry may already be saved'); expect(html).not.toContain('<form');
++    expect(fetchMock).toHaveBeenCalledOnce();
++  });
++  it.each(['', 'invalid', `${id}extra`])('rejects malformed hidden reference %j without effects', async submissionId => {
++    expect((await post({ ...fields, submissionId })).status).toBe(400); expect(fetchMock).not.toHaveBeenCalled();
++  });
++  it('rejects duplicate and contradictory hidden references without effects', async () => {
++    const data = new URLSearchParams({ ...fields, submissionId: id }); data.append('submissionId', id);
++    expect((await post(data)).status).toBe(400);
++    expect((await post({ ...fields, submissionId: id }, false, { 'Idempotency-Key': id.replace(/1$/, '2') })).status).toBe(400);
++    expect(fetchMock).not.toHaveBeenCalled();
++  });
++  it('still enforces origin, body and field validation before confirmation', async () => {
++    expect((await post(fields, false, { Origin: 'https://untrusted.example.invalid' })).status).toBe(403);
++    expect((await post({ ...fields, frustration: 'x'.repeat(20000) })).status).toBe(413);
++    expect((await post({ ...fields, email: 'invalid' })).status).toBe(400);
++    expect(fetchMock).not.toHaveBeenCalled();
++  });
++});
+diff --git a/tests/build/roadmap-signup.test.ts b/tests/build/roadmap-signup.test.ts
+--- a/tests/build/roadmap-signup.test.ts
++++ b/tests/build/roadmap-signup.test.ts
+@@ -1,6 +1,7 @@
+ import { describe, it, expect } from 'vitest';
+ import { existsSync, readFileSync, readdirSync } from 'node:fs';
+ import { fileURLToPath } from 'node:url';
++import { inquiryErrorMessage } from '../../src/lib/inquiry-submission';
+ 
+ const root = fileURLToPath(new URL('../../', import.meta.url));
+ const read = (p: string) => readFileSync(root + p, 'utf8');
+@@ -58,7 +59,8 @@
+   it('surfaces a failure to the visitor rather than swallowing it', () => {
+     expect(src).toMatch(/id="roadmap-status"/);
+     expect(src).toMatch(/aria-live="polite"/);
+-    expect(src).toMatch(/catch\s*\{[\s\S]{0,400}murillomartinezmichael@gmail\.com/);
++    expect(src).toMatch(/catch\s*\(error\)\s*\{[\s\S]{0,400}show\(inquiryErrorMessage\(error\), 'error'\)/);
++    expect(inquiryErrorMessage(new Error('Synthetic transport failure'))).toContain('murillomartinezmichael@gmail.com');
+   });
+ 
+   it('always sends a note field, so the no-JS POST is a valid lead too', () => {
+diff --git a/scripts/check-inbox-runtime.mjs b/scripts/check-inbox-runtime.mjs
+--- a/scripts/check-inbox-runtime.mjs
++++ b/scripts/check-inbox-runtime.mjs
+@@ -69,11 +69,20 @@
+     method: 'POST', headers: { Origin: 'https://m3mm.net', 'Content-Type': 'application/x-www-form-urlencoded',
+       'CF-Connecting-IP': '198.51.100.100' }, body: new URLSearchParams(data).toString(), redirect: 'manual',
+   });
+-  assert.equal(native.status, 303);
+-  assert.equal(native.headers.get('Location'), '/thanks');
++  assert.equal(native.status, 200);
++  assert.equal(calls.length, 0, 'Native confirmation must have no receiver effects');
++  const confirmation = await native.text();
++  const nativeId = confirmation.match(/name="submissionId" value="([^"]+)"/)[1];
++  const confirmed = await mf.dispatchFetch('https://m3mm.net/api/lead', {
++    method: 'POST', headers: { Origin: 'https://m3mm.net', 'Content-Type': 'application/x-www-form-urlencoded',
++      'CF-Connecting-IP': '198.51.100.100' }, body: new URLSearchParams({ ...data, submissionId: nativeId }).toString(), redirect: 'manual',
++  });
++  assert.equal(confirmed.status, 303);
++  assert.equal(confirmed.headers.get('Location'), '/thanks');
+   assert.equal(calls.length, 1);
++  assert.equal(calls[0].key, 'companysite:' + nativeId);
+   evidence.push({ scenario: 'native-form', status: native.status, receiverCalls: calls.length,
+-    limit: 'Server assigns fresh key; reload/native retry identity not established' });
++    confirmationBeforeEffects: true, confirmedStatus: confirmed.status, stableHiddenIdentity: true });
+   const proof = { checkedAt: new Date().toISOString(), runtime: 'actual installed workerd via Miniflare',
+     workerSha256: createHash('sha256').update(await readFile(worker)).digest('hex'), evidence,
+     boundaries: 'Synthetic receiver only; every outbound intercepted. No live provider, real DB or production configuration.',
+diff --git a/scripts/check-inquiry-retry.mjs b/scripts/check-inquiry-retry.mjs
+new file mode 100644
+--- /dev/null
++++ b/scripts/check-inquiry-retry.mjs
+@@ -0,0 +1,172 @@
++/** Compiled forms + compiled Pages route, synthetic retained receiver, no providers. */
++import assert from 'node:assert/strict';
++import { createServer } from 'node:http';
++import { readFile, stat, mkdir, writeFile } from 'node:fs/promises';
++import { existsSync } from 'node:fs';
++import { join, extname, resolve, sep } from 'node:path';
++import { fileURLToPath } from 'node:url';
++import { createHash } from 'node:crypto';
++import puppeteer from 'puppeteer-core';
++import { Miniflare, Response as WorkerResponse, convertV4MiniflareOptions } from 'miniflare';
++
++const root = fileURLToPath(new URL('../', import.meta.url));
++const dist = join(root, 'dist'); const out = join(root, 'output/retry-lifecycle');
++const target = 'https://cockpit.example.invalid/v1/leads/ingest';
++const chrome = [process.env.CHROME_PATH, 'C:/Program Files/Google/Chrome/Application/chrome.exe', '/usr/bin/google-chrome'].find(path => path && existsSync(path));
++assert.ok(chrome, 'Installed Chrome required; no installation or fallback');
++const mime = { '.html': 'text/html', '.js': 'application/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.woff2': 'font/woff2' };
++let mf; let serial = 0; let mode = 'lost'; let beforeReceipt;
++const saved = new Map(); const calls = []; const evidence = [];
++const server = createServer(async (req, res) => {
++  try {
++    const url = new URL(req.url, 'http://localhost');
++    if (url.pathname === '/api/lead' && req.method === 'POST') {
++      const chunks = []; for await (const chunk of req) chunks.push(chunk);
++      const headers = new Headers();
++      for (const [key, value] of Object.entries(req.headers)) if (typeof value === 'string') headers.set(key, value);
++      // Independent synthetic client per step; rate limiter itself has unit coverage.
++      headers.set('CF-Connecting-IP', `192.0.2.${++serial}`);
++      const response = await mf.dispatchFetch('https://m3mm.net/api/lead', { method: 'POST', headers, body: Buffer.concat(chunks), redirect: 'manual' });
++      res.writeHead(response.status, Object.fromEntries(response.headers)); res.end(Buffer.from(await response.arrayBuffer())); return;
++    }
++    if (url.pathname.startsWith('/api/')) { res.writeHead(204).end(); return; }
++    const base = resolve(dist, '.' + decodeURIComponent(url.pathname));
++    if (base !== dist && !base.startsWith(dist + sep)) { res.writeHead(403).end(); return; }
++    for (const path of [base, join(base, 'index.html'), base + '.html']) {
++      try { if (!(await stat(path)).isFile()) continue;
++        res.writeHead(200, { 'Content-Type': mime[extname(path)] ?? 'application/octet-stream' }); res.end(await readFile(path)); return;
++      } catch { /* next built path */ }
++    }
++    res.writeHead(404).end();
++  } catch (error) { res.writeHead(500).end('Fixture error'); console.error(error); }
++});
++await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
++const origin = `http://127.0.0.1:${server.address().port}`;
++mf = new Miniflare({ ...convertV4MiniflareOptions({ cf: false, host: '127.0.0.1', workers: [{
++  name: 'inquiry-browser-fixture', modules: true, scriptPath: join(root, 'output/runtime/index.js'),
++  compatibilityDate: '2026-08-27', compatibilityFlags: ['nodejs_compat'],
++  bindings: { ALLOWED_ORIGINS: origin, COCKPIT_LEAD_INBOX_URL: target, COCKPIT_INGEST_TOKEN: 'synthetic-only',
++    RESEND_API_KEY: 'synthetic-never-send', N8N_LEAD_WEBHOOK_URL: 'https://workflow.example.invalid/never' },
++  serviceBindings: { ASSETS: () => new WorkerResponse('not used', { status: 404 }) },
++  outboundService: async request => {
++    assert.equal(request.url, target, 'Every outward request is intercepted; only synthetic receiver allowed');
++    const key = request.headers.get('Idempotency-Key'); const payload = await request.json();
++    calls.push({ key, payload });
++    const old = saved.get(key);
++    if (old && JSON.stringify(old.payload) !== JSON.stringify(payload)) return WorkerResponse.json({}, { status: 409 });
++    if (!old) saved.set(key, { payload, receipt: { ...payload, id: String(saved.size + 1).padStart(32, '0'), created_at: '2026-10-02T00:00:00Z',
++      deliveries: payload.notifications.map((channel, i) => ({ id: String(saved.size * 3 + i + 1).padStart(32, '0'), channel, state: 'pending', attempts: 0, provider_receipt: '', error: '' })) } });
++    if (beforeReceipt) { const hook = beforeReceipt; beforeReceipt = undefined; await hook(); }
++    // Retained data with deliberately lost receipt, not a real DB/network failure.
++    return mode === 'lost' ? WorkerResponse.json({}, { status: 503 }) : WorkerResponse.json(saved.get(key).receipt, { status: old ? 200 : 201 });
++  },
++}] }), telemetry: { enabled: false } });
++const browser = await puppeteer.launch({ executablePath: chrome, headless: true, args: ['--disable-dev-shm-usage'] });
++const forms = [
++  { route: '/websites/', form: '#intake-form', status: '#intake-status', field: 'frustration',
++    values: { name: 'Synthetic Renée 😀', email: 'buyer@example.invalid', businessType: 'Synthetic café', frustration: 'Synthetic A&B, "quotes" and <script>bad()</script> 😀.' } },
++  { route: '/roadmap/', form: '#roadmap-signup', status: '#roadmap-status', field: 'topics',
++    values: { email: 'reader@example.invalid', topics: 'Synthetic café, <script>bad()</script> 😀.' } },
++];
++async function pageFor(f, width = 375, js = true) {
++  const context = await browser.createBrowserContext(); const page = await context.newPage();
++  await page.setViewport({ width, height: 900 }); await page.setJavaScriptEnabled(js);
++  await page.setRequestInterception(true);
++  page.on('request', req => req.url().startsWith(origin + '/') || req.url().startsWith('data:') ? req.continue() : req.abort());
++  await page.goto(origin + f.route, { waitUntil: 'networkidle0' }); return { page, context };
++}
++async function fill(page, f, values = f.values) {
++  await page.evaluate((selector, values) => {
++    for (const [name, value] of Object.entries(values)) {
++      const input = document.querySelector(`${selector} [name="${name}"]`); input.value = value;
++      input.dispatchEvent(new Event('input', { bubbles: true }));
++    }
++  }, f.form, values);
++}
++async function waitStatus(page, f, text) { await page.waitForFunction((selector, text) => document.querySelector(selector)?.textContent.includes(text), {}, f.status, text); }
++async function send(page, f) { await page.click(`${f.form} button[type=submit]`); }
++async function separate(page, f) {
++  page.once('dialog', dialog => dialog.accept());
++  await page.click(f.form + '-new-inquiry'); await waitStatus(page, f, 'This button has not sent');
++}
++function reset() { calls.length = 0; saved.clear(); mode = 'lost'; beforeReceipt = undefined; }
++try {
++  await mkdir(out, { recursive: true });
++  for (const width of [375, 1440]) for (const f of forms) {
++    reset(); const { page, context } = await pageFor(f, width);
++    try {
++      await fill(page, f); await send(page, f); await waitStatus(page, f, 'Delivery was not confirmed');
++      const a = calls[0].key; assert.equal(saved.size, 1);
++      const storage = await page.evaluate(() => Object.fromEntries(Object.entries(sessionStorage)));
++      for (const raw of Object.values(storage)) {
++        assert.ok(!raw.includes(f.values.email)); assert.ok(!raw.includes(f.values[f.field]));
++        for (const record of JSON.parse(raw)) assert.deepEqual(Object.keys(record).sort(), ['fingerprint', 'key', 'status']);
++      }
++      await page.reload({ waitUntil: 'networkidle0' }); await fill(page, f); await send(page, f);
++      await waitStatus(page, f, 'Delivery was not confirmed'); assert.equal(calls.at(-1).key, a); assert.equal(saved.size, 1);
++      await fill(page, f, { ...f.values, [f.field]: 'A genuinely different synthetic inquiry.' });
++      await send(page, f); await waitStatus(page, f, 'earlier inquiry may already be saved'); assert.equal(calls.length, 2);
++      page.once('dialog', dialog => dialog.dismiss()); await page.click(f.form + '-new-inquiry'); assert.equal(calls.length, 2);
++      await separate(page, f); assert.equal(calls.length, 2);
++      await send(page, f); await waitStatus(page, f, 'Delivery was not confirmed');
++      assert.notEqual(calls.at(-1).key, a); assert.equal(saved.size, 2);
++      await fill(page, f); await send(page, f); await waitStatus(page, f, 'Delivery was not confirmed'); assert.equal(calls.at(-1).key, a);
++      mode = 'ok'; await send(page, f); await page.waitForFunction(() => location.pathname.includes('thanks'));
++      assert.equal(saved.size, 2); assert.equal(calls.length, 5);
++      await page.goto(origin + f.route, { waitUntil: 'networkidle0' }); await fill(page, f); await send(page, f);
++      await waitStatus(page, f, 'already confirmed in this tab'); assert.equal(calls.length, 5);
++      await page.screenshot({ path: join(out, `${f.form.slice(1)}-${width}-confirmed.png`) });
++      await separate(page, f); await send(page, f); await page.waitForFunction(() => location.pathname.includes('thanks'));
++      assert.equal(saved.size, 3); assert.notEqual(calls.at(-1).key, a);
++      evidence.push({ scenario: 'reload-deliberate-new-revert-accepted', route: f.route, width, requests: calls.length,
++        retainedInquiries: saved.size, noRawBrowserStorage: true, oldIdentityPreserved: true, acceptedReplaySuppressed: true });
++    } finally { await context.close(); }
++  }
++  for (const f of forms) {
++    reset(); const { page, context } = await pageFor(f, 375, false);
++    try {
++      await fill(page, f); await Promise.all([page.waitForNavigation(), send(page, f)]);
++      assert.equal(calls.length, 0); assert.equal(new URL(page.url()).pathname, '/api/lead');
++      const first = await page.$eval('input[name=submissionId]', el => el.value);
++      const hidden = await page.$$eval('input[type=hidden]', nodes => Object.fromEntries(nodes.map(el => [el.name, el.value])));
++      assert.equal(hidden.email, f.values.email);
++      assert.ok(hidden.frustration.includes(f.values[f.field]));
++      assert.equal(await page.$$eval('script', nodes => nodes.length), 0);
++      await page.screenshot({ path: join(out, `${f.form.slice(1)}-native-confirm.png`) });
++      const [nativeResult] = await Promise.all([page.waitForNavigation(), page.click('button[type=submit]')]);
++      assert.equal(saved.size, 1, `Native confirmation status=${nativeResult.status()} origin=${nativeResult.request().headers().origin}`); assert.equal(await page.$eval('input[name=submissionId]', el => el.value), first);
++      assert.ok((await page.content()).includes('may already be saved'));
++      mode = 'ok'; await Promise.all([page.waitForNavigation(), page.click('button[type=submit]')]);
++      assert.ok(new URL(page.url()).pathname.includes('thanks')); assert.equal(saved.size, 1);
++      assert.equal(calls.length, 2); assert.equal(calls[0].key, calls[1].key);
++      evidence.push({ scenario: 'native-no-js-confirm-lost-response-retry', route: f.route, width: 375, requests: 2,
++        retainedInquiries: 1, sameHiddenIdentity: true, escapedFieldsRoundTrip: true });
++    } finally { await context.close(); }
++  }
++  for (const f of forms) for (const phase of ['before', 'after']) {
++    reset(); mode = 'ok'; const { page, context } = await pageFor(f);
++    try {
++      const blockStorage = () => page.evaluate(() => Object.defineProperty(window, 'sessionStorage', { configurable: true, get() { throw new Error('Synthetic storage denied'); } }));
++      await fill(page, f);
++      if (phase === 'before') await blockStorage(); else beforeReceipt = blockStorage;
++      await send(page, f);
++      if (phase === 'before') {
++        await waitStatus(page, f, 'No request was made this time'); assert.equal(calls.length, 0); assert.equal(saved.size, 0);
++      } else {
++        await waitStatus(page, f, 'Your inquiry was confirmed');
++        assert.equal(await page.$eval(`${f.form} button[type=submit]`, button => button.disabled), true);
++        await page.$eval(f.form, form => form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true })));
++        assert.equal(calls.length, 1); assert.equal(saved.size, 1);
++        await page.waitForFunction(() => location.pathname.includes('thanks'));
++      }
++      evidence.push({ scenario: 'storage-' + phase + '-send', route: f.route, requests: calls.length, retainedInquiries: saved.size, honestStatus: true });
++    } finally { await context.close(); }
++  }
++  const hashes = {};
++  for (const path of ['src/lib/inquiry-submission.ts', 'src/components/Intake.astro', 'src/pages/roadmap.astro', 'functions/api/lead.ts', 'functions/_lib/inquiry-confirmation.ts', 'output/runtime/index.js', 'dist/websites/index.html', 'dist/roadmap/index.html']) {
++    hashes[path] = createHash('sha256').update(await readFile(join(root, path))).digest('hex');
++  }
++  await writeFile(join(out, 'browser-evidence.json'), JSON.stringify({ checkedAt: new Date().toISOString(), browser: await browser.version(), hashes,
++    evidence, boundaries: 'Local compiled forms and Pages worker with synthetic retained receiver. No real database, provider, authentication or production call.', productionVerified: false }, null, 2));
++  console.log(`PASS ${evidence.length} compiled form/Pages retry scenarios; all outbound intercepted.`);
++} finally { await browser.close(); await mf.dispose(); await new Promise(resolve => server.close(resolve)); }
+diff --git a/functions/_lib/cors.ts b/functions/_lib/cors.ts
+--- a/functions/_lib/cors.ts
++++ b/functions/_lib/cors.ts
+@@ -37,9 +37,8 @@
+ export const ALLOWED_METHODS = 'POST, OPTIONS';
+ 
+ /**
+- * Non-safelisted request headers a cross-origin caller may set. `content-type`
+- * is the only one `onRequestPost` reads. Lowercase — browsers send
+- * `Access-Control-Request-Headers` lowercased.
++ * Default non-safelisted headers shared with chat. The lead route explicitly
++ * opts into its non-authentication retry header; other routes keep this default.
+  */
+ export const ALLOWED_REQUEST_HEADERS = ['content-type'];
+ 
+@@ -91,7 +90,7 @@
+  * Returning a blanket `Access-Control-Allow-Headers: Content-Type` while the
+  * caller asked for `Authorization` would be a grant that lies about its scope.
+  */
+-export function requestedHeadersAllowed(headerValue: string | null): boolean {
++export function requestedHeadersAllowed(headerValue: string | null, inquiryRetry = false): boolean {
+   if (!headerValue) return true; // nothing non-safelisted requested
+   const requested = headerValue
+     .split(',')
+@@ -100,7 +99,8 @@
+   if (requested.length === 0) return true;
+   if (requested.length > MAX_REQUESTED_HEADERS) return false;
+   return requested.every(
+-    (h) => ALLOWED_REQUEST_HEADERS.includes(h) || SAFELISTED_REQUEST_HEADERS.includes(h),
++    (h) => ALLOWED_REQUEST_HEADERS.includes(h) || SAFELISTED_REQUEST_HEADERS.includes(h)
++      || (inquiryRetry && h === 'idempotency-key'),
+   );
+ }
+ 
+@@ -131,7 +131,7 @@
+  * 204 carrying no `Access-Control-*` header at all — which is what makes the
+  * browser reject the preflight instead of caching a permission we don't mean.
+  */
+-export function preflightResponse(env: CorsEnv, request: Request): Response {
++export function preflightResponse(env: CorsEnv, request: Request, options: { inquiryRetry?: boolean } = {}): Response {
+   const deny = () =>
+     new Response(null, {
+       status: 204,
+@@ -153,7 +153,7 @@
+     .toUpperCase();
+   if (requestedMethod !== 'POST') return deny();
+ 
+-  if (!requestedHeadersAllowed(request.headers.get('Access-Control-Request-Headers'))) {
++  if (!requestedHeadersAllowed(request.headers.get('Access-Control-Request-Headers'), options.inquiryRetry)) {
+     return deny();
+   }
+ 
+@@ -164,7 +164,7 @@
+       Vary: CORS_VARY,
+       'Access-Control-Allow-Origin': origin,
+       'Access-Control-Allow-Methods': ALLOWED_METHODS,
+-      'Access-Control-Allow-Headers': 'Content-Type',
++      'Access-Control-Allow-Headers': options.inquiryRetry ? 'Content-Type, Idempotency-Key' : 'Content-Type',
+       'Access-Control-Max-Age': String(PREFLIGHT_MAX_AGE_S),
+     },
+   });
+diff --git a/tests/functions/cors.test.ts b/tests/functions/cors.test.ts
+--- a/tests/functions/cors.test.ts
++++ b/tests/functions/cors.test.ts
+@@ -115,6 +115,14 @@
+ 
+   it('rejects an absurdly long requested-headers list', () => {
+     expect(requestedHeadersAllowed(Array(33).fill('content-type').join(','))).toBe(false);
++  });
++
++  it('permits the retry identity only through an explicit lead-route opt-in', () => {
++    expect(requestedHeadersAllowed('content-type, Idempotency-Key')).toBe(false);
++    expect(requestedHeadersAllowed('content-type, Idempotency-Key', true)).toBe(true);
++    expect(requestedHeadersAllowed('content-type, idempotency-key, authorization', true)).toBe(false);
++    expect(requestedHeadersAllowed('idempotency-key, cookie', true)).toBe(false);
++    expect(requestedHeadersAllowed('idempotency-key, x-admin', true)).toBe(false);
+   });
+ });
+ 
+@@ -220,6 +228,26 @@
+ });
+ 
+ describe('the real /api/lead handler', () => {
++  it('grants the required retry header only within the existing origin/method/credential gates', async () => {
++    for (const origin of DEFAULT_ORIGINS) {
++      const res = await callOnRequest(preflight(origin, { requestHeaders: 'Content-Type, Idempotency-Key' }));
++      expect(res.headers.get('Access-Control-Allow-Origin')).toBe(origin);
++      expect(res.headers.get('Access-Control-Allow-Headers')).toBe('Content-Type, Idempotency-Key');
++      expect(res.headers.get('Access-Control-Allow-Credentials')).toBeNull();
++    }
++    for (const request of [preflight(EVIL, { requestHeaders: 'idempotency-key' }),
++      preflight('null', { requestHeaders: 'idempotency-key' }),
++      preflight(ALLOWED, { requestMethod: 'DELETE', requestHeaders: 'idempotency-key' }),
++      preflight(ALLOWED, { requestHeaders: 'idempotency-key, authorization' }),
++      preflight(ALLOWED, { requestHeaders: 'idempotency-key, x-admin' })]) {
++      expect(corsHeaderNames(await callOnRequest(request))).toEqual([]);
++    }
++  });
++
++  it('does not grant the retry header from a shared helper without the lead opt-in', () => {
++    const res = preflightResponse({}, preflight(ALLOWED, { requestHeaders: 'content-type, idempotency-key' }));
++    expect(corsHeaderNames(res)).toEqual([]);
++  });
+   it('routes an allowed-origin OPTIONS to a grant', async () => {
+     const res = await callOnRequest(preflight(ALLOWED));
+     expect(res.status).toBe(204);
+diff --git a/scripts/check-inquiry-cors.mjs b/scripts/check-inquiry-cors.mjs
+new file mode 100644
+--- /dev/null
++++ b/scripts/check-inquiry-cors.mjs
+@@ -0,0 +1,70 @@
++/** Real Chrome preflight → compiled Pages handler, isolated synthetic receiver. */
++import assert from 'node:assert/strict';
++import { createServer } from 'node:http';
++import { readFile, writeFile, mkdir } from 'node:fs/promises';
++import { createHash } from 'node:crypto';
++import { fileURLToPath } from 'node:url';
++import puppeteer from 'puppeteer-core';
++import { Miniflare, Response, convertV4MiniflareOptions } from 'miniflare';
++const root = fileURLToPath(new URL('../', import.meta.url));
++const expectedBlocked = process.argv.includes('--expect-blocked');
++const source = createServer((_req, res) => res.writeHead(200, { 'Content-Type': 'text/html' }).end('<!doctype html><html lang="en"><title>Synthetic CORS client</title><body>Synthetic client</body></html>'));
++await new Promise(resolve => source.listen(0, '127.0.0.1', resolve));
++const origin = `http://127.0.0.1:${source.address().port}`;
++let receiverCalls = 0; const retained = new Map(); const traffic = [];
++const mf = new Miniflare({ ...convertV4MiniflareOptions({ cf: false, host: '127.0.0.1', workers: [{
++  name: 'inquiry-cors-fixture', modules: true, scriptPath: root + 'output/runtime/index.js', compatibilityDate: '2026-08-27', compatibilityFlags: ['nodejs_compat'],
++  bindings: { ALLOWED_ORIGINS: origin, COCKPIT_LEAD_INBOX_URL: 'https://cockpit.example.invalid/v1/leads/ingest', COCKPIT_INGEST_TOKEN: 'synthetic-only' },
++  serviceBindings: { ASSETS: () => new Response('not used', { status: 404 }) },
++  outboundService: async request => {
++    assert.equal(request.url, 'https://cockpit.example.invalid/v1/leads/ingest'); receiverCalls++;
++    const key = request.headers.get('Idempotency-Key'); const payload = await request.json(); const old = retained.get(key);
++    if (old) assert.deepEqual(payload, old.payload);
++    if (!old) retained.set(key, { payload, receipt: { ...payload, id: 'a'.repeat(32), created_at: '2026-10-02T00:00:00Z',
++      deliveries: payload.notifications.map((channel, i) => ({ id: String(i + 1).padStart(32, '0'), channel, state: 'pending', attempts: 0, provider_receipt: '', error: '' })) } });
++    return Response.json(retained.get(key).receipt, { status: old ? 200 : 201 });
++  },
++}] }), telemetry: { enabled: false } });
++const api = createServer(async (req, res) => {
++  const headers = new Headers(); for (const [key, value] of Object.entries(req.headers)) if (typeof value === 'string') headers.set(key, value);
++  const chunks = []; for await (const chunk of req) chunks.push(chunk);
++  const response = await mf.dispatchFetch('https://m3mm.net/api/lead', { method: req.method, headers,
++    ...(req.method === 'POST' ? { body: Buffer.concat(chunks) } : {}), redirect: 'manual' });
++  traffic.push({ method: req.method, origin: req.headers.origin, requestedHeaders: req.headers['access-control-request-headers'],
++    status: response.status, allowedHeaders: response.headers.get('Access-Control-Allow-Headers'),
++    allowCredentials: response.headers.get('Access-Control-Allow-Credentials') });
++  res.writeHead(response.status, Object.fromEntries(response.headers)); res.end(Buffer.from(await response.arrayBuffer()));
++});
++await new Promise(resolve => api.listen(0, '127.0.0.1', resolve));
++const endpoint = `http://127.0.0.1:${api.address().port}/api/lead`;
++const browser = await puppeteer.launch({ executablePath: process.env.CHROME_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe', headless: true });
++try {
++  const page = await browser.newPage(); await page.setRequestInterception(true);
++  page.on('request', request => request.url().startsWith(origin + '/') || request.url().startsWith(endpoint) ? request.continue() : request.abort());
++  await page.goto(origin);
++  const send = extras => page.evaluate(async (url, extras) => {
++    try { const result = await fetch(url, { method: 'POST', credentials: 'omit', headers: {
++      'Content-Type': 'application/json', 'Idempotency-Key': '00000000-0000-4000-8000-000000000001', ...extras },
++      body: JSON.stringify({ name: 'Synthetic Buyer', email: 'buyer@example.invalid', businessType: 'Synthetic business', frustration: 'Synthetic cross-origin inquiry.' }) });
++      return { status: result.status, receipt: await result.json() };
++    } catch { return { blocked: true }; }
++  }, endpoint, extras);
++  const first = await send({});
++  if (expectedBlocked) {
++    assert.deepEqual(first, { blocked: true }); assert.equal(receiverCalls, 0);
++    assert.deepEqual(traffic.map(item => item.method), ['OPTIONS']);
++  } else {
++    assert.deepEqual(first, { status: 200, receipt: { ok: true } });
++    assert.deepEqual(await send({}), first); assert.equal(retained.size, 1); assert.equal(receiverCalls, 2);
++    const blocked = await send({ Authorization: 'synthetic-never-forwarded' });
++    assert.deepEqual(blocked, { blocked: true }); assert.equal(receiverCalls, 2);
++    const preflight = traffic.find(item => item.method === 'OPTIONS');
++    assert.match(preflight.requestedHeaders, /idempotency-key/); assert.match(preflight.allowedHeaders, /idempotency-key/i);
++    assert.ok(traffic.every(item => item.allowCredentials === null));
++  }
++  await mkdir(root + 'output/retry-lifecycle', { recursive: true });
++  await writeFile(root + `output/retry-lifecycle/cors-${expectedBlocked ? 'before' : 'after'}.json`, JSON.stringify({ checkedAt: new Date().toISOString(), browser: await browser.version(),
++    expectedBlocked, traffic, receiverCalls, retainedInquiries: retained.size,
++    workerSha256: createHash('sha256').update(await readFile(root + 'output/runtime/index.js')).digest('hex'), productionVerified: false }, null, 2));
++  console.log(expectedBlocked ? 'PASS reproduced: browser preflight blocks required retry key; zero receiver calls.' : 'PASS actual browser preflight, same-key replay and unknown-header denial; one retained synthetic inquiry.');
++} finally { await browser.close(); await mf.dispose(); await new Promise(resolve => api.close(resolve)); await new Promise(resolve => source.close(resolve)); }

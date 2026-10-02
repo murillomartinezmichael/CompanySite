@@ -1,0 +1,4008 @@
+{
+  "checkedAt": "2026-10-02T05:23:46.290Z",
+  "evidence": [
+    {
+      "route": "/",
+      "viewport": {
+        "name": "narrow",
+        "width": 320,
+        "height": 812,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/roadmap/",
+      "viewport": {
+        "name": "narrow",
+        "width": 320,
+        "height": 812,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/websites/",
+      "viewport": {
+        "name": "narrow",
+        "width": 320,
+        "height": 812,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "video-caption",
+          "impact": "critical",
+          "tags": [
+            "cat.text-alternatives",
+            "wcag2a",
+            "wcag122",
+            "section508",
+            "section508.22.a",
+            "TTv5",
+            "TT17.a",
+            "EN-301-549",
+            "EN-9.1.2.2",
+            "RGAAv4",
+            "RGAA-4.3.1"
+          ],
+          "description": "Ensure <video> elements have captions",
+          "help": "<video> elements must have captions",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/video-caption?application=axeAPI",
+          "nodes": [
+            {
+              "any": [],
+              "all": [],
+              "none": [
+                {
+                  "id": "caption",
+                  "data": null,
+                  "relatedNodes": [],
+                  "impact": "critical",
+                  "message": "Check that captions are available for the element"
+                }
+              ],
+              "impact": "critical",
+              "html": "<video aria-label=\"Aries Outdoor Living website preview\" aria-describedby=\"case-study-aries-details\" class=\"h-full w-full object-cover\" preload=\"none\" playsinline=\"\" muted=\"\" controls=\"\" poster=\"/videos/aries-walkthrough-still.webp\" data-astro-cid-p5wr5ghm=\"\">",
+              "target": [
+                "video"
+              ],
+              "failureSummary": "Fix all of the following:\n  Check that captions are available for the element"
+            }
+          ]
+        }
+      ],
+      "reviewedIncomplete": [
+        "video-caption"
+      ],
+      "silentVideoReview": true,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/compare/website-options/",
+      "viewport": {
+        "name": "narrow",
+        "width": 320,
+        "height": 812,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/audit/",
+      "viewport": {
+        "name": "narrow",
+        "width": 320,
+        "height": 812,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/start/",
+      "viewport": {
+        "name": "narrow",
+        "width": 320,
+        "height": 812,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/start/thanks/",
+      "viewport": {
+        "name": "narrow",
+        "width": 320,
+        "height": 812,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/thanks/",
+      "viewport": {
+        "name": "narrow",
+        "width": 320,
+        "height": 812,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/resume/",
+      "viewport": {
+        "name": "narrow",
+        "width": 320,
+        "height": 812,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/policies/",
+      "viewport": {
+        "name": "narrow",
+        "width": 320,
+        "height": 812,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/accessibility/",
+      "viewport": {
+        "name": "narrow",
+        "width": 320,
+        "height": 812,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/roadmap/thanks/",
+      "viewport": {
+        "name": "narrow",
+        "width": 320,
+        "height": 812,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/for/construction/",
+      "viewport": {
+        "name": "narrow",
+        "width": 320,
+        "height": 812,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/for/home-services/",
+      "viewport": {
+        "name": "narrow",
+        "width": 320,
+        "height": 812,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/for/outdoor-living/",
+      "viewport": {
+        "name": "narrow",
+        "width": 320,
+        "height": 812,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/",
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/roadmap/",
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/websites/",
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "video-caption",
+          "impact": "critical",
+          "tags": [
+            "cat.text-alternatives",
+            "wcag2a",
+            "wcag122",
+            "section508",
+            "section508.22.a",
+            "TTv5",
+            "TT17.a",
+            "EN-301-549",
+            "EN-9.1.2.2",
+            "RGAAv4",
+            "RGAA-4.3.1"
+          ],
+          "description": "Ensure <video> elements have captions",
+          "help": "<video> elements must have captions",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/video-caption?application=axeAPI",
+          "nodes": [
+            {
+              "any": [],
+              "all": [],
+              "none": [
+                {
+                  "id": "caption",
+                  "data": null,
+                  "relatedNodes": [],
+                  "impact": "critical",
+                  "message": "Check that captions are available for the element"
+                }
+              ],
+              "impact": "critical",
+              "html": "<video aria-label=\"Aries Outdoor Living website preview\" aria-describedby=\"case-study-aries-details\" class=\"h-full w-full object-cover\" preload=\"none\" playsinline=\"\" muted=\"\" controls=\"\" poster=\"/videos/aries-walkthrough-still.webp\" data-astro-cid-p5wr5ghm=\"\">",
+              "target": [
+                "video"
+              ],
+              "failureSummary": "Fix all of the following:\n  Check that captions are available for the element"
+            }
+          ]
+        }
+      ],
+      "reviewedIncomplete": [
+        "video-caption"
+      ],
+      "silentVideoReview": true,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/compare/website-options/",
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/audit/",
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/start/",
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/start/thanks/",
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/thanks/",
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/resume/",
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/policies/",
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/accessibility/",
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/roadmap/thanks/",
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/for/construction/",
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/for/home-services/",
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/for/outdoor-living/",
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024,
+        "deviceScaleFactor": 1,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812,
+        "deviceScaleFactor": 2,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/roadmap/",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812,
+        "deviceScaleFactor": 2,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/websites/",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812,
+        "deviceScaleFactor": 2,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "video-caption",
+          "impact": "critical",
+          "tags": [
+            "cat.text-alternatives",
+            "wcag2a",
+            "wcag122",
+            "section508",
+            "section508.22.a",
+            "TTv5",
+            "TT17.a",
+            "EN-301-549",
+            "EN-9.1.2.2",
+            "RGAAv4",
+            "RGAA-4.3.1"
+          ],
+          "description": "Ensure <video> elements have captions",
+          "help": "<video> elements must have captions",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/video-caption?application=axeAPI",
+          "nodes": [
+            {
+              "any": [],
+              "all": [],
+              "none": [
+                {
+                  "id": "caption",
+                  "data": null,
+                  "relatedNodes": [],
+                  "impact": "critical",
+                  "message": "Check that captions are available for the element"
+                }
+              ],
+              "impact": "critical",
+              "html": "<video aria-label=\"Aries Outdoor Living website preview\" aria-describedby=\"case-study-aries-details\" class=\"h-full w-full object-cover\" preload=\"none\" playsinline=\"\" muted=\"\" controls=\"\" poster=\"/videos/aries-walkthrough-still.webp\" data-astro-cid-p5wr5ghm=\"\">",
+              "target": [
+                "video"
+              ],
+              "failureSummary": "Fix all of the following:\n  Check that captions are available for the element"
+            }
+          ]
+        }
+      ],
+      "reviewedIncomplete": [
+        "video-caption"
+      ],
+      "silentVideoReview": true,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/compare/website-options/",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812,
+        "deviceScaleFactor": 2,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/audit/",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812,
+        "deviceScaleFactor": 2,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/start/",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812,
+        "deviceScaleFactor": 2,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/start/thanks/",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812,
+        "deviceScaleFactor": 2,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/thanks/",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812,
+        "deviceScaleFactor": 2,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/resume/",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812,
+        "deviceScaleFactor": 2,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/policies/",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812,
+        "deviceScaleFactor": 2,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/accessibility/",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812,
+        "deviceScaleFactor": 2,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/roadmap/thanks/",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812,
+        "deviceScaleFactor": 2,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/for/construction/",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812,
+        "deviceScaleFactor": 2,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/for/home-services/",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812,
+        "deviceScaleFactor": 2,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/for/outdoor-living/",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812,
+        "deviceScaleFactor": 2,
+        "isMobile": true
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1,
+        "isMobile": false
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/roadmap/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1,
+        "isMobile": false
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/websites/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1,
+        "isMobile": false
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "video-caption",
+          "impact": "critical",
+          "tags": [
+            "cat.text-alternatives",
+            "wcag2a",
+            "wcag122",
+            "section508",
+            "section508.22.a",
+            "TTv5",
+            "TT17.a",
+            "EN-301-549",
+            "EN-9.1.2.2",
+            "RGAAv4",
+            "RGAA-4.3.1"
+          ],
+          "description": "Ensure <video> elements have captions",
+          "help": "<video> elements must have captions",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/video-caption?application=axeAPI",
+          "nodes": [
+            {
+              "any": [],
+              "all": [],
+              "none": [
+                {
+                  "id": "caption",
+                  "data": null,
+                  "relatedNodes": [],
+                  "impact": "critical",
+                  "message": "Check that captions are available for the element"
+                }
+              ],
+              "impact": "critical",
+              "html": "<video aria-label=\"Aries Outdoor Living website preview\" aria-describedby=\"case-study-aries-details\" class=\"h-full w-full object-cover\" preload=\"none\" playsinline=\"\" muted=\"\" controls=\"\" poster=\"/videos/aries-walkthrough-still.webp\" data-astro-cid-p5wr5ghm=\"\">",
+              "target": [
+                "video"
+              ],
+              "failureSummary": "Fix all of the following:\n  Check that captions are available for the element"
+            }
+          ]
+        }
+      ],
+      "reviewedIncomplete": [
+        "video-caption"
+      ],
+      "silentVideoReview": true,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/compare/website-options/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1,
+        "isMobile": false
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/audit/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1,
+        "isMobile": false
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/start/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1,
+        "isMobile": false
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div class=\"chat-msg chat-msg-assistant\" data-astro-cid-pmyxn7tj=\"\">",
+              "target": [
+                ".chat-msg"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/start/thanks/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1,
+        "isMobile": false
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/thanks/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1,
+        "isMobile": false
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/resume/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1,
+        "isMobile": false
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/policies/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1,
+        "isMobile": false
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/accessibility/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1,
+        "isMobile": false
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/roadmap/thanks/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1,
+        "isMobile": false
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/for/construction/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1,
+        "isMobile": false
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/for/home-services/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1,
+        "isMobile": false
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/for/outdoor-living/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1,
+        "isMobile": false
+      },
+      "axeVersion": "4.13.0",
+      "violations": [],
+      "incomplete": [],
+      "reviewedIncomplete": [],
+      "silentVideoReview": false,
+      "overflow": 0,
+      "skipVisible": true,
+      "skipWorks": true,
+      "focusVisible": true,
+      "reducedMotion": true,
+      "emailLinksWork": true,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "chatViolations": [],
+      "chatIncomplete": [],
+      "greetingReview": {
+        "textRatio": 10.066207100664329,
+        "linkRatio": 13.473468294244366,
+        "unclipped": true
+      }
+    },
+    {
+      "route": "/",
+      "noScriptNavigation": true
+    },
+    {
+      "route": "/roadmap/",
+      "noScriptNavigation": true
+    },
+    {
+      "route": "/websites/",
+      "noScriptNavigation": true
+    },
+    {
+      "route": "/compare/website-options/",
+      "noScriptNavigation": true
+    },
+    {
+      "route": "/audit/",
+      "noScriptNavigation": true
+    },
+    {
+      "route": "/start/",
+      "noScriptNavigation": true
+    },
+    {
+      "route": "/start/thanks/",
+      "noScriptNavigation": true
+    },
+    {
+      "route": "/thanks/",
+      "noScriptNavigation": true
+    },
+    {
+      "route": "/resume/",
+      "noScriptNavigation": true
+    },
+    {
+      "route": "/policies/",
+      "noScriptNavigation": true
+    },
+    {
+      "route": "/accessibility/",
+      "noScriptNavigation": true
+    },
+    {
+      "route": "/roadmap/thanks/",
+      "noScriptNavigation": true
+    },
+    {
+      "route": "/for/construction/",
+      "noScriptNavigation": true
+    },
+    {
+      "route": "/for/home-services/",
+      "noScriptNavigation": true
+    },
+    {
+      "route": "/for/outdoor-living/",
+      "noScriptNavigation": true
+    },
+    {
+      "route": "/websites/",
+      "width": 375,
+      "retainedInput": true,
+      "manualFallback": true,
+      "deliberateRetry": true,
+      "sameRetryIdentity": true,
+      "false200ReceiptRejected": true,
+      "pendingAndAcceptedDuplicateBlocked": true
+    },
+    {
+      "route": "/roadmap/",
+      "width": 375,
+      "retainedInput": true,
+      "manualFallback": true,
+      "deliberateRetry": true,
+      "sameRetryIdentity": true,
+      "false200ReceiptRejected": true,
+      "pendingAndAcceptedDuplicateBlocked": true
+    },
+    {
+      "route": "/websites/",
+      "width": 1440,
+      "retainedInput": true,
+      "manualFallback": true,
+      "deliberateRetry": true,
+      "sameRetryIdentity": true,
+      "false200ReceiptRejected": true,
+      "pendingAndAcceptedDuplicateBlocked": true
+    },
+    {
+      "route": "/roadmap/",
+      "width": 1440,
+      "retainedInput": true,
+      "manualFallback": true,
+      "deliberateRetry": true,
+      "sameRetryIdentity": true,
+      "false200ReceiptRejected": true,
+      "pendingAndAcceptedDuplicateBlocked": true
+    }
+  ]
+}

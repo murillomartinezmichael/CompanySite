@@ -1,0 +1,21 @@
+{
+  "mode": "test",
+  "started": "2026-10-02T14:22:38.041770-04:00",
+  "finished": "2026-10-02T14:22:45.160595-04:00",
+  "command": [
+    "C:\\Program Files\\nodejs\\node.exe",
+    "C:\\Users\\Michael\\Documents\\GitHub\\.worktrees\\companysite-unified-inquiry-2026-09-24\\node_modules\\vitest\\vitest.mjs",
+    "run",
+    "--silent=true",
+    "--reporter=default",
+    "--reporter=json",
+    "--outputFile=C:\\Users\\Michael\\Documents\\GitHub\\docs\\fleet-deep-completion-2026-10-02\\companysite\\integration\\vitest-results.json"
+  ],
+  "exit": 0,
+  "profile": "C:\\Users\\Michael\\AppData\\Local\\Temp\\companysite-native-integration-20261002-zz9iu1yr",
+  "package_hashes": {
+    "package.json": "4cc748a749f2cab4d012353c7fd177933daac6c73dbdfbf1bd0e487edf9cf5ca",
+    "package-lock.json": "55f9e029ed79c4e2182c7e172eb6fe620931fca48046676704c27c9f4c7c9ca1"
+  },
+  "environment": "Only OS launcher variables inherited; no provider/account variables. Temporary profiles/empty npm configs, telemetry disabled."
+}

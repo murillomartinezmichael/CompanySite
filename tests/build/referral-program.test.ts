@@ -30,7 +30,11 @@ describe('referral capture — intake form', () => {
   });
 
   it('caps the field client-side at the same limit the server enforces', () => {
-    expect(intake).toMatch(/name="referredBy"[\s\S]{0,200}maxlength="120"/);
+    // Assert the compiled control, whether Astro uses a literal or shared LIMITS.
+    const rendered = read('dist/websites/index.html');
+    const input = rendered.match(/<input\b[^>]*\bname="referredBy"[^>]*>/)?.[0];
+    expect(input).toBeDefined();
+    expect(input).toMatch(/\bmaxlength="120"/);
     expect(validate).toMatch(/referredBy:\s*120/);
   });
 

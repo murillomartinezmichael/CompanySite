@@ -1,0 +1,87 @@
+{
+  "task": "COMPANYSITE-INTEGRATION-2026-10-02",
+  "owner": "Codex /root",
+  "status": "CHECKPOINTED",
+  "base": "2ee04be1e2c4038ed147daaab2a76f838e5a93f0",
+  "origin_main": "ae8362d3254e0fca36d0f3a80c16722ca9aeb9b1",
+  "scope": "Existing complete inquiry candidate, runtime qualification and local integration; retained inbox stays unconfigured.",
+  "source_sha256": {
+    "functions/_lib/cors.ts": "f3b089ca00b5d5abd6a76329398b3b6b7f92746c4c51f9fb1c6f0194c9590f5b",
+    "functions/api/lead.ts": "030077732d083f71cf382805d06d9f0d5df3441138a915f5fa4af50ea3967657",
+    "scripts/axe-home.mjs": "870cbfa118b326ec5a31a5d29ec87d94e8fe9f1abd22e62b51679b56f4629c88",
+    "scripts/check-intake-delivery.mjs": "064c52c9fc8aa2bac39d71b6b5d2313dc8d587c7dce27339d5cd69584a120f5d",
+    "src/components/Intake.astro": "e2ec44dc4eec8840c6dc5b90a343b488a3d2334e9d2fb6480e02cba850a0cbf3",
+    "src/pages/roadmap.astro": "d44bda15a24d2da5488e3b8d2db386e835590a67ce45de25b3a619d55bc7b81f",
+    "tests/build/referral-program.test.ts": "f7bb0eaae31dfc6b15dd3dc6633b1f7a2c62372b1765fcd06787df23148ea0de",
+    "tests/build/roadmap-signup.test.ts": "a7750e01413f60a35f55219c20eabc85fc58ad711480b39079bfa196f787f24e",
+    "tests/functions/cors.test.ts": "d6775033d60209960ebd92c95e52286bb7d5f1acac3aea87a4d2dafff53b18ae",
+    "functions/_lib/cockpit-inbox.ts": "a6aa1a5d7976bad2be5a982c88a2e2560bbb76882d361c8bda0fafcba9c07f58",
+    "functions/_lib/inquiry-confirmation.ts": "9694aad3fe6d94a8b8431ae7e454b6f434d97ce7743c04b8bedeb4b491186eea",
+    "scripts/check-inbox-runtime.mjs": "846b84db497004fe770d2acab630cbaaf32874f86be042a8c64257d0a2e52654",
+    "scripts/check-inquiry-cors.mjs": "44f2a4a883fdf0a546550c84981a376feefc664b2f036630772d520791f92bb3",
+    "scripts/check-inquiry-retry.mjs": "2947f56588cfddb55a8fdfb531c17b47d5861fa6f9af67f4d7dfaa89d06686a9",
+    "scripts/check-receiver-contract.mjs": "4b20df940fa2b8caa22757af7c3be260b1866d341b690fd6bec278f74ed170c6",
+    "src/lib/inquiry-submission.ts": "208bf5390b560eed69ad3a456c36454a9c2de66104b62c36ced7096442e35f88",
+    "tests/functions/cockpit-inbox.test.ts": "a4d95b369e65903a5f53aba3c04a62ef360c2550ed4923266db2326afd6ddd12",
+    "tests/functions/lead-inbox.test.ts": "e674990fae7bbdfb233caea05dbe1873b56577ac889a61fc38889d82b68befb7",
+    "tests/functions/lead-native-retry.test.ts": "18733f3b88fd5da37fe9b36e75b3024bc6bdaf35888e0d6eac65b41ecfad62e0",
+    "tests/inquiry-reload.test.ts": "e2afe9ce351a5bf67318f12d7c824b3094302ffcc47229749795a954e127cad4",
+    "tests/inquiry-submission.test.ts": "d867cc1f9c730b384d6ed73c9287a10c26c1307a235249822ab98b613b671ebe"
+  },
+  "checks": {
+    "native_passes": 956,
+    "windows_skips": 2,
+    "test_files": 61,
+    "build_pages": 15,
+    "output_fence": "PASS",
+    "astro_files": 46,
+    "astro_diagnostics": 0,
+    "workerd_scenarios": 12,
+    "linked_inquiries": 2,
+    "linked_receipts": 2,
+    "linked_jobs": 4,
+    "compiled_receipt_checks": 8,
+    "receiver_boundary_controls": 10,
+    "receiver_violations": 0
+  },
+  "runtime": {
+    "node": "22.23.2",
+    "declared_node": ">=22.12",
+    "node_version_file": "22.23.1",
+    "astro": "7.3.2",
+    "vitest": "4.1.11",
+    "wrangler": "4.125.0",
+    "puppeteer": "25.6.0",
+    "receiver_python": "3.12.14",
+    "receiver_commit": "16092e69a6326891a819efcd5ca9487c9c1e74fe"
+  },
+  "review": "15 prior independently reviewed lifecycle file hashes match. Root reviewed complete owned current source and refreshed runtime/linked evidence; no new independent worker.",
+  "remaining": [
+    "Apply semantic lock merge preserving local patches; qualify upstream Wrangler/Puppeteer versions.",
+    "Browser proof remains prior source-bound evidence, not a new post-dependency browser run.",
+    "Actual credential lifecycle, destinations, backup custody/historical schema/retention, one-sender cutover, exact send and production gates M02-M06 remain.",
+    "Node satisfies engines but differs from .node-version by patch.",
+    "PENDING_MANUAL dirty change and primary marketing/UI are held unread/uncommitted by this scope."
+  ],
+  "setup_corrections": [
+    "Build/compile themselves exited0; Python wrapper console encoding failed only while printing saved logs, then fixed. No redundant rebuild to disguise result.",
+    "Initial Astro command named a nonexistent entrypoint; corrected to the repository npm run astro -- check. Retained failed receipt/log."
+  ],
+  "publication": {
+    "committed": false,
+    "merged": false,
+    "pushed": false,
+    "deployed": false
+  },
+  "local_only_raw_logs": {
+    "docs/deep-completion-2026-10-02/integration/build.log": "a16a77ae97d60a9d87d2981897735bfb95a3ab9ef5766003ac7e010c5b64c840",
+    "docs/deep-completion-2026-10-02/integration/capture.log": "01c0f7638a2cb8c2a66b64ac18fc871d800dc2c9bed99515eeabeca9fee40dc5",
+    "docs/deep-completion-2026-10-02/integration/compile.log": "18e37965ec8d80957466383c8a9753d48f986fdc677c3059a745e05c619395a3",
+    "docs/deep-completion-2026-10-02/integration/receipts.log": "63ec1b42e9fc1b7dc879bc2f020ce43bc9ee4a054ec23999d0037d4ce57a769e",
+    "docs/deep-completion-2026-10-02/integration/test.log": "b092d894cf7f69d0f8c00dd437d038a0c1b124614dababa3753f59caa2732d09",
+    "docs/deep-completion-2026-10-02/integration/types-attempt1.log": "417bd980eaf8a3ab13c9f268e677a7617b5df999859a6b22fa9b226683b695fe",
+    "docs/deep-completion-2026-10-02/integration/types.log": "dd78964fa3d7f70ecdaec2b1271987a4626943537d731ff28d3f927a0c8898da",
+    "docs/deep-completion-2026-10-02/integration/worker.log": "dee3c31c92a83a1f9013edd2950b5d59e3c653ab817ab48e0cfca299452e77af"
+  },
+  "artifact_whitespace_exception": "Existing exact retry-lifecycle.incremental.patch contains valid blank context markers. Preserved bytes; reverse application checked; source/docs whitespace checked separately."
+}

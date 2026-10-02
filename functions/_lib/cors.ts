@@ -37,9 +37,8 @@ export const DEFAULT_ORIGINS = [
 export const ALLOWED_METHODS = 'POST, OPTIONS';
 
 /**
- * Non-safelisted request headers a cross-origin caller may set. `content-type`
- * is the only one `onRequestPost` reads. Lowercase — browsers send
- * `Access-Control-Request-Headers` lowercased.
+ * Default non-safelisted headers shared with chat. The lead route explicitly
+ * opts into its non-authentication retry header; other routes keep this default.
  */
 export const ALLOWED_REQUEST_HEADERS = ['content-type'];
 
@@ -91,7 +90,7 @@ export function originAllowed(env: CorsEnv, origin: string | null): boolean {
  * Returning a blanket `Access-Control-Allow-Headers: Content-Type` while the
  * caller asked for `Authorization` would be a grant that lies about its scope.
  */
-export function requestedHeadersAllowed(headerValue: string | null): boolean {
+export function requestedHeadersAllowed(headerValue: string | null, inquiryRetry = false): boolean {
   if (!headerValue) return true; // nothing non-safelisted requested
   const requested = headerValue
     .split(',')
@@ -100,7 +99,8 @@ export function requestedHeadersAllowed(headerValue: string | null): boolean {
   if (requested.length === 0) return true;
   if (requested.length > MAX_REQUESTED_HEADERS) return false;
   return requested.every(
-    (h) => ALLOWED_REQUEST_HEADERS.includes(h) || SAFELISTED_REQUEST_HEADERS.includes(h),
+    (h) => ALLOWED_REQUEST_HEADERS.includes(h) || SAFELISTED_REQUEST_HEADERS.includes(h)
+      || (inquiryRetry && h === 'idempotency-key'),
   );
 }
 
@@ -131,7 +131,7 @@ export function corsResponseHeaders(env: CorsEnv, origin: string | null): Record
  * 204 carrying no `Access-Control-*` header at all — which is what makes the
  * browser reject the preflight instead of caching a permission we don't mean.
  */
-export function preflightResponse(env: CorsEnv, request: Request): Response {
+export function preflightResponse(env: CorsEnv, request: Request, options: { inquiryRetry?: boolean } = {}): Response {
   const deny = () =>
     new Response(null, {
       status: 204,
@@ -153,7 +153,7 @@ export function preflightResponse(env: CorsEnv, request: Request): Response {
     .toUpperCase();
   if (requestedMethod !== 'POST') return deny();
 
-  if (!requestedHeadersAllowed(request.headers.get('Access-Control-Request-Headers'))) {
+  if (!requestedHeadersAllowed(request.headers.get('Access-Control-Request-Headers'), options.inquiryRetry)) {
     return deny();
   }
 
@@ -164,7 +164,7 @@ export function preflightResponse(env: CorsEnv, request: Request): Response {
       Vary: CORS_VARY,
       'Access-Control-Allow-Origin': origin,
       'Access-Control-Allow-Methods': ALLOWED_METHODS,
-      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Headers': options.inquiryRetry ? 'Content-Type, Idempotency-Key' : 'Content-Type',
       'Access-Control-Max-Age': String(PREFLIGHT_MAX_AGE_S),
     },
   });

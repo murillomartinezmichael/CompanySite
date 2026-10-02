@@ -1,0 +1,21 @@
+{
+  "mode": "compile",
+  "started": "2026-10-02T14:22:04.574955-04:00",
+  "finished": "2026-10-02T14:22:08.344827-04:00",
+  "command": [
+    "C:\\Program Files\\nodejs\\node.exe",
+    "C:\\Users\\Michael\\Documents\\GitHub\\.worktrees\\companysite-unified-inquiry-2026-09-24\\node_modules\\wrangler\\bin\\wrangler.js",
+    "pages",
+    "functions",
+    "build",
+    "functions",
+    "--outdir=output/runtime"
+  ],
+  "exit": 0,
+  "profile": "C:\\Users\\Michael\\AppData\\Local\\Temp\\companysite-native-integration-20261002-y1br0f5n",
+  "package_hashes": {
+    "package.json": "4cc748a749f2cab4d012353c7fd177933daac6c73dbdfbf1bd0e487edf9cf5ca",
+    "package-lock.json": "55f9e029ed79c4e2182c7e172eb6fe620931fca48046676704c27c9f4c7c9ca1"
+  },
+  "environment": "Only OS launcher variables inherited; no provider/account variables. Temporary profiles/empty npm configs, telemetry disabled."
+}

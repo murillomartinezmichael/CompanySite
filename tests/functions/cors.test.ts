@@ -116,6 +116,14 @@ describe('requestedHeadersAllowed', () => {
   it('rejects an absurdly long requested-headers list', () => {
     expect(requestedHeadersAllowed(Array(33).fill('content-type').join(','))).toBe(false);
   });
+
+  it('permits the retry identity only through an explicit lead-route opt-in', () => {
+    expect(requestedHeadersAllowed('content-type, Idempotency-Key')).toBe(false);
+    expect(requestedHeadersAllowed('content-type, Idempotency-Key', true)).toBe(true);
+    expect(requestedHeadersAllowed('content-type, idempotency-key, authorization', true)).toBe(false);
+    expect(requestedHeadersAllowed('idempotency-key, cookie', true)).toBe(false);
+    expect(requestedHeadersAllowed('idempotency-key, x-admin', true)).toBe(false);
+  });
 });
 
 describe('preflightResponse — grant path', () => {
@@ -220,6 +228,26 @@ describe('corsResponseHeaders — the POST side', () => {
 });
 
 describe('the real /api/lead handler', () => {
+  it('grants the required retry header only within the existing origin/method/credential gates', async () => {
+    for (const origin of DEFAULT_ORIGINS) {
+      const res = await callOnRequest(preflight(origin, { requestHeaders: 'Content-Type, Idempotency-Key' }));
+      expect(res.headers.get('Access-Control-Allow-Origin')).toBe(origin);
+      expect(res.headers.get('Access-Control-Allow-Headers')).toBe('Content-Type, Idempotency-Key');
+      expect(res.headers.get('Access-Control-Allow-Credentials')).toBeNull();
+    }
+    for (const request of [preflight(EVIL, { requestHeaders: 'idempotency-key' }),
+      preflight('null', { requestHeaders: 'idempotency-key' }),
+      preflight(ALLOWED, { requestMethod: 'DELETE', requestHeaders: 'idempotency-key' }),
+      preflight(ALLOWED, { requestHeaders: 'idempotency-key, authorization' }),
+      preflight(ALLOWED, { requestHeaders: 'idempotency-key, x-admin' })]) {
+      expect(corsHeaderNames(await callOnRequest(request))).toEqual([]);
+    }
+  });
+
+  it('does not grant the retry header from a shared helper without the lead opt-in', () => {
+    const res = preflightResponse({}, preflight(ALLOWED, { requestHeaders: 'content-type, idempotency-key' }));
+    expect(corsHeaderNames(res)).toEqual([]);
+  });
   it('routes an allowed-origin OPTIONS to a grant', async () => {
     const res = await callOnRequest(preflight(ALLOWED));
     expect(res.status).toBe(204);

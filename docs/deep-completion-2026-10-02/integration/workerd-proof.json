@@ -1,0 +1,72 @@
+{
+  "checkedAt": "2026-10-02T18:23:31.792Z",
+  "runtime": "actual installed workerd via Miniflare",
+  "workerSha256": "cb940ee7075ab35491c7277bb57d668a3f2aed4a4310a2f8d73e3d91d833f953",
+  "evidence": [
+    {
+      "scenario": "new",
+      "status": 200,
+      "receiverCalls": 1
+    },
+    {
+      "scenario": "replay",
+      "status": 200,
+      "receiverCalls": 1
+    },
+    {
+      "scenario": "held",
+      "status": 200,
+      "receiverCalls": 1
+    },
+    {
+      "scenario": "conflict",
+      "status": 409,
+      "receiverCalls": 1
+    },
+    {
+      "scenario": "unavailable",
+      "status": 503,
+      "receiverCalls": 1
+    },
+    {
+      "scenario": "unauthorized",
+      "status": 503,
+      "receiverCalls": 1
+    },
+    {
+      "scenario": "html",
+      "status": 503,
+      "receiverCalls": 1
+    },
+    {
+      "scenario": "fake",
+      "status": 503,
+      "receiverCalls": 1
+    },
+    {
+      "scenario": "wrong-context",
+      "status": 503,
+      "receiverCalls": 1
+    },
+    {
+      "scenario": "missing-role",
+      "status": 503,
+      "receiverCalls": 1
+    },
+    {
+      "scenario": "redirect",
+      "status": 503,
+      "receiverCalls": 1
+    },
+    {
+      "scenario": "native-form",
+      "status": 200,
+      "receiverCalls": 1,
+      "confirmationBeforeEffects": true,
+      "confirmedStatus": 303,
+      "stableHiddenIdentity": true
+    }
+  ],
+  "boundaries": "Synthetic receiver only; every outbound intercepted. No live provider, real DB or production configuration.",
+  "productionVerified": false
+}

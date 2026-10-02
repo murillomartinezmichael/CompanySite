@@ -1,5 +1,6 @@
 ---
 import { REFERRAL_FIELD_LABEL } from '../../functions/_lib/referral';
+import { LIMITS } from '../../functions/_lib/validate';
 
 interface Props {
   eyebrow?: string;
@@ -89,7 +90,6 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
       action="/api/lead"
       data-source={source}
       data-success-path={successPath}
-      novalidate
     >
       <!-- Corner marks — editorial polish -->
       <span class="pointer-events-none absolute left-4 top-4 h-3 w-3 border-l border-t border-clay/50"></span>
@@ -114,6 +114,7 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
             name="name"
             type="text"
             required
+            maxlength={LIMITS.name}
             autocomplete="name"
             class="field-input"
             placeholder="David Serrano"
@@ -126,6 +127,7 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
             name="email"
             type="email"
             required
+            maxlength={LIMITS.email}
             autocomplete="email"
             inputmode="email"
             class="field-input"
@@ -141,6 +143,7 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
             name="businessType"
             type="text"
             required
+            maxlength={LIMITS.businessType}
             class="field-input"
             placeholder="Contractor · gym · dentist"
           />
@@ -151,6 +154,7 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
           <input
             name="currentUrl"
             type="url"
+            maxlength={LIMITS.currentUrl}
             autocomplete="url"
             class="field-input"
             placeholder="https://"
@@ -164,6 +168,8 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
           name="frustration"
           rows="5"
           required
+          minlength={LIMITS.frustrationMin}
+          maxlength={LIMITS.frustration}
           class="field-input resize-none"
           placeholder="Site looks dated · doesn't rank · no one submits the form · phone doesn't ring after visits..."
         ></textarea>
@@ -197,7 +203,7 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
         <input
           name="referredBy"
           type="text"
-          maxlength="120"
+          maxlength={LIMITS.referredBy}
           autocomplete="off"
           class="field-input"
           placeholder="Name of the person or business who sent you"
@@ -243,11 +249,26 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
 <script>
   import { track } from '@/lib/track';
   import { isPriorPrefill } from '@/lib/prefill';
+  import { createInquirySubmission, isInquiryAccepted, InquiryRetryError, inquiryErrorMessage, showInquiryRecovery } from '@/lib/inquiry-submission';
+  import { validateLead } from '../../functions/_lib/validate';
 
   const form = document.getElementById('intake-form') as HTMLFormElement | null;
   const status = document.getElementById('intake-status') as HTMLDivElement | null;
 
   if (form && status) {
+    const submission = createInquirySubmission(undefined, { scope: 'intake' });
+    let sending = false;
+    let accepted = false;
+    // Release custom field errors as the visitor corrects their input, allowing
+    // native required/type/length checks to run before the next submit event.
+    form.addEventListener('input', () => {
+      form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea')
+        .forEach((field) => field.setCustomValidity(''));
+      if (!form.querySelector<HTMLButtonElement>('button[type=submit]')?.disabled) {
+        status.textContent = '';
+        status.classList.add('hidden');
+      }
+    });
     // CONVERSION_STANDARDS.md § 4 — intake_start fires once, on the first
     // field focus, so we can measure abandonment between CTA click and
     // submit. focusin bubbles, so a single `once` listener on the form
@@ -267,10 +288,11 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (sending || accepted) return;
       const submitBtn = form.querySelector<HTMLButtonElement>('button[type=submit]');
       const btnSpan = submitBtn?.querySelector<HTMLSpanElement>('span.relative');
       const originalBtnHTML = btnSpan?.innerHTML;
-      const data = Object.fromEntries(new FormData(form).entries());
+      const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
 
       // honeypot check
       if (data.company_website) {
@@ -279,6 +301,21 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
         return;
       }
 
+      // Use the endpoint's own validation for trimmed text and URL protocols.
+      // A correctable field error must never look like a transport failure.
+      const validation = validateLead(data);
+      if (!validation.ok) {
+        status.textContent = '';
+        status.classList.add('hidden');
+        for (const error of validation.errors) {
+          form.querySelector<HTMLInputElement | HTMLTextAreaElement>(`[name="${error.field}"]`)
+            ?.setCustomValidity(error.message);
+        }
+        form.reportValidity();
+        return;
+      }
+
+      sending = true;
       if (submitBtn && btnSpan) {
         submitBtn.disabled = true;
         btnSpan.innerHTML = '<span>Sending…</span>';
@@ -293,13 +330,21 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
       const source = String(data.source || 'unknown');
 
       try {
+        const attempt = await submission.prepare(data);
+        if (attempt.accepted) throw new InquiryRetryError('confirmed');
         const res = await fetch('/api/lead', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          redirect: 'error',
+          headers: {
+            'Content-Type': 'application/json',
+            'Idempotency-Key': attempt.key,
+          },
           body: JSON.stringify(data),
         });
 
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!(await isInquiryAccepted(res))) throw new Error(`Unconfirmed inquiry: HTTP ${res.status}`);
+        accepted = true;
+        const recoverySaved = submission.markAccepted(attempt.key);
 
         track({
           name: 'intake_submit',
@@ -307,7 +352,7 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
           intent,
           meta: { source, has_prefill: hasPrefill, message_length: message.length },
         });
-        status.textContent = 'Got it. Redirecting…';
+        status.textContent = recoverySaved ? 'Got it. Redirecting…' : 'Got it. Your inquiry was confirmed, but this browser could not save its retry reference. Do not resend. Redirecting…';
         status.classList.remove('border-clay/40', 'bg-clay/10');
         status.classList.add('border-emerald-400/40', 'bg-emerald-500/10');
         form.reset();
@@ -316,18 +361,20 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
         // gives the analytics beacon a beat to flush before navigation.
         const destination = form.dataset.successPath || '/thanks';
         setTimeout(() => { window.location.href = destination; }, 450);
-      } catch {
+      } catch (error) {
         track({
           name: 'intake_error',
           section: 'intake',
           intent,
           meta: { source, has_prefill: hasPrefill, message_length: message.length },
         });
-        status.textContent = 'Something broke on send. Email murillomartinezmichael@gmail.com and I\'ll pick it up manually.';
+        status.textContent = inquiryErrorMessage(error);
+        showInquiryRecovery(form, status, error, () => submission.allowSeparate(Object.fromEntries(new FormData(form).entries()) as Record<string, string>));
         status.classList.remove('border-clay/40', 'bg-clay/10');
         status.classList.add('border-red-400/40', 'bg-red-500/10');
       } finally {
-        if (submitBtn && btnSpan && originalBtnHTML) {
+        sending = false;
+        if (!accepted && submitBtn && btnSpan && originalBtnHTML) {
           submitBtn.disabled = false;
           btnSpan.innerHTML = originalBtnHTML;
         }

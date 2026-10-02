@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-10-02T05:31:19.823Z",
+  "browser": "Chrome/154.0.8037.95",
+  "expectedBlocked": true,
+  "traffic": [
+    {
+      "method": "OPTIONS",
+      "origin": "http://127.0.0.1:50645",
+      "requestedHeaders": "content-type,idempotency-key",
+      "status": 204,
+      "allowedHeaders": null,
+      "allowCredentials": null
+    }
+  ],
+  "receiverCalls": 0,
+  "retainedInquiries": 0,
+  "workerSha256": "8a9b675a3f6542b101f73b838b2a5927bd7cec78f41cabdbf227f475683fc9c2",
+  "productionVerified": false
+}

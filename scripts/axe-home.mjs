@@ -107,7 +107,7 @@ const origin = `http://127.0.0.1:${server.address().port}`;
 const browser = await puppeteer.launch({
   executablePath: chromePath,
   headless: true,
-  args: ['--no-sandbox', '--disable-dev-shm-usage'],
+  args: ['--disable-dev-shm-usage'],
 });
 
 let failures = 0;
