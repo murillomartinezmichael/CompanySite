@@ -1113,3 +1113,10 @@ yet; wait for miniflare to ship the undici bump.
 Resurrection: next dedicated session, or immediately if any of `define:vars`,
 spread props, `transition:*`, view transitions, or server islands ever gets
 used in `src/`.
+
+## 2026-10-02 · Light mode shipped (Claude)
+
+- **Shipped:** light mode on all 15 pages. Tokens became RGB-channel CSS variables (`tailwind.config.mjs` `palettes.dark` / `palettes.light`), the OS setting is followed by default, and the header sun/moon toggle saves the choice (`m3mm-theme`). Dark mode is unchanged. `tests/build/muted-text-contrast.test.ts` checks both palettes.
+- **Production secrets set 2026-10-02:** `ANTHROPIC_API_KEY` (chat) and `RESEND_API_KEY` (lead email).
+- **Next action:** verify `m3mm.net` as a Resend sending domain, then set `LEAD_FROM` (e.g. `M3MM <hello@m3mm.net>`). Until then, customer auto-replies from `onboarding@resend.dev` are rejected by Resend; owner notifications still arrive.
+- **Parked:** `PUBLIC_STRIPE_PAYMENT_LINK` is unset, so `/start` gates to the free review with no $100 deposit checkout.
