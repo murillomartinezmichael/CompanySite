@@ -1345,3 +1345,10 @@ yet; wait for miniflare to ship the undici bump.
 Resurrection: next dedicated session, or immediately if any of `define:vars`,
 spread props, `transition:*`, view transitions, or server islands ever gets
 used in `src/`.
+
+## 2026-09-27 — Adobe Aries showcase and TikTok draft
+
+- Created editable After Effects project, two 18-second renders and original procedural instrumental under `marketing/aries-ad-2026-09-27/`. Adobe render logs retained. No Firefly use or Content Credentials certification claimed.
+- Local Aries video/poster references now use the wide Adobe export; original media retained. Existing unrelated PENDING_MANUAL changes preserved.
+- Verified sampled rendered frames, H.264/AAC streams, vertical 1080x1920 at 30fps, audio peak -12.5 dBFS and destination HTTP 200. Final build status is in the creative README.
+- Next: review the supplied draft, verify paid-ad rights and source claims, then check actual TikTok placement/disclosure. Submission, spending and website production release remain owner gates; no commit/push/deploy.

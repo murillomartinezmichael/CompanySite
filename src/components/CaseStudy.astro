@@ -42,7 +42,7 @@ if (d.liveUrl) {
         playsinline
         muted
         controls
-        poster={previewStill}
+        poster={d.poster ?? previewStill}
       >
         <source src={d.video} type="video/mp4" />
       </video>

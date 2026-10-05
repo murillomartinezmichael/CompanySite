@@ -47,6 +47,7 @@ const NAV_ONLY_CTAS: ReadonlySet<string> = new Set([
   'hq-motion-toggle',  // Decorative motion preference, not a conversion.
   'sales-motion-toggle', // Same preference on the sales hero.
   'footer-motion-toggle', // Accessible sitewide motion preference.
+  'header-theme-toggle', // Light/dark display preference, not a conversion.
   'footer-a11y',       // Footer: nav → /accessibility statement page
   'footer-policies',   // Footer: nav → /policies company-policy library
   'policies-accessibility', // Policies: cross-link → accessibility statement

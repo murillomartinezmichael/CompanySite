@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import theme from '../../tailwind.config.mjs';
+import { palettes } from '../../tailwind.config.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const read = (p: string) => readFileSync(root + p, 'utf8');
@@ -30,12 +30,15 @@ const AA_BODY = 4.5;
 
 // Every background `--ink-mute` text renders against: the card fill and the
 // page ground.
-const BACKGROUNDS = [theme.theme.extend.colors.ink.DEFAULT, theme.theme.extend.colors.ink.soft, theme.theme.extend.colors.ink.panel];
+// Light mode (2026-10-01) re-colors the same tokens, so every pairing is
+// checked in both palettes.
+const THEMES = Object.entries(palettes);
+const BACKGROUNDS = THEMES.flatMap(([, p]) => [p.ink.DEFAULT, p.ink.soft, p.ink.panel]);
 
 const mutedOf = (file: string, variable: string) => {
   if (file === 'src/pages/index.astro' || file === 'src/pages/roadmap.astro') {
     expect(read(file)).toContain(`--${variable}: theme('colors.bone.muted')`);
-    return theme.theme.extend.colors.bone.muted;
+    return null; // token-backed: covered per theme by the pairing test
   }
   const m = read(file).match(new RegExp(`--${variable}:\\s*(#[0-9a-fA-F]{6})`));
   expect(m, `${file} no longer declares --${variable}`).toBeTruthy();
@@ -43,8 +46,7 @@ const mutedOf = (file: string, variable: string) => {
 };
 
 describe('muted greys clear the AA body-copy floor', () => {
-  it('every homepage text and control pairing meets its contrast threshold', () => {
-    const { ink, bone, clay, electric } = theme.theme.extend.colors;
+  it.each(THEMES)('every %s-mode text and control pairing meets its contrast threshold', (_name, { ink, bone, clay, electric }) => {
     for (const bg of [ink.DEFAULT, ink.soft, ink.panel]) {
       for (const fg of [bone.DEFAULT, bone.dim, bone.muted, clay.DEFAULT, clay.glow, electric.DEFAULT, electric.glow]) {
         expect(contrast(fg, bg), `${fg} on ${bg}`).toBeGreaterThanOrEqual(4.5);
@@ -68,6 +70,7 @@ describe('muted greys clear the AA body-copy floor', () => {
   ]) {
     it(`${file} --${variable} clears 4.5:1 on every background it renders on`, () => {
       const fg = mutedOf(file, variable);
+      if (!fg) return;
       for (const bg of BACKGROUNDS) {
         expect(contrast(fg, bg), `${fg} on ${bg}`).toBeGreaterThanOrEqual(AA_BODY);
       }

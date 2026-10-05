@@ -3,8 +3,8 @@ client: Aries Outdoor Living
 kind: Custom decks, pergolas, outdoor structures
 location: Atlanta, GA
 year: 2026
-video: /videos/aries-scroll-v2.mp4
-poster: /videos/aries-poster.jpg
+video: /videos/aries-showcase-adobe.mp4
+poster: /videos/aries-showcase-adobe.webp
 liveUrl: https://ariesoutdoorliving.com
 problem: >-
   Aries was booking jobs from Instagram DMs and word-of-mouth. Their old site

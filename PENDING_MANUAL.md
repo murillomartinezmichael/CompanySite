@@ -231,3 +231,12 @@ Aries walkthrough contains rating/project-count text. This pass did not invent,
 edit or independently verify those embedded statements. Michael must confirm the
 media is suitable for public proof or supply an approved replacement before publishing.
 Source assets: `src/assets/big7-live-site.jpg`, `public/videos/aries-scroll-v2.mp4`.
+
+
+## 2026-09-27 historical backup gate
+
+- [ ] Review GitHub secret-protection rejection for historical commit 332e797 (tests/build/start-checkout.test.ts:124–126; synthetic Stripe fixtures). No bypass performed and no historical tag published. Owner-approved remediation unblocks archival; production remains outside sync scope.
+
+## 2026-09-27 — Aries Adobe creative submission gate
+
+- [ ] Confirm paid-ad permission for the Aries name, website imagery and visible claims (including rating/project counts); preview the vertical draft with the selected TikTok placement, enable AI-generated-content disclosure, and approve the campaign budget/submission. Why Michael: rights evidence, Ads Manager and spending are owner-controlled; no ad was submitted. Resumes: final placement-specific corrections and authorized submission of marketing/aries-ad-2026-09-27/aries-tiktok-draft.mp4. The local website replacement also awaits the existing production-release gate.
