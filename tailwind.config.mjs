@@ -41,9 +41,10 @@ export const palettes = {
       muted:   '#4A5761',
     },
     clay: {
-      DEFAULT: '#3A6600',
+      // Small labels use text-clay/80: retain AA contrast after compositing.
+      DEFAULT: '#2F5400',
       deep:    '#C9F08A',
-      glow:    '#2F5400',
+      glow:    '#244200',
     },
   },
 };
