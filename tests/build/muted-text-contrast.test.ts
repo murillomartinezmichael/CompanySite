@@ -26,6 +26,15 @@ const contrast = (fg: string, bg: string) => {
   return (hi + 0.05) / (lo + 0.05);
 };
 
+
+// Text opacity blends sRGB channels with the actual surface before luminance
+// is measured. Opaque token checks alone missed the light-mode label failure.
+const composite = (fg: string, bg: string, alpha: number) => '#' + [1, 3, 5].map((i) => {
+  const front = parseInt(fg.slice(i, i + 2), 16);
+  const back = parseInt(bg.slice(i, i + 2), 16);
+  return Math.round(front * alpha + back * (1 - alpha)).toString(16).padStart(2, '0');
+}).join('');
+
 const AA_BODY = 4.5;
 
 // Every background `--ink-mute` text renders against: the card fill and the
@@ -56,6 +65,20 @@ describe('muted greys clear the AA body-copy floor', () => {
     for (const bg of [clay.DEFAULT, clay.glow, electric.DEFAULT, electric.glow]) {
       expect(contrast(ink.DEFAULT, bg), `button text on ${bg}`).toBeGreaterThanOrEqual(4.5);
     }
+  });
+  it.each(THEMES)('80%-opacity %s-mode accent labels remain readable on every surface', (_name, { ink, clay }) => {
+    for (const bg of [ink.DEFAULT, ink.soft, ink.panel]) {
+      for (const fg of [clay.DEFAULT, clay.glow]) {
+        expect(contrast(composite(fg, bg, 0.8), bg), `${fg} at 80% on ${bg}`).toBeGreaterThanOrEqual(AA_BODY);
+      }
+    }
+  });
+  it('alpha compositing reproduces the failing Chrome label measurements', () => {
+    // CI 37072938310: /websites page ground and the /thanks white cards.
+    expect(composite('#3A6600', '#F5F7F8', 0.8)).toBe('#5f8332');
+    expect(composite('#3A6600', '#FFFFFF', 0.8)).toBe('#618533');
+    expect(contrast('#5f8332', '#F5F7F8')).toBeLessThan(AA_BODY);
+    expect(contrast('#618533', '#FFFFFF')).toBeLessThan(AA_BODY);
   });
   it('the contrast maths agrees with the rendered measurement', () => {
     // Sanity check on the helper itself, against pairs measured in Chrome.
