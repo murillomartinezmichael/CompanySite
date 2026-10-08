@@ -1,0 +1,33 @@
+{
+  "id": "CS-RUNTIME-ISOLATION-01",
+  "at": "2026-10-08T18:34:30.123580+00:00",
+  "owner": "01a11c90-39f3-7611-bd83-59b0bf37db6f",
+  "status": "PASS_LOCAL_BROWSER_CHECKPOINT",
+  "release_status": "NOT_RELEASE_READY",
+  "candidate_base": "b1703b245ec4b0fdda7f0c5a2cbfbf394d276d9a",
+  "dirty_fixture_sha256": "75747ece159aaa67ac29aaf84de05c49eb9d32d64fa450d58c3054055a985d46",
+  "change": "Only scripts/check-inquiry-retry.mjs modulesRoot option; inquiry product and compiled bytes unchanged.",
+  "causal_evidence": "Standard/nodejs_compat and bound minimal workers pass; identical compiled bytes pass inline/from packet path but fail from candidate path under default module root; exact candidate path passes with explicit runtime-directory modulesRoot. Installed converter derives mainModule relative to modulesRoot, defaulting to runner root.",
+  "checks": {
+    "browser_scenarios": 10,
+    "browser": "Chrome/154.0.8037.98",
+    "run_exit": 0,
+    "current_proof_source_hashes": 8,
+    "cleanup_regressions": 7,
+    "syntax": "PASS",
+    "scoped_diff_whitespace": "PASS"
+  },
+  "proof": "compiled-browser-native-profile/browser-evidence.json",
+  "failures_preserved": [
+    "Original compiled startup failure",
+    "First fixed browser attempt: Chrome profile launch failure before assertions",
+    "Initial transient UTF-8 fixture decoding error corrected; exact one-line source diff verified"
+  ],
+  "cleanup": "Final packet-associated process check empty; successful fixture awaited browser/worker/server cleanup. Not an OS-wide egress claim.",
+  "not_done": [
+    "No fresh full app unit suite or build",
+    "No real receiver/database/provider/send/client/production acceptance",
+    "One-line fixture change remains local/uncommitted; no push/deployment"
+  ],
+  "next": "Review and locally commit this scoped fixture/evidence through existing hooks if available; then continue remaining CompanySite independent acceptance or record exact operational gates and advance."
+}

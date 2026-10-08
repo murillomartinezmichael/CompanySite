@@ -1,0 +1,104 @@
+{
+  "checkedAt": "2026-10-08T18:33:15.886Z",
+  "browser": "Chrome/154.0.8037.98",
+  "hashes": {
+    "src/lib/inquiry-submission.ts": "208bf5390b560eed69ad3a456c36454a9c2de66104b62c36ced7096442e35f88",
+    "src/components/Intake.astro": "e2ec44dc4eec8840c6dc5b90a343b488a3d2334e9d2fb6480e02cba850a0cbf3",
+    "src/pages/roadmap.astro": "d44bda15a24d2da5488e3b8d2db386e835590a67ce45de25b3a619d55bc7b81f",
+    "functions/api/lead.ts": "030077732d083f71cf382805d06d9f0d5df3441138a915f5fa4af50ea3967657",
+    "functions/_lib/inquiry-confirmation.ts": "9694aad3fe6d94a8b8431ae7e454b6f434d97ce7743c04b8bedeb4b491186eea",
+    "output/runtime/index.js": "9119c3ca1928323814fa12b0b1466a96af36dedaa8eb1b573068871486e2f98e",
+    "dist/websites/index.html": "2fffa8926b5e6bde9cfba7edfeab5c917cea5ed95e786e11bdb6b029171ff34e",
+    "dist/roadmap/index.html": "d80ee7490f8da68e384f0044cc8035fa77215a6d12e8ea24ebc29c72b99d32ae"
+  },
+  "evidence": [
+    {
+      "scenario": "reload-deliberate-new-revert-accepted",
+      "route": "/websites/",
+      "width": 375,
+      "requests": 6,
+      "retainedInquiries": 3,
+      "noRawBrowserStorage": true,
+      "oldIdentityPreserved": true,
+      "acceptedReplaySuppressed": true
+    },
+    {
+      "scenario": "reload-deliberate-new-revert-accepted",
+      "route": "/roadmap/",
+      "width": 375,
+      "requests": 6,
+      "retainedInquiries": 3,
+      "noRawBrowserStorage": true,
+      "oldIdentityPreserved": true,
+      "acceptedReplaySuppressed": true
+    },
+    {
+      "scenario": "reload-deliberate-new-revert-accepted",
+      "route": "/websites/",
+      "width": 1440,
+      "requests": 6,
+      "retainedInquiries": 3,
+      "noRawBrowserStorage": true,
+      "oldIdentityPreserved": true,
+      "acceptedReplaySuppressed": true
+    },
+    {
+      "scenario": "reload-deliberate-new-revert-accepted",
+      "route": "/roadmap/",
+      "width": 1440,
+      "requests": 6,
+      "retainedInquiries": 3,
+      "noRawBrowserStorage": true,
+      "oldIdentityPreserved": true,
+      "acceptedReplaySuppressed": true
+    },
+    {
+      "scenario": "native-no-js-confirm-lost-response-retry",
+      "route": "/websites/",
+      "width": 375,
+      "requests": 2,
+      "retainedInquiries": 1,
+      "sameHiddenIdentity": true,
+      "escapedFieldsRoundTrip": true
+    },
+    {
+      "scenario": "native-no-js-confirm-lost-response-retry",
+      "route": "/roadmap/",
+      "width": 375,
+      "requests": 2,
+      "retainedInquiries": 1,
+      "sameHiddenIdentity": true,
+      "escapedFieldsRoundTrip": true
+    },
+    {
+      "scenario": "storage-before-send",
+      "route": "/websites/",
+      "requests": 0,
+      "retainedInquiries": 0,
+      "honestStatus": true
+    },
+    {
+      "scenario": "storage-after-send",
+      "route": "/websites/",
+      "requests": 1,
+      "retainedInquiries": 1,
+      "honestStatus": true
+    },
+    {
+      "scenario": "storage-before-send",
+      "route": "/roadmap/",
+      "requests": 0,
+      "retainedInquiries": 0,
+      "honestStatus": true
+    },
+    {
+      "scenario": "storage-after-send",
+      "route": "/roadmap/",
+      "requests": 1,
+      "retainedInquiries": 1,
+      "honestStatus": true
+    }
+  ],
+  "boundaries": "Local compiled forms and Pages worker with synthetic retained receiver. No real database, provider, authentication or production call.",
+  "productionVerified": false
+}

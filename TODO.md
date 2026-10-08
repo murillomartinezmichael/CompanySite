@@ -1240,3 +1240,8 @@ yet; wait for miniflare to ship the undici bump.
 Resurrection: next dedicated session, or immediately if any of `define:vars`,
 spread props, `transition:*`, view transitions, or server islands ever gets
 used in `src/`.
+
+
+## 2026-10-08 — Compiled inquiry browser acceptance recovered
+
+Explicit modulesRoot in scripts/check-inquiry-retry.mjs fixes cwd-dependent Miniflare startup. Exact compiled bytes unchanged.10 native Chrome retry scenarios pass across websites/roadmap,375/1440,no-JS confirmation/lost response/storage failures;7 cleanup regressions pass. Current8proof source hashes match. Previous startup/profile failures retained; no provider or real data used. Evidence: docs/deep-completion-2026-10-02/runtime-module-root/. One-line fixture and receipt files remain local/uncommitted. Next: scoped review/commit through existing hooks, then exact operational custody/credentials/send/cutover gates M02-M06/A30/A33; no production acceptance or push. Unrelated PENDING_MANUAL remains unread/untouched.

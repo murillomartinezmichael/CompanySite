@@ -49,7 +49,7 @@ await new Promise((resolve, reject) => {
 });
 const origin = `http://127.0.0.1:${server.address().port}`;
 mf = new Miniflare({ ...convertV4MiniflareOptions({ cf: false, host: '127.0.0.1', workers: [{
-  name: 'inquiry-browser-fixture', modules: true, scriptPath: join(root, 'output/runtime/index.js'),
+  name: 'inquiry-browser-fixture', modules: true, modulesRoot: join(root, 'output/runtime'), scriptPath: join(root, 'output/runtime/index.js'),
   compatibilityDate: '2026-08-27', compatibilityFlags: ['nodejs_compat'],
   bindings: { ALLOWED_ORIGINS: origin, COCKPIT_LEAD_INBOX_URL: target, COCKPIT_INGEST_TOKEN: 'synthetic-only',
     RESEND_API_KEY: 'synthetic-never-send', N8N_LEAD_WEBHOOK_URL: 'https://workflow.example.invalid/never' },
