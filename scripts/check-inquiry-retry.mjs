@@ -40,7 +40,13 @@ const server = createServer(async (req, res) => {
     res.writeHead(404).end();
   } catch (error) { res.writeHead(500).end('Fixture error'); console.error(error); }
 });
-await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+let browser;
+let failure;
+try {
+await new Promise((resolve, reject) => {
+  server.once('error', reject);
+  server.listen(0, '127.0.0.1', () => { server.removeListener('error', reject); resolve(); });
+});
 const origin = `http://127.0.0.1:${server.address().port}`;
 mf = new Miniflare({ ...convertV4MiniflareOptions({ cf: false, host: '127.0.0.1', workers: [{
   name: 'inquiry-browser-fixture', modules: true, scriptPath: join(root, 'output/runtime/index.js'),
@@ -61,7 +67,9 @@ mf = new Miniflare({ ...convertV4MiniflareOptions({ cf: false, host: '127.0.0.1'
     return mode === 'lost' ? WorkerResponse.json({}, { status: 503 }) : WorkerResponse.json(saved.get(key).receipt, { status: old ? 200 : 201 });
   },
 }] }), telemetry: { enabled: false } });
-const browser = await puppeteer.launch({ executablePath: chrome, headless: true, args: ['--disable-dev-shm-usage'] });
+// Observe worker startup before opening Chrome; startup failures still reach cleanup.
+await mf.ready;
+browser = await puppeteer.launch({ executablePath: chrome, headless: true, args: ['--disable-dev-shm-usage'] });
 const forms = [
   { route: '/websites/', form: '#intake-form', status: '#intake-status', field: 'frustration',
     values: { name: 'Synthetic Renée 😀', email: 'buyer@example.invalid', businessType: 'Synthetic café', frustration: 'Synthetic A&B, "quotes" and <script>bad()</script> 😀.' } },
@@ -90,7 +98,6 @@ async function separate(page, f) {
   await page.click(f.form + '-new-inquiry'); await waitStatus(page, f, 'This button has not sent');
 }
 function reset() { calls.length = 0; saved.clear(); mode = 'lost'; beforeReceipt = undefined; }
-try {
   await mkdir(out, { recursive: true });
   for (const width of [375, 1440]) for (const f of forms) {
     reset(); const { page, context } = await pageFor(f, width);
@@ -169,4 +176,20 @@ try {
   await writeFile(join(out, 'browser-evidence.json'), JSON.stringify({ checkedAt: new Date().toISOString(), browser: await browser.version(), hashes,
     evidence, boundaries: 'Local compiled forms and Pages worker with synthetic retained receiver. No real database, provider, authentication or production call.', productionVerified: false }, null, 2));
   console.log(`PASS ${evidence.length} compiled form/Pages retry scenarios; all outbound intercepted.`);
-} finally { await browser.close(); await mf.dispose(); await new Promise(resolve => server.close(resolve)); }
+} catch (error) {
+  failure = error;
+} finally {
+  // Every acquired resource gets its cleanup attempt even if another close fails.
+  const results = await Promise.allSettled([
+    Promise.resolve().then(() => browser?.close()),
+    Promise.resolve().then(() => mf?.dispose()),
+    Promise.resolve().then(() => {
+      server.closeAllConnections();
+      if (!server.listening) return;
+      return new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
+    }),
+  ]);
+  const errors = results.filter(result => result.status === 'rejected').map(result => result.reason);
+  if (failure) errors.unshift(failure);
+  if (errors.length) throw new AggregateError(errors, 'Inquiry fixture failed; startup/test and cleanup errors retained');
+}
