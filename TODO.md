@@ -1245,3 +1245,13 @@ used in `src/`.
 ## 2026-10-08 — Compiled inquiry browser acceptance recovered
 
 Explicit modulesRoot in scripts/check-inquiry-retry.mjs fixes cwd-dependent Miniflare startup. Exact compiled bytes unchanged.10 native Chrome retry scenarios pass across websites/roadmap,375/1440,no-JS confirmation/lost response/storage failures;7 cleanup regressions pass. Current8proof source hashes match. Previous startup/profile failures retained; no provider or real data used. Evidence: docs/deep-completion-2026-10-02/runtime-module-root/. One-line fixture and receipt files remain local/uncommitted. Next: scoped review/commit through existing hooks, then exact operational custody/credentials/send/cutover gates M02-M06/A30/A33; no production acceptance or push. Unrelated PENDING_MANUAL remains unread/untouched.
+## 2026-10-02 · Light mode shipped (Claude)
+
+- **Shipped:** light mode on all 15 pages. Tokens became RGB-channel CSS variables (`tailwind.config.mjs` `palettes.dark` / `palettes.light`), the OS setting is followed by default, and the header sun/moon toggle saves the choice (`m3mm-theme`). Dark mode is unchanged. `tests/build/muted-text-contrast.test.ts` checks both palettes.
+- **Production secrets set 2026-10-02:** `ANTHROPIC_API_KEY` (chat) and `RESEND_API_KEY` (lead email).
+- **Next action:** verify `m3mm.net` as a Resend sending domain, then set `LEAD_FROM` (e.g. `M3MM <hello@m3mm.net>`). Until then, customer auto-replies from `onboarding@resend.dev` are rejected by Resend; owner notifications still arrive.
+- **Parked:** `PUBLIC_STRIPE_PAYMENT_LINK` is unset, so `/start` gates to the free review with no $100 deposit checkout.
+
+## 2026-10-09 — current upstream integration qualified locally
+
+Combined qualified inquiry candidate bed8c90 with upstream22b9c8d light-mode changes; both TODO histories retained.957tests pass/2existing skips,15-page build and placeholder fence pass,46-file Astro check zero diagnostics,Functions compile passes.10compiled inquiry retry cases and4mobile/desktop keyboard theme/reload cases pass with synthetic receiver and intercepted outbound; sampled375light/1440dark screenshots inspected. Independent integration review clean. Initial missing-dist test failure preserved before successful build/recheck. No installation, real send or deployment. Next: review production prerequisites M02-M06/A30/A33 and exact hosted push approval before main publication; retain nodejs_compat platform setting requirement. Proof: fleet companysite/default-integration-2026-10-09/.

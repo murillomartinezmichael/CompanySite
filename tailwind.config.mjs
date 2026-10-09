@@ -1,28 +1,66 @@
-/** M3MM performance palette — Michael approved lime/blue/black, 2026-09-09. */
+/** M3MM performance palette — Michael approved lime/blue/black, 2026-09-09.
+ *  Light mode added 2026-10-01 at Michael's request. Token roles never change
+ *  between themes (ink = surfaces, bone = text, clay/electric = accents); only
+ *  the values do. Each token is a CSS variable of RGB channels so opacity
+ *  modifiers (`bg-clay/20`) keep working; src/styles/global.css emits them. */
+export const palettes = {
+  dark: {
+    electric: { DEFAULT: '#50BDFF', deep: '#174E78', glow: '#9BDCFF' },
+    ink: {
+      DEFAULT: '#050607',   // --bg-void  · page ground
+      soft:    '#101519',   // --surface  · nav, cards, panels
+      panel:   '#192127',   // --surface-alt · alternate sections
+      outline: '#9AA7B1',   // interactive boundaries; >=3:1 on all surfaces
+      line:    '#354149',   // hairline
+    },
+    bone: {
+      DEFAULT: '#F4F7F8',   // --text-main  · body copy, headings
+      dim:     '#C2CDD3',   // secondary body
+      muted:   '#9AA7B1',   // --text-muted · labels, mono, metadata
+    },
+    clay: {
+      DEFAULT: '#B6FF3B',   // primary action lime; legacy token name
+      deep:    '#567C18',   // deeper tone for shadows/borders
+      glow:    '#D2FF87',   // hover-tint (thin usage only)
+    },
+  },
+  // Neon lime and sky blue fail as text on white, so light mode carries the
+  // same hues at text-safe depth. Pinned by tests/build/muted-text-contrast.
+  light: {
+    electric: { DEFAULT: '#0B5FA0', deep: '#BFE3FA', glow: '#084C82' },
+    ink: {
+      DEFAULT: '#F5F7F8',
+      soft:    '#FFFFFF',
+      panel:   '#E9EEF1',
+      outline: '#6B7884',
+      line:    '#CED7DD',
+    },
+    bone: {
+      DEFAULT: '#0A0E11',
+      dim:     '#2C3840',
+      muted:   '#4A5761',
+    },
+    clay: {
+      DEFAULT: '#3A6600',
+      deep:    '#C9F08A',
+      glow:    '#2F5400',
+    },
+  },
+};
+
+const channels = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16)).join(' ');
+const asVar = (group, shade) => `rgb(var(--${group}${shade === 'DEFAULT' ? '' : '-' + shade}) / <alpha-value>)`;
+/** `{ '--ink': '5 6 7', '--ink-soft': ... }` for one palette — global.css uses it. */
+export const themeVars = (palette) => Object.fromEntries(
+  Object.entries(palette).flatMap(([group, shades]) => Object.entries(shades).map(([shade, hex]) =>
+    [`--${group}${shade === 'DEFAULT' ? '' : '-' + shade}`, channels(hex)])));
+
 export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
   theme: {
     extend: {
-      colors: {
-        electric: { DEFAULT: '#50BDFF', deep: '#174E78', glow: '#9BDCFF' },
-        ink: {
-          DEFAULT: '#050607',   // --bg-void  · page ground
-          soft:    '#101519',   // --surface  · nav, cards, panels
-          panel:   '#192127',   // --surface-alt · alternate sections
-          outline: '#9AA7B1',   // interactive boundaries; >=3:1 on all dark surfaces
-          line:    '#354149',   // hairline (raw hex; rgba variants in raw CSS)
-        },
-        bone: {
-          DEFAULT: '#F4F7F8',   // --text-main  · body copy, headings
-          dim:     '#C2CDD3',   // secondary body
-          muted:   '#9AA7B1',   // --text-muted · labels, mono, metadata
-        },
-        clay: {
-          DEFAULT: '#B6FF3B',   // primary action lime; legacy token name
-          deep:    '#567C18',   // deeper tone for shadows/borders
-          glow:    '#D2FF87',   // hover-tint (thin usage only)
-        },
-      },
+      colors: Object.fromEntries(Object.entries(palettes.dark).map(([group, shades]) =>
+        [group, Object.fromEntries(Object.keys(shades).map((shade) => [shade, asVar(group, shade)]))])),
       fontFamily: {
         // Space Grotesk display, Inter body. Mono resolves to the OS's own
         // ui-monospace (SF Mono / Cascadia / Roboto Mono) — kicker labels are
@@ -47,8 +85,8 @@ export default {
         'display-md':  ['clamp(1.5rem, 3vw, 2.25rem)', { lineHeight: '1.1', letterSpacing: '-0.015em' }],
       },
       boxShadow: {
-        'floating-control': '0 8px 24px rgba(0, 0, 0, 0.45)',
-        'chat-panel': '0 20px 60px rgba(0, 0, 0, 0.55)',
+        'floating-control': '0 8px 24px rgb(0 0 0 / var(--shadow-strength, 0.45))',
+        'chat-panel': '0 20px 60px rgb(0 0 0 / var(--shadow-strength, 0.55))',
         // Hover states get a faint accent glow — 12px cap, ~0.3 alpha. No
         // large ambient glows. `glow-clay` kept as the name for backwards
         // compat with existing component classes.
@@ -76,5 +114,16 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    // Dark is the default. Light applies when the visitor's OS prefers it and
+    // they have not chosen, or when they pick it with the header toggle
+    // (Layout.astro sets data-theme before first paint).
+    ({ addBase }) => addBase({
+      ':root': { ...themeVars(palettes.dark), colorScheme: 'dark' },
+      '@media (prefers-color-scheme: light)': {
+        ':root:not([data-theme="dark"])': { ...themeVars(palettes.light), '--shadow-strength': '0.14', colorScheme: 'light' },
+      },
+      ':root[data-theme="light"]': { ...themeVars(palettes.light), '--shadow-strength': '0.14', colorScheme: 'light' },
+    }),
+  ],
 };
