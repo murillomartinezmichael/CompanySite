@@ -8,6 +8,8 @@ year: 2026
 # video: /videos/big7-scroll.mp4
 # poster: /videos/big7-poster.jpg
 image: ../../assets/big7-live-site.jpg
+conceptCover: ../../assets/previews/big7-concept.webp
+conceptAlt: AI-generated concept of a commercial building under construction; not an actual Big7 jobsite.
 imageAlt: >-
   Cropped view of the Big 7 Construction test-deployment homepage hero — dark panel reading
   "Commercial framing. Residential precision. Every trade, under one

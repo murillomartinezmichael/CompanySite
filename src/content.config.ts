@@ -13,6 +13,8 @@ const caseStudies = defineCollection({
         year: z.number(),
         video: z.string().optional(),
         poster: z.string().optional(),
+        conceptCover: image().optional(),
+        conceptAlt: z.string().optional(),
         // Still-image fallback when no scroll video exists yet — a real
         // screenshot of the shipped site, optimized by astro:assets at build.
         image: image().optional(),
@@ -26,6 +28,9 @@ const caseStudies = defineCollection({
       // LAW 11: a screenshot can never ship without honest alt text.
       .refine((d) => !d.image || Boolean(d.imageAlt), {
         message: 'imageAlt is required whenever image is set',
+      })
+      .refine((d) => !d.conceptCover || Boolean(d.conceptAlt), {
+        message: 'conceptAlt is required whenever conceptCover is set',
       }),
 });
 

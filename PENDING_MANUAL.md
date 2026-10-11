@@ -240,3 +240,15 @@ Source assets: `src/assets/big7-live-site.jpg`, `public/videos/aries-scroll-v2.m
 ## 2026-09-27 — Aries Adobe creative submission gate
 
 - [ ] Confirm paid-ad permission for the Aries name, website imagery and visible claims (including rating/project counts); preview the vertical draft with the selected TikTok placement, enable AI-generated-content disclosure, and approve the campaign budget/submission. Why Michael: rights evidence, Ads Manager and spending are owner-controlled; no ad was submitted. Resumes: final placement-specific corrections and authorized submission of marketing/aries-ad-2026-09-27/aries-tiktok-draft.mp4. The local website replacement also awaits the existing production-release gate.
+
+## INVESTOR-2026-10-10 — $2,000 investor showcase
+
+- [ ] **Review and publication:** Open `investor-preview/dist/index.html`; confirm the intended investor audience, approved product claims and hosting destination. Owner review is needed under root CLAUDE.md Laws 8/9 and the production release gate. Resumes: publish only the reviewed static candidate; no existing site release was performed.
+- [ ] **Funding terms and quote:** Confirm the funding structure (for example loan, equity or sponsorship) and approve a specific compatible purchase quote. The $2,000 target is confirmed; the $1,300/$350/$200/$150 allocation is only a proposed planning envelope. Resumes: accurate investor terms and a quoted use-of-funds breakdown; no funds accepted or spent here.
+- [ ] **Hardware availability:** Bring m3-server and both Raspberry Pis online on their established Tailscale connections. They timed out and appeared offline on October 10; the ThinkPad was accessible. No permission/network configuration was changed. Resumes: read-only current hardware, service and workload evidence. Historical alternate Linux desktop bootability also remains unverified.
+
+Owner: Michael. Execution follow-up: Codex or the named delivery owner. Local artifact and evidence: `investor-preview/README.md` and `investor-preview/evidence/source-receipt.json`. Seven entries now have narrated recordings (six application workflows and a Teardown sample report); other entries remain labeled explainers.
+
+- [ ] **Remaining product-demo environments:** Provide/approve an isolated licensed Cull instance and dedicated demo-only auth/provider environments for AIMA, SiteBot, QuoteMateAI, LeadLeak and CockpitCloud before recording their full workflows. No license/auth bypass, production data or paid provider call was attempted. Teardown's sample report is recorded; CLI execution remains a follow-up. Resume with existing product-native fixture workflows and record only approved sample data. Review the current narration and pacing before investor use.
+
+- [x] Investor funding bar: Michael confirmed $0 raised on October 10. funding.json, both displayed bars and portable package updated: 0% funded, $2,000 remaining.

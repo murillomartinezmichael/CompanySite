@@ -1,5 +1,33 @@
 # CompanySite — TODO
 
+## 2026-10-10 — expanded investor demos and Confluence tracker
+
+- Added real narrated Big7 navigation, CodeReviewHub fictional unsubmitted intake, Cockpit disposable sample-board workflow, and HandoffKit freshly generated fictional-bakery owner-guide walkthrough. Source repos remain read-only. Durable MP4/poster/VTT files in investor-preview/media/demos.
+- Added actual PhotoPicker output from 40 procedural test images: 10 keepers, 27 duplicates, 3 blurry rejects. No private photos or provider calls. Page includes result JSON and selected synthetic image.
+- All43 entries now have a coverage status/next action. Current split: 9 app workflows +2 output walkthroughs +1 existing Aries recording +1 verified output example +6 environment gates +17 pending examples +7 parked/historical. Pending examples are not presented as completed demos.
+- Build/output scan and713tests pass (2skips); investor verification passes12page states,8presenter states and11recordings with4responsive accessibility states. Source/claim review clear after text encoding fix. Confluence child page created and read back: https://m3mm.atlassian.net/wiki/spaces/SD/pages/4096001 . Exact sources: demo-coverage.mjs, demo-manifest.json, output-examples; browser receipts in evidence/actual-demos.
+- Next autonomous example priorities: SiteAudit local synthetic audit and Flowforge product-native offline connector. Six licensed/authenticated environment gates remain in PENDING_MANUAL;7parked entries stay held. Local /investors/ candidate only; no deployment, commit or push.
+
+## 2026-10-10 — investor navigation and shared themes
+
+- Added visible Home, Websites, Roadmap, Investors and Resume navigation plus a light/dark toggle to both integrated investor pages. Investor section links remain a separate row. Theme uses the same `m3mm-theme` preference and palette as CompanySite, with OS fallback and pre-paint initialization.
+- Build passed. Browser verified 375/1440px in both themes with zero axe WCAG violations on the investor page; checked theme carries Investors → Home → Investors and no horizontal overflow. Screenshots: `investor-preview/evidence/artwork/theme-*.png`. Local candidate only; refresh `/investors/` to view.
+
+## 2026-10-10 — investor page integrated (local candidate)
+
+- `/investors/` and `/investors/accessibility/` are included by `npm run build`; header/footer link to Investors. Showcase retains 43 entries, six app recordings plus a sample-report walkthrough, narration and USD0 / USD2000 progress. No investment terms added; search noindex remains pending publication review.
+- Files: `scripts/build-investors.mjs`, package build script, Header/Footer, investor-preview build/style/README and versionable `media/` inputs. Required narration, overview and demo inputs checked independently of ignored preview output. Existing CompanySite CSP is compatible with self-hosted media.
+- Verification: build/output scan passed; 713 tests passed, 2 skipped. `investor-preview/evidence/integration.json` records homepage navigation, both viewports, narration, seven real video playbacks and captions. Font requests resolved after review caught root-relative URLs. Existing broader accessibility findings above remain a separate release issue.
+- Open locally: `npm run preview -- --host 127.0.0.1 --port 4390`, then `/investors/`. Next release action is review/approval followed by normal deployment workflow; no commit/push/deploy in this change. Include `investor-preview/media/` in any eventual commit; generated dist alone is insufficient.
+
+## 2026-10-10 — AI preview covers (local candidate)
+
+- Michael confirmed m3mm.net previews only. Added optimized Aries and Big7 AI concept covers in `src/assets/previews/`, used by case studies and roadmap stage; visible concept disclosures and descriptive alt text. Client repositories, original photographs, and actual video sources remain unchanged.
+- Provenance/prompts: `investor-preview/artwork-prompts.json`. Screenshots: `investor-preview/evidence/artwork/` at 375px and 1440px. Build/output scan passed; 713 tests passed, 2 skipped; read-only review found no actionable issues. Targeted browser checks passed for both covers, both sizes, image decoding and roadmap disclosures.
+- Broader accessibility run flags existing contrast selectors on `/websites`, `/audit`, `/thanks` and a video-caption review item; this is not an all-green release. Inspect `output/design-qa` report before any release.
+- Demo recommendation: prioritize actual narrated workflows for runnable customer-facing products; use output examples for CLI/infrastructure and preserve parked status. Current coverage remains six application recordings plus one sample-report walkthrough. Additional Big7 public-lane walkthrough is a suitable next recording; no new demo was recorded in this artwork change.
+- Next: review the local CompanySite candidate, resolve pre-existing accessibility findings in an authorized follow-up, then apply the normal release gate. No deployment, commit or push performed.
+
 ## 2026-09-18 — quality follow-up: release provider response streams
 
 - PR #27 now points to `3cfcb2cabd37a8eed08586f158390cfce3c610ad`.
@@ -1352,3 +1380,34 @@ used in `src/`.
 - Local Aries video/poster references now use the wide Adobe export; original media retained. Existing unrelated PENDING_MANUAL changes preserved.
 - Verified sampled rendered frames, H.264/AAC streams, vertical 1080x1920 at 30fps, audio peak -12.5 dBFS and destination HTTP 200. Final build status is in the creative README.
 - Next: review the supplied draft, verify paid-ad rights and source claims, then check actual TikTok placement/disclosure. Submission, spending and website production release remain owner gates; no commit/push/deploy.
+
+## INVESTOR-2026-10-10 — investor showcase review candidate
+
+- Prepared `investor-preview/dist/index.html`: $2,000 funding target, 43 portfolio entries, 43 original 18-second captioned explainer videos, six featured entries, searchable full catalog, existing-device context, proposed use of funds and milestone gates.
+- Sources: 45 GitHub repository metadata records; m3mm.net roadmap/sitemap (HTTP 200); fleet manifest; shared Linux roster; direct ThinkPad hardware and Cull/Teardown/AI-console README reads. m3-server and both Pis were offline; their facts remain dated October 8–9. The alternate Linux desktop is not counted as another server.
+- Existing CompanySite Astro routes, release ownership and product implementations preserved. New static candidate is outside the production build; no commit, push or deployment.
+- Validation: ffprobe confirms all 43 videos at 18s/1280x720. Browser verification covers 320/375/768/1440 layouts, accessibility, filtering, empty/reset, repeated disclosure jumps, dialog playback/Escape/focus return, reduced motion, no-JS and direct-file opening. Independent Codex review found one repeated-hash bug, fixed with regression coverage. Evidence: `investor-preview/evidence/`.
+- Exact next action: Michael reviews `investor-preview/dist/index.html`, confirms funding structure and permitted investor audience, then approves publication of this candidate. Get a specific compatible quote and refresh offline-machine facts before presenting them as current. Recorded software demonstrations can supplement the clearly labeled explainers using approved sample data.
+- Parked: production publication, investment terms, hardware purchase, source-repository changes, private/employer data, and existing held media work. Manual gates: `PENDING_MANUAL.md` INVESTOR-2026-10-10.
+
+### INVESTOR-2026-10-10 follow-up — narrated interactive presenter
+
+- Michael explicitly requested AI audio and a presentation-like demo. Added a 12-chapter investor pitch (~448 seconds at 1x), 49-chapter full tour, 147 prerecorded synthetic narration segments, clickable talking points and synchronized highlights, chapter navigation, auto/manual progression, pause/replay, speed/volume, desktop fullscreen and persistent mobile pause.
+- Every product can open a narrated walkthrough. The existing Aries 20-second website recording is labeled as an actual recorded demo; other clips remain captioned explainers. Product links pause narration and open separately; no live forms or transactions are automated.
+- Verified eight presenter accessibility states (320/375/768/1440), natural audio-ended progression, pause/hold, chapter and point selection, rate, no-JS, offline audio, and all 147 encoded audio files. Existing twelve page/state checks still pass. Independent review found main CTA inheriting full-tour mode; fixed and HTTP browser regression passed. Non-silent sample volume verified; subjective voice quality is not listener-rated.
+- Files: investor-preview/{presentation.mjs,presenter.js,presenter.css,render-narration.ps1,verify-presenter.mjs}, plus build/package/server/README integration. dist, ZIP and evidence rebuilt. Voice is installed Microsoft Zira Desktop; no paid service or cloned voice. AI-audio authorization is site-specific, not a global policy edit.
+- Next: refresh the open local page and choose Play narrated presentation; review voice and presenter pacing. Actual product workflow recordings beyond Aries, hardware quote/terms and publication remain separate. No deployment, commit or push.
+
+### INVESTOR-2026-10-10 follow-up — recorded application workflows
+
+- Added six actual local app recordings: CampaignForge sample/edit/review/PNG export; company roadmap filtering; website-service proof/packages; SiteGuide storefront-to-template; SouthernVN written baseline/feedback; Aries V2 interactive 3D concept camera. Added a seventh recording of Teardown's existing fictional sample report, explicitly not CLI execution or a fresh audit.
+- Embedded synthetic narration, visible clicks, caption tracks, step seeking, a software-demo-only playlist and optional details that pause playback. Matching presenter/catalog entries use recordings; others retain labeled overviews. No product source, provider responses, licenses, auth or production state changed.
+- Verification: real UI actions and CampaignForge export asserted during capture; seven recording players tested for audio/video, step seek, detail pause/resume, speed, natural end, replay, focus return, captions and missing-media fallback. Four demo viewport/accessibility states plus existing 12 catalog and 8 presenter states pass automated checks. Source/output hashes, per-step screenshots and export evidence saved. Independent review findings corrected and verified.
+- Files: investor-preview/demo-{runtime.mjs,scripts.json,manifest.json}, record-demos.mjs, render-demo-audio.ps1, verify-demos.mjs; build/presenter/styles/narration/server/package/verifiers/README integrated. Dist and portable ZIP rebuilt. Checkpoint: local candidate only, no deployment/commit/push.
+- Exact next action: refresh the local preview, choose Watch software demos, then use Software demos in the presentation selector. Review voice/pacing; obtain the remaining dedicated demo environments listed in PENDING_MANUAL.md before claiming a full workflow for each backend/licensed product. Parked media stays parked. Teardown CLI execution, investor terms/hardware quote and publication remain open.
+
+### Investor funding progress — October 10
+- Added funding.json/funding.mjs and build/style integration: accessible status bars in hero and funding section, USD2000 target, unknown raised amount explicitly unconfirmed. Confirmed amount calculates percent and remaining balance; caps visual progress at100%.
+- Verified unknown/zero/partial/met/exceeded/invalid states, 375/1440 layouts and automated accessibility; read-only second opinion clean. Updated dist and ZIP, no release. Next: set funding.json raisedUsd to Michael-confirmed funds received, then node build.mjs and refresh package.
+
+- Funding follow-up: Michael confirmed $0 raised; updated funding.json, rebuilt both bars and ZIP. Verified 0% funded, aria-valuenow=0 and $2,000 remaining.
