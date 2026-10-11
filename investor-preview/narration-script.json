@@ -1,0 +1,1158 @@
+[
+  {
+    "id": "welcome",
+    "title": "Back the next chapter.",
+    "label": "The M3MM story",
+    "kind": "intro",
+    "points": [
+      [
+        "What we build",
+        "M3MM brings together client websites, practical software, and reusable delivery tools. This presentation walks through the work, the infrastructure behind it, and a focused funding request."
+      ],
+      [
+        "How to explore",
+        "You can pause me at any time, choose a chapter, or click a step to jump. Recorded software demos show actual workflows, with more detail available beside each step. Other entries have labeled overviews. Each project keeps its current status."
+      ],
+      [
+        "The ask",
+        "The request is two thousand dollars to strengthen development, local artificial intelligence, product testing, and recovery. Let’s start with the portfolio."
+      ]
+    ]
+  },
+  {
+    "id": "companysite",
+    "title": "M3MM headquarters",
+    "label": "Client work",
+    "kind": "product",
+    "status": "Officially released",
+    "url": "https://m3mm.net/",
+    "video": "./assets/companysite.mp4",
+    "poster": "./assets/companysite.jpg",
+    "points": [
+      [
+        "The product",
+        "M3MM headquarters. The company front door connects the release ledger, website services, case studies and roadmap."
+      ],
+      [
+        "Who it serves",
+        "Businesses evaluating a website or software partner. Custom website projects and ongoing service relationships."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Officially released. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "siteguide",
+    "title": "SiteGuide",
+    "label": "Products",
+    "kind": "product",
+    "status": "Testing preview",
+    "url": "https://siteguide-production.up.railway.app",
+    "video": "./assets/siteguide.mp4",
+    "poster": "./assets/siteguide.jpg",
+    "points": [
+      [
+        "The product",
+        "SiteGuide. A template storefront and embeddable AI guide help small businesses launch and explain their websites."
+      ],
+      [
+        "Who it serves",
+        "Small businesses and website owners. Template and bundle sales, with a recurring widget service."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Testing preview. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "ai-manual-assistant",
+    "title": "AIMA",
+    "label": "Products",
+    "kind": "product",
+    "status": "Testing preview",
+    "url": "https://peaceful-kashata-9599e5.netlify.app",
+    "video": "./assets/ai-manual-assistant.mp4",
+    "poster": "./assets/ai-manual-assistant.jpg",
+    "points": [
+      [
+        "The product",
+        "AIMA. Turns uploaded product manuals into a searchable knowledge base with answers that cite their source."
+      ],
+      [
+        "Who it serves",
+        "Teams that repeatedly search technical manuals. Subscription access to document question answering."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Testing preview. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "cull",
+    "title": "Cull",
+    "label": "Products",
+    "kind": "product",
+    "status": "Release gated",
+    "url": "",
+    "video": "./assets/cull.mp4",
+    "poster": "./assets/cull.jpg",
+    "points": [
+      [
+        "The product",
+        "Cull. A local photo-culling application helps photographers review a shoot and select keepers, including RAW workflows."
+      ],
+      [
+        "Who it serves",
+        "Wedding and event photographers. A paid local application; commercial terms still need confirmation."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Release gated. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "campaignforge",
+    "title": "CampaignForge",
+    "label": "Products",
+    "kind": "product",
+    "status": "In development",
+    "url": "",
+    "video": "./assets/campaignforge.mp4",
+    "poster": "./assets/campaignforge.jpg",
+    "points": [
+      [
+        "The product",
+        "CampaignForge. A local-first creative workspace turns marketing briefs into editable campaign assets using a visual editor."
+      ],
+      [
+        "Who it serves",
+        "Small businesses, freelancers and agencies. A subscription creative application; provider and release gates remain."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is In development. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "teardown",
+    "title": "Teardown",
+    "label": "Products",
+    "kind": "product",
+    "status": "In development",
+    "url": "",
+    "video": "./assets/teardown.mp4",
+    "poster": "./assets/teardown.jpg",
+    "points": [
+      [
+        "The product",
+        "Teardown. A white-label command-line website audit creates a self-contained HTML report under an agency’s own branding."
+      ],
+      [
+        "Who it serves",
+        "Web agencies and freelance developers. Agency licensing for branded diagnostic reports; price unconfirmed."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is In development. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "ariesoutdoorliving",
+    "title": "Aries Outdoor Living",
+    "label": "Client work",
+    "kind": "product",
+    "status": "Next official launch",
+    "url": "https://ariesoutdoorliving.com",
+    "video": "./assets/ariesoutdoorliving.mp4",
+    "poster": "./assets/ariesoutdoorliving.jpg",
+    "points": [
+      [
+        "The product",
+        "Aries Outdoor Living. A deployed outdoor-living website presents the company’s work and gives prospective clients a clear inquiry path."
+      ],
+      [
+        "Who it serves",
+        "An outdoor-living contractor and its customers. Evidence of custom-site delivery; the client owns its website."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Next official launch. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "ariesoutdoorliving-v2",
+    "title": "Aries Outdoor Living V2",
+    "label": "Client work",
+    "kind": "product",
+    "status": "Planned release",
+    "url": "",
+    "video": "./assets/ariesoutdoorliving-v2.mp4",
+    "poster": "./assets/ariesoutdoorliving-v2.jpg",
+    "points": [
+      [
+        "The product",
+        "Aries Outdoor Living V2. An Astro rebuild develops the client’s next website experience, with photography and inquiry flows."
+      ],
+      [
+        "Who it serves",
+        "The existing outdoor-living client. Client delivery work; this is a rebuild, not a second customer."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Planned release. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "big7construction",
+    "title": "Big7 Construction",
+    "label": "Client work",
+    "kind": "product",
+    "status": "Awaiting assets",
+    "url": "",
+    "video": "./assets/big7construction.mp4",
+    "poster": "./assets/big7construction.jpg",
+    "points": [
+      [
+        "The product",
+        "Big7 Construction. A construction-company website presents services and a path to an inquiry. Its official release awaits jobsite photography."
+      ],
+      [
+        "Who it serves",
+        "A construction business and its customers. Custom website delivery with a clear client-asset gate."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Awaiting assets. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "m3websites",
+    "title": "M3MM Websites",
+    "label": "Client work",
+    "kind": "product",
+    "status": "Testing preview",
+    "url": "https://m3mm.net/websites",
+    "video": "./assets/m3websites.mp4",
+    "poster": "./assets/m3websites.jpg",
+    "points": [
+      [
+        "The product",
+        "M3MM Websites. A dedicated website-services experience explains packages, presents client work and collects project inquiries."
+      ],
+      [
+        "Who it serves",
+        "Businesses seeking a custom website. Custom builds and support, within the company’s services lane."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Testing preview. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "codereviewhub",
+    "title": "CodeReviewHub",
+    "label": "Client work",
+    "kind": "product",
+    "status": "Release unconfirmed",
+    "url": "",
+    "video": "./assets/codereviewhub.mp4",
+    "poster": "./assets/codereviewhub.jpg",
+    "points": [
+      [
+        "The product",
+        "CodeReviewHub. A code-review intake site provides a starting point for website, software and firmware review requests."
+      ],
+      [
+        "Who it serves",
+        "Businesses and developers seeking technical review. A diagnostic entry point to scoped paid engineering work."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Release unconfirmed. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "leadleak",
+    "title": "LeadLeak",
+    "label": "Products",
+    "kind": "product",
+    "status": "Release unconfirmed",
+    "url": "",
+    "video": "./assets/leadleak.mp4",
+    "poster": "./assets/leadleak.jpg",
+    "points": [
+      [
+        "The product",
+        "LeadLeak. A web-based audit product uses the SiteAudit engine to identify website issues and produce graded reports."
+      ],
+      [
+        "Who it serves",
+        "Businesses and agencies investigating missed website inquiries. Paid audits or subscription reporting, subject to validation."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Release unconfirmed. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "sitebot",
+    "title": "SiteBot",
+    "label": "Products",
+    "kind": "product",
+    "status": "Release unconfirmed",
+    "url": "",
+    "video": "./assets/sitebot.mp4",
+    "poster": "./assets/sitebot.jpg",
+    "points": [
+      [
+        "The product",
+        "SiteBot. A multi-tenant AI chat-widget service gives websites a configurable conversational interface."
+      ],
+      [
+        "Who it serves",
+        "Small businesses operating customer-facing websites. Recurring per-site widget service; overlaps with the SiteGuide lane."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Release unconfirmed. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "quotemateai",
+    "title": "QuoteMateAI",
+    "label": "Products",
+    "kind": "product",
+    "status": "Release unconfirmed",
+    "url": "",
+    "video": "./assets/quotemateai.mp4",
+    "poster": "./assets/quotemateai.jpg",
+    "points": [
+      [
+        "The product",
+        "QuoteMateAI. An AI-assisted quoting project turns a service brief into a structured estimate for human review."
+      ],
+      [
+        "Who it serves",
+        "Service businesses preparing customer quotes. A quoting subscription or an upsell to service customers."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Release unconfirmed. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "southernvn-adaptive",
+    "title": "SouthernVN Adaptive",
+    "label": "Products",
+    "kind": "product",
+    "status": "In development",
+    "url": "",
+    "video": "./assets/southernvn-adaptive.mp4",
+    "poster": "./assets/southernvn-adaptive.jpg",
+    "points": [
+      [
+        "The product",
+        "SouthernVN Adaptive. A local-first Southern Vietnamese learning app adapts practice from review outcomes."
+      ],
+      [
+        "Who it serves",
+        "Southern Vietnamese learners. A future learning subscription; content and release validation remain."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is In development. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "cockpitcloud",
+    "title": "CockpitCloud",
+    "label": "Products",
+    "kind": "product",
+    "status": "Release unconfirmed",
+    "url": "",
+    "video": "./assets/cockpitcloud.mp4",
+    "poster": "./assets/cockpitcloud.jpg",
+    "points": [
+      [
+        "The product",
+        "CockpitCloud. A hosted, multi-user version of the project Cockpit brings work tracking and repository context into a shared view."
+      ],
+      [
+        "Who it serves",
+        "Small software teams and independent operators. Hosted work-management subscriptions, subject to validation."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Release unconfirmed. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "anime-console",
+    "title": "AI companion console",
+    "label": "Tools",
+    "kind": "product",
+    "status": "Internal prototype",
+    "url": "",
+    "video": "./assets/anime-console.mp4",
+    "poster": "./assets/anime-console.jpg",
+    "points": [
+      [
+        "The product",
+        "AI companion console. A browser interface pairs an animated character with local AI chat and separately controlled agent backends."
+      ],
+      [
+        "Who it serves",
+        "The internal development team. An internal interaction prototype; no external sales claim."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Internal prototype. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "flowforge",
+    "title": "Flowforge",
+    "label": "Tools",
+    "kind": "product",
+    "status": "In development",
+    "url": "",
+    "video": "./assets/flowforge.mp4",
+    "poster": "./assets/flowforge.jpg",
+    "points": [
+      [
+        "The product",
+        "Flowforge. Reusable connectors and defined workflows form an automation delivery engine. A legacy editor extension is retained."
+      ],
+      [
+        "Who it serves",
+        "The delivery team and future automation clients. Reusable automation delivery and support engagements."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is In development. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "siteaudit",
+    "title": "SiteAudit",
+    "label": "Tools",
+    "kind": "product",
+    "status": "In development",
+    "url": "",
+    "video": "./assets/siteaudit.mp4",
+    "poster": "./assets/siteaudit.jpg",
+    "points": [
+      [
+        "The product",
+        "SiteAudit. A website-audit CLI produces scorecards and review material, and supplies the engine used by related audit products."
+      ],
+      [
+        "Who it serves",
+        "The website-services team and agencies. Supports qualified leads and audit delivery; count engine reuse once."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is In development. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "photopicker",
+    "title": "PhotoPicker",
+    "label": "Tools",
+    "kind": "product",
+    "status": "Internal utility",
+    "url": "",
+    "video": "./assets/photopicker.mp4",
+    "poster": "./assets/photopicker.jpg",
+    "points": [
+      [
+        "The product",
+        "PhotoPicker. A reusable photo-selection engine scores and narrows image sets using configurable profiles."
+      ],
+      [
+        "Who it serves",
+        "The delivery team and photography applications. Reduces image-selection work and supports the Cull product."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Internal utility. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "handoffkit",
+    "title": "HandoffKit",
+    "label": "Tools",
+    "kind": "product",
+    "status": "Release unconfirmed",
+    "url": "",
+    "video": "./assets/handoffkit.mp4",
+    "poster": "./assets/handoffkit.jpg",
+    "points": [
+      [
+        "The product",
+        "HandoffKit. Generates branded, non-technical owner guides for delivered websites."
+      ],
+      [
+        "Who it serves",
+        "Client delivery teams and website owners. Reduces handoff effort and supports ongoing client service."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Release unconfirmed. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "clipforge",
+    "title": "ClipForge",
+    "label": "Tools",
+    "kind": "product",
+    "status": "Release unconfirmed",
+    "url": "",
+    "video": "./assets/clipforge.mp4",
+    "poster": "./assets/clipforge.jpg",
+    "points": [
+      [
+        "The product",
+        "ClipForge. A URL-to-video CLI creates a vertical MP4 draft with a timestamped script for a human voiceover."
+      ],
+      [
+        "Who it serves",
+        "The delivery team and social-content operators. Creates sales collateral; broader production remains gated."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Release unconfirmed. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "hub",
+    "title": "Hub",
+    "label": "Tools",
+    "kind": "product",
+    "status": "In development",
+    "url": "",
+    "video": "./assets/hub.mp4",
+    "poster": "./assets/hub.jpg",
+    "points": [
+      [
+        "The product",
+        "Hub. A local command center combines project state, data panels and next actions."
+      ],
+      [
+        "Who it serves",
+        "The internal development team. Operational support rather than a separate proven revenue stream."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is In development. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "cockpit",
+    "title": "Cockpit",
+    "label": "Tools",
+    "kind": "product",
+    "status": "Internal utility",
+    "url": "",
+    "video": "./assets/cockpit.mp4",
+    "poster": "./assets/cockpit.jpg",
+    "points": [
+      [
+        "The product",
+        "Cockpit. An offline project board and work log track tasks and delivery evidence in the browser."
+      ],
+      [
+        "Who it serves",
+        "The internal development team. Helps coordinate delivery with low operating overhead."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Internal utility. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "paymentbackend",
+    "title": "PaymentBackend",
+    "label": "Tools",
+    "kind": "product",
+    "status": "Parked / shared-service candidate",
+    "url": "",
+    "video": "./assets/paymentbackend.mp4",
+    "poster": "./assets/paymentbackend.jpg",
+    "points": [
+      [
+        "The product",
+        "PaymentBackend. Payment-service scaffolding explores shared billing and entitlement responsibilities."
+      ],
+      [
+        "Who it serves",
+        "Future internal product integrations. No standalone revenue claim; adoption depends on real shared needs."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Parked / shared-service candidate. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "contracts",
+    "title": "Contracts",
+    "label": "Tools",
+    "kind": "product",
+    "status": "Internal utility",
+    "url": "",
+    "video": "./assets/contracts.mp4",
+    "poster": "./assets/contracts.jpg",
+    "points": [
+      [
+        "The product",
+        "Contracts. A repository of reusable contracts supports consistency across the portfolio. Repository descriptions differ on its technical and service-template scope."
+      ],
+      [
+        "Who it serves",
+        "The internal delivery team. Supporting material; scope needs reconciliation before a detailed investor claim."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Internal utility. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "packages",
+    "title": "Shared packages",
+    "label": "Tools",
+    "kind": "product",
+    "status": "Internal utility",
+    "url": "",
+    "video": "./assets/packages.mp4",
+    "poster": "./assets/packages.jpg",
+    "points": [
+      [
+        "The product",
+        "Shared packages. Reusable packages support multiple projects, including common conduct and review-widget functionality."
+      ],
+      [
+        "Who it serves",
+        "The internal engineering team. Avoids repeating implementation across products."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Internal utility. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "fleet",
+    "title": "Fleet operating system",
+    "label": "Tools",
+    "kind": "product",
+    "status": "Internal utility",
+    "url": "",
+    "video": "./assets/fleet.mp4",
+    "poster": "./assets/fleet.jpg",
+    "points": [
+      [
+        "The product",
+        "Fleet operating system. Shared project standards, inventories and scripts coordinate work across the portfolio."
+      ],
+      [
+        "Who it serves",
+        "The internal engineering team. Delivery infrastructure, not a separately priced customer product."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Internal utility. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "linux-fleet",
+    "title": "Linux product workspace",
+    "label": "Tools",
+    "kind": "product",
+    "status": "Internal utility",
+    "url": "",
+    "video": "./assets/linux-fleet.mp4",
+    "poster": "./assets/linux-fleet.jpg",
+    "points": [
+      [
+        "The product",
+        "Linux product workspace. The Linux department’s governance repository organizes its product development work."
+      ],
+      [
+        "Who it serves",
+        "The Linux product-development team. Enables consistent delivery across environments."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Internal utility. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "m3mm-sync",
+    "title": "Cross-machine coordination",
+    "label": "Tools",
+    "kind": "product",
+    "status": "Internal utility",
+    "url": "",
+    "video": "./assets/m3mm-sync.mp4",
+    "poster": "./assets/m3mm-sync.jpg",
+    "points": [
+      [
+        "The product",
+        "Cross-machine coordination. A shared Git repository carries project ownership, decisions and status between machines."
+      ],
+      [
+        "Who it serves",
+        "The internal engineering team. Keeps delivery and product work coordinated."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Internal utility. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "kit",
+    "title": "Linux environment kit",
+    "label": "Tools",
+    "kind": "product",
+    "status": "Internal utility",
+    "url": "",
+    "video": "./assets/kit.mp4",
+    "poster": "./assets/kit.jpg",
+    "points": [
+      [
+        "The product",
+        "Linux environment kit. Repeatable environment setup separates core tools, desktop setup and hardware-specific work."
+      ],
+      [
+        "Who it serves",
+        "The internal engineering team. Reduces rebuild effort and machine-setup drift."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Internal utility. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "llm-setup",
+    "title": "Local AI environment",
+    "label": "Tools",
+    "kind": "product",
+    "status": "Internal utility",
+    "url": "",
+    "video": "./assets/llm-setup.mp4",
+    "poster": "./assets/llm-setup.jpg",
+    "points": [
+      [
+        "The product",
+        "Local AI environment. Setup and benchmark material supports the local AI stack on m3-server."
+      ],
+      [
+        "Who it serves",
+        "The internal engineering team. Supports local processing; cost savings require measurement."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Internal utility. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "mcplens",
+    "title": "McpLens",
+    "label": "Experiments",
+    "kind": "product",
+    "status": "Release unconfirmed",
+    "url": "",
+    "video": "./assets/mcplens.mp4",
+    "poster": "./assets/mcplens.jpg",
+    "points": [
+      [
+        "The product",
+        "McpLens. A .NET observability library instruments MCP tool, prompt and resource calls using OpenTelemetry."
+      ],
+      [
+        "Who it serves",
+        "Developers building MCP integrations. Developer-tool validation and engineering portfolio evidence."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Release unconfirmed. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "learnmicroservices",
+    "title": "LearnMicroservices",
+    "label": "Experiments",
+    "kind": "product",
+    "status": "In development",
+    "url": "",
+    "video": "./assets/learnmicroservices.mp4",
+    "poster": "./assets/learnmicroservices.jpg",
+    "points": [
+      [
+        "The product",
+        "LearnMicroservices. A .NET learning and reference project explores a small service-based application."
+      ],
+      [
+        "Who it serves",
+        "Developers learning distributed-system tradeoffs. Engineering research and learning; no sales claim."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is In development. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "resumesite",
+    "title": "Engineering portfolio",
+    "label": "Experiments",
+    "kind": "product",
+    "status": "Testing preview",
+    "url": "https://resumesite.murillomartinezmichael.workers.dev",
+    "video": "./assets/resumesite.mp4",
+    "poster": "./assets/resumesite.jpg",
+    "points": [
+      [
+        "The product",
+        "Engineering portfolio. A career-facing site presents engineering experience, project work and a downloadable resume."
+      ],
+      [
+        "Who it serves",
+        "Recruiters and engineering teams. Professional credibility; excluded from product-revenue assumptions."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Testing preview. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "games",
+    "title": "Game prototypes",
+    "label": "Experiments",
+    "kind": "product",
+    "status": "R&D",
+    "url": "",
+    "video": "./assets/games.mp4",
+    "poster": "./assets/games.jpg",
+    "points": [
+      [
+        "The product",
+        "Game prototypes. A collection of game development work includes the existing Ironwake Unity project."
+      ],
+      [
+        "Who it serves",
+        "Future players and the development team. Research and prototypes; no funded launch or revenue claim."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is R&D. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "viralclips",
+    "title": "ViralClips",
+    "label": "Experiments",
+    "kind": "product",
+    "status": "Media research",
+    "url": "",
+    "video": "./assets/viralclips.mp4",
+    "poster": "./assets/viralclips.jpg",
+    "points": [
+      [
+        "The product",
+        "ViralClips. Editing profiles and production recipes support distinct short-form video styles."
+      ],
+      [
+        "Who it serves",
+        "The internal creative team. Creative capability; no automated publishing or income claim."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Media research. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "animereelmachine",
+    "title": "AnimeReelMachine",
+    "label": "Experiments",
+    "kind": "product",
+    "status": "Parked",
+    "url": "",
+    "video": "./assets/animereelmachine.mp4",
+    "poster": "./assets/animereelmachine.jpg",
+    "points": [
+      [
+        "The product",
+        "AnimeReelMachine. A historical short-form media pipeline experiment."
+      ],
+      [
+        "Who it serves",
+        "Historical media research. Parked; rights review and explicit reactivation would precede use."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Parked. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "twitchclipcompiler",
+    "title": "TwitchClipCompiler",
+    "label": "Experiments",
+    "kind": "product",
+    "status": "Parked",
+    "url": "",
+    "video": "./assets/twitchclipcompiler.mp4",
+    "poster": "./assets/twitchclipcompiler.jpg",
+    "points": [
+      [
+        "The product",
+        "TwitchClipCompiler. A historical stream-clip discovery and compilation experiment."
+      ],
+      [
+        "Who it serves",
+        "Historical media research. Parked; third-party footage is not included in this showcase."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Parked. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "youtubefinancebot",
+    "title": "YouTubeFinanceBot",
+    "label": "Experiments",
+    "kind": "product",
+    "status": "Parked",
+    "url": "",
+    "video": "./assets/youtubefinancebot.mp4",
+    "poster": "./assets/youtubefinancebot.jpg",
+    "points": [
+      [
+        "The product",
+        "YouTubeFinanceBot. A historical finance-content automation experiment."
+      ],
+      [
+        "Who it serves",
+        "Historical media research. Parked; no current operation, financial advice or revenue claim."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Parked. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "truecrimeshorts",
+    "title": "TrueCrimeShorts",
+    "label": "Experiments",
+    "kind": "product",
+    "status": "Parked",
+    "url": "",
+    "video": "./assets/truecrimeshorts.mp4",
+    "poster": "./assets/truecrimeshorts.jpg",
+    "points": [
+      [
+        "The product",
+        "TrueCrimeShorts. A historical short-form storytelling pipeline experiment."
+      ],
+      [
+        "Who it serves",
+        "Historical media research. Parked; no current publishing or audience claim."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Parked. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "tiktok-machine",
+    "title": "Short-form workflow",
+    "label": "Experiments",
+    "kind": "product",
+    "status": "Parked",
+    "url": "",
+    "video": "./assets/tiktok-machine.mp4",
+    "poster": "./assets/tiktok-machine.jpg",
+    "points": [
+      [
+        "The product",
+        "Short-form workflow. A local orchestration project organizes ClipForge drafts and human review before manual posting."
+      ],
+      [
+        "Who it serves",
+        "Historical creative-production work. Parked; presentation does not reactivate production."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Parked. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "cleaning",
+    "title": "Cleaning website",
+    "label": "Client work",
+    "kind": "product",
+    "status": "Archived",
+    "url": "",
+    "video": "./assets/cleaning.mp4",
+    "poster": "./assets/cleaning.jpg",
+    "points": [
+      [
+        "The product",
+        "Cleaning website. An archived repository describes a website for a family-owned cleaning company."
+      ],
+      [
+        "Who it serves",
+        "A cleaning business. Historical website work; deployment and client acceptance are unverified."
+      ],
+      [
+        "Where it stands",
+        "The recorded status is Archived. This is a product overview, not a live demonstration. Commercial positioning is proposed; it does not establish customer demand, current revenue, or investment returns."
+      ]
+    ]
+  },
+  {
+    "id": "client-proof",
+    "title": "A real client-site walkthrough.",
+    "label": "Recorded demonstration",
+    "kind": "product",
+    "status": "Next official launch",
+    "video": "./assets/aries-recorded-demo.mp4",
+    "poster": "./assets/aries-recorded-demo.webp",
+    "url": "https://ariesoutdoorliving.com",
+    "points": [
+      [
+        "See the delivered work",
+        "This is an existing twenty-second recording of the Aries Outdoor Living website. Unlike the captioned portfolio explainers, this clip shows the actual website experience."
+      ],
+      [
+        "The business role",
+        "The client website presents outdoor-living work and a path to an inquiry. It demonstrates custom-site delivery. The client owns its website; it is not an additional software subscription product."
+      ],
+      [
+        "Explore together",
+        "The company roadmap lists Aries as the next official launch. Use Open product to inspect the public website in a separate tab. This recording does not prove current lead delivery or customer conversion."
+      ]
+    ]
+  },
+  {
+    "id": "infrastructure-tour",
+    "title": "The foundation already exists.",
+    "label": "Development infrastructure",
+    "kind": "hardware",
+    "points": [
+      [
+        "Current capacity",
+        "The October ninth inventory records the existing server with a two-core Pentium processor, about sixteen gigabytes of memory, and an RTX thirty fifty graphics card with six gigabytes of video memory. Those resources support local models, application hosting, and background work."
+      ],
+      [
+        "Supporting equipment",
+        "A Windows workstation handles delivery and creative work. A ThinkPad provides portable Linux development. Two Raspberry Pi three boards support monitoring and network tooling. The historical Linux desktop shares the server chassis, so it is not counted as a separate server."
+      ],
+      [
+        "What is verified",
+        "The ThinkPad connection was verified on October tenth. The server and both Pis were offline during that check, so their hardware details remain dated. Hardware upgrades must be paired with power checks, backups, and a successful restore."
+      ]
+    ]
+  },
+  {
+    "id": "ask",
+    "title": "A focused $2,000 ask.",
+    "label": "Proposed funding plan",
+    "kind": "budget",
+    "points": [
+      [
+        "Compute: $1,300",
+        "Michael has confirmed a two thousand dollar funding target. A proposed thirteen hundred dollar allowance covers the server platform and compute. Specific components will be selected after measuring representative workloads and checking compatibility."
+      ],
+      [
+        "Recovery: $350 · Power: $200",
+        "The proposal reserves three hundred fifty dollars for storage and recovery, and two hundred dollars for power protection. These are planning allowances, not vendor quotes or approved purchases."
+      ],
+      [
+        "Contingency: $150",
+        "The remaining one hundred fifty dollars covers tax, shipping, and contingency. This brings the plan to exactly two thousand dollars. Ongoing operating costs and the funding structure still need agreement. No repayment or investment return is promised here."
+      ]
+    ]
+  },
+  {
+    "id": "outcomes",
+    "title": "Measure what the funding changes.",
+    "label": "Acceptance milestones",
+    "kind": "outcomes",
+    "points": [
+      [
+        "Measure first",
+        "Before buying, record the time and resource use of a representative local-model task, product build, and background job. Compare reuse, upgraded hardware, and rented compute before choosing the final quote."
+      ],
+      [
+        "Prove recovery",
+        "After installation, verify hardware operation, thermals, protected power, and an isolated backup restore. Move critical workloads only after the acceptance checks pass."
+      ],
+      [
+        "Show the difference",
+        "Repeat the same workloads and present before-and-after evidence. Pair the results with recorded product demonstrations. The proposal is for measured capacity and reliability, not an invented performance multiplier."
+      ]
+    ]
+  },
+  {
+    "id": "discussion",
+    "title": "Let’s discuss the next step.",
+    "label": "Investor discussion",
+    "kind": "closing",
+    "points": [
+      [
+        "The work",
+        "You have seen the range of client work, product development, and supporting tools. The full catalog remains available, including testing, planned, and parked entries. Repository count is not revenue."
+      ],
+      [
+        "The decision",
+        "The next decisions are the final hardware quote, the investor audience, and mutually agreed funding terms. That could involve different structures, but no structure or ownership arrangement is represented as agreed today."
+      ],
+      [
+        "Your questions",
+        "Pause here for questions, revisit any chapter, or switch to the full portfolio tour. The contact link opens an email draft to Michael. This site does not accept payments or send a message automatically."
+      ]
+    ]
+  }
+]

@@ -1,0 +1,13 @@
+WEBVTT
+
+1
+00:00:00.995 --> 00:00:10.603
+Cockpit opens in a fresh browser with an empty board. This is the actual local application, without private tasks or existing work logs.
+
+2
+00:00:11.810 --> 00:00:20.033
+I create a fictional website review task and give it a concrete next action. Saving places that task on the real board.
+
+3
+00:00:21.236 --> 00:00:31.794
+I search for the sample website task. The board filters the visible cards, showing how a small team can find the next piece of work without an account or a server.

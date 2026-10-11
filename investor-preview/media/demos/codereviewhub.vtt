@@ -1,0 +1,13 @@
+WEBVTT
+
+1
+00:00:00.956 --> 00:00:10.344
+Code Review Hub is the actual intake site for technical review requests. The page explains the offer before asking the visitor what they have built.
+
+2
+00:00:11.550 --> 00:00:21.713
+I move into the request form and enter a fictional owner and sample project. The inputs are real controls. This does not use a customer record.
+
+3
+00:00:22.912 --> 00:00:35.749
+Next I describe the navigation and accessibility review in the message field. I stop before sending. This shows how a prospect prepares a request, not proof that the backend delivered it.

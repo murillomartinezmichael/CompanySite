@@ -1,0 +1,13 @@
+{
+  "tool": "Built-in image_gen",
+  "date": "2026-10-10",
+  "scope": "m3mm.net preview covers only; AI concepts, not client work photography",
+  "aries": {
+    "prompt": "Use case: ads-marketing. Create a premium photorealistic architectural CONCEPT hero image for an outdoor living contractor's website, Aries Outdoor Living, Metro Atlanta. Wide cinematic landscape 16:9. A beautifully crafted cedar pergola over a warm composite deck adjacent to a tasteful cream contemporary suburban home, refined black railings, precise believable joinery, restrained outdoor lounge furniture, stone walkway, mature leafy Georgia trees. Late afternoon natural sunlight, warm wood contrasted with deep forest green and soft ivory. Architectural magazine quality, grounded and inviting rather than extravagant. Whole scene coherent and constructible, no warped rails, floating stairs or impossible supports. Main architecture center-right, quieter darker garden on left suitable for HTML headline overlay. No people, no cars, no logos, no letters, no watermarks, no text. This is imagined design inspiration, not documentation of an actual completed client job.",
+    "asset": "src/assets/previews/aries-concept.webp"
+  },
+  "big7": {
+    "prompt": "Use case: ads-marketing. Generate a premium architectural CONCEPT cover for Big 7 Construction's portfolio card on the M3MM company website. Landscape 16:9. Photorealistic editorial architectural visualization of a modern two-story commercial building under expert construction in Metro Atlanta, clean structural steel and timber framing, concrete foundation, brick and charcoal metal exterior partially complete, one finished architectural portion and one orderly framing portion. Confident clean geometry, credible structural details, no chaotic debris. Ground-level three-quarter view, building center-right, warm angled morning light, slate sky, muted brick terracotta and steel blue palette, mature Georgia tree line. Visually striking, disciplined craftsmanship, appropriate to commercial and residential general construction, not a luxury mansion or skyscraper. Calm left third suitable for a heading overlay. No people, no visible company names, no logos, no text, no watermarks. Imagined construction concept, not a real Big7 jobsite or proof of completed work.",
+    "asset": "src/assets/previews/big7-concept.webp"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "sample": "Synthetic geometric landscapes; not client photographs",
+  "inputCount": 40,
+  "keepers": [
+    "IMG_4031.png",
+    "IMG_4036.png",
+    "IMG_4019.png",
+    "IMG_4008.png",
+    "IMG_4027.png",
+    "IMG_4034.png",
+    "IMG_4012.png",
+    "IMG_4021.png",
+    "IMG_4007.png",
+    "IMG_4002.png"
+  ],
+  "rejectCounts": {
+    "duplicates": 27,
+    "blurry": 3
+  },
+  "method": "Actual offline PhotoPicker cull; no AI provider or model used"
+}

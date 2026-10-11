@@ -1,0 +1,13 @@
+WEBVTT
+
+1
+00:00:00.918 --> 00:00:14.210
+Teardown produces a self-contained branded audit report. This is the product's existing sample file, using a fictional agency. The scores and date belong to that sample, not a new scan.
+
+2
+00:00:15.419 --> 00:00:25.387
+The report starts with an overall grade and the highest-priority findings. The format gives an agency a concrete starting point for a client conversation.
+
+3
+00:00:26.601 --> 00:00:39.008
+Scrolling down reveals the ranked fix list and practical next actions. This walkthrough shows the real report artifact. A separate end-to-end recording of the command-line audit is still needed.

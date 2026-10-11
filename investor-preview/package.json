@@ -1,0 +1,17 @@
+{
+  "name": "m3mm-investor-preview",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "start": "node serve.mjs",
+    "videos": "python render-videos.py",
+    "verify": "node verify.mjs",
+    "narration": "powershell -NoProfile -File render-narration.ps1",
+    "verify:presenter": "node verify-presenter.mjs",
+    "demos:audio": "powershell -NoProfile -File render-demo-audio.ps1",
+    "demos:record": "node record-demos.mjs",
+    "verify:demos": "node verify-demos.mjs",
+    "verify:http": "node verify.mjs --http-only && node verify-presenter.mjs --http-only && node verify-demos.mjs"
+  }
+}
