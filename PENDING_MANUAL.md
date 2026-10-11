@@ -37,6 +37,56 @@
   at startup identically for this branch and current main; no regression or
   required flag change is established. Verify the Pages preview's static and
   API OPTIONS responses before releasing middleware that covers static requests.
+## 2026-09-18 — CompanySite production decision
+
+- [ ] Review [PR #27](https://github.com/murillomartinezmichael/CompanySite/pull/27) at commit `3cfcb2cabd37a8eed08586f158390cfce3c610ad`
+  and approve this CompanySite release. The response-cleanup follow-up passes
+  748 local tests, all six checks and browser verification on this exact head.
+  [Updated preview](https://a5cf78a2.m3-companysite.pages.dev) passes nine GET/OPTIONS checks.
+  **Why Michael:** production publication is an owner decision under root
+  `CLAUDE.md` (When to decide vs. ask); the broad fleet request does not choose
+  a production release for every repository. **Resumes:** merge this reviewed
+  candidate and verify the corresponding production deployment.
+- [ ] Approve and verify one synthetic inquiry through a real configured operator
+  channel, including retained inquiry details, acknowledgment and roadmap triage.
+  **Why Michael:** this sends outward and needs account-side evidence. Local
+  tests intercept every provider request; a 2xx alone is not proof of final
+  delivery or downstream durability. **Resumes:** live intake acceptance check.
+- Browser failure/retained-input/retry verification is now complete in Linux CI;
+  all four mobile/desktop cases and screenshots were reviewed. Preview startup
+  also passes. These supersede the browser/startup uncertainty below, not the
+  real-delivery or production decision. Actual chat generation/disconnect and
+  production configuration parity remain unverified; no billing savings claimed.
+
+## 2026-09-17 - Pages compatibility and API release
+
+- [ ] Confirm the deployed Pages compatibility date/flags support the installed
+  Anthropic SDK's Node imports, then review the combined local API changes
+  before release. Local Wrangler Functions builds compile but warn about
+  `node:fs`/`node:path` without `nodejs_compat`; the same warning reproduces with
+  HEAD's unchanged handlers. **Why Michael:** actual Pages configuration and
+  production release remain account/owner decisions. This is not proof of a live
+  outage. Also verify disconnect propagation in the actual release environment
+  before claiming chat cancellation saves provider spend; offline tests prove
+  SDK signal propagation only. **Resumes:** configuration-aware runtime
+  verification and release.
+- [ ] Copy the prepared entries in `COCKPIT_QUEUE.md` into the actual
+  Cockpit Work Log. Only the local draft is recorded here.
+- [ ] Before releasing the triage correction, verify the actual n8n/Cockpit
+  workflows retain score-0 roadmap requests and do not send separate site-review
+  or deadline emails for `book:roadmap-subscribe`. Local payloads are tested;
+  provider-side workflow behavior is unverified. **Why Michael:** authenticated
+  workflow configuration and release approval. **Resumes:** end-to-end release
+  verification without inventing a roadmap update service or cadence.
+- [ ] Complete the delivery-failure release checks: confirm at least one real
+  operator channel is configured and actually retains/delivers accepted inquiries.
+  On a local preview with outbound requests intercepted, force `/api/lead` to
+  return `503 delivery_unavailable`; verify the 375px/desktop form preserves
+  entered fields, shows its manual-email fallback and succeeds on a deliberate
+  mocked retry. **Why Michael:** provider-account/release verification; automated
+  browser QA was blocked by three fresh-profile Chrome startup failures.
+  **Resumes:** browser-verified combined intake release. Backend evidence:
+  `TODO.md` and `%TEMP%/companysite-delivery-kO91yT/verification-*.log`.
 
 ## 2026-09-12 — payment fence release checks
 
@@ -69,6 +119,10 @@ URL; this pass intentionally makes no smaller or recolored derivative.
   gone. What is still open is whether you want to promise anything at all
   (a cadence, "email on every release", a format). If yes, give the wording and
   it goes in; if no, the page is already correct as-is and this can be closed.
+  **2026-09-17 local follow-up:** the confirmation email now follows the same
+  no-schedule acknowledgment. Native topic selections are preserved, and both
+  hidden/default notes now record an update request without inventing a cadence.
+  This fixes capture/receipt behavior; it does not decide the update service.
 - [ ] **Review the local structure commit as part of the combined release.**
   See `docs/STRUCTURE_AUDIT_2026-09-09.md` for the 14-page map, implemented fixes,
   remaining style inventory and exact verification. No production writes or
@@ -214,3 +268,24 @@ Aries walkthrough contains rating/project-count text. This pass did not invent,
 edit or independently verify those embedded statements. Michael must confirm the
 media is suitable for public proof or supply an approved replacement before publishing.
 Source assets: `src/assets/big7-live-site.jpg`, `public/videos/aries-scroll-v2.mp4`.
+
+
+## 2026-09-27 historical backup gate
+
+- [ ] Review GitHub secret-protection rejection for historical commit 332e797 (tests/build/start-checkout.test.ts:124–126; synthetic Stripe fixtures). No bypass performed and no historical tag published. Owner-approved remediation unblocks archival; production remains outside sync scope.
+
+## 2026-09-27 — Aries Adobe creative submission gate
+
+- [ ] Confirm paid-ad permission for the Aries name, website imagery and visible claims (including rating/project counts); preview the vertical draft with the selected TikTok placement, enable AI-generated-content disclosure, and approve the campaign budget/submission. Why Michael: rights evidence, Ads Manager and spending are owner-controlled; no ad was submitted. Resumes: final placement-specific corrections and authorized submission of marketing/aries-ad-2026-09-27/aries-tiktok-draft.mp4. The local website replacement also awaits the existing production-release gate.
+
+## INVESTOR-2026-10-10 — $2,000 investor showcase
+
+- [ ] **Review and publication:** Open `investor-preview/dist/index.html`; confirm the intended investor audience, approved product claims and hosting destination. Owner review is needed under root CLAUDE.md Laws 8/9 and the production release gate. Resumes: publish only the reviewed static candidate; no existing site release was performed.
+- [ ] **Funding terms and quote:** Confirm the funding structure (for example loan, equity or sponsorship) and approve a specific compatible purchase quote. The $2,000 target is confirmed; the $1,300/$350/$200/$150 allocation is only a proposed planning envelope. Resumes: accurate investor terms and a quoted use-of-funds breakdown; no funds accepted or spent here.
+- [ ] **Hardware availability:** Bring m3-server and both Raspberry Pis online on their established Tailscale connections. They timed out and appeared offline on October 10; the ThinkPad was accessible. No permission/network configuration was changed. Resumes: read-only current hardware, service and workload evidence. Historical alternate Linux desktop bootability also remains unverified.
+
+Owner: Michael. Execution follow-up: Codex or the named delivery owner. Local artifact and evidence: `investor-preview/README.md` and `investor-preview/evidence/source-receipt.json`. Seven entries now have narrated recordings (six application workflows and a Teardown sample report); other entries remain labeled explainers.
+
+- [ ] **Remaining product-demo environments:** Provide/approve an isolated licensed Cull instance and dedicated demo-only auth/provider environments for AIMA, SiteBot, QuoteMateAI, LeadLeak and CockpitCloud before recording their full workflows. No license/auth bypass, production data or paid provider call was attempted. Teardown's sample report is recorded; CLI execution remains a follow-up. Resume with existing product-native fixture workflows and record only approved sample data. Review the current narration and pacing before investor use.
+
+- [x] Investor funding bar: Michael confirmed $0 raised on October 10. funding.json, both displayed bars and portable package updated: 0% funded, $2,000 remaining.

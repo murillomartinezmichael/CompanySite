@@ -1,6 +1,7 @@
 # CompanySite — Runbook
 
 **Last updated:** 2026-09-18
+**Last updated:** 2026-09-17
 **Owner:** Michael Martinez (murillomartinezmichael@gmail.com)
 **Project shape:** Astro static site + Cloudflare Pages Functions. Rebuilt 2026-07-05 from the previous single-file HTML (preserved at `legacy/2026-cyberpunk-index.html`).
 

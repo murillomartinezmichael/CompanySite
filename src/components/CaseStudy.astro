@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import CaseStudyArt from './CaseStudyArt.astro';
 
 interface Props {
@@ -12,6 +12,9 @@ const { entry, index } = Astro.props;
 const d = entry.data;
 const hideLiveHeader = entry.id === 'big7';
 const previewStill = entry.id === 'aries' ? '/videos/aries-walkthrough-still.webp' : d.poster;
+const conceptPoster = d.conceptCover ? (await getImage({src:d.conceptCover,width:1600,format:'webp'})).src : undefined;
+const cover = d.conceptCover ?? d.image;
+const coverAlt = d.conceptCover ? d.conceptAlt ?? 'AI-generated architectural concept, not completed client work' : d.imageAlt ?? '';
 
 // Attribution on outbound case-study visits so referral traffic from m3mm.net
 // is legible in the client site's analytics.
@@ -42,14 +45,14 @@ if (d.liveUrl) {
         playsinline
         muted
         controls
-        poster={previewStill}
+        poster={conceptPoster ?? d.poster ?? previewStill}
       >
         <source src={d.video} type="video/mp4" />
       </video>
-    ) : d.image ? (
+    ) : cover ? (
       <Image
-        src={d.image}
-        alt={d.imageAlt ?? ''}
+        src={cover}
+        alt={coverAlt}
         class={`h-full w-full object-cover ${hideLiveHeader ? 'object-bottom' : 'object-top'}`}
         widths={[640, 960, 1280]}
         sizes="(min-width: 1280px) 1216px, 100vw"
@@ -63,9 +66,10 @@ if (d.liveUrl) {
   </div>
 
   <div class="project-caption">
-    <p>{d.client} <span>· {d.video ? 'Website walkthrough' : 'Website preview'}</span></p>
+    <p>{d.client} <span>· {d.conceptCover ? 'AI concept cover' : d.video ? 'Website walkthrough' : 'Website preview'}</span></p>
     {(d.poster || d.image) && <button type="button" class="inspect-button" hidden data-project-open={`project-view-${entry.id}`} data-cta={`casestudy-${entry.id}-inspect`} data-section="proof" data-intent={`product:${entry.id}`}>View larger still <span aria-hidden="true">↗</span></button>}
   </div>
+  {d.conceptCover && <p class="text-sm text-bone-dim mt-3">AI-generated design inspiration — not a photograph of completed client work.{d.video && ' Press play to see the actual website recording.'}</p>}
   <!-- Existing proof copy stays alongside the media, independent of the viewer. -->
   <div id={`case-study-${entry.id}-details`} class="project-copy">
     <div class="mb-4 flex flex-wrap items-baseline gap-3">
@@ -116,11 +120,11 @@ if (d.liveUrl) {
 </article>
 {(d.poster || d.image) && <dialog id={`project-view-${entry.id}`} class="project-viewer" aria-labelledby={`viewer-title-${entry.id}`}>
   <div class="viewer-heading">
-    <h2 id={`viewer-title-${entry.id}`}>{d.client} — website preview</h2>
+    <h2 id={`viewer-title-${entry.id}`}>{d.client} — {d.conceptCover ? 'AI concept cover' : 'website preview'}</h2>
     <form method="dialog"><button class="viewer-close" data-cta="project-viewer-close" data-section="proof" data-intent="product:case-studies" autofocus>Close <span aria-hidden="true">×</span></button></form>
   </div>
-  {d.image ? <Image src={d.image} alt={d.imageAlt ?? `${d.client} website preview`} widths={[960, 1440, 1920]} sizes="95vw" loading="lazy" decoding="async" /> : <img src={previewStill} alt={`${d.client} website walkthrough still`} loading="lazy" decoding="async" />}
-  <p class="viewer-caption">{d.kind} · {d.location} · {d.year}</p>
+  {cover ? <Image src={cover} alt={coverAlt} widths={[960, 1440, 1920]} sizes="95vw" loading="lazy" decoding="async" /> : <img src={previewStill} alt={`${d.client} website walkthrough still`} loading="lazy" decoding="async" />}
+  <p class="viewer-caption">{d.conceptCover ? 'AI-generated design inspiration — not completed client work.' : `${d.kind} · ${d.location} · ${d.year}`}</p>
 </dialog>}
 
 <script>

@@ -6,10 +6,21 @@ export function createOrbitalField(host: HTMLElement) {
   if (!canvas || !ctx) return { sync: (_enabled: boolean, _visible: boolean) => {} };
   const surface = canvas;
   const context = ctx;
-  const style = getComputedStyle(host);
-  const colors = ['--orbit-blue', '--orbit-lime', '--orbit-white'].map(key => style.getPropertyValue(key).trim());
+  // Tokens resolve to `rgb(r g b / a)` (theme variables) or legacy `#rrggbb`.
+  // Re-read on theme change so the field matches light or dark mode.
+  let colors: string[] = [];
+  let additive = true;
+  const readColors = () => {
+    const style = getComputedStyle(host);
+    colors = ['--orbit-blue', '--orbit-lime', '--orbit-white'].map(key => style.getPropertyValue(key).trim());
+    // Additive blending glows on black but washes dark ink out on a light page.
+    additive = getComputedStyle(document.documentElement).colorScheme !== 'light';
+  };
+  readColors();
   const rgba = (color: string, alpha: number) => {
-    const rgb = color.replace('#', '').match(/.{2}/g)?.map(v => parseInt(v, 16));
+    const rgb = color.startsWith('#')
+      ? color.slice(1).match(/.{2}/g)?.map(v => parseInt(v, 16))
+      : color.match(/\d+(\.\d+)?/g)?.slice(0, 3).map(Number);
     return rgb?.length === 3 ? `rgba(${rgb.join(',')},${alpha})` : color;
   };
   let seed = 84;
@@ -49,7 +60,7 @@ export function createOrbitalField(host: HTMLElement) {
     bloom.addColorStop(1, rgba(colors[0], 0));
     context.fillStyle = bloom;
     context.fillRect(0, 0, width, height);
-    context.globalCompositeOperation = 'lighter';
+    context.globalCompositeOperation = additive ? 'lighter' : 'source-over';
     ribbons.forEach((ribbon, i) => {
       context.beginPath();
       ribbon.forEach((point, n) => { const p = project(point); n ? context.lineTo(p.x, p.y) : context.moveTo(p.x, p.y); });
@@ -119,6 +130,7 @@ export function createOrbitalField(host: HTMLElement) {
     host.addEventListener('pointerleave', () => { pointerX = 0; pointerY = 0; });
   }
   document.addEventListener('visibilitychange', reconcile);
+  window.addEventListener('m3mm:themechange', () => { readColors(); draw(); });
   host.dataset.animationState = 'paused';
   return { sync(nextEnabled: boolean, nextVisible: boolean) { enabled = nextEnabled; visible = nextVisible; reconcile(); } };
 }

@@ -1,14 +1,16 @@
 ---
 import { DROPS } from '@/config/roadmap';
 import { getImage } from 'astro:assets';
-import big7 from '@/assets/big7-live-site.jpg';
+import big7 from '@/assets/previews/big7-concept.webp';
+import aries from '@/assets/previews/aries-concept.webp';
 import ReleasePath from './ReleasePath.astro';
 const quarters = [...new Set(DROPS.map(drop => drop.quarter))];
 const initialIndex = Math.max(0, DROPS.findIndex(drop => drop.status === 'next'));
 const initial = DROPS[initialIndex];
 const labels = { released: 'Officially released', next: 'Next official launch', testing: 'Testing preview', upcoming: 'Planned' };
 const big7Image = await getImage({ src: big7, width: 1280, format: 'webp' });
-const imageFor = (name: string) => name === 'AriesOutdoorLiving' ? '/videos/aries-walkthrough-still.webp' : name === 'Big7 Construction' ? big7Image.src : '';
+const ariesImage = await getImage({ src: aries, width: 1280, format: 'webp' });
+const imageFor = (name: string) => name === 'AriesOutdoorLiving' ? ariesImage.src : name === 'Big7 Construction' ? big7Image.src : '';
 const titleFor = (name: string) => name === 'AriesOutdoorLiving' ? 'Aries Outdoor Living' : name;
 ---
 <section class="release-stage" aria-labelledby="selected-build-title" data-release-stage data-sticky-suppress>
@@ -34,7 +36,8 @@ const titleFor = (name: string) => name === 'AriesOutdoorLiving' ? 'Aries Outdoo
       <a href={`#quarter-${quarters.indexOf(initial.quarter)}`} data-stage-link data-cta="roadmap-next-details" data-section="roadmap" data-intent="product:roadmap-drop">View build details <span aria-hidden="true">↘</span></a>
     </div>
     <div class="stage-visual" data-stage-visual>
-      <img src={imageFor(initial.name) || undefined} alt={`${titleFor(initial.name)} website preview`} data-stage-image hidden={!imageFor(initial.name)} decoding="async" />
+      <img src={imageFor(initial.name) || undefined} alt={`${titleFor(initial.name)} AI concept cover; not completed client work`} data-stage-image hidden={!imageFor(initial.name)} decoding="async" />
+      <p class="concept-caption" data-stage-concept hidden={!imageFor(initial.name)}>AI concept cover · Not completed client work</p>
       <div class="stage-art" data-stage-art hidden={Boolean(imageFor(initial.name))}><ReleasePath /><p>Modernize. Mobilize. Multiply.</p></div>
     </div>
   </div>
@@ -71,7 +74,8 @@ const titleFor = (name: string) => name === 'AriesOutdoorLiving' ? 'Aries Outdoo
       stage.querySelector<HTMLElement>('[data-stage-state]')!.dataset.state = data.state;
       stage.querySelector<HTMLAnchorElement>('[data-stage-link]')!.href = data.destination || '#signup-heading';
       image.hidden = !data.image; art.hidden = Boolean(data.image);
-      if (data.image) { image.src = data.image; image.alt = `${data.title} website preview`; }
+      stage.querySelector<HTMLElement>('[data-stage-concept]')!.hidden = !data.image;
+      if (data.image) { image.src = data.image; image.alt = `${data.title} AI concept cover; not completed client work`; }
       text('position', `${index + 1} / ${buttons.length}`);
       text('announcement', `${data.title}. ${data.status}. ${data.quarter}.`);
       buttons.forEach((button, i) => { button.setAttribute('aria-pressed', String(i === index)); button.tabIndex = i === index ? 0 : -1; });
@@ -93,12 +97,13 @@ const titleFor = (name: string) => name === 'AriesOutdoorLiving' ? 'Aries Outdoo
         event.preventDefault(); show(next, true);
       });
     });
-    image.addEventListener('error', () => { image.hidden = true; art.hidden = false; });
+    image.addEventListener('error', () => { image.hidden = true; art.hidden = false;stage.querySelector<HTMLElement>('[data-stage-concept]')!.hidden=true; });
     new MutationObserver(() => { if (document.documentElement.dataset.motion !== 'full') cancelMotion(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-motion'] });
     stage.querySelectorAll<HTMLElement>('[data-stage-controls]').forEach(el => { el.hidden = false; });
   }
 </script>
 <style>
+  .concept-caption { position:absolute;bottom:1rem;left:1rem;right:1rem;padding:.65rem .8rem;background:theme('colors.ink.DEFAULT');color:theme('colors.bone.DEFAULT');font-size:12px;border-radius:8px;z-index:1; }
   .release-stage { margin-top: theme('spacing.hq-section'); border-top: 1px solid theme('colors.ink.line'); border-bottom: 1px solid theme('colors.ink.line'); }
   .stage-heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; padding: 1.5rem 0; }
   .stage-heading > p { color: theme('colors.bone.dim'); }
@@ -114,7 +119,7 @@ const titleFor = (name: string) => name === 'AriesOutdoorLiving' ? 'Aries Outdoo
   .stage-description { margin-top: 1.5rem; color: theme('colors.bone.dim'); line-height: 1.7; max-width: 50ch; }
   .stage-meta { display: flex; flex-wrap: wrap; gap: .5rem 1rem; margin-top: 1.5rem; color: theme('colors.bone.muted'); font-size: theme('fontSize.hq-label[0]'); }
   .stage-copy > a { display: inline-flex; align-items: center; gap: 1rem; min-height: 44px; margin-top: 1.5rem; color: theme('colors.electric.DEFAULT'); text-decoration: underline; text-underline-offset: .3em; }
-  .stage-visual { min-width: 0; overflow: hidden; border: 1px solid theme('colors.ink.line'); border-radius: theme('borderRadius.hq-panel'); background: theme('colors.ink.soft'); aspect-ratio: 16 / 11; }
+  .stage-visual { position: relative; min-width: 0; overflow: hidden; border: 1px solid theme('colors.ink.line'); border-radius: theme('borderRadius.hq-panel'); background: theme('colors.ink.soft'); aspect-ratio: 16 / 11; }
   .stage-visual img { width: 100%; height: 100%; object-fit: contain; object-position: center; }
   .stage-art { height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 2rem; }
   .stage-art p { text-align: center; color: theme('colors.bone.muted'); font-size: theme('fontSize.hq-small[0]'); }
