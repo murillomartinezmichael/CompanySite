@@ -3,7 +3,7 @@ export const chapters = [
   {id:'welcome',title:'Back the next chapter.',label:'The M3MM story',kind:'intro',points:[
     ['What we build','M3MM brings together client websites, practical software, and reusable delivery tools. This presentation walks through the work, the infrastructure behind it, and a focused funding request.'],
     ['How to explore','You can pause me at any time, choose a chapter, or click a step to jump. Recorded software demos show actual workflows, with more detail available beside each step. Other entries have labeled overviews. Each project keeps its current status.'],
-    ['The ask','The request is two thousand dollars to strengthen development, local artificial intelligence, product testing, and recovery. Let’s start with the portfolio.']
+    ['The ask','We are discussing a long-term, phased investment in reliable infrastructure, secure development and local artificial intelligence. No funding commitment or investor terms have been agreed. Let’s start with the portfolio.']
   ]},
   ...projects.map(p=>({id:p.slug,title:p.name,label:p.category,kind:'product',status:p.status,url:p.url,video:`./assets/${p.slug}.mp4`,poster:`./assets/${p.slug}.jpg`,points:[
     ['The product',`${p.name}. ${p.description}`],
@@ -20,10 +20,10 @@ export const chapters = [
     ['Supporting equipment','A Windows workstation handles delivery and creative work. A ThinkPad provides portable Linux development. Two Raspberry Pi three boards support monitoring and network tooling. The historical Linux desktop shares the server chassis, so it is not counted as a separate server.'],
     ['What is verified','The ThinkPad connection was verified on October tenth. The server and both Pis were offline during that check, so their hardware details remain dated. Hardware upgrades must be paired with power checks, backups, and a successful restore.']
   ]},
-  {id:'ask',title:'A focused $2,000 ask.',label:'Proposed funding plan',kind:'budget',points:[
-    ['Compute: $1,300','Michael has confirmed a two thousand dollar funding target. A proposed thirteen hundred dollar allowance covers the server platform and compute. Specific components will be selected after measuring representative workloads and checking compatibility.'],
-    ['Recovery: $350 · Power: $200','The proposal reserves three hundred fifty dollars for storage and recovery, and two hundred dollars for power protection. These are planning allowances, not vendor quotes or approved purchases.'],
-    ['Contingency: $150','The remaining one hundred fifty dollars covers tax, shipping, and contingency. This brings the plan to exactly two thousand dollars. Ongoing operating costs and the funding structure still need agreement. No repayment or investment return is promised here.']
+  {id:'ask',title:'A serious long-term build.',label:'Proposed funding strategy',kind:'budget',points:[
+    ['Start with reliability','The first stage protects existing work: independent backups, successful sample restores, reliable power and a separate firewall for the lab while household internet remains unchanged.'],
+    ['Build reusable capacity','Later stages add central storage and virtualization, then an expandable local AI workstation with high GPU memory when benchmarks and business needs justify the investment.'],
+    ['Discuss terms before capital','A hypothetical contribution schedule is two hundred fifty dollars from the founder plus two hundred fifty dollars from outside contributors collectively every two weeks. One hundred twenty American-minted one-troy-ounce silver coins are also under discussion. None of this is pledged, received or valued here; ownership and legal terms must be agreed first.']
   ]},
   {id:'outcomes',title:'Measure what the funding changes.',label:'Acceptance milestones',kind:'outcomes',points:[
     ['Measure first','Before buying, record the time and resource use of a representative local-model task, product build, and background job. Compare reuse, upgraded hardware, and rented compute before choosing the final quote.'],
@@ -32,7 +32,7 @@ export const chapters = [
   ]},
   {id:'discussion',title:'Let’s discuss the next step.',label:'Investor discussion',kind:'closing',points:[
     ['The work','You have seen the range of client work, product development, and supporting tools. The full catalog remains available, including testing, planned, and parked entries. Repository count is not revenue.'],
-    ['The decision','The next decisions are the final hardware quote, the investor audience, and mutually agreed funding terms. That could involve different structures, but no structure or ownership arrangement is represented as agreed today.'],
+    ['The decision','The next decisions are the phased infrastructure budget, the investor audience, and mutually agreed funding terms. That could involve different structures, but no structure or ownership arrangement is represented as agreed today.'],
     ['Your questions','Pause here for questions, revisit any chapter, or switch to the full portfolio tour. The contact link opens an email draft to Michael. This site does not accept payments or send a message automatically.']
   ]}
 ];
