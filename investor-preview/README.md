@@ -175,3 +175,9 @@ No auth/license gate is bypassed. Shared libraries/infrastructure and parked
 media entries remain explanations. Teardown CLI execution remains unrecorded.
 
 Funding progress: funding.json is the owner-confirmed input. raisedUsd=null means unconfirmed, not $0. Set the received amount when confirmed, then rebuild and repackage. Bars appear in the hero and funding section; this is a static reviewed figure, not a live payment feed.
+
+## October 15 proposed long-range vision — draft only
+
+The investor page now includes a separate **long-range infrastructure vision** section, distinct from the owner-confirmed **$2,000 initial funding target** and the existing prerecorded investor narration. It explains a staged backup/network/virtualization/high-VRAM AI workstation strategy and a **hypothetical** $250 founder + $250 aggregate backer biweekly contribution scenario ($13,000 across 26 periods). The proposed 120 one-troy-ounce American-minted silver coins are **not counted as cash**: ownership, authenticity, exact type, valuation, and transfer terms have not been verified. No pledge, return, equity, debt or repayment term is implied.
+
+The static page and narrated chapters intentionally retain the original $2,000 request until the owner confirms whether the longer-term scenario is a replacement, a follow-on funding round or an internal planning example. The new section is textual and has no checkout/payment form. Before any public solicitation or live deployment, the owner must approve the audience, funding terms and publication, and obtain appropriate legal/tax review. Regenerate with `npm run build`, then run existing `npm run verify:http` in a permitted test environment; GitHub changes alone are not proof of a deployed site or browser validation.
