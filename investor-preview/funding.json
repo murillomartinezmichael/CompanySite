@@ -1,4 +1,17 @@
 {
-  "goalUsd": 2000,
-  "raisedUsd": 0
+  "fundingStatus": "proposed-not-committed",
+  "fixedFundingTargetUsd": null,
+  "raisedUsd": null,
+  "illustrativeBiweekly": {
+    "founderUsd": 250,
+    "investorsCombinedUsd": 250,
+    "periodsPerYear": 26
+  },
+  "silver": {
+    "proposedCoinCount": 120,
+    "description": "American-minted one-troy-ounce silver coins",
+    "ownership": "unconfirmed",
+    "valuationUsd": null
+  },
+  "note": "Illustrative planning only. No confirmed pledges, transferred coins, equity, loan, repayment or return."
 }
