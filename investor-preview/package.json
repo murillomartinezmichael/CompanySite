@@ -12,6 +12,7 @@
     "demos:audio": "powershell -NoProfile -File render-demo-audio.ps1",
     "demos:record": "node record-demos.mjs",
     "verify:demos": "node verify-demos.mjs",
-    "verify:http": "node verify.mjs --http-only && node verify-presenter.mjs --http-only && node verify-demos.mjs"
+    "verify:http": "node verify.mjs --http-only && node verify-presenter.mjs --http-only && node verify-demos.mjs",
+    "verify:budgets": "node verify-budgets.mjs"
   }
 }
