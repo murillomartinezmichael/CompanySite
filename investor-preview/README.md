@@ -1,5 +1,8 @@
 # M3MM investor showcase — review candidate
 
+> **2026-10-15 superseding direction:** The owner retired the former small fixed server-only investor ask. The investor-facing source now presents a phased, long-term infrastructure and AI investment conversation without a fixed fundraising target. Older dated sections below are historical and are **not** publication instructions. The silver and biweekly amounts remain proposed and uncommitted. **Narrated audio assets still reflect the former pitch and MUST be regenerated and reverified before publication; do not deploy the current draft or play stale narration to investors.**
+
+
 Funding target: **$2,000 USD**, confirmed by Michael on October 10, 2026.
 
 Open `dist/index.html` directly in a browser, or run `npm start` here and open
