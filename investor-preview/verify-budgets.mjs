@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {futureBuild,phaseCost,totalCost,roadmapMarkup} from './future-build.mjs';
+import {workstreams,workstreamCapex,monthlyAllowance,renderBudgets} from './separate-budgets.mjs';
+assert.equal(futureBuild.length,5);
+assert.equal(workstreams.length,11);
+assert.equal(workstreamCapex,totalCost,'Shared hardware must not be double counted');
+assert.equal(totalCost,7858);
+assert.equal(monthlyAllowance,85);
+assert.equal(futureBuild.reduce((sum,p)=>sum+phaseCost(p),0),totalCost);
+assert.ok(workstreams.every(w=>w.capital>=0&&w.monthly>=0&&w.deliverable&&w.status));
+assert.ok(futureBuild.every(p=>p.devices.every(d=>d.qty>0&&d.unit>=0)));
+assert.ok(roadmapMarkup().includes('What we intend to build next.'));
+assert.ok(renderBudgets().includes('A budget for every system.'));
+console.log('PASS: five phases, eleven budgets, hardware reconciliation and operating allowances');
