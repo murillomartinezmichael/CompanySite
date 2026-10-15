@@ -1,26 +1,43 @@
-// Proposed workstream budgets, dated 2026-10-15. USD estimates, not quotes or committed spending.
-// Shared hardware capex is allocated ONCE in future-build.mjs. Do not sum shared references again.
+// Each proposed system has an independent budget. Hardware totals come from future-build.mjs.
+// USD planning allowances as of 2026-10-15, NOT retailer quotes, commitments or purchases.
+import {futureBuild,phaseCost,totalCost,money} from './future-build.mjs';
+const hardware=[
+  ['recovery','Independent backup recovery',5,'Verify restorable backups before repairing Windows C: or migrating Linux data'],
+  ['network','Lab firewall and segmentation',0,'Separate M3MM.NET from household Xfinity; verify Cisco VLANs and DHCP first'],
+  ['storage','NAS file and snapshot server',5,'Central shares, snapshots, user permissions and backup restore tests'],
+  ['virtualization','Proxmox hypervisor',5,'VMs, containers, recovery images and isolated test environments'],
+  ['server','Upgraded always-on application server',15,'Migrate services away from the aging Pentium box with rollback'],
+  ['ai','Dedicated high-VRAM local AI workstation',30,'Benchmark local inference, model-serving and GPU-assisted development'],
+  ['rack','Rack, PDU and patch management',0,'Document cabling, power and serviceability'],
+  ['faster-network','2.5/10GbE upgrade',5,'Upgrade only demonstrated bandwidth bottlenecks'],
+  ['offsite','Off-site encrypted backup',10,'Keep recoverable copies outside the home'],
+  ['cooling','Environmental sensors and airflow',5,'Measure and alert on heat, humidity and physical hazards']
+];
+const extras=[
+ {id:'monitoring',name:'Monitoring and incident response',capital:0,monthly:0,shared:'Existing Pi/VM resources; no dedicated new hardware',deliverable:'Uptime Kuma, logs, alerts, incident runbooks',status:'Planned'},
+ {id:'identity',name:'Identity, secrets and access controls',capital:0,monthly:5,shared:'Open-source tooling and existing VM capacity',deliverable:'Least-privilege access, secrets handling, MFA and audit policy',status:'Design and review'},
+ {id:'dns',name:'Lab DNS, certificates and remote access',capital:0,monthly:10,shared:'Existing Pis and Tailscale; no new appliance',deliverable:'Documented names, certificate renewal and remote access recovery',status:'Planned; protect home DNS'},
+ {id:'dev',name:'Developer environments and CI',capital:0,monthly:10,shared:'Already budgeted Proxmox and existing workstations',deliverable:'Reproducible builds, staging and release checks',status:'Planned'},
+ {id:'agents',name:'Isolated AI agents and orchestration',capital:0,monthly:10,shared:'Already budgeted VMs and AI compute',deliverable:'Sandboxed agents, permissions, approvals and audit trails',status:'Design phase'},
+ {id:'portfolio',name:'Software product portfolio',capital:0,monthly:20,shared:'Shared existing and proposed infrastructure; product-specific costs TBD',deliverable:'Individual project scopes, labor estimates, API usage and launch budgets',status:'Not yet individually costed'},
+ {id:'operations',name:'Operations and replacement reserve',capital:0,monthly:30,shared:'Recurring allowance, not a hardware purchase',deliverable:'Replacement parts, batteries, renewals and unexpected repairs',status:'Planning allowance'}
+];
 export const workstreams=[
-{id:'backup',name:'Windows and Linux backup recovery',capital:200,monthly:5,shared:'Independent 8 TB external backup drive',deliverable:'Verified independent copies and sample restores; filesystem recovery gated by backup proof',status:'Blocked pending restore verification'},
-{id:'power',name:'Power resilience',capital:480,monthly:0,shared:'Two UPS units',deliverable:'Protected shutdown and tested runtime for network/NAS/AI equipment',status:'Planned; measure watts first'},
-{id:'accessories',name:'Cabling and Cisco console access',capital:110,monthly:0,shared:'Console adapter, Cat6 and labels',deliverable:'Port map, config backup, diagnostics and rollback documentation',status:'Planned'},
-{id:'gateway',name:'Lab firewall and VLAN routing',capital:308,monthly:0,shared:'UCG-Fiber gateway',deliverable:'Firewall-segmented lab with unchanged household Xfinity Wi-Fi',status:'Blocked by current DHCP/Cisco audit'},
-{id:'nas',name:'NAS and shared file services',capital:1060,monthly:5,shared:'Four-bay NAS and two 8 TB CMR disks',deliverable:'Shares, snapshots, permissions and tested restore workflow',status:'Planned; capacity and drives TBD'},
-{id:'proxmox',name:'Proxmox virtualization platform',capital:750,monthly:5,shared:'Dedicated mini PC',deliverable:'Isolated VMs, backup policy and reproducible host configuration',status:'Planned; do not overwrite current hosts'},
-{id:'ai',name:'High-VRAM AI workstation',capital:4950,monthly:30,shared:'GPU, CPU/platform, 128 GB RAM, NVMe, chassis and PSU',deliverable:'Measured local inference and agent workloads with GPU/thermal benchmarks',status:'Future, workload-dependent'},
-{id:'monitoring',name:'Monitoring and incident response',capital:0,monthly:0,shared:'Runs on existing Pi/Proxmox capacity; no new dedicated hardware',deliverable:'Uptime Kuma, health dashboards, alerts and runbooks',status:'Software setup after network recovery'},
-{id:'dev',name:'Developer and CI environments',capital:0,monthly:10,shared:'VMs on already budgeted Proxmox host',deliverable:'Staging, automated tests, secure secrets and release gates',status:'Software setup after Proxmox'},
-{id:'agents',name:'AI agent isolation and orchestration',capital:0,monthly:10,shared:'VMs and GPU capacity already budgeted',deliverable:'Sandboxed agents, audit trails, permissions and human approval gates',status:'Design phase'},
-{id:'portfolio',name:'Individual M3MM software products',capital:0,monthly:20,shared:'Uses existing development machines and shared platform',deliverable:'Per-product scoping, benchmarks, deployment and customer validation',status:'Costs vary by product; no separate hardware purchase assumed'}
+ ...hardware.map(([id,name,monthly,deliverable])=>{
+   const p=futureBuild.find(x=>x.id===id);
+   if(!p)throw Error('Missing hardware phase '+id);
+   return {id,name,capital:phaseCost(p),monthly,shared:p.devices.map(d=>d.name).join(', '),deliverable,status:'Future purchase; '+p.gate};
+ }),
+ ...extras
 ];
 export const workstreamCapex=workstreams.reduce((n,w)=>n+w.capital,0);
 export const monthlyAllowance=workstreams.reduce((n,w)=>n+w.monthly,0);
+if(workstreamCapex!==totalCost)throw Error('Hardware budget reconciliation failed');
 export const renderBudgets=()=>{
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- const money=n=>'$'+n.toLocaleString('en-US');
  return `<section class="wrap section" id="separate-budgets" aria-labelledby="separate-budgets-heading">
- <div class="section-heading"><div><p class="section-label">Project-by-project capital plan</p><h2 id="separate-budgets-heading">A budget for every system.</h2></div><p>Every workstream has its own estimated capital allocation, optional monthly allowance, deliverable and readiness gate. Shared equipment is counted only once.</p></div>
- <div class="future-summary"><div><span class="section-label">Allocated one-time equipment</span><strong>${money(workstreamCapex)}</strong><p>Reconciles to the five-phase hardware roadmap; software projects reuse this infrastructure.</p></div><div><span class="section-label">Illustrative monthly operating allowances</span><strong>${money(monthlyAllowance)}/mo</strong><p>${money(monthlyAllowance*12)}/year if fully activated. Estimates, not subscriptions already purchased; excludes variable electricity and internet already paid by the household.</p></div></div>
- <div class="future-grid">${workstreams.map(w=>`<article class="future-phase"><div class="future-phase-top"><span class="pill">${esc(w.status)}</span><strong>${money(w.capital)}</strong></div><h3>${esc(w.name)}</h3><p><strong>Budgeted equipment:</strong> ${esc(w.shared)}</p><p><strong>Expected outcome:</strong> ${esc(w.deliverable)}</p><p class="fine">Illustrative incremental operating allowance: ${money(w.monthly)}/month; not a verified bill.</p></article>`).join('')}</div>
- <p class="fine">Financial model: one-time equipment subtotal ${money(workstreamCapex)} plus an illustrative 15% purchasing allowance, rounded up to ${money(Math.ceil(workstreamCapex*1.15/100)*100)}. Recurring allowances are separate and not included in that total. Estimates are not live vendor quotes or investment commitments. Actual per-product engineering labor, paid APIs, taxes, hosting, licenses, insurance and support need separate scoping before any promise of delivery.</p></section>`;
+ <div class="section-heading"><div><p class="section-label">Every system, independently budgeted</p><h2 id="separate-budgets-heading">One budget per build.</h2></div><p>Separate budgets for NAS, AI workstation, replacement application server, firewall, backups, power, virtualization, networking and operations. Shared hardware is counted only once.</p></div>
+ <div class="future-summary"><div><span class="section-label">One-time equipment subtotal</span><strong>${money(workstreamCapex)}</strong><p>Matches the detailed device roadmap; before tax, shipping and contingency.</p></div><div><span class="section-label">Illustrative ongoing allowance</span><strong>${money(monthlyAllowance)}/mo</strong><p>${money(monthlyAllowance*12)}/year when all services are active. Excludes measured electricity, labor, insurance, tax and unknown vendor charges.</p></div></div>
+ <div class="future-grid">${workstreams.map(w=>`<article class="future-phase"><div class="future-phase-top"><span class="pill">${w.capital>0?'Hardware build':'Operations / software'}</span><strong>${money(w.capital)}</strong></div><h3>${esc(w.name)}</h3><p><strong>Equipment / resource:</strong> ${esc(w.shared)}</p><p><strong>Acceptance outcome:</strong> ${esc(w.deliverable)}</p><p class="fine">Illustrative recurring allowance: ${money(w.monthly)}/month</p><details class="coverage"><summary>Readiness and dependency</summary><p>${esc(w.status)}</p></details></article>`).join('')}</div>
+ <p class="fine">Budget guardrails: one-time hardware ${money(workstreamCapex)}, illustrative 15% purchase contingency ${money(Math.ceil(workstreamCapex*1.15/100)*100)}, plus separate recurring costs. Software portfolio items require per-product estimates before funded delivery commitments. No capital contributions or purchases are confirmed.</p></section>`;
 };
