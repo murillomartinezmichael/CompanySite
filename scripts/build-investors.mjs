@@ -2,7 +2,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import '../investor-preview/build.mjs';
-import { chapters } from '../investor-preview/presentation.mjs';
 import { projects } from '../investor-preview/portfolio.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -10,7 +9,6 @@ const source = path.join(root, 'investor-preview/dist');
 const target = path.join(root, 'dist/investors');
 const media = path.join(root, 'investor-preview/media');
 const required = projects.flatMap(p => [`${p.slug}.mp4`, `${p.slug}.jpg`]);
-for (const chapter of chapters) chapter.points.forEach((_, index) => required.push(`narration/${chapter.id}-${index}.m4a`));
 for (const file of required) {
   if (!fs.existsSync(path.join(media, file)) || fs.statSync(path.join(media, file)).size === 0)
     throw new Error(`Missing approved investor media input: ${file}`);
@@ -28,6 +26,8 @@ for (const demo of Object.values(demos)) {
     if (!fs.existsSync(input)) throw new Error(`Missing approved investor media input: ${relative}`);
   }
 }
+// Avoid retaining obsolete pitch files from an earlier local build.
+fs.rmSync(target, { recursive: true, force: true });
 fs.cpSync(source, target, { recursive: true });
 fs.copyFileSync(path.join(root, 'investor-preview/site-theme.js'), path.join(target, 'site-theme.js'));
 for (const route of ['', 'accessibility/']) {
@@ -44,4 +44,4 @@ for (const route of ['', 'accessibility/']) {
     .replace('Local review candidate. Publication and investment terms require owner approval.', 'Funding discussion only. No investment terms or returns are offered on this page.');
   fs.writeFileSync(file, html);
 }
-console.log('Built /investors/ with portfolio, funding progress and narrated media.');
+console.log('Built /investors/ with portfolio and updated phased investment vision; old narrated pitch excluded.');
