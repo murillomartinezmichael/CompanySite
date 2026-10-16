@@ -48,6 +48,7 @@ if (d.liveUrl) {
         poster={conceptPoster ?? d.poster ?? previewStill}
       >
         <source src={d.video} type="video/mp4" />
+        <track kind="captions" srclang="en" label="Muted video description" src="/videos/project-preview-muted.en.vtt" default />
       </video>
     ) : cover ? (
       <Image
