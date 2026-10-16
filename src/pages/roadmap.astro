@@ -49,6 +49,15 @@ const intakePost = '/api/lead';
 
       </div>
 
+      <section class="infrastructure-track" aria-labelledby="infrastructure-track-heading">
+        <div>
+          <p class="intro-label">Infrastructure investment track · proposed</p>
+          <h2 id="infrastructure-track-heading">The systems behind the software.</h2>
+          <p>Our product release roadmap remains separate from the planned network, NAS, Linux application server, Proxmox, large-model AI workstation, backup and security buildout. Each system has an estimated budget, components and a readiness gate.</p>
+          <p class="schedule-note">The existing equipment and household Xfinity network remain in service; future purchases and dates are not committed.</p>
+        </div>
+        <a class="infrastructure-track-link" href="/investors/infrastructure/" data-cta="roadmap-infrastructure" data-section="roadmap" data-intent="product:infrastructure-roadmap">Explore infrastructure budgets and build order →</a>
+      </section>
       <RoadmapStage />
 
       <div class="roadmap-board">
@@ -242,6 +251,14 @@ const intakePost = '/api/lead';
 </script>
 
 <style>
+  .infrastructure-track{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1.5rem;align-items:center;margin:1.5rem 0 2.5rem;padding:clamp(1.2rem,3vw,2rem);border:1px solid rgba(95,202,219,.4);border-radius:1.2rem;background-color:#101519}
+  .infrastructure-track h2{font-size:clamp(1.35rem,2.4vw,2rem);margin:.35rem 0 .7rem;color:#f3f5f8}
+  .infrastructure-track p{line-height:1.65;max-width:65ch;color:#e9f3f7}
+  .roadmap-scope .infrastructure-track .intro-label,.roadmap-scope .infrastructure-track .schedule-note{color:#e9f3f7}
+  .infrastructure-track-link{display:inline-flex;align-items:center;justify-content:center;text-align:center;padding:.9rem 1.2rem;border:1px solid #71d6e9;border-radius:.7rem;color:#e7faff;background:rgba(8,93,116,.32);font-weight:700;max-width:18rem}
+  .infrastructure-track-link:focus-visible{outline:3px solid #f5ba73;outline-offset:4px}
+  @media(max-width:850px){.infrastructure-track{grid-template-columns:1fr}.infrastructure-track-link{max-width:none}}
+
   :global(body:has(.roadmap-scope)) {
     background: theme('colors.ink.DEFAULT');
   }
