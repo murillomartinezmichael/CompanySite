@@ -10,6 +10,7 @@ import { renderBudgets, workstreamCapex } from './separate-budgets.mjs';
 import { totalCost } from './future-build.mjs';
 import { renderResilience } from './resilience-platform.mjs';
 import { renderFinancialOverview, renderAssetsFramework } from './financial-overview.mjs';
+import { renderAiExpansionScenario } from './ai-expansion-scenario.mjs';
 if(workstreamCapex!==totalCost)throw Error('Workstream budgets must reconcile with hardware roadmap');
 const root = path.dirname(fileURLToPath(import.meta.url));
 const out = path.join(root,'dist');
@@ -80,7 +81,7 @@ fs.mkdirSync(infrastructureDir,{recursive:true});
 const infrastructureHTML=head('Infrastructure roadmap and budgets — M3MM')+
 '<a class="skip" href="#main">Skip to content</a><header class="wrap"><a class="brand" href="/investors/" data-cta="back-investors"><img src="/investors/assets/official-logo.png" alt="M3MM" width="52" height="52"><span>Modernize. Mobilize. Multiply.</span></a><nav aria-label="Infrastructure navigation"><a href="/investors/">← Investor overview</a><a href="#overall-budget">Overall budget</a><a href="#future-build">Build phases</a><a href="#separate-budgets">System budgets</a><a href="#resilience">Operations</a><a href="#assets-framework">Assets</a><a href="/roadmap">Company roadmap</a></nav></header>'+
 '<main id="main"><section class="hero wrap"><div class="hero-copy"><p class="edition">M3MM.NET · Future infrastructure</p><h1>Build the foundation. Then scale.</h1><p class="lede">A transparent, itemized plan for equipment, upgrade paths, operating costs and responsible purchasing decisions.</p><a class="button" href="#overall-budget">Explore the budget</a></div></section>'+
-renderFinancialOverview()+roadmapMarkup()+renderBudgets()+renderResilience()+renderAssetsFramework()+
+renderFinancialOverview()+roadmapMarkup()+renderBudgets()+renderAiExpansionScenario()+renderResilience()+renderAssetsFramework()+
 '<section class="closing wrap"><h2>Evidence before purchases.</h2><p>Every stage needs compatibility checks, tested recovery and approval. Figures are provisional and do not establish investor commitments.</p><a class="button" href="/investors/">Back to investor overview</a></section></main>'+foot+'</body></html>';
 // Track infrastructure navigation and actions for site-structure validation.
 const trackedInfrastructureHTML=infrastructureHTML.replace(/<a(?![^>]*data-cta=)(?=[\s>])/g, '<a data-cta="infrastructure-navigation"');
