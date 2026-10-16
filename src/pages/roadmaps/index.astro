@@ -1,0 +1,44 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { LAUNCH_STATS } from '@/config/roadmap';
+import { INFRASTRUCTURE_MILESTONES } from '@/config/environment';
+import '@/styles/explore.css';
+---
+<Layout title="Two Roadmaps — M3MM" description="Two distinct M3MM roadmaps: software product development and environment infrastructure." path="/roadmaps" breadcrumbs={[{ name: 'M3MM', url: '/' }, { name: 'Roadmaps', url: '/roadmaps' }]}>
+  <Header slot="header" path="/roadmaps" minimal={true} />
+  <main class="explore-page">
+    <div class="container-page explore-shell">
+      <div class="explore-intro">
+        <p class="explore-eyebrow">M3MM / Two independent plans</p>
+        <h1 class="explore-title">Two roadmaps. Two different jobs.</h1>
+        <p class="explore-lede">One roadmap follows products and releases. The other follows the servers, network, storage and safeguards that support the work. They have separate milestones and never share an invented completion percentage.</p>
+      </div>
+      <div class="explore-grid">
+        <article class="explore-card">
+          <span class="explore-tag">Roadmap 01 / Software</span>
+          <h2>Project development</h2>
+          <p>Track {LAUNCH_STATS.total} published builds, distinguish officially released products from testing previews, and see the existing launch queue.</p>
+          <ul class="explore-list"><li>Project release stages</li><li>Published target windows</li><li>Testing and official launch status</li></ul>
+          <a href="/roadmap" class="explore-link" data-cta="roadmaps-projects" data-section="roadmaps" data-intent="product:roadmap">Open project roadmap →</a>
+        </article>
+        <article class="explore-card">
+          <span class="explore-tag">Roadmap 02 / Infrastructure</span>
+          <h2>Environment buildout</h2>
+          <p>Follow {INFRASTRUCTURE_MILESTONES.length} planning and verification milestones across networking, compute, storage, AI and reliability.</p>
+          <ul class="explore-list"><li>Dependency-led milestones</li><li>Current versus proposed capabilities</li><li>Purchase and safety gates</li></ul>
+          <a href="/roadmaps/environment" class="explore-link" data-cta="roadmaps-environment" data-section="roadmaps" data-intent="product:roadmap">Open environment roadmap →</a>
+        </article>
+      </div>
+      <section class="explore-section explore-divider">
+        <h2>Explore the underlying information</h2>
+        <div class="explore-actions">
+          <a href="/projects" class="explore-button explore-button-secondary" data-cta="roadmaps-project-directory" data-section="roadmaps" data-intent="product:projects">Project directory</a>
+          <a href="/environment" class="explore-button explore-button-secondary" data-cta="roadmaps-environment-guide" data-section="roadmaps" data-intent="product:environment">Environment overview</a>
+        </div>
+      </section>
+    </div>
+  </main>
+  <Footer slot="footer" path="/roadmaps" />
+</Layout>

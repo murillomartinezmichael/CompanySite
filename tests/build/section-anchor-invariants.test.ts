@@ -106,7 +106,13 @@ describe('§ 1 — page anchors resolve to sections on the same page', () => {
     for (const anchor of ['#proof', '#services', '#intake']) expect(src).toContain(`href: '${anchor}'`);
     // The global navigation now travels between pages; rendered reachability
     // and fragment validity are checked across every route in site-structure.
-    expect(read('src/components/Header.astro')).toContain("href: '/websites'");
-    expect(read('src/components/Header.astro')).toContain("href: '/roadmap'");
+    // Global header now uses a shared compact IA; legacy sales and launch
+    // routes remain reachable through contextual links and the footer.
+    const primary = read('src/config/site-navigation.ts');
+    for (const route of ['/projects', '/environment', '/roadmaps', '/business', '/about']) {
+      expect(primary).toContain(`href: '${route}'`);
+    }
+    expect(read('src/components/Footer.astro')).toContain('href="/websites"');
+    expect(read('src/pages/roadmaps/index.astro')).toContain('href="/roadmap"');
   });
 });
