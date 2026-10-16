@@ -3,7 +3,7 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {root} from './demo-runtime.mjs';
-import {chromium} from '../../CampaignForge/node_modules/playwright/index.mjs';
+import {chromium} from 'playwright';
 const require=createRequire(import.meta.url),manifest=JSON.parse(fs.readFileSync(path.join(root,'demo-manifest.json'),'utf8'));
 const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'}),results=[];
 try{
