@@ -22,13 +22,13 @@ export const futureBuild = [
     {name:'Mirrored system SSDs',spec:'Two enterprise/endurance-oriented 1 TB SSDs for OS and VM/application data',qty:2,unit:130},
     {name:'Chassis, PSU and management',spec:'Quiet ventilated case, reliable PSU and remote management strategy',qty:1,unit:440}
   ],gate:'Document actual services, migration/rollback, power draw and backup restores before moving workloads off the current box.'},
-  {id:'ai',phase:'06',title:'Expandable AI workstation',window:'Later, based on measured demand',purpose:'High-VRAM local inference, model evaluation and agent development.',devices:[
+  {id:'ai',phase:'06',title:'Conceptual single-GPU AI baseline',window:'Later, based on measured demand',purpose:'Legacy cost-comparison placeholder for a single GPU. The owner\'s intended Threadripper/256GB ECC/dual-5090 workstation is separately modeled below and must be repriced before procurement.',devices:[
     {name:'High-VRAM NVIDIA GPU',spec:'24–32 GB VRAM class, availability and benchmarks TBD',qty:1,unit:2600},
     {name:'CPU, motherboard and cooling',spec:'12–16-core desktop platform, PCIe expansion and adequate cooling',qty:1,unit:1050},
     {name:'System RAM',spec:'128 GB supported memory configuration',qty:1,unit:420},
     {name:'NVMe storage',spec:'2 TB system/projects plus 4 TB AI models',qty:1,unit:440},
     {name:'Case and power supply',spec:'Airflow-focused chassis, quality PSU sized for GPU',qty:1,unit:440}
-  ],gate:'Benchmark current RTX 3050/3070 Ti systems, verify thermals, VRAM need, power and payback.'},
+  ],gate:'Do not buy the single-GPU placeholder parts as a guaranteed dual-5090 upgrade foundation. Verify TRX50 memory QVL, cooling, GPU spacing, power and full expansion scenario.'},
   {id:'rack',phase:'07',title:'Rack, cable management and serviceability',window:'After final footprint and heat measurements',purpose:'Organize equipment with labeled power, patching, access and airflow.',devices:[
     {name:'Open-frame rack and shelves',spec:'Appropriate depth and load rating; avoid oversized enterprise racks',qty:1,unit:380},
     {name:'Patch panel, cable managers and PDU',spec:'Cat6 patching, labels, grounded distribution; no unapproved house rewiring',qty:1,unit:320}
