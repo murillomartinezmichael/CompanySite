@@ -1,0 +1,51 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { INFRASTRUCTURE_MILESTONES, INFRASTRUCTURE_PHASES, infrastructureStatusLabel } from '@/config/environment';
+import '@/styles/explore.css';
+---
+<Layout title="Environment Roadmap — M3MM" description="A public, phased plan for the M3MM lab: inventory, networking, compute, storage, AI and reliability. Milestones are not claims of deployed infrastructure." path="/roadmaps/environment" breadcrumbs={[{ name: 'M3MM', url: '/' }, { name: 'Roadmaps', url: '/roadmaps' }, { name: 'Environment', url: '/roadmaps/environment' }]}>
+  <Header slot="header" path="/roadmaps/environment" minimal={true} />
+  <main class="explore-page">
+    <div class="container-page explore-shell">
+      <p class="explore-breadcrumb"><a href="/roadmaps" data-cta="environment-roadmap-back" data-section="environment-roadmap" data-intent="product:roadmap">← Both roadmaps</a></p>
+      <div class="explore-intro">
+        <p class="explore-eyebrow">Roadmap 02 / Infrastructure</p>
+        <h1 class="explore-title">Build the environment. Protect the home network.</h1>
+        <p class="explore-lede">A phased plan for M3MM's computing environment. These are public planning and verification items, not a live infrastructure inventory. Milestones can only be marked complete after private evidence and safe validation.</p>
+        <div class="explore-actions">
+          <a href="/environment" class="explore-button explore-button-primary" data-cta="envroadmap-environment" data-section="environment-roadmap" data-intent="product:environment">Environment overview</a>
+          <a href="/roadmap" class="explore-button explore-button-secondary" data-cta="envroadmap-project" data-section="environment-roadmap" data-intent="product:roadmap">Software roadmap</a>
+        </div>
+      </div>
+      <aside class="explore-notice">
+        <strong>Safety boundary:</strong> Household Xfinity routing and everyday devices stay untouched. Network segmentation, NAS migration, and hypervisor deployment are proposals until backups, approvals and rollback testing are complete. No private topology or access endpoints are published here.
+      </aside>
+      <nav class="explore-filters explore-section" aria-label="Jump to infrastructure phase">
+        {INFRASTRUCTURE_PHASES.map(phase => <a class="explore-button explore-button-secondary" style="min-height:44px;" href={`#${phase.id}`} data-cta="envroadmap-phase-jump" data-section="environment-roadmap" data-intent="product:company-hub">{phase.name}</a>)}
+      </nav>
+      {INFRASTRUCTURE_PHASES.map(phase => (
+        <section id={phase.id} class="explore-section explore-divider" aria-labelledby={`heading-${phase.id}`}>
+          <p class="explore-eyebrow">Infrastructure phase</p>
+          <h2 id={`heading-${phase.id}`} style="margin-bottom:1.1rem;">{phase.name}</h2>
+          <div class="explore-grid">
+            {INFRASTRUCTURE_MILESTONES.filter(item => item.phase === phase.id).map(item => (
+              <article class="explore-card">
+                <span class="explore-tag">{infrastructureStatusLabel[item.status]}</span>
+                <h3>{item.title}</h3>
+                <p>{item.detail}</p>
+                <dl>
+                  <div class="explore-record"><dt class="explore-note">Depends on</dt><dd>{item.dependency}</dd></div>
+                  <div class="explore-record"><dt class="explore-note">Cost status</dt><dd>{item.cost}</dd></div>
+                </dl>
+              </article>
+            ))}
+          </div>
+        </section>
+      ))}
+      <p class="explore-note explore-divider">Milestone states are intentionally conservative. “Needs verification” means an asset or practice may exist but has not been independently validated for public reporting. Dollar estimates, target dates and percentages are omitted until sourced.</p>
+    </div>
+  </main>
+  <Footer slot="footer" path="/roadmaps/environment" />
+</Layout>

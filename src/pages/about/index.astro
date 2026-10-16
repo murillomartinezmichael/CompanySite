@@ -1,0 +1,50 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import '@/styles/explore.css';
+---
+<Layout title="About M3MM" description="M3MM's mission: Modernize. Mobilize. Multiply. Explore the company, its work and ways to get in touch." path="/about" breadcrumbs={[{ name: 'M3MM', url: '/' }, { name: 'About', url: '/about' }]}>
+  <Header slot="header" path="/about" minimal={true} />
+  <main class="explore-page">
+    <div class="container-page explore-shell">
+      <div class="explore-intro">
+        <p class="explore-eyebrow">M3MM / About</p>
+        <h1 class="explore-title">Modernize. Mobilize. Multiply.</h1>
+        <p class="explore-lede">M3MM is a technology company hub bringing together software products, custom website services, automation work and the systems that support them.</p>
+      </div>
+      <div class="explore-grid">
+        <article class="explore-card">
+          <h2>What M3MM creates</h2>
+          <p>Explore planned and released software, AI and automation projects, client-facing website work, and development tools.</p>
+          <a href="/projects" class="explore-link" data-cta="about-projects" data-section="about" data-intent="product:projects">Projects →</a>
+        </article>
+        <article class="explore-card">
+          <h2>How the systems grow</h2>
+          <p>Understand the publicly shareable environment plan without exposing network configuration, management endpoints or credentials.</p>
+          <a href="/environment" class="explore-link" data-cta="about-environment" data-section="about" data-intent="product:environment">Environment →</a>
+        </article>
+        <article class="explore-card">
+          <h2>Experience and career</h2>
+          <p>The existing career and resume pages remain available instead of adding another top-level navigation tab.</p>
+          <a href="/resume" class="explore-link" data-cta="about-resume" data-section="about" data-intent="product:career">Career and resume →</a>
+        </article>
+        <article class="explore-card">
+          <h2>Work with M3MM</h2>
+          <p>See custom website services and ask for a review using the existing intake workflow.</p>
+          <a href="/websites" class="explore-link" data-cta="about-services" data-section="about" data-intent="product:website-services">Website services →</a>
+        </article>
+      </div>
+      <section class="explore-section explore-divider">
+        <h2>Policies and contact</h2>
+        <p>The public policies and accessibility commitments remain available. For business inquiries, use the existing free-site-review entry point.</p>
+        <div class="explore-actions">
+          <a href="/policies" class="explore-button explore-button-secondary" data-cta="about-policies" data-section="about" data-intent="product:company-hub">Company policies</a>
+          <a href="/accessibility" class="explore-button explore-button-secondary" data-cta="about-accessibility" data-section="about" data-intent="product:company-hub">Accessibility</a>
+          <a href="/audit#intake" class="explore-button explore-button-primary" data-cta="about-contact" data-section="about" data-intent="book:free-review">Contact M3MM →</a>
+        </div>
+      </section>
+    </div>
+  </main>
+  <Footer slot="footer" path="/about" />
+</Layout>

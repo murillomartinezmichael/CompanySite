@@ -1,0 +1,62 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { ENVIRONMENT_AREAS, INFRASTRUCTURE_PHASES } from '@/config/environment';
+import '@/styles/explore.css';
+---
+<Layout title="Environment — M3MM" description="A public overview of M3MM's planned homelab, infrastructure architecture, storage, security and hardware decisions." path="/environment" breadcrumbs={[{ name: 'M3MM', url: '/' }, { name: 'Environment', url: '/environment' }]}>
+  <Header slot="header" path="/environment" minimal={true} />
+  <main class="explore-page">
+    <div class="container-page explore-shell">
+      <div class="explore-intro">
+        <p class="explore-eyebrow">M3MM / The systems behind the work</p>
+        <h1 class="explore-title">One environment. Clear boundaries.</h1>
+        <p class="explore-lede">The home for planning M3MM's own compute, networking, storage and automation systems. Public documentation describes intended capabilities, not a live operational dashboard or a verified installation.</p>
+        <div class="explore-actions">
+          <a href="/roadmaps/environment" class="explore-button explore-button-primary" data-cta="environment-roadmap" data-section="environment" data-intent="product:roadmap">Environment roadmap →</a>
+          <a href="/roadmaps" class="explore-button explore-button-secondary" data-cta="environment-both-roadmaps" data-section="environment" data-intent="product:roadmap">Compare both roadmaps</a>
+        </div>
+      </div>
+      <aside class="explore-notice">
+        <strong>What stays separate:</strong> M3MM lab expansion must not disrupt household Xfinity Wi-Fi, existing household devices, or daily-use systems. Sensitive diagrams, device identities, management endpoints and configurations belong in private documentation.
+      </aside>
+      <section id="areas" class="explore-section" aria-labelledby="areas-heading">
+        <h2 id="areas-heading">Explore the environment</h2>
+        <p>Six focused areas replace one overloaded infrastructure page. Follow the relevant area for goals, dependencies and the next verification step.</p>
+        <div class="explore-grid explore-grid-3" style="margin-top:1.3rem;">
+          {ENVIRONMENT_AREAS.map(area => (
+            <article class="explore-card">
+              <span class="explore-tag">Environment</span>
+              <h3>{area.title}</h3>
+              <p>{area.summary}</p>
+              <a href={`/environment/${area.slug}`} class="explore-link" data-cta="environment-area-open" data-section="environment" data-intent="product:company-hub">Explore this area →</a>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section class="explore-section explore-divider" aria-labelledby="separation-heading">
+        <h2 id="separation-heading">Current versus planned</h2>
+        <div class="explore-grid" style="margin-top:1.2rem;">
+          <article class="explore-card">
+            <h3>Current / verify</h3>
+            <p>Document what is already owned and running, then validate each device's role, health and backup coverage privately. Ownership alone is not proof that a service is deployed.</p>
+            <span class="explore-tag">Evidence required</span>
+          </article>
+          <article class="explore-card">
+            <h3>Proposed / design</h3>
+            <p>Evaluate segmentation, Proxmox, shared storage, Raspberry Pi organization, local AI services, monitoring and UPS capacity before any disruptive installation.</p>
+            <span class="explore-tag">Planning only</span>
+          </article>
+        </div>
+      </section>
+      <section class="explore-section explore-divider">
+        <h2>Infrastructure phases</h2>
+        <p>The independent environment roadmap covers {INFRASTRUCTURE_PHASES.length} phases, each with its own prerequisites and evidence gates.</p>
+        <ol class="explore-list">{INFRASTRUCTURE_PHASES.map(phase => <li>{phase.name}</li>)}</ol>
+        <a href="/roadmaps/environment" class="explore-link" data-cta="environment-all-phases" data-section="environment" data-intent="product:roadmap">See milestones and dependencies →</a>
+      </section>
+    </div>
+  </main>
+  <Footer slot="footer" path="/environment" />
+</Layout>

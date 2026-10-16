@@ -1,0 +1,46 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { ENVIRONMENT_AREAS, type EnvironmentArea } from '@/config/environment';
+import '@/styles/explore.css';
+
+export function getStaticPaths() {
+  return ENVIRONMENT_AREAS.map(area => ({ params: { section: area.slug }, props: { area } }));
+}
+interface Props { area: EnvironmentArea; }
+const { area } = Astro.props;
+const url = `/environment/${area.slug}`;
+---
+<Layout title={`${area.title} — M3MM Environment`} description={area.summary} path={url} breadcrumbs={[{ name: 'M3MM', url: '/' }, { name: 'Environment', url: '/environment' }, { name: area.title, url }]}>
+  <Header slot="header" path="/environment" minimal={true} />
+  <main class="explore-page">
+    <div class="container-page explore-shell">
+      <p class="explore-breadcrumb"><a href="/environment" data-cta="environment-area-back" data-section="environment-area" data-intent="product:environment">← All environment areas</a></p>
+      <div class="explore-detail">
+        <div class="explore-intro">
+          <p class="explore-eyebrow">M3MM / Infrastructure planning</p>
+          <h1 class="explore-title">{area.title}</h1>
+          <p class="explore-lede">{area.summary}</p>
+          <p class="explore-note" style="margin-top:1.3rem;">Published as a planning overview. Current installation, cost and completion must be verified privately.</p>
+        </div>
+        <section class="explore-card" aria-labelledby="focus-heading">
+          <span class="explore-tag">Design & verification</span>
+          <h2 id="focus-heading">What belongs here</h2>
+          <ul class="explore-list">{area.focus.map(point => <li>{point}</li>)}</ul>
+          <h3 style="margin-top:1rem;">Next step</h3>
+          <p>{area.next}</p>
+        </section>
+      </div>
+      <section class="explore-section explore-divider">
+        <h2>Follow the buildout</h2>
+        <p>Use the environment roadmap to see how this area depends on the others. Software launch commitments remain on the separate project roadmap.</p>
+        <div class="explore-actions">
+          <a href="/roadmaps/environment" class="explore-button explore-button-primary" data-cta="environment-area-roadmap" data-section="environment-area" data-intent="product:roadmap">Environment roadmap</a>
+          <a href="/roadmap" class="explore-button explore-button-secondary" data-cta="environment-area-project-roadmap" data-section="environment-area" data-intent="product:roadmap">Project roadmap</a>
+        </div>
+      </section>
+    </div>
+  </main>
+  <Footer slot="footer" path="/environment" />
+</Layout>

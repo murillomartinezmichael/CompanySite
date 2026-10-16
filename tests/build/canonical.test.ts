@@ -2,6 +2,9 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { DROPS } from '../../src/config/roadmap';
+import { projectSlug } from '../../src/lib/project-slugs';
+import { ENVIRONMENT_AREAS } from '../../src/config/environment';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const read = (p: string) => readFileSync(root + p, 'utf8');
@@ -34,10 +37,20 @@ const PROD_ORIGIN = 'https://m3mm.net';
 // discovery. Pin both directions from one source of truth.
 const PAGE_EXPECTATIONS: ReadonlyArray<{
   file: string;
-  path: string;
+  path: string | null;
   noindex?: boolean;
 }> = [
   { file: 'src/pages/index.astro', path: '/' },
+
+  { file: 'src/pages/about/index.astro', path: '/about' },
+  { file: 'src/pages/business/index.astro', path: '/business' },
+  { file: 'src/pages/projects/index.astro', path: '/projects' },
+  { file: 'src/pages/projects/[slug].astro', path: null },
+  { file: 'src/pages/environment/index.astro', path: '/environment' },
+  { file: 'src/pages/environment/[section].astro', path: null },
+  { file: 'src/pages/roadmaps/index.astro', path: '/roadmaps' },
+  { file: 'src/pages/roadmaps/environment.astro', path: '/roadmaps/environment' },
+
   { file: 'src/pages/audit.astro', path: '/audit' },
   { file: 'src/pages/start.astro', path: '/start' },
   { file: 'src/pages/thanks.astro', path: '/thanks', noindex: true },
@@ -138,9 +151,15 @@ describe('canonical URL wiring', () => {
     // fails the pin (paths must be static + reviewable in source).
     for (const { file, path } of PAGE_EXPECTATIONS) {
       const src = read(file);
+      if (path === null) {
+        // Dynamic profile pages enumerate routes and send per-record canonicals.
+        expect(src).toContain('getStaticPaths');
+        expect(src).toMatch(/<Layout\b[^>]*\bpath=\{/);
+      } else {
       expect(src, `${file} must mount <Layout path="${path}">`).toMatch(
         new RegExp(`<Layout\\b[^>]*\\bpath="${path}"`),
       );
+      }
     }
   });
 
@@ -210,6 +229,7 @@ describe('canonical URL wiring', () => {
       [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].trim()),
     );
     for (const { path, noindex } of PAGE_EXPECTATIONS) {
+      if (path === null) continue;
       // Sitemap always lists the fully-qualified URL. `/` becomes
       // `${PROD_ORIGIN}/`; anything else drops the leading slash after
       // the origin.
@@ -219,6 +239,13 @@ describe('canonical URL wiring', () => {
       } else {
         expect(locs, `${expected} is indexable — must appear in sitemap.xml`).toContain(expected);
       }
+    }
+    // A dynamic profile must appear in the public sitemap, too.
+    for (const path of [
+      ...DROPS.map(item => '/projects/' + projectSlug(item.name)),
+      ...ENVIRONMENT_AREAS.map(item => '/environment/' + item.slug),
+    ]) {
+      expect(locs, path + ' missing from sitemap').toContain(PROD_ORIGIN + path);
     }
   });
 });

@@ -1,0 +1,52 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import '@/styles/explore.css';
+const tracks = [
+  { name: 'Company strategy', description: 'The M3MM umbrella: build useful software, support client work and expand carefully.', href: '/about', cta: 'Explore the mission' },
+  { name: 'Products & opportunities', description: 'Public work is organized by project and release status; previews are not counted as official launches.', href: '/projects', cta: 'Browse products' },
+  { name: 'Investor information', description: 'The existing investor showcase remains available without crowding the main company navigation.', href: '/investors/', cta: 'Open investor showcase' },
+  { name: 'Website services', description: 'The complete custom-site sales, proof and free-review process keeps its own dedicated page.', href: '/websites', cta: 'Explore services' },
+];
+---
+<Layout title="Business — M3MM" description="M3MM business strategy, product opportunities, investor information, services and infrastructure planning in clear sections." path="/business" breadcrumbs={[{ name: 'M3MM', url: '/' }, { name: 'Business', url: '/business' }]}>
+  <Header slot="header" path="/business" minimal={true} />
+  <main class="explore-page">
+    <div class="container-page explore-shell">
+      <div class="explore-intro">
+        <p class="explore-eyebrow">M3MM / Company business</p>
+        <h1 class="explore-title">The business, organized.</h1>
+        <p class="explore-lede">A concise business overview with separate paths for products, website services, investor materials and future infrastructure spending. The detailed investor presentation remains available at its existing URL.</p>
+      </div>
+      <div class="explore-grid">
+        {tracks.map(track => (
+          <article class="explore-card">
+            <h2>{track.name}</h2>
+            <p>{track.description}</p>
+            <a href={track.href} class="explore-link" data-cta="business-section-open" data-section="business" data-intent="product:company-hub">{track.cta} →</a>
+          </article>
+        ))}
+      </div>
+      <section class="explore-section explore-divider" aria-labelledby="cost-heading">
+        <h2 id="cost-heading">Budget planning and investment needs</h2>
+        <p>Infrastructure planning distinguishes between existing assets, one-time equipment, recurring subscriptions and unapproved expansion. No unverified price totals or financial performance figures are published here.</p>
+        <div class="explore-grid explore-grid-3" style="margin-top:1.2rem;">
+          <article class="explore-card"><h3>Existing assets</h3><p>Confirm owned computers, storage and networking hardware before treating it as available project capacity.</p></article>
+          <article class="explore-card"><h3>Capital purchases</h3><p>Compare NAS, storage, switches, UPS and future compute according to validated dependencies and current quotes.</p></article>
+          <article class="explore-card"><h3>Ongoing services</h3><p>Separate hosting, software and maintenance obligations from the up-front equipment estimate.</p></article>
+        </div>
+        <div class="explore-actions">
+          <a href="/environment/budget" class="explore-button explore-button-secondary" data-cta="business-environment-budget" data-section="business" data-intent="product:environment">Infrastructure cost planning</a>
+          <a href="/investors/" class="explore-button explore-button-primary" data-cta="business-investors" data-section="business" data-intent="product:investor-showcase">Investor materials →</a>
+        </div>
+      </section>
+      <section class="explore-section explore-divider">
+        <h2>Progress belongs in the roadmaps</h2>
+        <p>Project delivery and homelab expansion are different lines of work. See each independently rather than treating a hardware purchase as progress on a product launch.</p>
+        <a href="/roadmaps" class="explore-link" data-cta="business-roadmaps" data-section="business" data-intent="product:roadmap">Compare the two roadmaps →</a>
+      </section>
+    </div>
+  </main>
+  <Footer slot="footer" path="/business" />
+</Layout>

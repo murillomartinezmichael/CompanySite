@@ -1,0 +1,61 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { DROPS, type Drop } from '@/config/roadmap';
+import { projectSlug } from '@/lib/project-slugs';
+import '@/styles/explore.css';
+
+export function getStaticPaths() {
+  return DROPS.map((drop) => ({ params: { slug: projectSlug(drop.name) }, props: { drop } }));
+}
+interface Props { drop: Drop; }
+const { drop } = Astro.props;
+const slug = projectSlug(drop.name);
+const statusLabels = {
+  released: 'Officially released',
+  testing: 'Testing preview — not an official release',
+  next: 'Next official release',
+  upcoming: 'Planned — not yet released',
+};
+const external = Boolean(drop.url?.startsWith('http'));
+---
+<Layout title={`${drop.name} — M3MM Projects`} description={drop.blurb} path={`/projects/${slug}`} breadcrumbs={[{ name: 'M3MM', url: '/' }, { name: 'Projects', url: '/projects' }, { name: drop.name, url: `/projects/${slug}` }]}>
+  <Header slot="header" path="/projects" minimal={true} />
+  <main class="explore-page">
+    <div class="container-page explore-shell">
+      <p class="explore-breadcrumb"><a href="/projects" data-cta="project-back" data-section="project" data-intent="product:projects">← All projects</a></p>
+      <div class="explore-detail">
+        <div>
+          <p class="explore-eyebrow">M3MM / Project profile</p>
+          <h1 class="explore-title">{drop.name}</h1>
+          <p class="explore-lede">{drop.blurb}</p>
+          <div class="explore-actions">
+            {drop.url && <a class="explore-button explore-button-primary" href={drop.url} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined} data-cta="project-open" data-section="project" data-intent="product:company-hub">{drop.status === 'testing' ? 'Open testing preview' : 'Open project'} ↗</a>}
+            <a class="explore-button explore-button-secondary" href="/roadmap" data-cta="project-full-roadmap" data-section="project" data-intent="product:roadmap">Project roadmap</a>
+          </div>
+        </div>
+        <div class="explore-card">
+          <span class="explore-tag">{statusLabels[drop.status]}</span>
+          <h2>Release information</h2>
+          <dl>
+            <div class="explore-record"><dt class="explore-note">Category</dt><dd>{drop.category ?? 'M3MM build'}</dd></div>
+            <div class="explore-record"><dt class="explore-note">Roadmap group</dt><dd>{drop.quarter}</dd></div>
+            <div class="explore-record"><dt class="explore-note">Published release label</dt><dd>{drop.dateLabel} {drop.year}</dd></div>
+            <div class="explore-record"><dt class="explore-note">Lifecycle</dt><dd>{statusLabels[drop.status]}</dd></div>
+          </dl>
+          <p class="explore-note">Published dates are targets unless officially released. This profile does not imply a validated percent complete, a feature checklist, or a new release commitment.</p>
+        </div>
+      </div>
+      <section class="explore-section explore-divider">
+        <h2>Where this fits</h2>
+        <p>Software release planning is maintained separately from the infrastructure buildout. Explore the software roadmap for launch order or the environment roadmap for supporting systems.</p>
+        <div class="explore-actions">
+          <a href="/roadmap" class="explore-link" data-cta="project-release-plan" data-section="project" data-intent="product:roadmap">Software release roadmap →</a>
+          <a href="/roadmaps/environment" class="explore-link" data-cta="project-env-plan" data-section="project" data-intent="product:roadmap">Environment roadmap →</a>
+        </div>
+      </section>
+    </div>
+  </main>
+  <Footer slot="footer" path="/projects" />
+</Layout>

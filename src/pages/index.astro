@@ -11,10 +11,12 @@ const roadmapPreview = DROPS.filter((drop) => drop.status === 'next' || drop.sta
 
 // Department content is independent of the shared site navigation.
 const departments = [
-  { number: '01', name: 'Website services', description: 'Custom business websites, project examples, and a free site review.', href: '/websites', action: 'Explore website services' },
-  { number: '02', name: 'Roadmap', description: 'The shipping queue, launch order, dates, and signup for future product drops.', href: '/roadmap', action: 'View full roadmap' },
-  { number: '03', name: 'Resume', description: 'Career surface: experience, the work behind it, and a downloadable resume.', href: '/resume', action: 'Open resume' },
-  { number: '04', name: 'Company policies', description: 'The public policy library, including workplace vaccination and accessibility.', href: '/policies', action: 'Read policies' },
+  { number: '01', name: 'Projects', description: 'Software products, client work, and public testing previews in one searchable directory.', href: '/projects', action: 'Explore projects' },
+  { number: '02', name: 'Environment', description: 'Compute, networking, storage, and security plans for the systems behind the work.', href: '/environment', action: 'Explore the environment' },
+  { number: '03', name: 'Two roadmaps', description: 'Separate plans for shipping products and building the infrastructure that supports them.', href: '/roadmaps', action: 'Choose a roadmap' },
+  { number: '04', name: 'Business', description: 'Company strategy, investor information, services, and expansion planning.', href: '/business', action: 'Explore business' },
+  { number: '05', name: 'Website services', description: 'Custom business websites, project examples, pricing, and a free site review.', href: '/websites', action: 'Explore services' },
+  { number: '06', name: 'About', description: 'The mission, career background, public policies, and ways to reach M3MM.', href: '/about', action: 'Learn about M3MM' },
 ];
 
 const isExternal = (url?: string) => Boolean(url?.startsWith('http'));
@@ -39,11 +41,11 @@ const isExternal = (url?: string) => Boolean(url?.startsWith('http'));
           releases, try a preview, or see what I’m building next.
         </p>
         <div class="hero-actions">
-          <a href="#released" class="action action-live" data-cta="hq-released" data-section="hero" data-intent="product:released-work">
-            See what’s released
+          <a href="/projects" class="action action-live" data-cta="hq-projects" data-section="hero" data-intent="product:released-work">
+            Explore the projects
           </a>
-          <a href="/roadmap" class="action action-ghost" data-cta="hq-roadmap" data-section="hero" data-intent="product:roadmap">
-            Open the roadmap
+          <a href="/roadmaps" class="action action-ghost" data-cta="hq-roadmap" data-section="hero" data-intent="product:roadmap">
+            Explore both roadmaps
           </a>
         </div>
       </div>
@@ -167,12 +169,15 @@ const isExternal = (url?: string) => Boolean(url?.startsWith('http'));
           <p class="section-code section-code-roadmap"><span></span> Shipping queue</p>
           <h2 id="roadmap-heading">What ships next matters.</h2>
           <p>
-            The roadmap is a first-class part of M3MM. It shows the order, dates, and status of
-            every planned drop. A test deployment stays labeled Testing until
-            M3MM declares the official public release.
+            The project roadmap shows public release order and testing status.
+            A separate environment roadmap tracks computing, networking, and storage milestones.
+            Neither one substitutes for verified progress in the other.
           </p>
           <a href="/roadmap" class="roadmap-button" data-cta="hq-roadmap-full" data-section="roadmap" data-intent="product:roadmap">
-            View the complete roadmap
+            View the project roadmap
+          </a>
+          <a href="/roadmaps/environment" class="action action-ghost" data-cta="hq-environment-roadmap" data-section="roadmap" data-intent="product:environment-roadmap">
+            Environment roadmap
           </a>
         </div>
 
@@ -198,7 +203,7 @@ const isExternal = (url?: string) => Boolean(url?.startsWith('http'));
         <p class="section-code">Built in public</p>
         <h2 id="closing-heading">The hub grows when the work ships.</h2>
       </div>
-      <a href="/roadmap" data-cta="hq-roadmap-closing" data-section="closing" data-intent="product:roadmap">See what ships next</a>
+      <a href="/roadmaps" data-cta="hq-roadmap-closing" data-section="closing" data-intent="product:roadmap">See what ships next</a>
     </section>
   </div>
 
@@ -257,7 +262,7 @@ const isExternal = (url?: string) => Boolean(url?.startsWith('http'));
   .section-intro .section-code { grid-column: 1 / -1; margin: 0; }
   .section-intro h2,.ledger-title h2,.roadmap-copy h2,.closing h2 { margin: 0; font-size: theme('fontSize.hq-section[0]'); line-height: 1.12; letter-spacing: -.025em; }
   .section-intro>p:last-child,.ledger-note { max-width: 48ch; color: var(--hq-dim); line-height: 1.65; }
-  .department-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0 3rem; list-style: none; padding: 0; margin-top: 2rem; }
+  .department-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 0 3rem; list-style: none; padding: 0; margin-top: 2rem; }
   .department-card { display: flex; flex-direction: column; height: 100%; padding: 2rem 0; border-bottom: 1px solid var(--hq-line); background: transparent; color: var(--hq-text); text-decoration: none; transition: background 150ms ease; }
   .department-card:hover h3 { color: theme('colors.electric.DEFAULT'); }
   .department-card h3 { transition: color 180ms ease; }
