@@ -33,6 +33,10 @@ fs.copyFileSync(path.join(root, 'investor-preview/site-theme.js'), path.join(tar
 for (const route of ['', 'accessibility/', 'infrastructure/']) {
   const file = path.join(target, route, 'index.html');
   let html = fs.readFileSync(file, 'utf8');
+  // Standalone investor-preview assets are nested under /investors/ in CompanySite.
+  // The spoken presenter bundle is withheld, so ship no CSS link to it.
+  html = html.replaceAll('"/assets/', '"/investors/assets/')
+    .replace(/<link rel="stylesheet" href="(?:\.{1,2}\/|\/investors\/|\/)presenter\.css">/g, '');
   html = html.replace('<head>', '<head><script src="/investors/site-theme.js"></script>');
   html = html.replace(/<nav aria-label="Primary">/, '<nav aria-label="Investor sections">');
   html = html.replace(/<header class="wrap">[\s\S]*?<\/header>/, original => {
@@ -44,8 +48,7 @@ for (const route of ['', 'accessibility/', 'infrastructure/']) {
     .replace('Local review candidate. Publication and investment terms require owner approval.', 'Funding discussion only. No investment terms or returns are offered on this page.');
   if (route === 'infrastructure/') {
     html = html.replace('href="/tokens.css"','href="/investors/tokens.css"')
-      .replace('href="/style.css"','href="/investors/style.css"')
-      .replace('href="./presenter.css"','href="/investors/presenter.css"');
+      .replace('href="/style.css"','href="/investors/style.css"');
   }
   fs.writeFileSync(file, html);
 }
