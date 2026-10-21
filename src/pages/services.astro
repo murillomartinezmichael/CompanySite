@@ -1,0 +1,15 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+
+---
+<Layout title="Services — M3MM" description="Website design, focused applications and practical automation from M3MM. Start with scope, examples and a clear next step." path="/services">
+<Header slot="header" path="/services" />
+
+<section class="m3-intro container-page"><p class="m3-eyebrow">Services</p><h1>Make the work<br/>work better.</h1><p class="m3-lede">Choose the problem you need solved. We’ll define the scope, the responsibilities and the path to a usable result.</p></section>
+<section class="m3-section container-page"><div class="m3-grid"><article class="m3-card"><p class="m3-eyebrow">01 / Customer experience</p><h2>Websites</h2><p>New business sites, focused repairs and complete rebuilds. Mobile-first layouts, service pages, proof and lead capture.</p><p><strong>Basic sites from $500.</strong> Business packages and custom scopes stay clearly separated.</p><a class="m3-link" href="/websites" data-cta="services-websites" data-section="services">See website packages &amp; examples →</a></article><article class="m3-card"><p class="m3-eyebrow">02 / Useful software</p><h2>Web applications</h2><p>Focused tools for a specific workflow: information, records, approvals and the work between systems.</p><p>Scope and delivery requirements are agreed before pricing. Preview products are labeled honestly.</p><a class="m3-link" href="/contact?intent=tier:custom:scoped-project#intake" data-cta="services-apps" data-section="services" data-intent="tier:custom:scoped-project">Discuss an application →</a></article><article class="m3-card"><p class="m3-eyebrow">03 / Repeatable work</p><h2>Automation &amp; AI</h2><p>Connect repetitive steps, surface useful information and preserve the approval points that matter.</p><p>Access, data handling and provider costs are reviewed before a live connection is enabled.</p><a class="m3-link" href="/contact?intent=tier:custom:scoped-project#intake" data-cta="services-automation" data-section="services" data-intent="tier:custom:scoped-project">Map an automation →</a></article></div></section>
+<section class="m3-section container-page m3-split"><div><p class="m3-eyebrow">How it works</p><h2>Scope. Build.<br/>Verify. Hand over.</h2></div><div class="m3-reading"><p>Start with a concrete problem, existing tools and the people who will use the result. We agree what belongs in the build—and what does not.</p><p>Then we implement and test the actual workflow, including mobile use, forms and the handoff. Launch requirements and third-party costs stay explicit.</p><div class="m3-actions"><a class="m3-button primary" href="/audit#intake" data-cta="services-review" data-section="services" data-intent="book:free-review">Get a free site review</a><a class="m3-link" href="/projects" data-cta="services-projects" data-section="services">Explore the work →</a></div></div></section>
+
+<Footer slot="footer" path="/services" />
+</Layout>

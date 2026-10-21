@@ -1,7 +1,13 @@
 import { withSecurityHeaders } from './_lib/security-headers';
+import {authorizeOwner,denied,privatePath,privateResponse,type OwnerEnvironment} from './_lib/owner-access';
 
 // Keep the public hostname aligned with canonical URLs and the API origin policy.
-export const onRequest: PagesFunction = ({ request, next }) => {
+export const onRequest: PagesFunction<OwnerEnvironment> = async ({ request, env, next }) => {
+  if (privatePath(new URL(request.url).pathname)) {
+    const access=await authorizeOwner(request,env);
+    if(!access.ok) return denied(access);
+    return privateResponse(await next());
+  }
   const url = new URL(request.url);
   if (url.hostname !== 'www.m3mm.net') return next();
 

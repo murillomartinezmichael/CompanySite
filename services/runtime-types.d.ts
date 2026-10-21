@@ -1,0 +1,1 @@
+type PagesFunction<E=Record<string,unknown>> = (context:{request:Request;env:E;params:Record<string,string|string[]>;next:()=>Promise<Response>;waitUntil?:(promise:Promise<unknown>)=>void})=>Response|Promise<Response>;

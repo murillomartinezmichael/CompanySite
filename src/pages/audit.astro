@@ -16,65 +16,8 @@ import Intake from '@/components/Intake.astro';
 >
   <Header slot="header" minimal={true} path="/audit" />
 
-  <section class="page-intro relative isolate overflow-hidden">
 
-    <div class="container-page relative py-hq-section">
-      <div class="max-w-3xl">
-        <div class="mb-6 flex items-center gap-3">
-          <span class="hairline"></span>
-          <p class="kicker">You clicked the link. Now the actual value.</p>
-        </div>
-
-        <h1 class="text-hq-hero">
-          Turn your viewers into <span class="text-bone-dim">customers.</span>
-        </h1>
-
-        <p class="mt-6 max-w-2xl text-lg text-bone-dim">
-          Free site review — I'll pull up your site personally (Lighthouse, mobile, funnel, copy) and record a 5-minute video teardown of what's costing you DMs and quote requests, in your inbox within 24 hours. If nothing needs fixing, I'll tell you that too.
-        </p>
-
-        <ul class="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-sm text-bone-muted">
-          <li>✓ No sales call</li>
-          <li>✓ Recorded video teardown, not a template</li>
-          <li>✓ 24h reply, personally</li>
-          <li>✓ Free — actually free</li>
-        </ul>
-
-        <!-- Under-$500 template link -->
-        <div class="mt-8 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-bone-muted">
-          <span class="mono text-[11px] uppercase tracking-[0.2em] text-clay">Budget under $500?</span>
-          <a
-            href="https://siteguide-production.up.railway.app/demos?utm_source=m3mm&utm_medium=audit&utm_campaign=downshift&utm_content=audit-under-500"
-            class="group inline-flex items-center gap-1.5 text-bone-dim underline decoration-clay/50 decoration-1 underline-offset-[6px] transition-colors hover:text-clay"
-            data-cta="downshift-siteguide"
-            data-section="audit-hero"
-            data-intent="product:siteguide"
-            target="_blank"
-            rel="noopener"
-          >
-            Preview the SiteGuide test storefront
-            <svg class="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-        </div>
-
-        <!-- Client proof — same named outcomes rendered on the Hero. -->
-        <div class="mt-12 grid gap-5 border-t border-ink-line/60 pt-8 sm:grid-cols-2">
-          <div class="panel flex flex-col gap-2 p-5">
-            <span class="mono text-[10px] uppercase tracking-[0.22em] text-clay">Aries Outdoor Living</span>
-            <p class="text-sm leading-snug text-bone-dim">
-              Same intake, same 24h review. <span class="text-bone">Deployed and sold</span> · first quote request 3 days after handoff.
-            </p>
-          </div>
-          <div class="panel flex flex-col gap-2 p-5">
-            <span class="mono text-[10px] uppercase tracking-[0.22em] text-clay">Big 7 Construction</span>
-            <p class="text-sm leading-snug text-bone-dim">
-              Same intake. <span class="text-bone">Build + Repair test deployment complete</span> — official launch waits on real jobsite photography.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+<section class="page-intro container-page m3-hero"><div><p class="m3-eyebrow">Free site review</p><h1>A clearer view of<br/>what needs fixing.</h1><p class="m3-lede">I’ll review your site personally—Lighthouse, mobile, funnel and copy—and send a 5-minute recorded video teardown within 24 hours. If nothing needs fixing, I’ll tell you that too.</p><div class="m3-actions"><a href="#intake" class="m3-button primary" data-cta="audit-intake" data-section="audit-hero" data-intent="book:free-review">Request the free review ↓</a><a href="/websites#proof" class="m3-link" data-cta="audit-proof" data-section="audit-hero">See the client work →</a></div></div><aside class="m3-manifesto" aria-label="What to expect"><div><span>01 / Share</span><strong>Two-minute intake.</strong><p>Your business, current site and the problem you’re seeing.</p></div><div><span>02 / Review</span><strong>Personal, not a template.</strong><p>Recorded video teardown, not a template. No sales call.</p></div><div><span>03 / Decide</span><strong>A useful next step.</strong><p>Keep the review. Decide whether a repair or a build makes sense.</p></div></aside></section>
 
   <Intake
     eyebrow="Step 1 · Tell me what to look at"
@@ -83,5 +26,17 @@ import Intake from '@/components/Intake.astro';
     source="audit-page"
   />
 
-  <Footer slot="footer" path="/audit" />
+  <section class="container-page"><p class="m3-lede">Need a lower-cost self-serve option?</p><a
+            href="https://siteguide-production.up.railway.app/demos?utm_source=m3mm&utm_medium=audit&utm_campaign=downshift&utm_content=audit-under-500"
+            class="m3-link"
+            data-cta="downshift-siteguide"
+            data-section="audit-hero"
+            data-intent="product:siteguide"
+            target="_blank"
+            rel="noopener"
+          >
+            Preview the SiteGuide test storefront
+            <svg class="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a></section>
+<Footer slot="footer" path="/audit" />
 </Layout>

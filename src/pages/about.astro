@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+
+---
+<Layout title="About — M3MM" description="Meet the engineer behind M3MM. Learn how the company approaches websites, software, ownership and delivery." path="/about">
+<Header slot="header" path="/about" />
+
+<section class="m3-intro container-page"><p class="m3-eyebrow">About M3MM</p><h1>One engineer.<br/>A clear line of sight.</h1><p class="m3-lede">M3MM is Michael Murillo-Martinez’s company for websites, software and practical automation. Based in Atlanta. Built around work people can actually use.</p></section>
+<section class="m3-section container-page m3-split"><div><p class="m3-eyebrow">The person behind the work</p><h2>From the first conversation<br/>to the handoff.</h2></div><div class="m3-reading"><p>You work directly with the engineer doing the build. The aim is to keep decisions understandable: what is included, what is being tested, who owns it and what is ready to launch.</p><p>The company brings client work, product development and delivery systems together without pretending they are the same thing. Experimental work remains labeled as experimental.</p><div class="m3-actions"><a class="m3-button" href="/resume" data-cta="about-resume" data-section="about">Read Michael’s experience</a><a class="m3-link" href="/projects" data-cta="about-projects" data-section="about">Explore projects →</a></div></div></section>
+<section class="m3-section container-page"><div class="m3-grid"><article class="m3-card"><p class="m3-eyebrow">Modernize.</p><h3>Make things clearer.</h3><p>Structure, language and useful interfaces before decorative complexity.</p></article><article class="m3-card"><p class="m3-eyebrow">Mobilize.</p><h3>Turn a plan into working software.</h3><p>Small, coherent stages with a visible purpose and an observable result.</p></article><article class="m3-card"><p class="m3-eyebrow">Multiply.</p><h3>Build on verified work.</h3><p>Reusable tools, clear ownership and improvements grounded in evidence.</p></article></div></section>
+<section class="container-page m3-close"><div><h2>Know what to expect.</h2><p>Read our public policies and accessibility statement, or bring a project to the conversation.</p><a class="m3-link" href="/policies" data-cta="about-policies" data-section="about">Company policies →</a></div><a class="m3-button primary" href="/contact" data-cta="about-contact" data-section="about">Contact Michael →</a></section>
+
+<Footer slot="footer" path="/about" />
+</Layout>

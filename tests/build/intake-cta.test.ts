@@ -19,14 +19,7 @@ describe('Header + Footer thread `path` so intake CTAs never dead-end', () => {
     expect(src).toMatch(/<section id="intake" class="[^"]*\boverflow-hidden\b/);
   });
 
-  it('Header derives an intakeHref from the current path', () => {
-    const src = read('src/components/Header.astro');
-    expect(src).toMatch(/path\?:\s*string/);
-    expect(src).toMatch(/const\s+intakeHref\s*=\s*hasIntakeOnPage\s*\?\s*['"]#intake['"]\s*:\s*['"]\/audit#intake['"]/);
-    // Every `#intake` href in Header now flows through intakeHref — the
-    // literal `href="#intake"` shape must be gone.
-    expect(src).not.toMatch(/href="#intake"/);
-  });
+  it('Header uses a real Contact destination rather than a missing intake fragment',()=>{expect(read('src/components/Header.astro')).toContain("['/contact','Contact']");expect(read('src/pages/contact.astro')).toContain('<Intake');});
 
   it('Footer derives an intakeHref from the current path', () => {
     const src = read('src/components/Footer.astro');

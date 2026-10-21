@@ -1,0 +1,19 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import {PUBLIC_PROJECTS,statusLabel} from '@/config/public-projects';
+---
+<Layout title="Projects — M3MM" description="Explore M3MM’s approved public project directory. Filter released work, testing previews and planned builds without confusing status with availability." path="/projects">
+<Header slot="header" path="/projects" />
+
+<section class="m3-intro container-page"><p class="m3-eyebrow">Projects</p><h1>Explore the work.<br/>Know where it stands.</h1><p class="m3-lede">Client websites, practical products and delivery tools. This directory uses the existing public release registry; previews and proposed builds remain labeled.</p></section>
+<section class="m3-section container-page" aria-label="Public project directory"><div class="m3-filter"><label>Find a project<input id="project-search" type="search" placeholder="Search projects" autocomplete="off"/></label><label>Release status<select id="project-status"><option value="all">All statuses</option><option value="released">Officially released</option><option value="next">Next official launch</option><option value="testing">Testing previews</option><option value="upcoming">Planned</option></select></label><p id="project-count" role="status" aria-live="polite">{PUBLIC_PROJECTS.length} public entries</p></div><div class="m3-project-list">{PUBLIC_PROJECTS.map(p=><article class="m3-project-row" data-project-row data-status={p.status} data-search={(p.name+' '+p.blurb).toLowerCase()}><span class="m3-status" data-status={p.status}>{statusLabel(p.status)}</span><div><h2>{p.name}</h2><p>{p.blurb}</p></div><a class="m3-link" href={'/projects/'+p.slug} data-cta="project-detail" data-section="projects" aria-label={'Explore '+p.name}>Explore →</a></article>)}</div><p id="projects-empty" hidden>No matching projects. Clear the search or choose All statuses.</p><div class="m3-actions"><a class="m3-button" href="/roadmap" data-cta="projects-roadmap" data-section="projects">Open Project Roadmap →</a><a class="m3-link" href="/websites#proof" data-cta="projects-client-proof" data-section="projects">Read the client case studies →</a></div></section>
+<script>
+const search=document.querySelector<HTMLInputElement>('#project-search');const select=document.querySelector<HTMLSelectElement>('#project-status');
+function filter(){let count=0;for(const row of document.querySelectorAll<HTMLElement>('[data-project-row]')){const show=(!search?.value||row.dataset.search?.includes(search.value.toLowerCase().trim()))&&(!select||select.value==='all'||row.dataset.status===select.value);row.hidden=!show;if(show)count++;}const status=document.getElementById('project-count');if(status)status.textContent=count+' public '+(count===1?'entry':'entries');const empty=document.getElementById('projects-empty');if(empty)empty.hidden=count!==0;}
+search?.addEventListener('input',filter);select?.addEventListener('change',filter);
+</script>
+
+<Footer slot="footer" path="/projects" />
+</Layout>

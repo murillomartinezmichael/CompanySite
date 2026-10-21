@@ -29,3 +29,11 @@ Thumbs.db
 # NOTE: deliberately NOT ignoring `build/` -- tests/build/ holds tracked specs.
 coverage/
 .vite/
+
+# Private workspace local secrets and key-ceremony outputs
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+*.dpapi
+*.recovery-envelope.json

@@ -1,6 +1,7 @@
 ---
 import { palettes } from '../../tailwind.config.mjs';
 import '@/styles/global.css';
+import '@/styles/redesign.css';
 // Claude-powered assistant, replaced the SiteGuide embed 2026-08-20.
 import ChatWidget from '@/components/ChatWidget.astro';
 
@@ -120,7 +121,7 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
       '@context': 'https://schema.org',
       '@type': 'ProfessionalService',
       name: 'M3MM',
-      logo: 'https://m3mm.net/brand-mark.png',
+      logo: 'https://m3mm.net/official-logo.png',
       url: 'https://m3mm.net/',
       description,
       areaServed: 'United States',
@@ -217,7 +218,7 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
       })} />
     )}
   </head>
-  <body class:list={[{ 'hq-page': path === '/' || path === '/websites' }]}>
+  <body class:list={[{ 'm3-redesign': true, 'hq-page': path === '/' || path === '/websites' }]}>
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-clay focus:px-4 focus:py-2 focus:text-ink">Skip to content</a>
 
     <slot name="header" />

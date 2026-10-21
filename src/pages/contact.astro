@@ -1,0 +1,15 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import Intake from '@/components/Intake.astro';
+---
+<Layout title="Contact — M3MM" description="Tell M3MM about your business, website or software project. A direct conversation with the engineer doing the work." path="/contact">
+<Header slot="header" path="/contact" />
+
+<section class="m3-intro container-page"><p class="m3-eyebrow">Contact</p><h1>What are we<br/>building next?</h1><p class="m3-lede">Bring the problem, the existing setup and the result you need. You do not need a finished technical specification to start.</p><div class="m3-actions"><a class="m3-button primary" href="#intake" data-cta="contact-open-intake" data-section="contact" data-intent="book:free-review">Tell Michael about it ↓</a><a class="m3-link" href="/services" data-cta="contact-services" data-section="contact">Review the services →</a></div></section>
+<section class="container-page m3-section"><div class="m3-grid"><article><p class="m3-eyebrow">Bring the context</p><h2>Your business.</h2><p class="m3-lede">Who it serves, the current website or tool, and the work you need it to do.</p></article><article><p class="m3-eyebrow">Name the problem</p><h2>What gets in the way?</h2><p class="m3-lede">The confusing page, repeated task or missing connection that prompted the conversation.</p></article><article><p class="m3-eyebrow">Define the outcome</p><h2>What would help?</h2><p class="m3-lede">The result, timing and constraints. Unknowns can be worked through together.</p></article></div></section>
+<Intake source="contact-page" eyebrow="Project conversation" headline="Tell me what you need." sub="Share the business and the problem. Do not include passwords, account statements or confidential financial information."/>
+
+<Footer slot="footer" path="/contact" />
+</Layout>

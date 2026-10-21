@@ -37,7 +37,8 @@ const BACKGROUNDS = THEMES.flatMap(([, p]) => [p.ink.DEFAULT, p.ink.soft, p.ink.
 
 const mutedOf = (file: string, variable: string) => {
   if (file === 'src/pages/index.astro' || file === 'src/pages/roadmap.astro') {
-    expect(read(file)).toContain(`--${variable}: theme('colors.bone.muted')`);
+    expect(read('src/styles/redesign.css')).toContain('rgb(var(--bone-muted))');
+    expect(read('src/layouts/Layout.astro')).toContain("import '@/styles/redesign.css'");
     return null; // token-backed: covered per theme by the pairing test
   }
   const m = read(file).match(new RegExp(`--${variable}:\\s*(#[0-9a-fA-F]{6})`));

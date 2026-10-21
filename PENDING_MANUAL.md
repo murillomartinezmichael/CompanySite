@@ -1,3 +1,46 @@
+<!-- ACTIVATION-WORK-CURRENT -->
+## Exact current activation prerequisites — approvals already recorded
+
+- [ ] **Cloudflare Access administration:** identify/create the owner-only private application and configure its issuer, audience, immutable owner and scoped session-read credential through approved host secrets. Existing CLI scope/session does not establish Access administration. Resumes actual-login/revocation acceptance.
+- [ ] **Independent recovery custody:** choose the actual backup destination and keep a strong recovery passphrase separately; run `scripts/prepare-finance-recovery.mjs` locally with hidden input. No key or passphrase should be pasted into chat. Resumes production secret installation and independent-machine recovery tests.
+- [ ] **Private media enrollment:** the live R2 API reported dashboard activation required. Resolve its actual terms before enabling; no unspecified charge is authorized. Resumes bucket setup and protected real-object tests.
+- [ ] **Read-only valuation source:** identify its permissions, cost/definitions and the existing authorized scheduler. The discovered nightly synchronization task is not verified as that scheduler and was not changed. Resumes actual daily refresh verification.
+
+Unknown source facts and ownership stay unresolved; owner approval does not guess them. No repeat generic approval is needed.
+<!-- /ACTIVATION-WORK-CURRENT -->
+
+<!-- OWNER-APPROVAL-20261020 -->
+## Owner approval received
+
+The owner approved proceeding with the current CompanySite activation and release scope on 2026-10-20. See `docs/redesign/OWNER_APPROVAL_2026-10-20.md`. Repeated approval is no longer the blocker for that scope; required credentials, concrete configuration details, source facts and technical verification still are. Preserve owner-only access and existing no-trading/no-unspecified-spending boundaries.
+<!-- /OWNER-APPROVAL-20261020 -->
+
+<!-- PRIVATE-CONTINUATION-20261020 -->
+## Current private workspace activation gates
+
+- [ ] Approve the actual owner identity provider mapping, signing-key source and authoritative session/revocation service. No login or investor policy was changed.
+- [ ] Approve the private production database, encrypted-store migration, secret/recovery-key custody and independent restore destination. No remote database or production key was created.
+- [ ] Reconcile and approve the latest real finance and private operational records before import. Resolve ambiguous securities, coin weight/type, source timestamps and ownership.
+- [ ] Approve a protected media-store delivery path before enabling private playback/downloads. Original media remain retained.
+- [ ] Approve the read-only valuation source and verify the existing scheduler; no paid feed, bank connection or schedule is active.
+- [ ] Approve source integration, push/merge and deployment separately after reviewing the candidate and any concurrent changes.
+
+Local implementation is no longer the blocker for the core storage/import flows. These are actual activation, custody, source-evidence and release decisions. Original manual tasks remain below.
+<!-- /PRIVATE-CONTINUATION-20261020 -->
+
+# Redesign activation gates
+
+- [ ] Approve and verify an owner identity service integration. Why blocked: CompanySite has no current user login, and no permission/provider changes were authorized. Resumes: real owner/non-owner/expired-session acceptance tests.
+- [ ] Approve a private, access-controlled finance store and verify atomic duplicate handling and backup/restore. Why blocked: no approved private store exists in CompanySite. Resumes: import of the latest corrected records, private operational catalog and reconciliation.
+- [ ] Verify symbols, truncated holdings, metal identity/weight, ownership and source timestamps in the private importer. Why blocked: no authoritative position documents/data source has been approved for this application. Resumes: reconciled valuations without substituting assets.
+- [ ] Approve a suitable read-only daily price/account source and existing scheduler integration. Why blocked: source/persistence/permissions have not been verified. Resumes: actual daily-history refresh acceptance.
+- [ ] Review this candidate with the existing CompanySite owner and approve source integration and deployment separately. Why blocked: no merge, push, public preview, permission change or deployment was authorized. Resumes: staged production acceptance, preserving all other agent work.
+
+
+## Preserved pre-redesign manual work
+
+The following baseline items retain their original ownership and status. They have not been marked complete by this redesign.
+
 # Pending manual
 
 ## 2026-09-18 — release the inquiry reliability candidate

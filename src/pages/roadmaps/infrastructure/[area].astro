@@ -1,0 +1,13 @@
+---
+import Layout from '@/layouts/Layout.astro';import Header from '@/components/Header.astro';import Footer from '@/components/Footer.astro';
+import {ENVIRONMENT_AREAS,type EnvironmentArea} from '@/config/environment';
+export function getStaticPaths(){return ENVIRONMENT_AREAS.map(area=>({params:{area:area.slug},props:{area}}));}
+interface Props {area:EnvironmentArea;}
+const {area}=Astro.props;const pagePath='/roadmaps/infrastructure/'+area.slug;
+---
+<Layout title={area.title+' — M3MM Infrastructure'} description={area.summary} path={pagePath} breadcrumbs={[{name:'M3MM',url:'/'},{name:'Roadmaps',url:'/roadmaps'},{name:'Infrastructure',url:'/roadmaps/infrastructure'},{name:area.title,url:pagePath}]}><Header slot="header" path={pagePath}/>
+<section class="container-page m3-intro"><p class="m3-eyebrow">Infrastructure / Planning</p><h1>{area.title}</h1><p class="m3-lede">{area.summary}</p><div class="m3-actions"><a class="m3-link" href="/roadmaps/infrastructure" data-cta="infra-detail-back" data-section="infra-detail" data-intent="product:roadmap">Back to Infrastructure Roadmap →</a></div></section>
+<section class="container-page m3-section m3-split"><div><p class="m3-eyebrow">Purpose and boundaries</p><h2>Plan first.<br/>Verify before changing.</h2><p class="m3-lede">This is a public planning overview. Device identities, configurations, actual costs and evidence of completed work remain in private operational records.</p></div><article class="m3-card"><h2>What belongs here</h2><ul class="infra-focus">{area.focus.map(point=><li>{point}</li>)}</ul><h3>Next verification step</h3><p>{area.next}</p></article></section>
+<section class="container-page m3-close"><div><h2>Infrastructure is not a product release.</h2><p>Software launch decisions stay with the existing project owner and the separate Project Roadmap.</p></div><a class="m3-button" href="/roadmap" data-cta="infra-detail-projects" data-section="infra-detail" data-intent="product:roadmap">Project Roadmap →</a></section>
+<Footer slot="footer" path={pagePath}/></Layout>
+<style>.infra-focus{padding-left:1.2rem;margin:1.5rem 0;list-style:disc;color:rgb(var(--bone-dim))}.infra-focus li{margin:.75rem 0}</style>

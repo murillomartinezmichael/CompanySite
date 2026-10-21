@@ -41,11 +41,53 @@ function walkAstro(dir: string): string[] {
 // these lists with a written reason. This is the fence.
 
 const NAV_ONLY_CTAS: ReadonlySet<string> = new Set([
+  'footer-home', // Redesign: route/section navigation, not a form submission.
+  'footer-services', // Redesign: route/section navigation, not a form submission.
+  'footer-projects', // Redesign: route/section navigation, not a form submission.
+  'footer-roadmaps', // Redesign: route/section navigation, not a form submission.
+  'footer-about', // Redesign: route/section navigation, not a form submission.
+  'footer-contact', // Redesign: route/section navigation, not a form submission.
+  'footer-resume', // Redesign: route/section navigation, not a form submission.
+  'footer-workspace', // Redesign: route/section navigation, not a form submission.
+  'mobile-menu', // Redesign: route/section navigation, not a form submission.
+  'hero-packages', // Redesign: route/section navigation, not a form submission.
+  'hero-proof', // Redesign: route/section navigation, not a form submission.
+  'selected-project', // Redesign: route/section navigation, not a form submission.
+  'about-resume', // Redesign: route/section navigation, not a form submission.
+  'about-projects', // Redesign: route/section navigation, not a form submission.
+  'about-policies', // Redesign: route/section navigation, not a form submission.
+  'about-contact', // Redesign: route/section navigation, not a form submission.
+  'accessibility-section', // Redesign: route/section navigation, not a form submission.
+  'policies-section', // Redesign: route/section navigation, not a form submission.
+  'resume-section', // Redesign: route/section navigation, not a form submission.
+  'contact-services', // Redesign: route/section navigation, not a form submission.
+  'home-start', // Redesign: route/section navigation, not a form submission.
+  'home-services', // Redesign: route/section navigation, not a form submission.
+  'home-all-projects', // Redesign: route/section navigation, not a form submission.
+  'home-infrastructure', // Redesign: route/section navigation, not a form submission.
+  'home-contact', // Redesign: route/section navigation, not a form submission.
+  'infra-project-track', // Redesign: route/section navigation, not a form submission.
+  'infra-back-roadmaps', // Redesign: route/section navigation, not a form submission.
+  'projects-roadmap', // Redesign: route/section navigation, not a form submission.
+  'projects-client-proof', // Redesign: route/section navigation, not a form submission.
+  'project-detail', // Redesign: route/section navigation, not a form submission.
+  'project-open', // Redesign: route/section navigation, not a form submission.
+  'project-roadmap', // Redesign: route/section navigation, not a form submission.
+  'project-contact', // Redesign: route/section navigation, not a form submission.
+  'roadmap-infrastructure', // Redesign: route/section navigation, not a form submission.
+  'roadmap-follow', // Redesign: route/section navigation, not a form submission.
+  'roadmaps-projects', // Redesign: route/section navigation, not a form submission.
+  'roadmaps-infrastructure', // Redesign: route/section navigation, not a form submission.
+  'roadmaps-work', // Redesign: route/section navigation, not a form submission.
+  'services-websites', // Redesign: route/section navigation, not a form submission.
+  'services-projects', // Redesign: route/section navigation, not a form submission.
+  'thanks-roadmaps', // Redesign: route/section navigation, not a form submission.
+  'audit-proof', // Redesign: route/section navigation, not a form submission.
+  'hq-released', // Home navigation to the public project directory.
+  'hq-roadmap-full', // Home navigation to Project Roadmap.
   'logo',              // Header: brand mark → /
   'breadcrumb',        // Page hierarchy navigation, not a conversion.
   'roadmap-motion-toggle', // Roadmap decorative motion preference.
-  'hq-motion-toggle',  // Decorative motion preference, not a conversion.
-  'sales-motion-toggle', // Same preference on the sales hero.
   'footer-motion-toggle', // Accessible sitewide motion preference.
   'header-theme-toggle', // Light/dark display preference, not a conversion.
   'footer-a11y',       // Footer: nav → /accessibility statement page

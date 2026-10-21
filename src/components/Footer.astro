@@ -19,53 +19,15 @@ const EMAIL_HOST = 'gmail.com';
 const EMAIL_SUBJECT = 'Free site review request — m3mm.net';
 const EMAIL_BODY = "Hey Mike,\n\nBusiness: \nCurrent site: \nWhat's frustrating me: \n\n— sent from m3mm.net footer";
 ---
-
-<footer class="site-footer mt-24 border-t border-ink-line/60">
-  <div class="container-page flex flex-col gap-6 py-10 text-sm text-bone-muted sm:flex-row sm:items-center sm:justify-between">
-    <div class="flex items-center gap-3">
-      <span class="grid h-12 w-12 shrink-0 place-items-center">
-        <img src="/official-logo.png" alt="M3MM" width="48" height="48" class="h-12 w-12 object-contain" decoding="async" />
-      </span>
-      <span class="flex flex-col gap-0.5">
-        <span class="font-mono text-[10px] uppercase tracking-[0.16em] text-bone-dim">Modernize. Mobilize. Multiply.</span>
-        <span>© {year} Michael Murillo-Martinez · Atlanta, GA</span>
-      </span>
-    </div>
-    <nav class="flex flex-wrap items-center gap-x-6 gap-y-2" aria-label="Footer">
-      <a href="/investors/" class="transition-colors hover:text-bone" data-cta="footer-investors" data-section="footer" data-intent="product:investor-showcase">Investors</a>
-      <a href="/" class="transition-colors hover:text-bone" data-cta="footer-home" data-section="footer" data-intent="product:company-hub">Home</a>
-      <a href="/roadmap" class="transition-colors hover:text-bone" data-cta="footer-roadmap" data-section="footer" data-intent="product:roadmap">Roadmap</a>
-      <a href="/resume" class="transition-colors hover:text-bone" data-cta="footer-resume" data-section="footer" data-intent="product:career">Resume</a>
-      <a href="/websites" class="transition-colors hover:text-bone" data-cta="footer-websites" data-section="footer" data-intent="product:website-services">Websites</a>
-      <a
-        href="/audit#intake"
-        class="max-w-full break-all transition-colors hover:text-bone"
-        data-cta="footer-email"
-        data-section="footer"
-        data-intent="book:free-review"
-        data-em-u={EMAIL_USER}
-        data-em-h={EMAIL_HOST}
-        data-em-sub={EMAIL_SUBJECT}
-        data-em-body={EMAIL_BODY}
-      >email →</a>
-      <a href={intakeHref} class="transition-colors hover:text-bone" data-cta="footer-intake" data-section="footer" data-intent="book:free-review">Free site review →</a>
-      <a
+<footer class="site-footer m3-footer"><div class="container-page m3-footer-grid"><div><a href="/" class="m3-footer-brand" data-cta="footer-home" data-section="footer"><img src="/official-logo.png" alt="" width="52" height="52"/><strong>M3MM</strong></a><p>Modernize. Mobilize. Multiply.</p><p>Websites, software, and practical automation.<br/>Built in Atlanta.</p></div><nav aria-label="Explore M3MM"><h2>Explore</h2><a href="/services" data-cta="footer-services" data-section="footer">Services</a><a href="/projects" data-cta="footer-projects" data-section="footer">Projects</a><a href="/roadmaps" data-cta="footer-roadmaps" data-section="footer">Both roadmaps</a><a href="/about" data-cta="footer-about" data-section="footer">About M3MM</a></nav><nav aria-label="Get started"><h2>Let’s build</h2><a href="/contact" data-cta="footer-contact" data-section="footer">Start a conversation</a><a href={intakeHref} data-cta="footer-intake" data-section="footer" data-intent="book:free-review">Free site review</a><a href="/audit#intake" data-cta="footer-email" data-section="footer" data-intent="book:free-review" data-em-u={EMAIL_USER} data-em-h={EMAIL_HOST} data-em-sub={EMAIL_SUBJECT} data-em-body={EMAIL_BODY}>Email Michael</a><a
         href="https://siteguide-production.up.railway.app/demos?utm_source=m3mm&utm_medium=footer&utm_campaign=downshift&utm_content=footer-link"
         target="_blank"
         rel="noopener"
-        class="transition-colors hover:text-bone"
+        class="m3-link"
         data-cta="footer-siteguide"
         data-section="footer"
         data-intent="product:siteguide"
-      >Templates ↗</a>
-      <a href="/policies" class="transition-colors hover:text-bone" data-cta="footer-policies" data-section="footer">Policies</a>
-      <a href="/accessibility" class="transition-colors hover:text-bone" data-cta="footer-a11y" data-section="footer">Accessibility</a>
-    </nav>
-  </div>
-  <div class="container-page"><button class="motion-toggle" type="button" data-motion-toggle hidden aria-pressed="false" data-cta="footer-motion-toggle" data-section="footer">Pause motion</button></div>
-</footer>
-
-<script is:inline>
+      >Templates ↗</a><a href="/resume" data-cta="footer-resume" data-section="footer">Experience &amp; resume</a></nav></div><div class="container-page m3-footer-bottom"><p>© {year} Michael Murillo-Martinez</p><nav aria-label="Legal and workspace"><a href="/policies" data-cta="footer-policies" data-section="footer">Policies</a><a href="/accessibility" data-cta="footer-a11y" data-section="footer">Accessibility</a><a href="/workspace" data-cta="footer-workspace" data-section="footer">Private workspace ↗</a></nav><button type="button" class="motion-toggle" data-motion-toggle hidden aria-pressed="false" data-cta="footer-motion-toggle" data-section="footer">Pause motion</button></div></footer><script is:inline>
   // Hydrate the footer email link to a real mailto: without leaving the
   // address in HTML source. A raw address trips Cloudflare's Email Address
   // Obfuscation, which injects a render-blocking cdn-cgi email-decode script
@@ -83,13 +45,4 @@ const EMAIL_BODY = "Hey Mike,\n\nBusiness: \nCurrent site: \nWhat's frustrating 
     a.textContent = addr;
   })();
 </script>
-
-<style>
-  .site-footer { border-top: 3px solid theme('colors.electric.DEFAULT'); background: theme('colors.ink.soft'); }
-  .site-footer > div:first-child { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.4fr); align-items: start; gap: 3rem; }
-  .site-footer nav { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .25rem 1.5rem; }
-  .site-footer nav a { display: inline-flex; align-items: center; min-height: 44px; color: theme('colors.bone.dim'); }
-  .site-footer nav a:hover { color: theme('colors.electric.DEFAULT'); }
-  .site-footer nav a[data-cta="footer-email"] { grid-column: 1 / -1; order: 1; }
-  @media (max-width: 768px) { .site-footer > div:first-child { grid-template-columns: 1fr; gap: 2rem; } .site-footer nav { grid-template-columns: repeat(2,minmax(0,1fr)); } }
-</style>
+<style>.m3-footer{border-top:1px solid rgb(var(--ink-line));margin-top:var(--m3-section);background:rgb(var(--ink-soft))}.m3-footer-grid{display:grid;grid-template-columns:1.5fr .8fr 1fr;gap:3rem;padding-block:3.5rem}.m3-footer-brand{display:inline-flex;gap:1rem;align-items:center}.m3-footer-brand img{object-fit:contain}.m3-footer-brand strong{font:600 1.5rem/1 'Space Grotesk',sans-serif}.m3-footer p{font-size:.875rem;color:rgb(var(--bone-muted));margin-top:1rem}.m3-footer nav{display:flex;flex-direction:column}.m3-footer h2{font:600 .8rem/1.5 Inter,sans-serif;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.8rem}.m3-footer nav a{font-size:.875rem;color:rgb(var(--bone-dim));display:flex;align-items:center;min-height:44px;overflow-wrap:anywhere}.m3-footer nav a:hover{color:rgb(var(--electric))}.m3-footer-bottom{border-top:1px solid rgb(var(--ink-line));padding-block:1rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}.m3-footer-bottom p{margin:0;font-size:.8rem}.m3-footer-bottom nav{flex-direction:row;gap:1.5rem;flex-wrap:wrap}.m3-footer-bottom nav a{font-size:.8rem}@media(max-width:750px){.m3-footer-grid{grid-template-columns:1fr 1fr;gap:2rem}.m3-footer-grid>div{grid-column:1/-1}.m3-footer-bottom{align-items:start;flex-direction:column}}</style>

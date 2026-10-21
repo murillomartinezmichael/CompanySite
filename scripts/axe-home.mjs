@@ -1,4 +1,4 @@
-/** All public pages: structure, navigation and accessibility. Build first. */
+/** Public templates and conversion pages at four viewport widths. Full route coverage also runs in redesign-browser-after.mjs. Build first. */
 import { createServer } from 'node:http';
 import { readFile, stat, mkdir, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
@@ -21,7 +21,7 @@ const silentReelVerified = createHash('sha256')
 
 const ROUTES = ['/', '/roadmap/', '/websites/', '/compare/website-options/',
   '/audit/', '/start/', '/start/thanks/', '/thanks/', '/resume/', '/policies/',
-  '/accessibility/', '/roadmap/thanks/', '/for/construction/', '/for/home-services/', '/for/outdoor-living/'];
+  '/accessibility/', '/roadmap/thanks/', '/for/construction/', '/for/home-services/', '/for/outdoor-living/', '/services/', '/projects/', '/roadmaps/', '/about/', '/contact/', '/roadmaps/infrastructure/', '/roadmaps/infrastructure/hardware/'];
 const VIEWPORTS = [
   { name: 'narrow', width: 320, height: 812, deviceScaleFactor: 1, isMobile: true },
   { name: 'tablet', width: 768, height: 1024, deviceScaleFactor: 1, isMobile: true },
@@ -123,7 +123,7 @@ try {
       const isComparison = route === '/compare/website-options/';
       const isSales = route === '/websites/';
       const prefix = isHome ? '' : isComparison ? 'comparison-' : route.slice(1).replaceAll('/', '-');
-      const heading = isHome ? '#hub-heading' : isRoadmap ? '#roadmap-heading' : isComparison ? '#comparison-heading' : 'main h1';
+      const heading = isHome ? '#home-title' : isRoadmap ? 'main h1' : isComparison ? '#comparison-heading' : 'main h1';
       const consoleErrors = [];
       const failedRequests = [];
       page.on('pageerror', (error) => consoleErrors.push(String(error)));
@@ -151,7 +151,14 @@ try {
       if (!emailLinksWork) throw new Error(`${route}: email hydration must preserve each link's label and destination`);
       const firstCta = await page.evaluate(() => document.querySelector('main a[href], main button:not([disabled])')?.getAttribute('data-cta'));
       if (!firstCta) throw new Error(`${route}: first main-content action has no tracking marker`);
-      await page.screenshot({ path: join(artifacts, `${prefix}${viewport.name}-hero.png`) });
+      // Search/filter inputs may precede the first conversion CTA. The skip
+      // control must reach the first visible main control, not an assumed link.
+      const firstMainControl=await page.evaluate(()=>{
+        const element=[...document.querySelectorAll('main a[href], main button:not([disabled]), main input:not([disabled]):not([type="hidden"]), main select:not([disabled]), main textarea:not([disabled]), main summary')].find(e=>{const r=e.getBoundingClientRect();return r.width>0&&r.height>0;});
+        if(!element)return false;element.setAttribute('data-keyboard-probe','first-main-control');return true;
+      });
+      if(!firstMainControl)throw new Error('No usable main control on '+route);
+      await page.screenshot({ path: join(artifacts, prefix+viewport.name+'-hero.png') });
       await page.keyboard.press('Tab');
       const skipVisible = await page.evaluate(() => {
         const a = document.activeElement, r = a.getBoundingClientRect();
@@ -159,12 +166,12 @@ try {
       });
       await page.keyboard.press('Enter');
       await page.keyboard.press('Tab');
-      const skipWorks = await page.evaluate(expected => document.activeElement.getAttribute('data-cta') === expected, firstCta);
+      const skipWorks = await page.evaluate(() => document.activeElement.getAttribute('data-keyboard-probe') === 'first-main-control');
       const focusVisible = await page.evaluate(() => parseFloat(getComputedStyle(document.activeElement).outlineWidth) >= 2);
       await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
       const reducedMotion = await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior === 'auto');
       if (!skipVisible || !skipWorks || !focusVisible || !reducedMotion) {
-        throw new Error(`Keyboard/motion regression: ${JSON.stringify({ skipVisible, skipWorks, focusVisible, reducedMotion })}`);
+        throw new Error(`Keyboard/motion regression on ${route} at ${viewport.width}px: ${JSON.stringify({ skipVisible, skipWorks, focusVisible, reducedMotion })}`);
       }
       await page.evaluate(() => { document.activeElement.blur(); window.scrollTo({ top: 0, behavior: 'instant' }); });
       await page.evaluate(AXE_SOURCE);
@@ -248,7 +255,7 @@ try {
       await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
       await page.evaluate(selector => document.querySelector(selector).scrollIntoView({ behavior: 'instant' }), releaseSelector);
       await page.screenshot({ path: join(artifacts, `${prefix}${viewport.name}-releases.png`) });
-      for (const section of (isHome ? ['.departments', '#roadmap', 'footer'] : isRoadmap ? ['.section-nav', '#quarter-2', '.signup', 'footer'] : isComparison ? ['#quote-heading', '.next-step', 'footer'] : isSales ? ['.section-nav', '#proof', '#intake', 'footer'] : ['footer'])) {
+      for (const section of (isHome ? ['#home-services', '#roadmap', 'footer'] : isRoadmap ? ['.roadmap-filters', '#quarter-2', '.signup', 'footer'] : isComparison ? ['#quote-heading', '.next-step', 'footer'] : isSales ? ['.section-nav', '#proof', '#intake', 'footer'] : ['footer'])) {
         await page.evaluate(selector => document.querySelector(selector).scrollIntoView({ behavior: 'instant' }), section);
         await page.screenshot({ path: join(artifacts, `${prefix}${viewport.name}-${section.replace(/[.#]/g, '')}.png`) });
       }

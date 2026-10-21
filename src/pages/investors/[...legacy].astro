@@ -1,0 +1,6 @@
+---
+import WorkspaceLayout from '@/layouts/WorkspaceLayout.astro';import {WORKSPACE_VIEWS} from '@/config/workspace';
+export function getStaticPaths(){return [{params:{legacy:undefined},props:{slug:'investor-ledger'}},{params:{legacy:'infrastructure'},props:{slug:'operations/infrastructure'}},{params:{legacy:'accessibility'},props:{slug:'operations'}}];}
+const view=WORKSPACE_VIEWS.find(v=>v.slug===Astro.props.slug)!;
+---
+<WorkspaceLayout view={view}/>

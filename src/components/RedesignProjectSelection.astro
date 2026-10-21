@@ -1,0 +1,6 @@
+---
+import {DROPS} from '@/config/roadmap';
+import {projectSlug} from '@/config/public-projects';
+const selected=[DROPS[1],DROPS[4],DROPS[5]];
+---
+<div class="m3-grid">{selected.map(p=><article class="m3-card"><span class="m3-status" data-status={p.status}>{p.status==='next'?'Next official launch':'Testing preview'}</span><h3>{p.name}</h3><p>{p.blurb}</p><a class="m3-link" href={'/projects/'+projectSlug(p.name)} data-cta="selected-project" data-section="projects">Explore the project →</a></article>)}</div>
