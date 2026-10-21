@@ -28,6 +28,9 @@ try{
  first='';second='';const filename=path.join(destination,'companysite-'+id+'.recovery-envelope.json');
  fs.writeFileSync(filename,JSON.stringify(envelope,null,2),{flag:'wx',mode:0o600});
  console.log('Encrypted recovery envelope prepared and locally decrypted for verification: '+filename);
+ console.log('Recovery context: '+context);
+ console.log('Recovery key SHA-256 fingerprint (non-secret; retain independently): '+crypto.createHash('sha256').update(raw).digest('hex'));
+ console.log('Use scripts/verify-finance-recovery.mjs on the independent recovery device with this original context and fingerprint.');
  console.log('No key was uploaded or activated. Store the recovery passphrase separately. Production secret installation and an independent-machine restore check remain required.');
 }catch(error){console.error(error instanceof Error?error.message:'Key preparation failed. No activation was performed.');process.exitCode=1;}
 finally{raw?.fill(0);restored?.fill(0);prompt.close();}
