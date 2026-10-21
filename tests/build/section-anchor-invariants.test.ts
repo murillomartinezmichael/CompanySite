@@ -64,33 +64,7 @@ describe('§ 1 — page anchors resolve to sections on the same page', () => {
     ).toEqual([]);
   });
 
-  it('every non-minimal Header resolves the anchors for its page mode', () => {
-    const missing: string[] = [];
-    for (const file of PAGES) {
-      const src = read(file);
-      if (!componentUsed(src, 'Header')) continue;
-      // Header defaults to minimal=false. Only the explicit
-      // `minimal={true}` prop suppresses the nav bar.
-      const isMinimal = /<Header[^>]*\bminimal=\{true\}/.test(src);
-      if (isMinimal) continue;
-      const isHubHome = /<Layout\b[\s\S]*?\bpath="\/"/.test(src);
-      if (isHubHome) {
-        if (!/id="released"/.test(src)) missing.push(`${file}: hub Header #released anchor dead-ends`);
-        if (!/id="roadmap"/.test(src)) missing.push(`${file}: hub Header #roadmap anchor dead-ends`);
-      } else {
-        if (!componentUsed(src, 'Proof')) {
-          missing.push(`${file}: sales Header renders without <Proof /> — nav-proof (#proof) dead-ends`);
-        }
-        if (!componentUsed(src, 'Services')) {
-          missing.push(`${file}: sales Header renders without <Services /> — nav-services (#services) dead-ends`);
-        }
-      }
-    }
-    expect(
-      missing,
-      `Header nav-* anchors point at sections not on the page — pass minimal={true} or mount the section:\n  ${missing.join('\n  ')}`,
-    ).toEqual([]);
-  });
+  it('the global header links to six real pages rather than absent in-page anchors',()=>{const header=read('src/components/Header.astro');for(const href of ['/','/services','/projects','/roadmaps','/about','/contact'])expect(header).toContain("['"+href+"',");expect(header).not.toMatch(/href=["']#(?:proof|services|intake)/);});
 
   it('Hero.astro default ctaHref stays a same-page anchor (invariant this test relies on)', () => {
     // If Hero's default ctaHref ever changes to an absolute or cross-page
@@ -106,7 +80,7 @@ describe('§ 1 — page anchors resolve to sections on the same page', () => {
     for (const anchor of ['#proof', '#services', '#intake']) expect(src).toContain(`href: '${anchor}'`);
     // The global navigation now travels between pages; rendered reachability
     // and fragment validity are checked across every route in site-structure.
-    expect(read('src/components/Header.astro')).toContain("href: '/websites'");
-    expect(read('src/components/Header.astro')).toContain("href: '/roadmap'");
+    expect(read('src/pages/services.astro')).toContain('href="/websites"');
+    expect(read('src/pages/roadmaps/index.astro')).toContain('href="/roadmap"');
   });
 });

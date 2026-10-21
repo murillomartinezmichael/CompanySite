@@ -37,6 +37,12 @@ const PAGE_EXPECTATIONS: ReadonlyArray<{
   path: string;
   noindex?: boolean;
 }> = [
+  { file: 'src/pages/about.astro', path: '/about' },
+  { file: 'src/pages/contact.astro', path: '/contact' },
+  { file: 'src/pages/services.astro', path: '/services' },
+  { file: 'src/pages/projects/index.astro', path: '/projects' },
+  { file: 'src/pages/roadmaps/index.astro', path: '/roadmaps' },
+  { file: 'src/pages/roadmaps/infrastructure.astro', path: '/roadmaps/infrastructure' },
   { file: 'src/pages/index.astro', path: '/' },
   { file: 'src/pages/audit.astro', path: '/audit' },
   { file: 'src/pages/start.astro', path: '/start' },
@@ -59,6 +65,7 @@ const PAGE_EXPECTATIONS: ReadonlyArray<{
 ];
 
 describe('canonical URL wiring', () => {
+  it('dynamic project routes use their own canonical while private routes stay noindexed',()=>{expect(read('src/pages/projects/[slug].astro')).toContain('path={pagePath}');expect(read('src/pages/projects/[slug].astro')).toContain("pagePath='/projects/'+project.slug");expect(read('src/layouts/WorkspaceLayout.astro')).toContain('noindex,nofollow,noarchive');expect(read('public/sitemap.xml')).not.toMatch(/\/(workspace|investors)/);});
   it('astro.config.mjs pins site to the production origin', () => {
     const cfg = read('astro.config.mjs');
     expect(cfg).toMatch(new RegExp(`site:\\s*['"\`]${PROD_ORIGIN}['"\`]`));
@@ -127,7 +134,7 @@ describe('canonical URL wiring', () => {
     const disk = walkAstro(root + 'src/pages')
       .map((f) => relative(root, f).replace(/\\/g, '/'))
       .sort();
-    const covered = PAGE_EXPECTATIONS.map((p) => p.file).sort();
+    const covered = [...PAGE_EXPECTATIONS.map((p) => p.file),'src/pages/projects/[slug].astro','src/pages/workspace/[...view].astro','src/pages/investors/[...legacy].astro','src/pages/roadmaps/infrastructure/[area].astro'].sort();
     expect(disk).toEqual(covered);
   });
 

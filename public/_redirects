@@ -8,3 +8,15 @@
 
 # The former standalone hub is now the primary homepage.
 /hub           /             301
+
+# Preserve PR38 entrances without a second competing navigation or /about route.
+/environment /roadmaps/infrastructure 301
+/roadmaps/environment /roadmaps/infrastructure 301
+/business /about 301
+/environment/hardware /roadmaps/infrastructure/hardware 301
+/environment/networking /roadmaps/infrastructure/networking 301
+/environment/compute /roadmaps/infrastructure/compute 301
+/environment/storage /roadmaps/infrastructure/storage 301
+/environment/security /roadmaps/infrastructure/security 301
+/environment/budget /roadmaps/infrastructure/budget 301
+/projects/michaels-resume-career-site /projects/michael-s-resume-career-site 301

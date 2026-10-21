@@ -1,0 +1,15 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+
+---
+<Layout title="Roadmaps — M3MM" description="Two clear roadmaps: the projects M3MM is building and the infrastructure that supports delivery." path="/roadmaps">
+<Header slot="header" path="/roadmaps" />
+
+<section class="m3-intro container-page"><p class="m3-eyebrow">Roadmaps</p><h1>The work.<br/>The foundation.</h1><p class="m3-lede">Two related tracks, not one overloaded page. Follow product delivery separately from the infrastructure that supports it.</p></section>
+<section class="m3-section container-page"><div class="m3-grid two"><article class="m3-card"><p class="m3-eyebrow">01 / Delivery</p><h2>Project Roadmap</h2><p>Every approved public release entry, its lifecycle status and the next proposed step. Testing is not the same as released.</p><a class="m3-link" href="/roadmap" data-cta="roadmaps-projects" data-section="roadmap">Explore Project Roadmap →</a></article><article class="m3-card"><p class="m3-eyebrow">02 / Reliability</p><h2>Infrastructure Roadmap</h2><p>Recovery, separation, storage and capacity. Public milestones only; internal budgets and configurations remain private.</p><a class="m3-link" href="/roadmaps/infrastructure" data-cta="roadmaps-infrastructure" data-section="roadmap">Explore Infrastructure Roadmap →</a></article></div></section>
+<section class="m3-section container-page m3-split"><div><p class="m3-eyebrow">How to read the plans</p><h2>Direction, not a promise.</h2></div><div class="m3-reading"><p>A target date is not a release commitment. A demo is not proof of production readiness. Stages change when the work and acceptance checks support the change.</p><p>Public information is kept separate from owner records, investor arrangements, internal budgets and system access details.</p><a class="m3-link" href="/projects" data-cta="roadmaps-work" data-section="roadmap">See the public project directory →</a></div></section>
+
+<Footer slot="footer" path="/roadmaps" />
+</Layout>

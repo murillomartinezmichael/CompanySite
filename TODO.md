@@ -1,3 +1,29 @@
+<!-- ACTIVATION-WORK-CURRENT -->
+## Approved CompanySite activation work
+
+- [x] Preserve PR38 infrastructure areas, phases, milestones and legacy paths under the latest six-item public navigation.
+- [x] Implement constrained Access source and independently authorized private media adapters with synthetic/local-R2 tests.
+- [x] Implement portable encrypted recovery envelopes and a local, hidden-input operator command; no production key generated.
+- [x] Check existing financial source coverage without replacing newer user evidence or storing real records in source.
+- [ ] Verify actual owner Access session/revocation evidence and configured private app.
+- [ ] Verify independent recovery/key custody; enable private R2 only after the actual account enrollment/terms are resolved.
+- [ ] Identify and test the approved read-only feed and existing valuation scheduler.
+- [ ] Release only after exact-source checks and actual-environment private-boundary and rollback acceptance.
+<!-- /ACTIVATION-WORK-CURRENT -->
+
+<!-- PRIVATE-CONTINUATION-20261020 -->
+## 2026-10-20 — private workspace continuation (isolated candidate)
+
+- [x] Signed owner verification, encrypted local persistence, audit/CAS, idempotency/restart and encrypted recovery tests.
+- [x] Reconciled complete brokerage snapshots, explicit ledger corrections, contributor/account separation and source-aware history.
+- [x] Approval-gated private catalog/workstream imports preserving existing project ownership and status.
+- [x] Fresh build, application/service type checks and regression suite; exact browser/runtime receipts in the continuation report.
+- [ ] Actual owner identity/session sources, approved private database/key custody, real imports, protected media, approved read-only source and existing scheduler activation.
+- [ ] Conflict-aware source integration and release only after separate owner approval.
+
+This section is about the isolated candidate only; original project owners and earlier tasks below remain unchanged.
+<!-- /PRIVATE-CONTINUATION-20261020 -->
+
 ## 2026-10-02 — current inquiry candidate qualified for local integration
 
 - [x] Full existing source reviewed;15 independently reviewed lifecycle hashes match. Native956pass/2skip,15-page build/output fence,46-file Astro check0diagnostics,12 compiled-worker fixture cases.

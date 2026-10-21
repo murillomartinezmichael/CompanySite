@@ -35,6 +35,7 @@ import resume from '@/data/resume.json';
     <div class="mt-4 flex flex-wrap items-start justify-between gap-6">
       <div>
         <h1 class="font-display text-4xl sm:text-5xl leading-[1.05] text-bone">{resume.name}</h1>
+<nav class="m3-doc-nav" aria-label="On this page"><a href="#document-section-0" data-cta="resume-section" data-section="resume">Experience</a><a href="#document-section-1" data-cta="resume-section" data-section="resume">Selected Deployed Work</a><a href="#document-section-2" data-cta="resume-section" data-section="resume">Education</a><a href="#document-section-3" data-cta="resume-section" data-section="resume">Skills</a><a href="#document-section-4" data-cta="resume-section" data-section="resume">Community &amp; Leadership</a><a href="#document-section-5" data-cta="resume-section" data-section="resume">Awards &amp; Credentials</a></nav>
         <p class="mt-3 text-bone-dim">{resume.title} · {resume.location}</p>
       </div>
       <a
@@ -50,7 +51,7 @@ import resume from '@/data/resume.json';
     <p class="mt-8 text-lg text-bone-muted leading-relaxed">{resume.summary}</p>
 
     <section class="mt-14">
-      <h2 class="font-display text-2xl text-bone border-b border-ink-line pb-3">Experience</h2>
+      <h2 id="document-section-0" class="font-display text-2xl text-bone border-b border-ink-line pb-3">Experience</h2>
       <div class="mt-8 space-y-10">
         {resume.experience.map((job) => (
           <div>
@@ -68,7 +69,7 @@ import resume from '@/data/resume.json';
     </section>
 
     <section class="mt-14">
-      <h2 class="font-display text-2xl text-bone border-b border-ink-line pb-3">Selected Deployed Work</h2>
+      <h2 id="document-section-1" class="font-display text-2xl text-bone border-b border-ink-line pb-3">Selected Deployed Work</h2>
       <div class="mt-8 grid gap-6 sm:grid-cols-2">
         {resume.liveWork.map((work) => (
           <article class="panel p-5">
@@ -90,7 +91,7 @@ import resume from '@/data/resume.json';
     </section>
 
     <section class="mt-14">
-      <h2 class="font-display text-2xl text-bone border-b border-ink-line pb-3">Education</h2>
+      <h2 id="document-section-2" class="font-display text-2xl text-bone border-b border-ink-line pb-3">Education</h2>
       <div class="mt-8 space-y-4">
         {resume.education.map((ed) => (
           <div>
@@ -103,7 +104,7 @@ import resume from '@/data/resume.json';
     </section>
 
     <section class="mt-14">
-      <h2 class="font-display text-2xl text-bone border-b border-ink-line pb-3">Skills</h2>
+      <h2 id="document-section-3" class="font-display text-2xl text-bone border-b border-ink-line pb-3">Skills</h2>
       <dl class="mt-8 space-y-4">
         <div>
           <dt class="field-label justify-start">Production</dt>
@@ -121,7 +122,7 @@ import resume from '@/data/resume.json';
     </section>
 
     <section class="mt-14">
-      <h2 class="font-display text-2xl text-bone border-b border-ink-line pb-3">Community &amp; Leadership</h2>
+      <h2 id="document-section-4" class="font-display text-2xl text-bone border-b border-ink-line pb-3">Community &amp; Leadership</h2>
       <div class="mt-8 space-y-4">
         {resume.community.map((c) => (
           <div>
@@ -136,7 +137,7 @@ import resume from '@/data/resume.json';
     </section>
 
     <section class="mt-14">
-      <h2 class="font-display text-2xl text-bone border-b border-ink-line pb-3">Awards &amp; Credentials</h2>
+      <h2 id="document-section-5" class="font-display text-2xl text-bone border-b border-ink-line pb-3">Awards &amp; Credentials</h2>
       <ul class="mt-8 list-disc space-y-2 pl-5 leading-relaxed text-bone-dim">
         {resume.credentials.map((credential) => <li>{credential}</li>)}
       </ul>

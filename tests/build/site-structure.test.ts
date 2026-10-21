@@ -54,6 +54,7 @@ describe('rendered site structure', () => {
   it('every page exposes primary navigation and every action link is tracked', () => {
     const errors: string[] = [];
     for (const page of pages) {
+      if(/^\/(workspace|investors)(\/|$)/.test(page.route)){expect(page.html,page.route).toContain('aria-label="Private workspace"');expect(page.html,page.route).toContain('noindex');expect(readFileSync(page.file,'utf8')).not.toContain('/api/track');expect(readFileSync(page.file,'utf8')).not.toContain('chat-widget');continue;}
       expect(page.html, page.route).toContain('aria-label="Primary"');
       for (const tag of anchors(page.html)) {
         if (hrefOf(tag) === '#main') continue; // accessibility skip control, not a funnel CTA

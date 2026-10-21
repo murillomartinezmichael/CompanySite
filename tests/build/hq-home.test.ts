@@ -10,23 +10,8 @@ describe('m3mm.net is the umbrella hub', () => {
   const home = read('src/pages/index.astro');
   const websites = read('src/pages/websites.astro');
 
-  it('gives Released and Roadmap separate, addressable homepage sections', () => {
-    expect(home).toMatch(/<section id="released"[^>]*aria-labelledby="released-heading"/);
-    expect(home).toMatch(/<section id="roadmap"[^>]*aria-labelledby="roadmap-heading"/);
-    expect(home).toContain('Officially<br />released.');
-    expect(home).toContain('Reachable does not mean released.');
-    expect(home).toContain('What ships next matters.');
-  });
-
-  it('separates official releases, test previews, and the roadmap queue in one source of truth', () => {
-    expect(home).toMatch(/const released = DROPS\.filter\(\(drop\) => drop\.status === 'released'\)/);
-    expect(home).toMatch(/const testing = DROPS\.filter\(\(drop\) => drop\.status === 'testing'\)/);
-    expect(home).toMatch(/drop\.status === 'next' \|\| drop\.status === 'upcoming'/);
-    expect(DROPS).toHaveLength(21);
-    expect(LAUNCH_STATS.released).toBe(1);
-    expect(LAUNCH_STATS.next).toBe(1);
-    expect(LAUNCH_STATS.testing).toBe(4);
-  });
+  it('keeps addressable work and roadmap sections while moving the full directory off Home',()=>{expect(home).toContain('id="released"');expect(home).toContain('id="roadmap"');expect(home).toContain('<RedesignProjectSelection/>');expect(home).toContain('href="/projects"');expect(home).toContain('href="/roadmap"');expect(home).toContain('href="/roadmaps/infrastructure"');expect(home).not.toContain('<RoadmapStage');});
+  it('keeps one authoritative public release registry for the directory and roadmap',()=>{expect(read('src/config/public-projects.ts')).toContain('PUBLIC_PROJECTS=DROPS.map');expect(read('src/pages/projects/index.astro')).toContain('PUBLIC_PROJECTS.map');expect(DROPS).toHaveLength(21);expect(LAUNCH_STATS.released).toBe(1);expect(LAUNCH_STATS.next).toBe(1);expect(LAUNCH_STATS.testing).toBe(4);});
 
   it('pins the public launch truth Michael chose', () => {
     expect(DROPS.filter((drop) => drop.status === 'released').map((drop) => drop.name)).toEqual(['M3MM Hub']);

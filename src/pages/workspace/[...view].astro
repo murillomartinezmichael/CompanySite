@@ -1,0 +1,8 @@
+---
+import WorkspaceLayout from '@/layouts/WorkspaceLayout.astro';import {WORKSPACE_VIEWS} from '@/config/workspace';
+export function getStaticPaths(){return WORKSPACE_VIEWS.map(view=>({params:{view:view.slug||undefined},props:{view}}));}
+const {view}=Astro.props;
+---
+<!-- Empty application shell only. Root Pages middleware authorizes this route
+     before static delivery. No private records or fixtures are rendered here. -->
+<WorkspaceLayout view={view}/>

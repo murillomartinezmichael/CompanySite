@@ -1,0 +1,19 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import {ENVIRONMENT_AREAS,INFRASTRUCTURE_PHASES,INFRASTRUCTURE_MILESTONES,infrastructureStatusLabel} from '@/config/environment';
+---
+<Layout title="Infrastructure Roadmap — M3MM" description="A public view of M3MM’s proposed infrastructure stages: reliable recovery, isolated environments, storage, virtualization and measured AI capacity." path="/roadmaps/infrastructure">
+<Header slot="header" path="/roadmaps/infrastructure" />
+
+<section class="m3-intro container-page"><p class="m3-eyebrow">Roadmaps / Infrastructure</p><h1>Reliability first.<br/>Capacity when justified.</h1><p class="m3-lede">The public direction for a dependable development environment. These are proposed readiness stages—not completed installations, approved purchases or promised dates.</p><div class="m3-actions"><a class="m3-link" href="/roadmap" data-cta="infra-project-track" data-section="roadmap">See the separate Project Roadmap →</a></div></section>
+
+<section class="container-page m3-section" aria-labelledby="infra-areas"><div class="m3-section-head"><div><p class="m3-eyebrow">Explore the foundation</p><h2 id="infra-areas">Six focused areas.</h2></div><p>Capabilities and verification steps, not a public device inventory or spending approval.</p></div><div class="m3-grid">{ENVIRONMENT_AREAS.map(area=><article class="m3-card"><h3>{area.title}</h3><p>{area.summary}</p><a class="m3-link" href={'/roadmaps/infrastructure/'+area.slug} data-cta="infra-area-open" data-section="roadmap" data-intent="product:environment">Explore this area →</a></article>)}</div></section>
+<section class="container-page m3-section" aria-labelledby="infra-evidence"><p class="m3-eyebrow">Detailed readiness ledger</p><h2 id="infra-evidence">Dependencies stay explicit.</h2><p class="m3-lede">These retained planning records are not automatically marked complete when a purchase, preview or code change occurs.</p><div class="m3-grid two">{INFRASTRUCTURE_PHASES.map(phase=><details class="m3-card"><summary><strong>{phase.name}</strong></summary>{INFRASTRUCTURE_MILESTONES.filter(m=>m.phase===phase.id).map(m=><article class="infra-milestone"><span class="m3-status">{infrastructureStatusLabel[m.status]}</span><h3>{m.title}</h3><p>{m.detail}</p><p><strong>Depends on:</strong> {m.dependency}</p><p><strong>Cost status:</strong> {m.cost}</p></article>)}</details>)}</div></section>
+<style>.infra-milestone{margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid rgb(var(--ink-line))}.infra-milestone p{font-size:.9rem}.m3-card summary{cursor:pointer;min-height:44px;display:list-item}</style>
+
+<section class="container-page m3-close"><div><h2>Public progress.<br/>Private operating details.</h2><p>Network configurations, machine inventories, costs, investor terms and financial records are not published in this roadmap.</p></div><a class="m3-button" href="/roadmaps" data-cta="infra-back-roadmaps" data-section="roadmap">Back to both roadmaps →</a></section>
+
+<Footer slot="footer" path="/roadmaps/infrastructure" />
+</Layout>
