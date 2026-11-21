@@ -11,6 +11,9 @@ const pages = walk(dist).filter(p => p.endsWith('.html')).map(file => ({
   route: '/' + relative(dist, file).replace(/\\/g, '/').replace(/index\.html$/, ''),
   html: readFileSync(file, 'utf8').replace(/<script\b[^>]*>[\s\S]*?<\/script>|<style\b[^>]*>[\s\S]*?<\/style>|<!--[\s\S]*?-->/gi, ''),
 }));
+// Product samples (e.g. a Teardown report) are standalone files, byte-identical to the product's output:
+// no site chrome, served noindex by public/_headers, pinned by the last test below.
+const isSample = (route: string) => route.startsWith('/samples/');
 const anchors = (html: string) => [...html.matchAll(/<a\b[^>]*>/g)].map(m => m[0]);
 const hrefOf = (tag: string) => tag.match(/\bhref="([^"]+)"/)?.[1]?.replace(/&amp;/g, '&');
 const urlOf = (href: string, route: string) => new URL(href, 'https://m3mm.net' + route);
@@ -46,7 +49,7 @@ describe('rendered site structure', () => {
         if (target && !reached.has(target.route)) { reached.add(target.route); changed = true; }
       }
     }
-    expect(pages.filter(p => !p.html.includes('noindex') && !reached.has(p.route)).map(p => p.route)).toEqual([]);
+    expect(pages.filter(p => !p.html.includes('noindex') && !isSample(p.route) && !reached.has(p.route)).map(p => p.route)).toEqual([]);
     // Receipt URLs remain distinct completion destinations, deliberately outside primary browsing.
     for (const route of ['/thanks/', '/start/thanks/']) expect(pages.find(p => p.route === route)?.html).toContain('noindex');
   });
@@ -54,6 +57,7 @@ describe('rendered site structure', () => {
   it('every page exposes primary navigation and every action link is tracked', () => {
     const errors: string[] = [];
     for (const page of pages) {
+      if (isSample(page.route)) continue;
       if(/^\/(workspace|investors)(\/|$)/.test(page.route)){expect(page.html,page.route).toContain('aria-label="Private workspace"');expect(page.html,page.route).toContain('noindex');expect(readFileSync(page.file,'utf8')).not.toContain('/api/track');expect(readFileSync(page.file,'utf8')).not.toContain('chat-widget');continue;}
       expect(page.html, page.route).toContain('aria-label="Primary"');
       for (const tag of anchors(page.html)) {
@@ -62,5 +66,17 @@ describe('rendered site structure', () => {
       }
     }
     expect(errors).toEqual([]);
+  });
+
+  it('product samples are standalone, script-free and served noindex', () => {
+    const samples = pages.filter(p => isSample(p.route));
+    expect(samples.map(p => p.route)).toContain('/samples/teardown-report.html');
+    for (const page of samples) {
+      const raw = readFileSync(page.file, 'utf8');
+      expect(raw, page.route).not.toMatch(/<script\b/i);
+      expect(raw, page.route).not.toContain('/api/track');
+    }
+    const headers = readFileSync(fileURLToPath(new URL('../../public/_headers', import.meta.url)), 'utf8');
+    expect(headers).toMatch(/^\/samples\/\*\n(?:[ \t]+.*\n)*?[ \t]+X-Robots-Tag: noindex/m);
   });
 });
