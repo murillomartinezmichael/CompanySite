@@ -170,3 +170,14 @@ page funnel, original logo, claims, prices and full no-JS build list. A still at
 00:03 of our existing Aries walkthrough supplies its preview; the tutorial's
 cabin assets and third-party providers are not used. No long pinned scroll intro
 or new rendering dependency. See the cinematic application and verification docs.
+
+## D-CS-014 — Downscaled logo copy for small marks and icons (2026-11-21)
+
+Michael: "shrink the logo, keep the current one." The 1024 px original
+(`public/official-logo.png`, 804 KB) was downloaded on every page for a 44–52 px
+header/footer mark plus favicon. Header, footer, intake, policies, workspace marks,
+favicon and apple-touch-icon now use `public/official-logo-192.png` (21 KB), a pure
+Lanczos downscale from `scripts/make-logo-icon.mjs`: same artwork and white
+background, no crop, recolour, filter or redraw. The original stays byte-for-byte
+and remains the og:image, twitter:image and JSON-LD logo. Amends D-CS-011 for
+these sizes only. Pinned by `tests/build/official-logo.test.ts`.

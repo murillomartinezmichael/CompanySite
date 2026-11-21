@@ -17,8 +17,9 @@ The written brand is **M3MM**. **Modernize. Mobilize. Multiply.** keeps its orde
 white background. SHA-256:
 `27c7c0c1a8c069e4ea38c87a41c7a6d1523d00ebbde4c5e9eb6637372ec24e97`.
 Display the complete square at its original aspect ratio. No filters, clipping,
-recoloring, tracing, animation or generated variants. Favicon, touch icon and social sharing metadata use
-that same original file. Retired sharing art is no longer referenced. KineticTrack is separate decorative artwork, not a logo.
+recoloring, tracing, animation or generated variants. One exception (D-CS-014, 2026-11-21): small
+marks, favicon and touch icon use `public/official-logo-192.png`, a pure downscale of the original
+(`node scripts/make-logo-icon.mjs`). Social sharing metadata and the JSON-LD logo use the original file. Retired sharing art is no longer referenced. KineticTrack is separate decorative artwork, not a logo.
 
 Claims, service prices, client proof, referral terms and release status are
 unchanged. `src/config/roadmap.ts` remains the authority for all 21 tracked builds.
