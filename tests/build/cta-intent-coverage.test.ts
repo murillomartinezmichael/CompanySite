@@ -48,7 +48,10 @@ const NAV_ONLY_CTAS: ReadonlySet<string> = new Set([
   'footer-about', // Redesign: route/section navigation, not a form submission.
   'footer-contact', // Redesign: route/section navigation, not a form submission.
   'footer-resume', // Redesign: route/section navigation, not a form submission.
-  'footer-workspace', // Redesign: route/section navigation, not a form submission.
+  'notfound-home', // 404 page: route navigation, not a form submission.
+  'notfound-services', // 404 page: route navigation, not a form submission.
+  'notfound-projects', // 404 page: route navigation, not a form submission.
+  'notfound-contact', // 404 page: route navigation, not a form submission.
   'mobile-menu', // Redesign: route/section navigation, not a form submission.
   'hero-packages', // Redesign: route/section navigation, not a form submission.
   'hero-proof', // Redesign: route/section navigation, not a form submission.

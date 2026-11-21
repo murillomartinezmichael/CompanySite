@@ -47,6 +47,8 @@ const PAGE_EXPECTATIONS: ReadonlyArray<{
   { file: 'src/pages/audit.astro', path: '/audit' },
   { file: 'src/pages/start.astro', path: '/start' },
   { file: 'src/pages/thanks.astro', path: '/thanks', noindex: true },
+  // Real not-found page (dist/404.html -> Pages serves it with status 404). Never in the sitemap.
+  { file: 'src/pages/404.astro', path: '/404', noindex: true },
   { file: 'src/pages/accessibility.astro', path: '/accessibility' },
   { file: 'src/pages/policies.astro', path: '/policies' },
   { file: 'src/pages/roadmap.astro', path: '/roadmap' },
