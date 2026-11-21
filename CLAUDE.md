@@ -11,7 +11,7 @@ and the shipping roadmap. The website-services conversion floor lives at
 
 - The written brand is **M3MM**, never `M³` or standalone `M3`.
 - The three Ms mean **Modernize. Mobilize. Multiply.** Keep that punctuation and order.
-- Use the exact original `public/official-logo.png`, including its white background, wherever a mark is shown. No cropping, filters, recoloring, animation or redraws. See docs/M3_DESIGN_SYSTEM.md.
+- Use the exact original `public/official-logo.png`, including its white background, wherever a mark is shown. No cropping, filters, recoloring, animation or redraws. Only exception (D-CS-014): small marks and icons use `public/official-logo-192.png`, a pure downscale made by `node scripts/make-logo-icon.mjs`; og/twitter/JSON-LD keep the original. See docs/M3_DESIGN_SYSTEM.md.
 - `m3mm.net` is the umbrella hub. The root must keep separate Released and Roadmap sections and route visitors to every M3MM department. `/hub` permanently redirects to `/`.
 - Public reachability and official release are separate states. Only M3MM Hub is currently released; AriesOutdoorLiving is next; preview deployments stay labeled `testing`; Big7 is long-term pending real jobsite photography.
 - `/websites` is the complete custom-site sales department. Preserve its Hero → TwoDoor → Proof → Services → FAQ → Intake funnel and its `#proof`, `#services`, and `#intake` anchors.

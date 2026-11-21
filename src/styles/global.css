@@ -207,7 +207,7 @@
 .motion-toggle:hover { border-color: theme('colors.electric.DEFAULT'); }
 .motion-toggle:disabled { cursor: default; }
 html[data-motion="paused"] *, html[data-motion="paused"] *::before, html[data-motion="paused"] *::after { animation-play-state: paused !important; }
-img[src="/official-logo.png"] { object-fit: contain; border-radius: 0; filter: none; }
+img[src="/official-logo.png"], img[src="/official-logo-192.png"] { object-fit: contain; border-radius: 0; filter: none; }
 .page-intro { border-bottom: 1px solid theme('colors.ink.line'); }
 .page-intro h1 { font-weight: 600; }
 .page-intro .hairline { height: 3px; width: 2rem; background: theme('colors.electric.DEFAULT'); }
