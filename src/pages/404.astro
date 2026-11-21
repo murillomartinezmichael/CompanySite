@@ -1,0 +1,35 @@
+---
+// Real not-found page. Without a top-level 404.html, Cloudflare Pages serves the homepage
+// with HTTP 200 for every unknown URL (a "soft 404" that search engines index as junk).
+// With dist/404.html present, Pages returns this page with status 404.
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+---
+
+<Layout
+  title="Page not found — M3MM"
+  description="That page doesn't exist on m3mm.net. Head back to the M3MM home page, services or projects."
+  path="/404"
+  noindex={true}
+>
+  <Header slot="header" minimal={true} path="/404" />
+
+  <section class="reading-page container-page py-hq-section max-w-3xl">
+    <p class="text-xs uppercase tracking-[0.24em] text-bone-muted">Error · 404</p>
+    <h1 class="mt-4 font-display text-4xl sm:text-5xl leading-[1.05] text-bone">
+      Page not <em class="text-clay italic">found</em>
+    </h1>
+    <p class="mt-6 text-lg text-bone-muted leading-relaxed">
+      That address doesn't match anything on m3mm.net. It may have moved, or the link had a typo.
+    </p>
+    <nav class="m3-doc-nav mt-8" aria-label="Where to next">
+      <a href="/" data-cta="notfound-home" data-section="notfound">M3MM home</a>
+      <a href="/services" data-cta="notfound-services" data-section="notfound">Services</a>
+      <a href="/projects" data-cta="notfound-projects" data-section="notfound">Projects</a>
+      <a href="/contact" data-cta="notfound-contact" data-section="notfound">Start a conversation</a>
+    </nav>
+  </section>
+
+  <Footer slot="footer" path="/404" />
+</Layout>
