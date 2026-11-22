@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Northwind Digital report — https://ferropizza.example/</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 40px;
+    font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    color: #111827; background: #ffffff;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+  .brand { font-weight: 800; font-size: 20px; letter-spacing: -0.02em; }
+  .brand span { color: #6b7280; font-weight: 500; font-size: 13px; display: block; }
+  .meta { text-align: right; font-size: 13px; color: #6b7280; }
+  .meta strong { color: #111827; }
+  .headline { display: flex; align-items: center; gap: 20px; margin: 28px 0; }
+  .headline h1 { font-size: 20px; margin: 0 0 4px; }
+  .headline p { margin: 0; color: #6b7280; font-size: 14px; }
+  .bars { margin: 24px 0; }
+  .bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .bar-label { width: 110px; font-size: 13px; color: #374151; flex-shrink: 0; }
+  .bar-track { flex: 1; height: 10px; background: #e5e7eb; border-radius: 6px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 6px; }
+  .bar-score { width: 46px; text-align: right; font-size: 12px; color: #6b7280; flex-shrink: 0; }
+  .screenshot { margin: 28px 0; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; }
+  .screenshot img { display: block; width: 100%; height: auto; }
+  .findings { margin: 28px 0; }
+  .findings h2 { font-size: 15px; margin: 0 0 12px; }
+  .finding { padding: 12px 14px; border-left: 3px solid #dc2626; background: #fef2f2; border-radius: 4px; margin-bottom: 10px; font-size: 14px; }
+  .finding.warn { border-left-color: #ca8a04; background: #fffbeb; }
+  .finding b { display: block; font-size: 14px; color: #111827; margin-bottom: 2px; }
+  .finding .subtext { color: #4b5563; }
+  .cta { margin: 28px 0; padding: 16px; background: #111827; color: #fff; border-radius: 8px; font-size: 14px; }
+  footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid #e5e7eb; font-size: 12px; color: #9ca3af; }
+
+  .fixlist { margin: 28px 0; }
+  .fixlist h2 { font-size: 15px; margin: 0 0 12px; }
+  .fix-row { display: flex; gap: 12px; padding: 12px 0; border-top: 1px solid #f3f4f6; }
+  .fix-row:first-of-type { border-top: none; }
+  .fix-rank { flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; background: #f3f4f6; color: #6b7280; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .fix-body { flex: 1; }
+  .fix-title { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+  .fix-badge { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; padding: 2px 8px; border-radius: 999px; margin-left: 8px; vertical-align: middle; }
+  .fix-badge.high { background: #fee2e2; color: #b91c1c; }
+  .fix-badge.medium { background: #fef3c7; color: #92400e; }
+  .fix-detail { font-size: 13px; color: #4b5563; margin: 4px 0; }
+  .fix-tip { font-size: 13px; color: #111827; background: #f9fafb; border-radius: 6px; padding: 8px 10px; margin-top: 4px; }
+  .fix-tip b { color: #6b7280; font-size: 11px; text-transform: uppercase; letter-spacing: 0.03em; margin-right: 4px; }
+  .brand { color: #0f766e; }
+  .brand-logo { display: block; margin-bottom: 6px; max-width: 200px; width: auto; }
+  .cta { background: #0f766e; }
+  .findings h2, .fixlist h2 { border-bottom: 2px solid #f59e0b; padding-bottom: 6px; }
+  .fix-tip { border-left: 3px solid #f59e0b; }
+  a { color: #0f766e; }
+  .agency-footer { margin-top: 8px; color: #6b7280; }
+.skip-link{position:absolute;left:-9999px;top:0}.skip-link:focus{left:8px;top:8px;background:#fff;color:#000;padding:8px 12px;z-index:10;outline:3px solid #000}a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:3px solid currentColor;outline-offset:2px}
+.evaluation-notice{margin:16px 0;padding:10px 14px;border:2px dashed #b45309;color:#7c2d12;background:#fffbeb;font-weight:600;font-size:14px}
+@media print{body{padding:0}.skip-link{display:none}.fix-row,.bar-row,.finding,.not-applicable,.screenshot{break-inside:avoid}h2{break-after:avoid}.screenshot{width:fit-content;max-width:100%;margin:16px auto}.screenshot img{width:auto;max-width:100%;max-height:150mm}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to report</a>
+<div class="wrap">
+  <header>
+    <div class="brand"><img class="brand-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDk2IDk2Ij48cmVjdCB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHJ4PSIxOCIgZmlsbD0iIzBmNzY2ZSIvPjxwYXRoIGQ9Ik0yNCA2MiBMNDAgNDAgTDUyIDU0IEw3MiAyOCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPgo=" alt="" height="40">Northwind Digital<span>Websites that win inquiries</span></div>
+    <div class="meta"><strong>Ferro Pizza Kitchen</strong><br>https://ferropizza.example/<br>2026-11-21</div>
+  </header>
+<main id="main">
+
+
+  <div class="headline">
+    <svg width="84" height="84" viewBox="0 0 84 84" style="flex-shrink:0" role="img" aria-label="Grade C"><circle cx="42.0" cy="42.0" r="37.0" fill="none" stroke="#e5e7eb" stroke-width="8"/><circle cx="42.0" cy="42.0" r="37.0" fill="none" stroke="#ca8a04" stroke-width="8" stroke-dasharray="172.03 232.48" stroke-linecap="round" transform="rotate(-90 42.0 42.0)"/><text x="42.0" y="42.0" text-anchor="middle" dominant-baseline="central" font-size="30" font-weight="800" font-family="sans-serif" fill="#ca8a04">C</text></svg>
+    <div>
+      <h1>Overall grade: C (74/100)</h1>
+      <p>30-Point Mobile Conversion Inspection — 30 checks across Inquiry Capture, Trust, Speed, and Findability.</p>
+    </div>
+  </div>
+
+  <div class="bars">
+    
+    <div class="bar-row">
+      <div class="bar-label">Inquiry Capture</div>
+      <div class="bar-track"><div class="bar-fill" style="width: 91%; background: #16a34a;"></div></div>
+      <div class="bar-score">91</div>
+    </div>
+    
+    <div class="bar-row">
+      <div class="bar-label">Trust</div>
+      <div class="bar-track"><div class="bar-fill" style="width: 67%; background: #dc2626;"></div></div>
+      <div class="bar-score">67</div>
+    </div>
+    
+    <div class="bar-row">
+      <div class="bar-label">Speed</div>
+      <div class="bar-track"><div class="bar-fill" style="width: 0%; background: #dc2626;"></div></div>
+      <div class="bar-score">0</div>
+    </div>
+    
+    <div class="bar-row">
+      <div class="bar-label">Findability</div>
+      <div class="bar-track"><div class="bar-fill" style="width: 83%; background: #16a34a;"></div></div>
+      <div class="bar-score">83</div>
+    </div>
+    
+  </div>
+
+  
+
+  <div class="findings">
+    <h2>Top 3 things costing you inquiries</h2>
+    
+    <div class="finding fail">
+      <b>Phone number isn&#39;t visible without scrolling</b><span class="subtext">no phone number in the first screen — mobile visitors have to hunt for a way to reach you</span>
+    </div>
+    
+    <div class="finding fail">
+      <b>No client reviews shown</b><span class="subtext">visitors look for proof from other clients before reaching out — your site shows none, so they leave to go find proof and might never come back</span>
+    </div>
+    
+    <div class="finding fail">
+      <b>A popup blocks the page on arrival</b><span class="subtext">a popup covers 100% of the page before visitors read a single word — you pay for the click, then chase them off, and Google dings the popup too</span>
+    </div>
+    
+  </div>
+
+  
+  <div class="fixlist">
+    <h2>Full fix list — ranked by how much it's costing you (8)</h2>
+    
+    <div class="fix-row">
+      <div class="fix-rank">1</div>
+      <div class="fix-body">
+        <div class="fix-title">Phone number isn&#39;t visible without scrolling<span class="fix-badge high">High impact</span></div>
+        <div class="fix-detail">no phone number in the first screen — mobile visitors have to hunt for a way to reach you</div>
+        <div class="fix-tip"><b>Fix</b>Put your phone number in the header so it&#39;s the first thing a visitor sees.</div>
+      </div>
+    </div>
+    
+    <div class="fix-row">
+      <div class="fix-rank">2</div>
+      <div class="fix-body">
+        <div class="fix-title">No client reviews shown<span class="fix-badge high">High impact</span></div>
+        <div class="fix-detail">visitors look for proof from other clients before reaching out — your site shows none, so they leave to go find proof and might never come back</div>
+        <div class="fix-tip"><b>Fix</b>Embed a Google or Facebook review widget.</div>
+      </div>
+    </div>
+    
+    <div class="fix-row">
+      <div class="fix-rank">3</div>
+      <div class="fix-body">
+        <div class="fix-title">A popup blocks the page on arrival<span class="fix-badge high">High impact</span></div>
+        <div class="fix-detail">a popup covers 100% of the page before visitors read a single word — you pay for the click, then chase them off, and Google dings the popup too</div>
+        <div class="fix-tip"><b>Fix</b>Remove or delay the popup so the page is usable the instant it loads.</div>
+      </div>
+    </div>
+    
+    <div class="fix-row">
+      <div class="fix-rank">4</div>
+      <div class="fix-body">
+        <div class="fix-title">Site loads too slowly<span class="fix-badge high">High impact</span></div>
+        <div class="fix-detail">11200 ms to load — most mobile visitors bounce before this finishes</div>
+        <div class="fix-tip"><b>Fix</b>Compress images and trim scripts — every extra second loses mobile visitors.</div>
+      </div>
+    </div>
+    
+    <div class="fix-row">
+      <div class="fix-rank">5</div>
+      <div class="fix-body">
+        <div class="fix-title">Images are too heavy, slowing the page down<span class="fix-badge high">High impact</span></div>
+        <div class="fix-detail">8203 KB of images — every visit burns your visitor&#39;s data plan</div>
+        <div class="fix-tip"><b>Fix</b>Compress and resize images before uploading them.</div>
+      </div>
+    </div>
+    
+    <div class="fix-row">
+      <div class="fix-rank">6</div>
+      <div class="fix-body">
+        <div class="fix-title">Too many outside scripts slowing things down<span class="fix-badge high">High impact</span></div>
+        <div class="fix-detail">31 third-party scripts — tracking and widget code from other domains is what&#39;s making the page crawl on a phone</div>
+        <div class="fix-tip"><b>Fix</b>Remove unused tracking, chat, or widget scripts you no longer need.</div>
+      </div>
+    </div>
+    
+    <div class="fix-row">
+      <div class="fix-rank">7</div>
+      <div class="fix-body">
+        <div class="fix-title">Link preview looks broken when shared<span class="fix-badge high">High impact</span></div>
+        <div class="fix-detail">when a happy client shares your site in a community Facebook group, it shows up as a gray blank box instead of your business — free referrals dying on arrival</div>
+        <div class="fix-tip"><b>Fix</b>Add an og:image so the link looks right when pasted into texts or socials.</div>
+      </div>
+    </div>
+    
+    <div class="fix-row">
+      <div class="fix-rank">8</div>
+      <div class="fix-body">
+        <div class="fix-title">Missing structured business info Google can read<span class="fix-badge medium">Medium impact</span></div>
+        <div class="fix-detail">the site never formally introduces the business to Google — no machine-readable name/address/phone card, so competitors who provide one get the map features</div>
+        <div class="fix-tip"><b>Fix</b>Add LocalBusiness schema markup so Google can show a rich result.</div>
+      </div>
+    </div>
+    
+  </div>
+  
+
+  <div class="cta">This is a free diagnostic, not a pitch — reply if you want a hand fixing any of it.</div>
+
+  <section class="not-applicable"><h2>Not applicable here</h2><p>Audited as a restaurant, salon or shop. These checks were written for trades and home-service businesses, so they were left out and do not count toward the grade: licence / insurance / guarantee wording.</p></section>
+</main>
+<footer>30-Point Mobile Conversion Inspection — measured by a real browser on an iPhone-size viewport on 2026-11-21. Verified measurements, not AI guesswork; a check that couldn't run is reported unknown and never counts against the grade.<div class="agency-footer"><div>Prepared by Northwind Digital for your team.</div><div><a href="mailto:hello@northwind.example">hello@northwind.example</a> &middot; <a href="https://northwind.example">https://northwind.example</a></div></div></footer>
+</div>
+</body>
+</html>

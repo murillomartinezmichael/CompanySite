@@ -71,6 +71,9 @@ describe('rendered site structure', () => {
   it('product samples are standalone, script-free and served noindex', () => {
     const samples = pages.filter(p => isSample(p.route));
     expect(samples.map(p => p.route)).toContain('/samples/teardown-report.html');
+    for (const type of ['local', 'professional', 'health', 'venue']) {
+      expect(samples.map(p => p.route)).toContain(`/samples/teardown-${type}.html`);
+    }
     for (const page of samples) {
       const raw = readFileSync(page.file, 'utf8');
       expect(raw, page.route).not.toMatch(/<script\b/i);
