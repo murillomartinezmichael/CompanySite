@@ -55,6 +55,7 @@ const PAGE_EXPECTATIONS: ReadonlyArray<{
   { file: 'src/pages/websites.astro', path: '/websites' },
   { file: 'src/pages/compare/website-options.astro', path: '/compare/website-options' },
   { file: 'src/pages/for/construction.astro', path: '/for/construction' },
+  { file: 'src/pages/for/hvac.astro', path: '/for/hvac' },
   { file: 'src/pages/for/home-services.astro', path: '/for/home-services' },
   { file: 'src/pages/for/landscaping.astro', path: '/for/landscaping' },
   { file: 'src/pages/for/outdoor-living.astro', path: '/for/outdoor-living' },

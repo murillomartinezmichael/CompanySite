@@ -33,6 +33,13 @@ const TRADES: ReadonlyArray<{
     absent: ['Big 7 Construction'],
   },
   {
+    file: 'src/pages/for/hvac.astro',
+    path: '/for/hvac',
+    source: 'for-hvac',
+    clients: [],
+    absent: ['Aries Outdoor Living', 'Big 7 Construction'],
+  },
+  {
     file: 'src/pages/for/outdoor-living.astro',
     path: '/for/outdoor-living',
     source: 'for-outdoor-living',
