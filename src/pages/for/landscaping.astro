@@ -1,0 +1,45 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import TradeLanding from '@/components/TradeLanding.astro';
+import Intake from '@/components/Intake.astro';
+---
+
+<Layout
+  title="Websites for landscaping contractors — M3MM"
+  description="Show landscaping services, project photos and service areas on a site built to help customers request a quote. Get a free video teardown from M3MM."
+  path="/for/landscaping"
+  breadcrumbs={[
+    { name: 'M3MM', url: '/' },
+    { name: 'For landscaping contractors', url: '/for/landscaping' },
+  ]}
+>
+  <Header slot="header" minimal={true} path="/for/landscaping" />
+
+  <TradeLanding
+    trade="landscaping"
+    kicker="For landscaping contractors"
+    headline="A landscaping website that shows"
+    headlineDim="your work."
+    sub="Customers want to know whether you handle the work they need and serve their area. Put your landscaping services, photos of completed projects and service area up front, with a clear way to request a quote."
+    proofs={[
+      {
+        name: 'Aries Outdoor Living',
+        accent: 'cyber',
+        pre: 'Relevant outdoor project work:',
+        strong: 'Deployed and sold',
+        post: ' · first quote request 3 days after handoff.',
+      },
+    ]}
+  />
+
+  <Intake
+    eyebrow="Step 1 · Tell me what to look at"
+    headline="What should customers know about your landscaping business?"
+    sub="Share your current site or the way customers find you now. Tell me which services and areas you cover, and I'll review how clearly your online presence helps customers take the next step."
+    source="for-landscaping"
+  />
+
+  <Footer slot="footer" path="/for/landscaping" />
+</Layout>

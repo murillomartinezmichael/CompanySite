@@ -42,6 +42,7 @@ describe('m3mm.net is the umbrella hub', () => {
       'src/pages/thanks.astro',
       'src/pages/for/construction.astro',
       'src/pages/for/home-services.astro',
+      'src/pages/for/landscaping.astro',
       'src/pages/for/outdoor-living.astro',
       'src/pages/for/roofing.astro',
     ].map(read).join('\n');

@@ -26,6 +26,13 @@ const TRADES: ReadonlyArray<{
   absent: string[];
 }> = [
   {
+    file: 'src/pages/for/landscaping.astro',
+    path: '/for/landscaping',
+    source: 'for-landscaping',
+    clients: ['Aries Outdoor Living'],
+    absent: ['Big 7 Construction'],
+  },
+  {
     file: 'src/pages/for/outdoor-living.astro',
     path: '/for/outdoor-living',
     source: 'for-outdoor-living',
