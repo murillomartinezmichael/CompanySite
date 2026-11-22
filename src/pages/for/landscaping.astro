@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import { tradeServiceJsonLd } from '@/lib/tradeServiceJsonLd';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import TradeLanding from '@/components/TradeLanding.astro';
@@ -10,6 +11,7 @@ import Intake from '@/components/Intake.astro';
   title="Websites for landscaping contractors in Metro Atlanta — M3MM"
   description="Show landscaping services, project photos and service areas to Metro Atlanta homeowners. Get a free video teardown from M3MM."
   path="/for/landscaping"
+  extraJsonLd={tradeServiceJsonLd('landscaping')}
   breadcrumbs={[
     { name: 'M3MM', url: '/' },
     { name: 'For landscaping contractors', url: '/for/landscaping' },

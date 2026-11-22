@@ -79,6 +79,22 @@ describe('trade landing pages — message match + real proof only', () => {
       expect(src).toMatch(new RegExp(`<Intake[\\s\\S]{0,400}source="${t.source}"`));
     });
 
+    it(`${t.path} links to the other five trades with tracking`, () => {
+      const html = read(`dist${t.path}/index.html`);
+      const section = html.match(/<section[^>]*aria-labelledby="other-trades-heading"[\s\S]*?<\/section>/)?.[0];
+      expect(section).toBeDefined();
+      expect(section).toMatch(/<h2[^>]*>Websites for other trades<\/h2>/);
+      for (const other of TRADES) {
+        if (other.path === t.path) {
+          expect(section).not.toContain(`href="${other.path}"`);
+        } else {
+          const slug = other.path.split('/').pop();
+          expect(section).toContain(`href="${other.path}" data-cta="trade-crosslink-${slug}" data-section="${t.source}" data-intent="product:${slug === 'home-services' ? 'home-service' : slug}-websites"`); // stable analytics key
+        }
+      }
+      expect(section?.match(/<a\s/g)).toHaveLength(5);
+    });
+
     it(`${t.path} proof names only the matching real client(s)`, () => {
       for (const c of t.clients) {
         expect(src, `${t.file} must cite ${c}`).toContain(c);

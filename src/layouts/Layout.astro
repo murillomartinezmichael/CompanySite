@@ -16,6 +16,7 @@ interface Props {
   ogImage?: string;
   noindex?: boolean;
   breadcrumbs?: BreadcrumbItem[];
+  extraJsonLd?: Record<string, unknown>;
 }
 
 // Default OG image is now the PNG raster of og.svg. SVG OG cards silently
@@ -29,6 +30,7 @@ const {
   ogImage = '/official-logo.png',
   noindex = false,
   breadcrumbs,
+  extraJsonLd,
 } = Astro.props;
 
 const canonical = new URL(path, Astro.site ?? 'https://m3mm.net').toString();
@@ -204,6 +206,10 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
         ],
       },
     })} />
+
+    {extraJsonLd && (
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(extraJsonLd).replace(/</g, '\\u003c')} />
+    )}
 
     {breadcrumbs && breadcrumbs.length > 0 && (
       <script is:inline type="application/ld+json" set:html={JSON.stringify({

@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import { tradeServiceJsonLd } from '@/lib/tradeServiceJsonLd';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import TradeLanding from '@/components/TradeLanding.astro';
@@ -10,6 +11,7 @@ import Intake from '@/components/Intake.astro';
   title="Websites for roofing contractors in Metro Atlanta — M3MM"
   description="Roofing contractor websites in Metro Atlanta that make services, project photos, qualifications and inspection requests easy to find. Get a free video teardown."
   path="/for/roofing"
+  extraJsonLd={tradeServiceJsonLd('roofing')}
   breadcrumbs={[
     { name: 'M3MM', url: '/' },
     { name: 'For roofing contractors', url: '/for/roofing' },

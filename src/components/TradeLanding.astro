@@ -6,6 +6,8 @@
 // for a trade-specific TikTok/IG video so message match holds end-to-end.
 // Proof panels carry the SAME verified client facts as Hero + /audit +
 // /thanks — no trade gets an invented outcome.
+import { trades } from '@/data/trades';
+
 interface ProofPanel {
   name: string;
   accent: 'cyber' | 'neon';
@@ -27,3 +29,12 @@ const { trade, kicker, headline, headlineDim, sub, proofs } = Astro.props;
 ---
 
 <section class="page-intro trade-intro container-page m3-hero"><div><p class="m3-eyebrow">{kicker}</p><h1>{headline} <span>{headlineDim}</span></h1><p class="m3-lede">{sub}</p><div class="m3-actions"><a href="#intake" class="m3-button primary" data-cta="trade-review" data-section={`for-${trade}`} data-intent="book:free-review">Get my free teardown →</a><a href="/websites?intent=product:case-studies#proof" class="m3-link" data-cta="trade-see-work" data-section={`for-${trade}`} data-intent="product:case-studies">See the full case studies</a></div><p class="m3-lede">No sales call · Recorded video teardown, not a template · 24h reply, personally · Free—actually free</p></div>{proofs.length > 0 && <aside class="m3-manifesto" aria-label="Relevant client evidence">{proofs.map(p=><div><span>Relevant work</span><strong>{p.name}</strong><p>{p.pre} <b>{p.strong}</b>{p.post}</p></div>)}</aside>}</section>
+
+<section class="container-page" aria-labelledby="other-trades-heading">
+  <h2 id="other-trades-heading" class="text-hq-h2">Websites for other trades</h2>
+  <ul role="list" class="flex flex-wrap gap-3 py-4">
+    {trades.filter(other => other.slug !== trade).map(other => (
+      <li><a class="m3-link inline-flex min-h-11 items-center" href={other.href} data-cta={`trade-crosslink-${other.slug}`} data-section={`for-${trade}`} data-intent={other.intent}>{other.label}</a></li>
+    ))}
+  </ul>
+</section>

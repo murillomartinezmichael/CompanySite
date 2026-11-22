@@ -53,11 +53,12 @@ describe('every `data-intent` uses a CONVERSION_STANDARDS § 2 reserved namespac
   }
 
   it('interpolated intents in components live only on documented prefixes', () => {
-    // CaseStudy.astro emits `product:${entry.slug}` — the only interpolated
-    // form we expect. Any other file introducing template-literal intents
+    // CaseStudy emits product-prefixed interpolated intents; TradeLanding uses
+    // other.intent from src/data/trades.ts (all product:-prefixed, pinned below).
+    // Any other file introducing template-literal intents
     // must be added here so we know we're not shipping intent shapes we
     // haven't audited. Regression guard against silent namespace drift.
-    const allowed = ['src/components/CaseStudy.astro', 'src/components/Services.astro'];
+    const allowed = ['src/components/CaseStudy.astro', 'src/components/Services.astro', 'src/components/TradeLanding.astro'];
     const found: string[] = [];
     for (const file of files) {
       const rel = file.replace(root, '').replace(/\\/g, '/');
@@ -67,6 +68,7 @@ describe('every `data-intent` uses a CONVERSION_STANDARDS § 2 reserved namespac
     }
     // Services.astro uses `{s.intent}` (variable, not template literal),
     // still worth pinning here so a future rewrite gets caught.
+    expect(readFileSync(`${root}src/components/TradeLanding.astro`, 'utf8')).toContain('data-intent={other.intent}');
     const undocumented = found.filter((f) => !allowed.includes(f));
     expect(undocumented, `undocumented interpolated intents: ${undocumented.join(', ')}`).toEqual([]);
   });
