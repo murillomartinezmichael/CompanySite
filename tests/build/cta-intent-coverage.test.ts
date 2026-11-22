@@ -41,6 +41,11 @@ function walkAstro(dir: string): string[] {
 // these lists with a written reason. This is the fence.
 
 const NAV_ONLY_CTAS: ReadonlySet<string> = new Set([
+  // Trade pages: outbound links to official Georgia license verification/guides. Help, not a conversion.
+  'hvac-verify-license',
+  'hvac-license-guide',
+  'roofing-verify-license',
+  'landscaping-license-guide',
   'footer-home', // Redesign: route/section navigation, not a form submission.
   'footer-services', // Redesign: route/section navigation, not a form submission.
   'footer-projects', // Redesign: route/section navigation, not a form submission.
