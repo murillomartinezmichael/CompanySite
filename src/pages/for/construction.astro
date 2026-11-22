@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import { tradeServiceJsonLd } from '@/lib/tradeServiceJsonLd';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import TradeLanding from '@/components/TradeLanding.astro';
@@ -10,6 +11,7 @@ import Intake from '@/components/Intake.astro';
   title="Websites for construction companies — M3MM"
   description="New builds, repairs, service lines. Company sites that turn visitors into quote requests — free 5-minute video teardown of your site within 24 hours."
   path="/for/construction"
+  extraJsonLd={tradeServiceJsonLd('construction')}
   breadcrumbs={[
     { name: 'M3MM', url: '/' },
     { name: 'For construction companies', url: '/for/construction' },
