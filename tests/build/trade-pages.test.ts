@@ -101,6 +101,13 @@ describe('trade landing pages — message match + real proof only', () => {
     expect(src).toContain('https://sos.ga.gov/how-to-guide/how-guide-conditioned-air-contractor');
   });
 
+  it('roofing metadata names Atlanta and links to Georgia license verification', () => {
+    const src = read('src/pages/for/roofing.astro');
+    expect(src).toMatch(/title="[^"]*Atlanta/);
+    expect(src).toMatch(/description="[^"]*Atlanta/);
+    expect(src).toMatch(/<a[^>]*href="https:\/\/verify\.sos\.ga\.gov"[^>]*target="_blank"[^>]*rel="noopener"/);
+  });
+
   it('TradeLanding CTA carries tracked funnel metadata into a per-trade bucket', () => {
     const src = read('src/components/TradeLanding.astro');
     expect(src).toMatch(/data-cta="trade-review"[\s\S]{0,120}data-section=\{`for-\$\{trade\}`\}[\s\S]{0,120}data-intent="book:free-review"/);

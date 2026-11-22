@@ -7,8 +7,8 @@ import Intake from '@/components/Intake.astro';
 ---
 
 <Layout
-  title="Websites for roofing contractors — M3MM"
-  description="Roofing contractor websites that make services, project photos, qualifications and inspection requests easy to find. Get a free video teardown."
+  title="Websites for roofing contractors in Metro Atlanta — M3MM"
+  description="Roofing contractor websites in Metro Atlanta that make services, project photos, qualifications and inspection requests easy to find. Get a free video teardown."
   path="/for/roofing"
   breadcrumbs={[
     { name: 'M3MM', url: '/' },
@@ -33,6 +33,17 @@ import Intake from '@/components/Intake.astro';
       },
     ]}
   />
+
+  <section class="container-page py-16" aria-labelledby="atlanta-homeowners">
+    <h2 id="atlanta-homeowners" class="text-3xl font-display">What Atlanta homeowners check first</h2>
+    <ul class="mt-6 space-y-4">
+      <li><strong>Roofing services:</strong> Show whether you handle inspections, repairs, replacements, and the roofing materials you work with.</li>
+      <li><strong>Project photos:</strong> Share clear photos of completed roofing work so homeowners can see what you do.</li>
+      <li><strong>Service area:</strong> List the metro counties you actually serve, such as Fulton, DeKalb, Cobb, or Gwinnett.</li>
+      <li><strong>Contact options:</strong> Make your phone number and inspection or quote request options easy to find on a mobile device.</li>
+    </ul>
+    <p class="mt-6">Georgia has no roofing-specific state license. Residential and general contractors are licensed by the State Licensing Board for Residential and General Contractors under the Georgia Secretary of State. Cities and counties commonly require a local business license or occupational tax certificate. Show your license number so customers can <a class="m3-link" href="https://verify.sos.ga.gov" target="_blank" rel="noopener" data-cta="roofing-verify-license" data-section="for-roofing" data-intent="resource:license-verification">verify a Georgia license</a>.</p>
+  </section>
 
   <Intake
     eyebrow="Step 1 · Tell me what to look at"
