@@ -190,3 +190,7 @@ Roofing, landscaping and HVAC pages were added at `/for/<trade>`. They are a fir
 fact-safe pass: no statistics, prices or testimonials. Keyword volume (plan step 2)
 is still unmeasured. A deeper pass must add Atlanta-specific, verifiable content
 before these are promoted. Pinned by `tests/build/trade-pages.test.ts`.
+
+2026-11-22 follow-up: construction, home-services and outdoor-living now also target
+Metro Atlanta (same fact-safe pattern; existing real-client proofs kept). All six
+pages declare `areaServed: Atlanta, Georgia` in their Service JSON-LD.

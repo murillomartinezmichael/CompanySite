@@ -131,6 +131,15 @@ describe('trade landing pages — message match + real proof only', () => {
     expect(src).toMatch(/<a[^>]*href="https:\/\/verify\.sos\.ga\.gov"[^>]*target="_blank"[^>]*rel="noopener"/);
   });
 
+  for (const slug of ['construction', 'home-services', 'outdoor-living']) {
+    it(`${slug} metadata names Atlanta and links to Georgia license verification`, () => {
+      const src = read(`src/pages/for/${slug}.astro`);
+      expect(src).toMatch(/title="[^"]*Atlanta/);
+      expect(src).toMatch(/description="[^"]*Atlanta/);
+      expect(src).toMatch(/<a[^>]*href="https:\/\/verify\.sos\.ga\.gov"[^>]*target="_blank"[^>]*rel="noopener"[^>]*data-cta="[a-z-]+-verify-license"/);
+    });
+  }
+
   it('TradeLanding CTA carries tracked funnel metadata into a per-trade bucket', () => {
     const src = read('src/components/TradeLanding.astro');
     expect(src).toMatch(/data-cta="trade-review"[\s\S]{0,120}data-section=\{`for-\$\{trade\}`\}[\s\S]{0,120}data-intent="book:free-review"/);

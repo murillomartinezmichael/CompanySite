@@ -8,13 +8,11 @@ export function tradeServiceJsonLd(trade: Trade): Record<string, unknown> {
     name: `Website design for ${audience} contractors`,
     serviceType: 'Website design',
     audience: { '@type': 'BusinessAudience', name: `${audience} contractors` },
-    ...(['roofing', 'landscaping', 'hvac'].includes(trade) && {
-      areaServed: {
-        '@type': 'City',
-        name: 'Atlanta',
-        containedInPlace: { '@type': 'State', name: 'Georgia' },
-      },
-    }),
+    areaServed: {
+      '@type': 'City',
+      name: 'Atlanta',
+      containedInPlace: { '@type': 'State', name: 'Georgia' },
+    },
     provider: { '@type': 'ProfessionalService', name: 'M3MM', url: 'https://m3mm.net/' },
     url: `https://m3mm.net/for/${trade}/`,
   };

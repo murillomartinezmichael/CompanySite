@@ -8,8 +8,8 @@ import Intake from '@/components/Intake.astro';
 ---
 
 <Layout
-  title="Websites for home-service pros — M3MM"
-  description="Contractors, crews, and home-service companies. Sites that turn visitors into booked jobs — free 5-minute video teardown of your site within 24 hours."
+  title="Websites for home-service pros in Metro Atlanta — M3MM"
+  description="Websites for Metro Atlanta home-service companies that make services, service areas and booking options easy to find. Get a free video teardown of your site."
   path="/for/home-services"
   extraJsonLd={tradeServiceJsonLd('home-services')}
   breadcrumbs={[
@@ -42,6 +42,17 @@ import Intake from '@/components/Intake.astro';
       },
     ]}
   />
+
+  <section class="container-page py-16" aria-labelledby="atlanta-homeowners">
+    <h2 id="atlanta-homeowners" class="text-3xl font-display">What Atlanta homeowners check first</h2>
+    <ul class="mt-6 space-y-4">
+      <li><strong>Services:</strong> List the jobs you take and the ones you don't, so homeowners know they found the right company.</li>
+      <li><strong>Proof of work:</strong> Show photos of completed jobs and any reviews customers have given you permission to share.</li>
+      <li><strong>Service area:</strong> List the metro counties you actually serve, such as Fulton, DeKalb, Cobb, or Gwinnett.</li>
+      <li><strong>Booking:</strong> Make your phone number and request form easy to find on a mobile device.</li>
+    </ul>
+    <p class="mt-6">Many home-service trades in Georgia, including residential and general contracting, electrical, plumbing, and conditioned air, require a state license through the Georgia Secretary of State. Cities and counties commonly require a local business license or occupational tax certificate. If your trade is licensed, show your license number so customers can <a class="m3-link" href="https://verify.sos.ga.gov" target="_blank" rel="noopener" data-cta="home-services-verify-license" data-section="for-home-services">verify a Georgia license</a>.</p>
+  </section>
 
   <Intake
     eyebrow="Step 1 · Tell me what to look at"
