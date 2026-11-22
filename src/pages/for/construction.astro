@@ -8,8 +8,8 @@ import Intake from '@/components/Intake.astro';
 ---
 
 <Layout
-  title="Websites for construction companies — M3MM"
-  description="New builds, repairs, service lines. Company sites that turn visitors into quote requests — free 5-minute video teardown of your site within 24 hours."
+  title="Websites for construction companies in Metro Atlanta — M3MM"
+  description="Construction company websites in Metro Atlanta that make new builds, repairs, service areas and quote requests easy to find. Get a free video teardown."
   path="/for/construction"
   extraJsonLd={tradeServiceJsonLd('construction')}
   breadcrumbs={[
@@ -35,6 +35,17 @@ import Intake from '@/components/Intake.astro';
       },
     ]}
   />
+
+  <section class="container-page py-16" aria-labelledby="atlanta-property-owners">
+    <h2 id="atlanta-property-owners" class="text-3xl font-display">What Atlanta property owners check first</h2>
+    <ul class="mt-6 space-y-4">
+      <li><strong>Services:</strong> Say plainly whether you take on new builds, additions, renovations, repairs, or a mix, and for residential or commercial clients.</li>
+      <li><strong>Project photos:</strong> Show completed jobs with a short note on scope, so visitors can match your work to their project.</li>
+      <li><strong>Service area:</strong> List the metro counties you actually serve, such as Fulton, DeKalb, Cobb, or Gwinnett.</li>
+      <li><strong>Quote path:</strong> Make your phone number and quote request easy to find on a mobile device.</li>
+    </ul>
+    <p class="mt-6">In Georgia, residential and general contractors are licensed by the State Licensing Board for Residential and General Contractors under the Georgia Secretary of State. Cities and counties commonly require a local business license or occupational tax certificate. Show your license number so customers can <a class="m3-link" href="https://verify.sos.ga.gov" target="_blank" rel="noopener" data-cta="construction-verify-license" data-section="for-construction">verify a Georgia license</a>.</p>
+  </section>
 
   <Intake
     eyebrow="Step 1 · Tell me what to look at"

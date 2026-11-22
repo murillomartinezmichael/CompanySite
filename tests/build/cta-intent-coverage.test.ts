@@ -45,6 +45,9 @@ const NAV_ONLY_CTAS: ReadonlySet<string> = new Set([
   'hvac-verify-license',
   'hvac-license-guide',
   'roofing-verify-license',
+  'construction-verify-license',
+  'home-services-verify-license',
+  'outdoor-living-verify-license',
   'landscaping-license-guide',
   'footer-home', // Redesign: route/section navigation, not a form submission.
   'footer-services', // Redesign: route/section navigation, not a form submission.

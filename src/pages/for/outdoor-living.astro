@@ -8,8 +8,8 @@ import Intake from '@/components/Intake.astro';
 ---
 
 <Layout
-  title="Websites for outdoor living contractors — M3MM"
-  description="Decks, pergolas, outdoor structures. Gallery-first sites that turn finished builds into booked jobs — free 5-minute video teardown of your site within 24 hours."
+  title="Websites for outdoor living contractors in Metro Atlanta — M3MM"
+  description="Gallery-first websites for Metro Atlanta deck, patio and pergola builders that turn finished projects into quote requests. Get a free video teardown."
   path="/for/outdoor-living"
   extraJsonLd={tradeServiceJsonLd('outdoor-living')}
   breadcrumbs={[
@@ -35,6 +35,17 @@ import Intake from '@/components/Intake.astro';
       },
     ]}
   />
+
+  <section class="container-page py-16" aria-labelledby="atlanta-homeowners">
+    <h2 id="atlanta-homeowners" class="text-3xl font-display">What Atlanta homeowners check first</h2>
+    <ul class="mt-6 space-y-4">
+      <li><strong>Finished builds:</strong> Lead with photos of completed decks, patios, pergolas, and outdoor structures.</li>
+      <li><strong>What you build:</strong> Say which structures and materials you work with, so homeowners can tell if you fit their project.</li>
+      <li><strong>Service area:</strong> List the metro counties you actually serve, such as Fulton, DeKalb, Cobb, or Gwinnett.</li>
+      <li><strong>Quote path:</strong> Make your phone number and quote request easy to find on a mobile device.</li>
+    </ul>
+    <p class="mt-6">Depending on the scope of work, building decks, pergolas, and other outdoor structures in Georgia may require a residential or general contractor license from the Georgia Secretary of State, as well as local building permits. If you hold a license, show your license number so customers can <a class="m3-link" href="https://verify.sos.ga.gov" target="_blank" rel="noopener" data-cta="outdoor-living-verify-license" data-section="for-outdoor-living">verify a Georgia license</a>.</p>
+  </section>
 
   <Intake
     eyebrow="Step 1 · Tell me what to look at"
