@@ -181,3 +181,12 @@ Lanczos downscale from `scripts/make-logo-icon.mjs`: same artwork and white
 background, no crop, recolour, filter or redraw. The original stays byte-for-byte
 and remains the og:image, twitter:image and JSON-LD logo. Amends D-CS-011 for
 these sizes only. Pinned by `tests/build/official-logo.test.ts`.
+
+## D-CS-015 — Trade landing pages target Metro Atlanta (2026-11-22)
+
+Michael confirmed Metro Atlanta as the target metro for the local-SEO trade pages
+(fleet `docs/plans/SEO_TRADE_PAGES_PLAN_2026-10-16.md` step 3, previously "assumed").
+Roofing, landscaping and HVAC pages were added at `/for/<trade>`. They are a first,
+fact-safe pass: no statistics, prices or testimonials. Keyword volume (plan step 2)
+is still unmeasured. A deeper pass must add Atlanta-specific, verifiable content
+before these are promoted. Pinned by `tests/build/trade-pages.test.ts`.

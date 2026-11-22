@@ -44,7 +44,10 @@ describe('Header + Footer thread `path` so intake CTAs never dead-end', () => {
       // Header/Footer/Layout's hasIntakeOnPage now includes `/for/*` so
       // their CTAs stay same-page anchors instead of bouncing the visitor
       // to /audit mid-funnel.
+      { file: 'src/pages/for/landscaping.astro', expected: '/for/landscaping' },
+      { file: 'src/pages/for/hvac.astro', expected: '/for/hvac' },
       { file: 'src/pages/for/outdoor-living.astro', expected: '/for/outdoor-living' },
+      { file: 'src/pages/for/roofing.astro', expected: '/for/roofing' },
       { file: 'src/pages/for/construction.astro', expected: '/for/construction' },
       { file: 'src/pages/for/home-services.astro', expected: '/for/home-services' },
     ];

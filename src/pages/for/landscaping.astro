@@ -1,0 +1,56 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import TradeLanding from '@/components/TradeLanding.astro';
+import Intake from '@/components/Intake.astro';
+---
+
+<Layout
+  title="Websites for landscaping contractors in Metro Atlanta — M3MM"
+  description="Show landscaping services, project photos and service areas to Metro Atlanta homeowners. Get a free video teardown from M3MM."
+  path="/for/landscaping"
+  breadcrumbs={[
+    { name: 'M3MM', url: '/' },
+    { name: 'For landscaping contractors', url: '/for/landscaping' },
+  ]}
+>
+  <Header slot="header" minimal={true} path="/for/landscaping" />
+
+  <TradeLanding
+    trade="landscaping"
+    kicker="For landscaping contractors"
+    headline="A landscaping website that shows"
+    headlineDim="your work."
+    sub="Customers want to know whether you handle the work they need and serve their area. Put your landscaping services, photos of completed projects and service area up front, with a clear way to request a quote."
+    proofs={[
+      {
+        name: 'Aries Outdoor Living',
+        accent: 'cyber',
+        pre: 'Relevant outdoor project work:',
+        strong: 'Outdoor living',
+        post: '',
+      },
+    ]}
+  />
+
+  <section class="container-page py-16" aria-labelledby="atlanta-homeowners">
+    <h2 id="atlanta-homeowners" class="text-3xl font-display">What Atlanta homeowners check first</h2>
+    <ul class="mt-6 space-y-4">
+      <li><strong>Services:</strong> Show the landscaping, maintenance, and lawn or turf treatments your business actually offers.</li>
+      <li><strong>Project photos:</strong> Share clear photos of your completed work so customers can see the kinds of projects you handle.</li>
+      <li><strong>Service area:</strong> List the metro counties you actually serve, such as Fulton, DeKalb, Cobb, or Gwinnett.</li>
+      <li><strong>Contact options:</strong> Make it easy to call or request a quote from a phone.</li>
+    </ul>
+    <p class="mt-6">If your business offers lawn or turf treatment, show your license number so customers can verify it. In Georgia, commercially applying restricted-use pesticides on ornamentals and turf requires a Commercial Pesticide Applicator license in Category 24, Ornamental and Turf, from the Georgia Department of Agriculture. Charging customers for pest control also requires a Pesticide Contractor license. See the <a class="m3-link" href="https://agr.ga.gov/pesticide-applicator-license-categories" target="_blank" rel="noopener" data-cta="landscaping-license-guide" data-section="for-landscaping">Georgia Department of Agriculture licensing categories</a>.</p>
+  </section>
+
+  <Intake
+    eyebrow="Step 1 · Tell me what to look at"
+    headline="What should customers know about your landscaping business?"
+    sub="Share your current site or the way customers find you now. Tell me which services and areas you cover, and I'll review how clearly your online presence helps customers take the next step."
+    source="for-landscaping"
+  />
+
+  <Footer slot="footer" path="/for/landscaping" />
+</Layout>

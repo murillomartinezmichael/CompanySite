@@ -26,9 +26,30 @@ const TRADES: ReadonlyArray<{
   absent: string[];
 }> = [
   {
+    file: 'src/pages/for/landscaping.astro',
+    path: '/for/landscaping',
+    source: 'for-landscaping',
+    clients: ['Aries Outdoor Living'],
+    absent: ['Big 7 Construction'],
+  },
+  {
+    file: 'src/pages/for/hvac.astro',
+    path: '/for/hvac',
+    source: 'for-hvac',
+    clients: [],
+    absent: ['Aries Outdoor Living', 'Big 7 Construction'],
+  },
+  {
     file: 'src/pages/for/outdoor-living.astro',
     path: '/for/outdoor-living',
     source: 'for-outdoor-living',
+    clients: ['Aries Outdoor Living'],
+    absent: ['Big 7 Construction'],
+  },
+  {
+    file: 'src/pages/for/roofing.astro',
+    path: '/for/roofing',
+    source: 'for-roofing',
     clients: ['Aries Outdoor Living'],
     absent: ['Big 7 Construction'],
   },
@@ -72,6 +93,28 @@ describe('trade landing pages — message match + real proof only', () => {
     });
   }
 
+  it('landscaping metadata names Atlanta and links to Georgia pesticide licensing', () => {
+    const src = read('src/pages/for/landscaping.astro');
+    expect(src).toMatch(/title="[^"]*Atlanta/);
+    expect(src).toMatch(/description="[^"]*Atlanta/);
+    expect(src).toMatch(/<a[^>]*href="https:\/\/agr\.ga\.gov\/pesticide-applicator-license-categories"[^>]*target="_blank"[^>]*rel="noopener"/);
+  });
+
+  it('HVAC metadata names Atlanta and links to Georgia licensing resources', () => {
+    const src = read('src/pages/for/hvac.astro');
+    expect(src).toMatch(/title="[^"]*Atlanta/);
+    expect(src).toMatch(/description="[^"]*Atlanta/);
+    expect(src).toContain('https://verify.sos.ga.gov');
+    expect(src).toContain('https://sos.ga.gov/how-to-guide/how-guide-conditioned-air-contractor');
+  });
+
+  it('roofing metadata names Atlanta and links to Georgia license verification', () => {
+    const src = read('src/pages/for/roofing.astro');
+    expect(src).toMatch(/title="[^"]*Atlanta/);
+    expect(src).toMatch(/description="[^"]*Atlanta/);
+    expect(src).toMatch(/<a[^>]*href="https:\/\/verify\.sos\.ga\.gov"[^>]*target="_blank"[^>]*rel="noopener"/);
+  });
+
   it('TradeLanding CTA carries tracked funnel metadata into a per-trade bucket', () => {
     const src = read('src/components/TradeLanding.astro');
     expect(src).toMatch(/data-cta="trade-review"[\s\S]{0,120}data-section=\{`for-\$\{trade\}`\}[\s\S]{0,120}data-intent="book:free-review"/);
@@ -82,7 +125,7 @@ describe('trade landing pages — message match + real proof only', () => {
     expect(src).not.toContain('Sold at handoff');
   });
 
-  it('all three trade pages are listed in the sitemap', () => {
+  it('all trade pages are listed in the sitemap', () => {
     const sitemap = read('public/sitemap.xml');
     for (const t of TRADES) {
       expect(sitemap).toContain(`<loc>https://m3mm.net${t.path}</loc>`);
