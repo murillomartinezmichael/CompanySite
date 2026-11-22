@@ -33,6 +33,13 @@ const TRADES: ReadonlyArray<{
     absent: ['Big 7 Construction'],
   },
   {
+    file: 'src/pages/for/roofing.astro',
+    path: '/for/roofing',
+    source: 'for-roofing',
+    clients: ['Aries Outdoor Living'],
+    absent: ['Big 7 Construction'],
+  },
+  {
     file: 'src/pages/for/construction.astro',
     path: '/for/construction',
     source: 'for-construction',
@@ -82,7 +89,7 @@ describe('trade landing pages — message match + real proof only', () => {
     expect(src).not.toContain('Sold at handoff');
   });
 
-  it('all three trade pages are listed in the sitemap', () => {
+  it('all trade pages are listed in the sitemap', () => {
     const sitemap = read('public/sitemap.xml');
     for (const t of TRADES) {
       expect(sitemap).toContain(`<loc>https://m3mm.net${t.path}</loc>`);

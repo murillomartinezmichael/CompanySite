@@ -57,6 +57,7 @@ const PAGE_EXPECTATIONS: ReadonlyArray<{
   { file: 'src/pages/for/construction.astro', path: '/for/construction' },
   { file: 'src/pages/for/home-services.astro', path: '/for/home-services' },
   { file: 'src/pages/for/outdoor-living.astro', path: '/for/outdoor-living' },
+  { file: 'src/pages/for/roofing.astro', path: '/for/roofing' },
   { file: 'src/pages/start/thanks.astro', path: '/start/thanks', noindex: true },
   // A roadmap subscriber gets its own receipt: /thanks promises a recorded
   // video teardown, which is false for a follow request. noindex for the same

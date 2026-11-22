@@ -45,6 +45,7 @@ describe('Header + Footer thread `path` so intake CTAs never dead-end', () => {
       // their CTAs stay same-page anchors instead of bouncing the visitor
       // to /audit mid-funnel.
       { file: 'src/pages/for/outdoor-living.astro', expected: '/for/outdoor-living' },
+      { file: 'src/pages/for/roofing.astro', expected: '/for/roofing' },
       { file: 'src/pages/for/construction.astro', expected: '/for/construction' },
       { file: 'src/pages/for/home-services.astro', expected: '/for/home-services' },
     ];
