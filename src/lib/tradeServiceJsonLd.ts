@@ -1,7 +1,7 @@
 type Trade = 'roofing' | 'landscaping' | 'hvac' | 'construction' | 'home-services' | 'outdoor-living';
 
 export function tradeServiceJsonLd(trade: Trade): Record<string, unknown> {
-  const audience = trade.replace(/-/g, ' ');
+  const audience = trade === 'hvac' ? 'HVAC' : trade.replace(/-/g, ' ');
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',

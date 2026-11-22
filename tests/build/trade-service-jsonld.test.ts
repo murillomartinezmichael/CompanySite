@@ -12,7 +12,7 @@ describe('built trade Service JSON-LD', () => {
       const services = blocks.filter((block) => block['@type'] === 'Service');
       expect(services).toHaveLength(1);
       const service = services[0];
-      const audience = trade.replace(/-/g, ' ');
+      const audience = trade === 'hvac' ? 'HVAC' : trade.replace(/-/g, ' ');
       expect(service).toEqual({
         '@context': 'https://schema.org',
         '@type': 'Service',
