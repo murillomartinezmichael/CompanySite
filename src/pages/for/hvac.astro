@@ -7,8 +7,8 @@ import Intake from '@/components/Intake.astro';
 ---
 
 <Layout
-  title="Websites for HVAC contractors — M3MM"
-  description="Custom HVAC contractor websites that make heating and cooling services, service areas, and contact options easy to find. Request a free site teardown."
+  title="Websites for HVAC contractors in Metro Atlanta — M3MM"
+  description="Custom websites for HVAC contractors in Metro Atlanta that make heating and cooling services, service areas, and contact options easy to find. Request a free site teardown."
   path="/for/hvac"
   breadcrumbs={[
     { name: 'M3MM', url: '/' },
@@ -24,6 +24,16 @@ import Intake from '@/components/Intake.astro';
     sub="When heating or cooling stops working, customers need to know what you service, where you work, and how to reach you. A clear HVAC site can also show installation and maintenance options, applicable licenses and credentials, and how to request service."
     proofs={[]}
   />
+  <section class="container-page py-16" aria-labelledby="atlanta-homeowners">
+    <h2 id="atlanta-homeowners" class="text-3xl font-display">What Atlanta homeowners check first</h2>
+    <ul class="mt-6 space-y-4">
+      <li><strong>Heating and cooling services:</strong> Show which repairs, installations, and maintenance services your crew offers.</li>
+      <li><strong>How to request service:</strong> Make your phone number and contact options easy to find on a mobile device.</li>
+      <li><strong>Service area:</strong> List the metro counties you actually serve, such as Fulton, DeKalb, Cobb, or Gwinnett.</li>
+      <li><strong>License information:</strong> Show your license number so customers can verify it.</li>
+    </ul>
+    <p class="mt-6">Georgia HVAC contractors need a Conditioned Air Contractor license from the Georgia Secretary of State Division of Conditioned Air Contractors. Licenses are Class I (restricted) or Class II (unrestricted). Anyone can <a class="m3-link" href="https://verify.sos.ga.gov" target="_blank" rel="noopener" data-cta="hvac-verify-license" data-section="for-hvac" data-intent="resource:license-verification">verify a Georgia license</a>. See the <a class="m3-link" href="https://sos.ga.gov/how-to-guide/how-guide-conditioned-air-contractor" target="_blank" rel="noopener" data-cta="hvac-license-guide" data-section="for-hvac" data-intent="resource:license-guide">official conditioned air contractor guide</a> for more information.</p>
+  </section>
   <Intake
     eyebrow="Step 1 · Tell me what to look at"
     headline="What should your HVAC site do better?"
