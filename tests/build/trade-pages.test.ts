@@ -93,6 +93,13 @@ describe('trade landing pages — message match + real proof only', () => {
     });
   }
 
+  it('landscaping metadata names Atlanta and links to Georgia pesticide licensing', () => {
+    const src = read('src/pages/for/landscaping.astro');
+    expect(src).toMatch(/title="[^"]*Atlanta/);
+    expect(src).toMatch(/description="[^"]*Atlanta/);
+    expect(src).toMatch(/<a[^>]*href="https:\/\/agr\.ga\.gov\/pesticide-applicator-license-categories"[^>]*target="_blank"[^>]*rel="noopener"/);
+  });
+
   it('HVAC metadata names Atlanta and links to Georgia licensing resources', () => {
     const src = read('src/pages/for/hvac.astro');
     expect(src).toMatch(/title="[^"]*Atlanta/);
