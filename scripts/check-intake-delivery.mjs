@@ -22,6 +22,9 @@ export async function checkIntakeDelivery(browser, origin, artifacts) {
       let releaseResponse;
       try {
         await page.setViewport({ width, height: 900 });
+        // html{scroll-behavior:smooth} keeps focus scrolls animating after page.type(),
+        // so at 375px the click lands where the button was. Match axe-home's other pages.
+        await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
         await page.setRequestInterception(true);
         page.on('request', req => {
           if (req.url() === origin + '/api/lead') {
