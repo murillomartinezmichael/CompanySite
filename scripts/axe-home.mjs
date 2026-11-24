@@ -21,7 +21,7 @@ const silentReelVerified = createHash('sha256')
 
 const ROUTES = ['/', '/roadmap/', '/websites/', '/compare/website-options/',
   '/audit/', '/start/', '/start/thanks/', '/thanks/', '/resume/', '/policies/',
-  '/accessibility/', '/roadmap/thanks/', '/for/construction/', '/for/home-services/', '/for/outdoor-living/', '/services/', '/projects/', '/roadmaps/', '/about/', '/contact/', '/roadmaps/infrastructure/', '/roadmaps/infrastructure/hardware/'];
+  '/accessibility/', '/roadmap/thanks/', '/for/construction/', '/for/home-services/', '/for/outdoor-living/', '/for/roofing/', '/for/landscaping/', '/for/hvac/', '/services/', '/projects/', '/roadmaps/', '/about/', '/contact/', '/roadmaps/infrastructure/', '/roadmaps/infrastructure/hardware/'];
 const VIEWPORTS = [
   { name: 'narrow', width: 320, height: 812, deviceScaleFactor: 1, isMobile: true },
   { name: 'tablet', width: 768, height: 1024, deviceScaleFactor: 1, isMobile: true },
