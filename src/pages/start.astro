@@ -3,7 +3,7 @@ import Layout from '@/layouts/Layout.astro';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import Intake from '@/components/Intake.astro';
-import { BASIC_SITE, checkoutReady } from '@/config/offers';
+import { BASIC_SITE, HOSTING_PLAN, checkoutReady, hostingCheckoutReady } from '@/config/offers';
 ---
 
 <Layout
@@ -113,6 +113,44 @@ import { BASIC_SITE, checkoutReady } from '@/config/offers';
               </>
             )}
           </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="hosting-plan" class="pb-hq-section" aria-labelledby="hosting-plan-heading">
+      <div class="container-page">
+        <div class="panel grid gap-6 p-6 sm:p-8 lg:grid-cols-[1.2fr,0.8fr] lg:items-center">
+          <div>
+            <p class="mono text-[11px] uppercase tracking-[0.22em] text-bone-muted">Optional · after launch</p>
+            <h2 id="hosting-plan-heading" class="mt-3 font-display text-2xl text-bone">Hosting + help, ${HOSTING_PLAN.monthlyUsd}/month</h2>
+            <p class="mt-3 max-w-2xl text-sm leading-relaxed text-bone-dim">
+              Prefer not to manage hosting yourself? I keep the site online and handle small updates you ask for. It&rsquo;s optional: you still own the code and can take it elsewhere any time.
+            </p>
+          </div>
+          {hostingCheckoutReady ? (
+            <div>
+              <a
+                href={HOSTING_PLAN.paymentLink}
+                class="btn-ghost flex w-full items-center justify-center"
+                data-cta="start-subscribe-hosting"
+                data-section="start-hosting"
+                data-intent="checkout:hosting-plan"
+              >
+                Add hosting + help, ${HOSTING_PLAN.monthlyUsd}/month
+              </a>
+              <p class="mt-3 text-center mono text-[10px] uppercase tracking-[0.16em] text-bone-muted">Monthly subscription hosted by Stripe</p>
+            </div>
+          ) : (
+            <a
+              href="#intake"
+              class="btn-ghost flex w-full items-center justify-center"
+              data-cta="start-ask-hosting"
+              data-section="start-hosting"
+              data-intent="book:free-review"
+            >
+              Ask about it in your free review
+            </a>
+          )}
         </div>
       </div>
     </section>
