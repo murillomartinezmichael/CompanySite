@@ -3,7 +3,7 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {chromium} from '../../CampaignForge/node_modules/playwright/index.mjs';
+import {chromium} from 'playwright';
 export const root=path.dirname(fileURLToPath(import.meta.url));
 const fleet=path.resolve(root,'../..');
 export const targets={
