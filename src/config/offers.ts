@@ -69,13 +69,14 @@ function explainRejection(link: string): string | null {
 export function resolvePaymentLink(
   envValue: string | undefined,
   fallback: string = PLACEHOLDER_PAYMENT_LINK,
+  envName: string = 'PUBLIC_STRIPE_PAYMENT_LINK',
 ): string {
   const candidate = (envValue ?? '').trim();
   if (candidate === '') return fallback;
   const reason = explainRejection(candidate);
   if (reason === null) return candidate;
   throw new InvalidPaymentLinkError(
-    `PUBLIC_STRIPE_PAYMENT_LINK is set but is not a usable LIVE Stripe Payment Link: ${reason}.\n` +
+    `${envName} is set but is not a usable LIVE Stripe Payment Link: ${reason}.\n` +
       `  Got:      ${redactIfSecret(candidate)}\n` +
       `  Expected: https://buy.stripe.com/<link-id> (optional query parameters)\n` +
       `  Fix it in Cloudflare Pages → Settings → Environment variables → Production, then redeploy.\n` +
@@ -101,3 +102,21 @@ export const BASIC_SITE = {
  * the Cloudflare Pages dashboard changes nothing until the next deploy.
  */
 export const checkoutReady = isLiveStripePaymentLink(BASIC_SITE.paymentLink);
+
+/**
+ * Optional after-launch plan. Same fence as the deposit: the subscribe button
+ * renders only when `PUBLIC_STRIPE_HOSTING_LINK` (Cloudflare Pages → Settings →
+ * Environment variables, Production) is a well-formed LIVE Payment Link.
+ * Unset → the card points to the free review instead; set but invalid → the
+ * build fails with the reason.
+ */
+export const HOSTING_PLAN = {
+  monthlyUsd: 100,
+  paymentLink: resolvePaymentLink(
+    import.meta.env.PUBLIC_STRIPE_HOSTING_LINK,
+    PLACEHOLDER_PAYMENT_LINK,
+    'PUBLIC_STRIPE_HOSTING_LINK',
+  ),
+} as const;
+
+export const hostingCheckoutReady = isLiveStripePaymentLink(HOSTING_PLAN.paymentLink);

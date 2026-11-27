@@ -3,9 +3,11 @@ import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import {
   BASIC_SITE,
+  HOSTING_PLAN,
   InvalidPaymentLinkError,
   PLACEHOLDER_PAYMENT_LINK,
   checkoutReady,
+  hostingCheckoutReady,
   isLiveStripePaymentLink,
   resolvePaymentLink,
 } from '../../src/config/offers';
@@ -275,5 +277,42 @@ describe.skipIf(!existsSync(distStartPath))('built /start HTML (needs `npm run b
     expect(h).toContain('data-cta="start-pay-deposit"');
     expect(h).not.toContain('Checkout opening soon');
     expect(h).not.toContain('data-cta="start-free-review"');
+  });
+});
+
+describe('optional $100/month hosting + help plan', () => {
+  const start = read('src/pages/start.astro');
+  const offers = read('src/config/offers.ts');
+  const faq = read('src/components/Faq.astro');
+
+  it('sources the hosting link from its own env var, validated', () => {
+    expect(offers).toMatch(/import\.meta\.env\.PUBLIC_STRIPE_HOSTING_LINK/);
+    expect(offers).toMatch(/export const hostingCheckoutReady = isLiveStripePaymentLink\(HOSTING_PLAN\.paymentLink\)/);
+    expect(hostingCheckoutReady).toBe(isLiveStripePaymentLink(HOSTING_PLAN.paymentLink));
+    expect(HOSTING_PLAN.monthlyUsd).toBe(100);
+  });
+
+  it('names the hosting env var when its value is rejected', () => {
+    expect(() =>
+      resolvePaymentLink('https://buy.stripe.com/test_abc123', PLACEHOLDER_PAYMENT_LINK, 'PUBLIC_STRIPE_HOSTING_LINK'),
+    ).toThrow(/PUBLIC_STRIPE_HOSTING_LINK is set but/);
+    expect(resolvePaymentLink(undefined, PLACEHOLDER_PAYMENT_LINK, 'PUBLIC_STRIPE_HOSTING_LINK')).toBe(PLACEHOLDER_PAYMENT_LINK);
+  });
+
+  it('renders the hosting link as an href ONLY inside the hostingCheckoutReady branch', () => {
+    const hrefUses = start.match(/href=\{HOSTING_PLAN\.paymentLink\}/g) ?? [];
+    expect(hrefUses).toHaveLength(1);
+    const gateOpen = start.indexOf('{hostingCheckoutReady ? (');
+    const gateElse = start.indexOf(') : (', gateOpen);
+    const hrefAt = start.indexOf('href={HOSTING_PLAN.paymentLink}');
+    expect(gateOpen).toBeGreaterThan(-1);
+    expect(hrefAt).toBeGreaterThan(gateOpen);
+    expect(hrefAt).toBeLessThan(gateElse);
+  });
+
+  it('keeps the plan optional and ownership intact in public copy', () => {
+    expect(start).toContain('you still own the code');
+    expect(faq).toContain('no monthly retainer is required');
+    expect(faq).toContain('optional $100/month hosting + help plan');
   });
 });
