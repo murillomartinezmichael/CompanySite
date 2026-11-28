@@ -13,7 +13,8 @@ const pages = walk(dist).filter(p => p.endsWith('.html')).map(file => ({
   route: '/' + relative(dist, file).replace(/\\/g, '/').replace(/index\.html$/, ''),
   html: readFileSync(file, 'utf8').replace(/<script\b[^>]*>[\s\S]*?<\/script>|<style\b[^>]*>[\s\S]*?<\/style>|<!--[\s\S]*?-->/gi, ''),
 }));
-// Product samples (e.g. a Teardown report) are standalone files, byte-identical to the product's output:
+// Product samples (e.g. a Teardown report) are standalone copies of the product's output (see
+// sample-report-contrast.test.ts for the a11y values they must keep):
 // no site chrome, served noindex by public/_headers, pinned by the last test below.
 const isSample = (route: string) => route.startsWith('/samples/');
 const anchors = (html: string) => [...html.matchAll(/<a\b[^>]*>/g)].map(m => m[0]);
