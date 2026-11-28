@@ -221,7 +221,7 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
           '@type': 'ListItem',
           position: i + 1,
           name: b.name,
-          item: new URL(b.url, 'https://m3mm.net').toString(),
+          item: new URL(servedPath(b.url), 'https://m3mm.net').toString(),
         })),
       })} />
     )}
