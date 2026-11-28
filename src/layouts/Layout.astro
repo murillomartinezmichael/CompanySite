@@ -5,6 +5,7 @@ import '@/styles/redesign.css';
 // Claude-powered assistant, replaced the SiteGuide embed 2026-08-20.
 import ChatWidget from '@/components/ChatWidget.astro';
 import { servedPath } from '@/lib/servedUrl';
+import { BASIC_SITE } from '@/config/offers';
 
 interface BreadcrumbItem {
   name: string;
@@ -165,8 +166,8 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
             priceSpecification: {
               '@type': 'UnitPriceSpecification',
               priceCurrency: 'USD',
-              price: 500,
-              minPrice: 500,
+              price: BASIC_SITE.priceUsd,
+              minPrice: BASIC_SITE.priceUsd,
             },
             availability: 'https://schema.org/InStock',
             url: 'https://m3mm.net/start',

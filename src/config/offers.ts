@@ -1,5 +1,6 @@
 /** Public offer links only. Never put Stripe secret keys in browser code. */
 
+import { basicSitePriceUsd } from './basic-site-price';
 import { redactDiagnostic } from '../../scripts/check-shipped-placeholders.mjs';
 import { paymentLinkProblem } from '../../scripts/payment-link-policy.mjs';
 
@@ -85,7 +86,7 @@ export function resolvePaymentLink(
 }
 
 export const BASIC_SITE = {
-  priceUsd: 500,
+  priceUsd: basicSitePriceUsd,
   depositPercent: 20,
   depositUsd: 100,
   paymentLink: resolvePaymentLink(import.meta.env.PUBLIC_STRIPE_PAYMENT_LINK),

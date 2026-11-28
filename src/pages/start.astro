@@ -7,8 +7,8 @@ import { BASIC_SITE, HOSTING_PLAN, checkoutReady, hostingCheckoutReady } from '@
 ---
 
 <Layout
-  title="Start your $500 business site — M3MM"
-  description="Reserve an M3MM basic business-site build with a $100 non-refundable down payment, then send the project intake."
+  title={`Start your $${BASIC_SITE.priceUsd} business site — M3MM`}
+  description={`Reserve an M3MM basic business-site build with a $${BASIC_SITE.depositUsd} non-refundable down payment, then send the project intake.`}
   path="/start"
   breadcrumbs={[
     { name: 'M3MM', url: '/' },
@@ -28,11 +28,11 @@ import { BASIC_SITE, HOSTING_PLAN, checkoutReady, hostingCheckoutReady } from '@
             </div>
 
             <h1 class="text-hq-hero">
-              Start your <span class="highlight-yellow"><span class="fg">$500 site</span></span> with $100 down.
+              Start your <span class="highlight-yellow"><span class="fg">${BASIC_SITE.priceUsd} site</span></span> with ${BASIC_SITE.depositUsd} down.
             </h1>
             <p class="mt-6 max-w-2xl text-lg text-bone-dim">
               {checkoutReady
-                ? 'Pay the 20% down payment to reserve your project, then complete the project intake. I review the scope and confirm your actual build week before work begins.'
+                ? `Pay the ${BASIC_SITE.depositPercent}% down payment to reserve your project, then complete the project intake. I review the scope and confirm your actual build week before work begins.`
                 : 'Stripe checkout for the down payment opens soon. Start with the free site review below — I review the scope, confirm your build week, and send you the payment link the moment checkout is live.'}
             </p>
 
@@ -67,7 +67,7 @@ import { BASIC_SITE, HOSTING_PLAN, checkoutReady, hostingCheckoutReady } from '@
             </div>
 
             <p class="mt-5 text-sm leading-relaxed text-bone-dim">
-              The $100 down payment is non-refundable. All other payments are refundable before launch.
+              The ${BASIC_SITE.depositUsd} down payment is non-refundable. All other payments are refundable before launch.
             </p>
 
             {checkoutReady ? (
@@ -80,7 +80,7 @@ import { BASIC_SITE, HOSTING_PLAN, checkoutReady, hostingCheckoutReady } from '@
                   data-intent="checkout:basic-deposit"
                 >
                   <span class="relative z-10 flex items-center gap-2.5">
-                    Pay $100 securely
+                    Pay ${BASIC_SITE.depositUsd} securely
                     <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
                   </span>
                 </a>

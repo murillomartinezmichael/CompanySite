@@ -16,15 +16,12 @@ describe('pricing-card payment-policy badge', () => {
   const services = read('src/components/Services.astro');
 
   it('exactly the two build-lane tiers carry the owner-confirmed policy', () => {
-    // Split the CATALOG into per-tier chunks keyed on `key:` and read each
-    // tier's paymentPolicy field, so the assertion survives reordering.
-    const chunks = [...services.matchAll(/key: '([^']+)'[\s\S]*?paymentPolicy: '([^']*)'/g)];
-    const byKey = Object.fromEntries(chunks.map((m) => [m[1], m[2]]));
-    expect(Object.keys(byKey)).toHaveLength(4);
-    expect(byKey['site-that-books']).toBe(PAYMENT_POLICY);
-    expect(byKey['business-website']).toBe(PAYMENT_POLICY);
-    expect(byKey['siteguide-setup']).toBe('');
-    expect(byKey['custom-builds']).toBe('');
+    const html = read('dist/websites/index.html');
+    for (const tier of ['site-that-books', 'business-website', 'siteguide-setup', 'custom-builds']) {
+      const card = html.match(new RegExp(`data-cta="service-${tier}"[\\s\\S]*?</a>`))?.[0];
+      expect(card).toBeDefined();
+      expect(card!.includes(PAYMENT_POLICY)).toBe(['site-that-books', 'business-website'].includes(tier));
+    }
   });
 
   it('badge renders conditionally so tiers without this policy stay clean', () => {
@@ -35,7 +32,7 @@ describe('pricing-card payment-policy badge', () => {
   it('pins the 20% down payment as the only non-refundable payment before launch', () => {
     // Prevent the superseded full-refund claim from silently returning.
     expect(services).not.toContain('Full refund any time before launch.');
-    expect(services.match(/20% down to start\./g)).toHaveLength(2);
+    expect(read('dist/websites/index.html').match(/20% down to start\./g)).toHaveLength(2);
     expect(services.match(/The down payment is non-refundable;/g)).toHaveLength(2);
     expect(services.match(/all other payments are refundable before launch\./g)).toHaveLength(2);
   });

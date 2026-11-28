@@ -1,4 +1,5 @@
 ---
+import { BASIC_SITE } from '@/config/offers';
 const services = [
   {
     key: 'site-that-books',
@@ -6,7 +7,7 @@ const services = [
     number: '01',
     title: 'Basic site or cleanup',
     for: 'New businesses, small teams, quick credibility fixes',
-    from: '$500',
+    from: `$${BASIC_SITE.priceUsd}`,
     body: 'A clean one-page site, landing page, or refresh that gives a business a real home base: fast, mobile-first, clear CTA, and no mystery stack.',
     bullets: [
       'One-page site or refresh with clear CTA',
@@ -15,12 +16,12 @@ const services = [
       'Starter SEO and share preview cleaned up',
     ],
     accent: 'clay',
-    cta: 'Start with $100 down',
+    cta: `Start with $${BASIC_SITE.depositUsd} down`,
     href: '/start',
     // Owner-confirmed policy (2026-07-20): work starts after 20% down. That
     // payment is retained on cancellation; later payments remain refundable
     // until launch.
-    paymentPolicy: '20% down to start. The down payment is non-refundable; all other payments are refundable before launch.',
+    paymentPolicy: `${BASIC_SITE.depositPercent}% down to start. The down payment is non-refundable; all other payments are refundable before launch.`,
   },
   {
     key: 'business-website',
@@ -39,7 +40,7 @@ const services = [
     accent: 'neon',
     cta: 'Get a quote',
     href: '#intake',
-    paymentPolicy: '20% down to start. The down payment is non-refundable; all other payments are refundable before launch.',
+    paymentPolicy: `${BASIC_SITE.depositPercent}% down to start. The down payment is non-refundable; all other payments are refundable before launch.`,
   },
   {
     key: 'siteguide-setup',
@@ -103,7 +104,7 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
         <span class="highlight-yellow"><span class="fg">Pick the lane</span></span>. <span class="text-bone-dim">No mystery pricing.</span>
       </h2>
       <p class="mt-6 text-lg text-bone-dim">
-        SiteGuide covers the starter-template lane. M3MM builds the custom business sites: $500 for simple, $1k-$2k for bounded company sites, quote-only when the scope is Aries or Big7 sized.
+        SiteGuide covers the starter-template lane. M3MM builds the custom business sites: ${BASIC_SITE.priceUsd} for simple, $1k-$2k for bounded company sites, quote-only when the scope is Aries or Big7 sized.
       </p>
     </div>
 
@@ -186,7 +187,7 @@ const accentClasses: Record<string, { line: string; text: string; hover: string 
 
     <!-- Under-$500 template link -->
     <div class="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-bone-muted">
-      <span class="mono text-[11px] uppercase tracking-[0.2em] text-clay">Budget under $500?</span>
+      <span class="mono text-[11px] uppercase tracking-[0.2em] text-clay">Budget under ${BASIC_SITE.priceUsd}?</span>
       <a
         href="https://siteguide-production.up.railway.app/demos?utm_source=m3mm&utm_medium=services&utm_campaign=downshift&utm_content=services-under-500"
         class="group inline-flex items-center gap-1.5 text-bone-dim underline decoration-clay/50 decoration-1 underline-offset-[6px] transition-colors hover:text-clay"
