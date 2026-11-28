@@ -25,6 +25,15 @@ export function inquiryConfirmation(
     cors, state === 'uncertain' ? { 'Retry-After': '5' } : {});
 }
 
+/** A native form POST refused before its fields could be read (413, an
+ * unparsable or unreadable body). Nothing to re-render, so plain guidance. */
+export function inquiryRequestProblem(status: 400 | 413, cors: Record<string, string>): Response {
+  const message = status === 413
+    ? 'Your inquiry was not sent because it is too long. Go back, shorten the longest field, and send again.'
+    : 'Your inquiry was not sent because it could not be read. Go back and send it again.';
+  return inquiryPage(status, `<p role="alert">${message}</p>`, cors, {});
+}
+
 function inquiryPage(status: number, body: string, cors: Record<string, string>, extra: Record<string, string>): Response {
   return new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1"><title>M3MM inquiry confirmation</title></head>

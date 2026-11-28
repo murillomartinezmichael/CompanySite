@@ -1,7 +1,7 @@
 // POST /api/lead — the money path. Every TikTok click terminates here.
 //
 // Hardening (Rung 1, 2026-07-05):
-// - 16 KB body cap (reject bombs before parse)
+// - 16 KB JSON / 96 KB form body cap (reject bombs before parse)
 // - JSON, URL-encoded and multipart text forms supported
 // - Origin allowlist (m3mm.net + localhost dev variants)
 // - Per-IP rate limit 5 req / 60s with Retry-After
@@ -17,7 +17,7 @@ import { LIMITS, validateLead, esc, UTM_FIELDS, type Lead } from '../_lib/valida
 import { checkRate, rateKey } from '../_lib/rate';
 import { sendToCockpit, leadIdempotencyKey } from '../_lib/cockpit-sink';
 import { storeInCockpit, SUBMISSION_ID } from '../_lib/cockpit-inbox';
-import { inquiryConfirmation, inquiryFormProblem } from '../_lib/inquiry-confirmation';
+import { inquiryConfirmation, inquiryFormProblem, inquiryRequestProblem } from '../_lib/inquiry-confirmation';
 import { sendToN8n } from '../_lib/n8n-sink';
 import { referralOffer, referralShareUrl, REFERRAL_FIELD_LABEL } from '../_lib/referral';
 import { originAllowed, corsResponseHeaders, preflightResponse } from '../_lib/cors';
@@ -223,11 +223,15 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
   const succeed = (intent?: string) =>
     isForm ? redirectResponse(successPathFor(intent), cors) : reply(200, { ok: true });
 
+  // A native form renders the reply, so its request errors get a page too.
+  const bodyLimit = isForm ? LIMITS.formBodyBytes : LIMITS.bodyBytes;
+  const tooLarge = () => isForm ? inquiryRequestProblem(413, cors)
+    : reply(413, { ok: false, error: 'payload_too_large', limit: bodyLimit });
+  const unreadable = (error: string) => isForm ? inquiryRequestProblem(400, cors) : reply(400, { ok: false, error });
+
   const contentLengthRaw = request.headers.get('Content-Length');
   const contentLength = contentLengthRaw ? Number(contentLengthRaw) : NaN;
-  if (Number.isFinite(contentLength) && contentLength > LIMITS.bodyBytes) {
-    return reply(413, { ok: false, error: 'payload_too_large', limit: LIMITS.bodyBytes });
-  }
+  if (Number.isFinite(contentLength) && contentLength > bodyLimit) return tooLarge();
 
   const rate = checkRate(rateKey('lead', ip), RATE_MAX, RATE_WINDOW_S);
   // A native form renders this response, so its 429 waits until the (capped)
@@ -241,17 +245,13 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
     );
   }
 
-  const bodyRead = await readBodyText(request, LIMITS.bodyBytes);
-  if (!bodyRead.ok) {
-    if (bodyRead.error === 'too_large') {
-      return reply(413, { ok: false, error: 'payload_too_large', limit: LIMITS.bodyBytes });
-    }
-    return reply(400, { ok: false, error: 'body_unreadable' });
-  }
+  const bodyRead = await readBodyText(request, bodyLimit);
+  if (!bodyRead.ok) return bodyRead.error === 'too_large' ? tooLarge() : unreadable('body_unreadable');
   const raw = bodyRead.text;
 
   let body: Lead;
   let nativeSubmissionId: string | null = null;
+  let duplicateSubmissionId = false;
   if (isJson) {
     let parsed: unknown;
     try {
@@ -282,11 +282,11 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
         params = new URLSearchParams();
         for (const [name, value] of fields) {
           // Intake accepts text fields, not attachments or File coercions.
-          if (typeof value !== 'string') return reply(400, { ok: false, error: 'invalid_form' });
+          if (typeof value !== 'string') return unreadable('invalid_form');
           params.append(name, value);
         }
       } catch {
-        return reply(400, { ok: false, error: 'invalid_form' });
+        return unreadable('invalid_form');
       }
     } else {
       params = new URLSearchParams(raw);
@@ -294,8 +294,8 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
     // Duplicate/empty references are invalid, never permission to generate a new
     // identity. The UUID identifies a public submission; it is not authorization.
     if (params.has('submissionId')) {
-      if (params.getAll('submissionId').length !== 1) return reply(400, { ok: false, error: 'invalid_submission_id' });
-      nativeSubmissionId = params.get('submissionId');
+      if (params.getAll('submissionId').length !== 1) duplicateSubmissionId = true;
+      else nativeSubmissionId = params.get('submissionId');
     }
     // Match the roadmap's JS submit handler when the browser posts natively.
     // Only that exact intent may fold its optional topics into the intake note.
@@ -320,6 +320,14 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
     };
   }
 
+  // Only a form can carry a hidden reference; its page keeps the typed text
+  // and drops the bad reference (inquiryFormProblem keeps one only on 429).
+  const badSubmissionId = () => isForm
+    ? inquiryFormProblem(400, body, cors, { errors: [{ field: 'submissionId', code: 'invalid',
+      message: 'The retry reference on this page was not valid, so nothing was sent. If you already sent this inquiry, it may be saved.' }] })
+    : reply(400, { ok: false, error: 'invalid_submission_id' });
+  if (duplicateSubmissionId) return badSubmissionId();
+
   if (!rate.ok) {
     return inquiryFormProblem(429, body, cors, { retryAfter: rate.retryAfter, submissionId: nativeSubmissionId });
   }
@@ -343,11 +351,11 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
   if (env.COCKPIT_LEAD_INBOX_URL !== undefined) {
     const headerId = request.headers.get('Idempotency-Key');
     if (headerId !== null && nativeSubmissionId !== null && headerId.toLowerCase() !== nativeSubmissionId.toLowerCase()) {
-      return reply(400, { ok: false, error: 'invalid_submission_id' });
+      return badSubmissionId();
     }
     const suppliedId = headerId ?? nativeSubmissionId;
     if (suppliedId !== null && !SUBMISSION_ID.test(suppliedId)) {
-      return reply(400, { ok: false, error: 'invalid_submission_id' });
+      return badSubmissionId();
     }
     if (suppliedId === null) {
       if (isForm) return inquiryConfirmation(lead, crypto.randomUUID(), 'confirm', cors);
