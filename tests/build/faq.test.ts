@@ -11,6 +11,7 @@ describe('website-department objection-handling FAQ', () => {
 
   it('renders between Services and Intake in the website department', () => {
     expect(websites).toMatch(/import Faq from ['"]@\/components\/Faq\.astro['"]/);
+    expect(websites).toContain('<Services />');
     expect(websites.indexOf('<Services />')).toBeLessThan(websites.indexOf('<Faq />'));
     expect(websites.indexOf('<Faq />')).toBeLessThan(websites.indexOf('<Intake />'));
   });
@@ -35,8 +36,14 @@ describe('website-department objection-handling FAQ', () => {
   });
 
   it('attributes the under-$500 SiteGuide downshift and uses a reserved intent', () => {
-    expect(faq).toContain('utm_source=m3mm&utm_medium=faq&utm_campaign=downshift&utm_content=faq-under-500');
-    expect(faq).toMatch(/data-cta="faq-siteguide"[\s\S]{0,120}data-section="faq"[\s\S]{0,120}data-intent="product:siteguide"/);
+    const html = read('dist/websites/index.html');
+    const anchor = html.match(/<a\b[^>]*\sdata-cta="faq-siteguide"[^>]*>/)?.[0];
+    const href = anchor?.match(/\shref="([^"]+)"/)?.[1].replaceAll('&amp;', '&');
+    expect(href).toBe(
+      'https://siteguide-production.up.railway.app/demos?utm_source=m3mm&utm_medium=faq&utm_campaign=downshift&utm_content=faq-under-500',
+    );
+    expect(anchor).toContain('data-section="faq"');
+    expect(anchor).toContain('data-intent="product:siteguide"');
   });
 
   it('keeps visible keyboard focus styling on each disclosure summary', () => {

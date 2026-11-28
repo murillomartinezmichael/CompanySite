@@ -20,6 +20,7 @@ describe('two-door chooser under the Hero', () => {
 
   it('renders between Hero and Proof in the website department', () => {
     expect(websites).toMatch(/import TwoDoor from ['"]@\/components\/TwoDoor\.astro['"]/);
+    expect(websites).toContain('<Hero />');
     expect(websites.indexOf('<Hero />')).toBeLessThan(websites.indexOf('<TwoDoor />'));
     expect(websites.indexOf('<TwoDoor />')).toBeLessThan(websites.indexOf('<Proof />'));
   });
@@ -29,8 +30,16 @@ describe('two-door chooser under the Hero', () => {
   });
 
   it('template door routes to SiteGuide on its own UTM lane, in a new tab', () => {
-    expect(twoDoor).toContain('utm_source=m3mm&utm_medium=two-door&utm_campaign=downshift&utm_content=hero-two-door');
-    expect(twoDoor).toMatch(/target="_blank"[\s\S]{0,200}rel="noopener"[\s\S]{0,400}data-cta="door-siteguide"[\s\S]{0,120}data-section="two-door"[\s\S]{0,120}data-intent="product:siteguide"/);
+    const html = read('dist/websites/index.html');
+    const anchor = html.match(/<a\b[^>]*\sdata-cta="door-siteguide"[^>]*>/)?.[0];
+    const href = anchor?.match(/\shref="([^"]+)"/)?.[1].replaceAll('&amp;', '&');
+    expect(href).toBe(
+      'https://siteguide-production.up.railway.app/demos?utm_source=m3mm&utm_medium=two-door&utm_campaign=downshift&utm_content=hero-two-door',
+    );
+    expect(anchor).toContain('data-section="two-door"');
+    expect(anchor).toContain('data-intent="product:siteguide"');
+    expect(anchor).toContain('target="_blank"');
+    expect(anchor).toContain('rel="noopener"');
   });
 
   it('price framing matches the Services ladder (no invented numbers)', () => {
