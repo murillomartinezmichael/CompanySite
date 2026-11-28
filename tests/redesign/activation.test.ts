@@ -61,6 +61,6 @@ describe('Protected media and actual local R2 reads',()=>{
 
 describe('PR38 content preserved without competing navigation',()=>{
  it('keeps all six environment areas and twelve exact source milestones',()=>{expect(ENVIRONMENT_AREAS).toHaveLength(6);expect(INFRASTRUCTURE_PHASES).toHaveLength(6);expect(INFRASTRUCTURE_MILESTONES).toHaveLength(12);expect(INFRASTRUCTURE_MILESTONES.some(x=>x.status==='complete')).toBe(false);});
- it('preserves all previous environment destinations as redirects',()=>{const redirects=fs.readFileSync('public/_redirects','utf8');for(const a of ENVIRONMENT_AREAS)expect(redirects).toContain('/environment/'+a.slug+' /roadmaps/infrastructure/'+a.slug+' 301');expect(redirects).toContain('/roadmaps/environment /roadmaps/infrastructure 301');});
+ it('preserves all previous environment destinations as redirects',()=>{const redirects=fs.readFileSync('public/_redirects','utf8');for(const a of ENVIRONMENT_AREAS)expect(redirects).toContain('/environment/'+a.slug+' /roadmaps/infrastructure/'+a.slug+'/ 301');expect(redirects).toContain('/roadmaps/environment /roadmaps/infrastructure/ 301');});
  it('does not introduce a second about route or public investor showcase',()=>{expect(fs.existsSync('src/pages/about/index.astro')).toBe(false);expect(fs.readFileSync('scripts/build-investors.mjs','utf8')).not.toMatch(/^import.*investor-preview/m);});
 });
