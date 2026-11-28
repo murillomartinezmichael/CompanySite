@@ -92,6 +92,9 @@ const NAV_ONLY_CTAS: ReadonlySet<string> = new Set([
   'roadmaps-work', // Redesign: route/section navigation, not a form submission.
   'services-websites', // Redesign: route/section navigation, not a form submission.
   'services-projects', // Redesign: route/section navigation, not a form submission.
+  // Receipt pages link back to the homepage after submission.
+  'start-thanks-home',
+  'roadmap-thanks-home',
   'thanks-roadmaps', // Redesign: route/section navigation, not a form submission.
   'audit-proof', // Redesign: route/section navigation, not a form submission.
   'hq-released', // Home navigation to the public project directory.
@@ -167,6 +170,12 @@ describe('§ 2 + § 4 — every tracked CTA carries an intent or is nav-only', (
       offenders,
       `New tracked CTAs missing data-intent — add data-intent or add the CTA name to NAV_ONLY_CTAS / FORM_SUBMIT_CTAS with a written reason:\n  ${offenders.join('\n  ')}`,
     ).toEqual([]);
+  });
+
+  it.each(['start-thanks-home', 'roadmap-thanks-home'])('%s has no conversion intent', (name) => {
+    const link = ctas.find((tag) => tag.cta === name);
+    expect(link?.raw).toMatch(/^<a\s/);
+    expect(link?.raw).not.toMatch(/\sdata-intent\b/);
   });
 
   it('every NAV_ONLY_CTAS entry is actually shipped somewhere (no dead allowlist)', () => {
