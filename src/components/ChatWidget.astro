@@ -224,9 +224,13 @@
 
     trigger.addEventListener('click', () => (opened ? closePanel() : openPanel()));
     closeBtn.addEventListener('click', closePanel);
+    // The panel floats above the header menu, so it takes Escape first
+    // (capture phase) and claims it; the header skips a claimed Escape.
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && opened) closePanel();
-    });
+      if (e.key !== 'Escape' || !opened || e.defaultPrevented) return;
+      e.preventDefault();
+      closePanel();
+    }, true);
 
     // Auto-grow the textarea up to its max-height, no library.
     input.addEventListener('input', () => {
