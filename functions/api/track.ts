@@ -15,8 +15,9 @@ import { checkRate, rateKey } from '../_lib/rate';
 import { clean } from '../_lib/validate';
 import { withSecurityHeaders } from '../_lib/security-headers';
 import { readBodyText } from '../_lib/read-body';
+import { originAllowed, type CorsEnv } from '../_lib/cors';
 
-type Env = {};
+type Env = CorsEnv;
 
 const MAX_BODY_BYTES = 4 * 1024;
 const RATE_MAX = 60;
@@ -27,6 +28,8 @@ const SOURCE_MAX = 64;
 const INTENT_MAX = 64;
 const PATH_MAX = 256;
 const REFERRER_MAX = 512;
+// Client clocks drift; anything further out than this is forged or broken.
+const TS_SKEW_MS = 24 * 60 * 60 * 1000;
 
 type CTAEvent = {
   name?: string;
@@ -35,8 +38,13 @@ type CTAEvent = {
   intent?: string;
   path?: string;
   referrer?: string;
-  ts?: number;
+  ts?: unknown;
 };
+
+/** Client `ts` only when finite (JSON 1e400 parses to Infinity) and plausible. */
+function clientTs(ts: unknown, now: number): number {
+  return typeof ts === 'number' && Number.isFinite(ts) && Math.abs(ts - now) <= TS_SKEW_MS ? ts : now;
+}
 
 // `public/_headers` does NOT reach Pages Functions responses — see
 // ../_lib/security-headers.ts. Every reply off this beacon sets them itself.
@@ -55,7 +63,12 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
   }
 };
 
-const trackPost: PagesFunction<Env> = async ({ request }) => {
+const trackPost: PagesFunction<Env> = async ({ request, env }) => {
+  // The beacon is sent same-origin only (src/lib/track.ts). A foreign page can
+  // otherwise make each of its visitors post forged events, one IP apiece, so
+  // the per-IP limit below never engages. Same allowlist as /api/lead.
+  if (!originAllowed(env, request.headers.get('Origin'))) return noContent();
+
   const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
 
   // Soft rate — even a hostile client can't drown the tail.
@@ -98,7 +111,7 @@ const trackPost: PagesFunction<Env> = async ({ request }) => {
     referrer: clean(body.referrer, REFERRER_MAX) || undefined,
     ip,
     ua: ua.slice(0, 200),
-    ts: typeof body.ts === 'number' ? body.ts : Date.now(),
+    ts: clientTs(body.ts, Date.now()),
   }));
 
   return noContent();
