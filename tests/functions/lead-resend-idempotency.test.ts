@@ -60,6 +60,29 @@ describe('Resend Idempotency-Key', () => {
     expect(admin[1].body).toBe(admin[0].body);
   });
 
+  // The reply body carries a "before <first submission + 24h>" deadline. It
+  // used to be computed from each request's clock, so every retry changed the
+  // keyed body. The retry page now carries the first submission's timestamp.
+  it('a native retry keeps the first submission deadline in a byte-identical reply', async () => {
+    const t0 = Date.UTC(2026, 10, 2, 9, 30, 0);
+    vi.useFakeTimers({ now: t0, toFake: ['Date'] });
+    try {
+      resendStatus = 'timeout';
+      const page = await post(fields);
+      expect(page.status).toBe(503);
+      const hidden = hiddenFields(await page.text());
+      resendStatus = 200;
+      const replies: string[] = [];
+      for (const later of [10, 25]) {
+        vi.setSystemTime(t0 + later * 60_000); keys.length = 0;
+        expect((await post(hidden)).status).toBe(303);
+        replies.push(keys.find(k => k.to === fields.email)!.body);
+      }
+      expect(replies[1]).toBe(replies[0]);
+      expect(JSON.parse(replies[0]).html).toContain('before 03 Nov 2026 09:30:00 GMT');
+    } finally { vi.useRealTimers(); }
+  });
+
   it('keys are per email, stable per submission id, never contain secrets, fit 256 chars', async () => {
     await post(fields, { 'Idempotency-Key': id }, true);
     await post(fields, { 'Idempotency-Key': id }, true);

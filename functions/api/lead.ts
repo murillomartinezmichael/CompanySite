@@ -77,6 +77,15 @@ function successPathFor(intent: string | undefined): string {
   return INTENT_SUCCESS_PATHS[intent];
 }
 
+/** First-submission time carried by the native retry page, so a retried
+ * reply repeats its deadline instead of changing the Resend-keyed body. Only
+ * a value from the last 24 h (Resend's idempotency window) is honoured; it
+ * can only move the visitor's own reply deadline, never past now + 24 h. */
+function firstSubmittedAt(raw: string | null, now: number): number {
+  const t = raw !== null && /^\d{13}$/.test(raw) ? Number(raw) : NaN;
+  return t >= now - 24 * 60 * 60 * 1000 && t <= now ? t : now;
+}
+
 function redirectResponse(location: string, extraHeaders: Record<string, string> = {}): Response {
   return new Response(null, {
     status: 303,
@@ -252,6 +261,7 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
   let body: Lead;
   let nativeSubmissionId: string | null = null;
   let duplicateSubmissionId = false;
+  let nativeSubmittedAt: string | null = null;
   if (isJson) {
     let parsed: unknown;
     try {
@@ -297,6 +307,7 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
       if (params.getAll('submissionId').length !== 1) duplicateSubmissionId = true;
       else nativeSubmissionId = params.get('submissionId');
     }
+    nativeSubmittedAt = params.get('submittedAt');
     // Match the roadmap's JS submit handler when the browser posts natively.
     // Only that exact intent may fold its optional topics into the intake note.
     const roadmapTopics = params.get('intent')?.trim() === 'book:roadmap-subscribe'
@@ -328,8 +339,9 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
     : reply(400, { ok: false, error: 'invalid_submission_id' });
   if (duplicateSubmissionId) return badSubmissionId();
 
+  const submittedAt = firstSubmittedAt(nativeSubmittedAt, Date.now());
   if (!rate.ok) {
-    return inquiryFormProblem(429, body, cors, { retryAfter: rate.retryAfter, submissionId: nativeSubmissionId });
+    return inquiryFormProblem(429, body, cors, { retryAfter: rate.retryAfter, submissionId: nativeSubmissionId, submittedAt });
   }
 
   // Honeypot: bots gleefully fill the hidden field. Silent 200 so they
@@ -429,7 +441,9 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
   // Deadline stamp — same 24h SLA the intake promises, made concrete.
   // Uses UTC so it renders identically regardless of the visitor's TZ; the
   // "before {date}" phrasing avoids any implication of a specific hour.
-  const deadlineDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  // Counted from the first submission (see firstSubmittedAt) so a retry
+  // repeats the same reply body under the same Resend key.
+  const deadlineDate = new Date(submittedAt + 24 * 60 * 60 * 1000);
   const deadlineStr = deadlineDate.toUTCString().replace(/^[A-Z][a-z]{2}, /, '');
   const isProjectIntake = lead.intent === 'checkout:basic-deposit';
   const isRoadmapRequest = lead.intent === 'book:roadmap-subscribe';
@@ -539,7 +553,7 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
     // path. A sink that answered non-2xx may still have kept it ("may already
     // be saved"). The page carries deliveryId so the retry reuses the same
     // Resend idempotency keys.
-    if (isForm) return inquiryConfirmation(lead, deliveryId, 'uncertain', cors);
+    if (isForm) return inquiryConfirmation(lead, deliveryId, 'uncertain', cors, submittedAt);
     return reply(503, { ok: false, error: 'delivery_unavailable' });
   }
   return succeed(lead.intent);
