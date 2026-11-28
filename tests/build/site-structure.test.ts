@@ -3,6 +3,8 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { PUBLIC_PROJECTS } from '../../src/config/public-projects';
+
 const dist = fileURLToPath(new URL('../../dist/', import.meta.url));
 const walk = (dir: string): string[] => readdirSync(dir, { withFileTypes: true })
   .flatMap(e => e.isDirectory() ? walk(join(dir, e.name)) : [join(dir, e.name)]);
@@ -27,6 +29,15 @@ describe('rendered site structure', () => {
     const current = links.filter(tag => tag.includes('aria-current="page"'));
     expect(current.map(hrefOf)).toEqual(route === '/services' ? ['/services'] : []);
     expect(links.filter(tag => tag.includes('data-active-section')).map(hrefOf)).toEqual(['/services']);
+  });
+
+  it('hides project filters and shows all project rows before JavaScript runs', () => {
+    const html = pages.find(page => page.route === '/projects/')!.html;
+    const controls = html.match(/<div\b[^>]*class="m3-filter"[^>]*>/)?.[0];
+    expect(controls).toMatch(/\shidden(?=[\s=>])/);
+    const rows = html.match(/<article\b[^>]*\sdata-project-row\b[^>]*>/g) ?? [];
+    expect(rows).toHaveLength(PUBLIC_PROJECTS.length);
+    for (const row of rows) expect(row).not.toMatch(/\shidden(?=[\s=>])/);
   });
 
   it('every internal navigation target and fragment resolves in the build', () => {
