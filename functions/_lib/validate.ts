@@ -75,21 +75,41 @@ export function clean(v: unknown, max: number): string {
   return v.trim().slice(0, max);
 }
 
+// C0/C1 controls (incl. CR, LF, TAB), DEL, U+2028/2029 line separators and
+// bidi embedding/override/isolate marks. None belongs in a name, subject or
+// attribution value; CR/LF there reads as a header or line break downstream
+// (operator email Subject, Cockpit card title, n8n replyHint).
+const LINE_UNSAFE = /[\u0000-\u001f\u007f-\u009f\u2028\u2029\u202a-\u202e\u2066-\u2069]+/g;
+// Free text keeps \n and \t; CR is normalised away, every other control dropped.
+const TEXT_UNSAFE = /[\u0000-\u0008\u000b-\u001f\u007f-\u009f\u2028\u2029\u202a-\u202e\u2066-\u2069]/g;
+
+/** `clean` for single-line fields: each unsafe run collapses to one space. */
+export function cleanLine(v: unknown, max: number): string {
+  if (typeof v !== 'string') return '';
+  return clean(v.replace(LINE_UNSAFE, ' '), max);
+}
+
+/** `clean` for multi-line free text: CRLF -> LF, other controls removed. */
+export function cleanText(v: unknown, max: number): string {
+  if (typeof v !== 'string') return '';
+  return clean(v.replace(/\r\n?/g, '\n').replace(TEXT_UNSAFE, ''), max);
+}
+
 export function validateLead(input: Lead): { ok: true; lead: Required<Omit<Lead, 'company_website'>> } | { ok: false; errors: FieldError[] } {
-  const name = clean(input.name, LIMITS.name);
-  const email = clean(input.email, LIMITS.email);
-  const businessType = clean(input.businessType, LIMITS.businessType);
-  const currentUrl = clean(input.currentUrl, LIMITS.currentUrl);
-  const frustration = clean(input.frustration, LIMITS.frustration);
-  const preferredStart = clean(input.preferredStart, LIMITS.preferredStart);
-  const source = clean(input.source, LIMITS.source) || 'unknown';
-  const referredBy = clean(input.referredBy, LIMITS.referredBy);
-  const intent = clean(input.intent, LIMITS.intent);
-  const utm_source = clean(input.utm_source, LIMITS.utm);
-  const utm_medium = clean(input.utm_medium, LIMITS.utm);
-  const utm_campaign = clean(input.utm_campaign, LIMITS.utm);
-  const utm_content = clean(input.utm_content, LIMITS.utm);
-  const utm_term = clean(input.utm_term, LIMITS.utm);
+  const name = cleanLine(input.name, LIMITS.name);
+  const email = cleanLine(input.email, LIMITS.email);
+  const businessType = cleanLine(input.businessType, LIMITS.businessType);
+  const currentUrl = cleanLine(input.currentUrl, LIMITS.currentUrl);
+  const frustration = cleanText(input.frustration, LIMITS.frustration);
+  const preferredStart = cleanLine(input.preferredStart, LIMITS.preferredStart);
+  const source = cleanLine(input.source, LIMITS.source) || 'unknown';
+  const referredBy = cleanLine(input.referredBy, LIMITS.referredBy);
+  const intent = cleanLine(input.intent, LIMITS.intent);
+  const utm_source = cleanLine(input.utm_source, LIMITS.utm);
+  const utm_medium = cleanLine(input.utm_medium, LIMITS.utm);
+  const utm_campaign = cleanLine(input.utm_campaign, LIMITS.utm);
+  const utm_content = cleanLine(input.utm_content, LIMITS.utm);
+  const utm_term = cleanLine(input.utm_term, LIMITS.utm);
 
   const errors: FieldError[] = [];
   if (!name) errors.push({ field: 'name', code: 'required', message: 'Name is required.' });
