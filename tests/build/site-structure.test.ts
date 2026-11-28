@@ -19,8 +19,16 @@ const isSample = (route: string) => route.startsWith('/samples/');
 const anchors = (html: string) => [...html.matchAll(/<a\b[^>]*>/g)].map(m => m[0]);
 const hrefOf = (tag: string) => tag.match(/\bhref="([^"]+)"/)?.[1]?.replace(/&amp;/g, '&');
 const urlOf = (href: string, route: string) => new URL(href, 'https://m3mm.net' + route);
+// Exact `id` attributes only: the leading whitespace keeps `data-id="x"` from counting as `id="x"`.
+const idsOf = (html: string) => new Set([...html.matchAll(/\sid=(?:"([^"]*)"|'([^']*)')/g)].map(m => m[1] ?? m[2]));
 
 describe('rendered site structure', () => {
+  it('fragment lookup matches exact id attributes, not data-id', () => {
+    expect(idsOf('<section data-id="intake"></section>').has('intake')).toBe(false);
+    expect(idsOf('<section id="intake"></section>').has('intake')).toBe(true);
+    expect(idsOf("<div class=\"x\" id='proof'></div>").has('proof')).toBe(true);
+  });
+
   it.each(['/services', '/audit'])('marks only exact primary navigation matches on %s', route => {
     const page = pages.find(p => p.route === route + '/');
     const nav = page?.html.match(/<nav\b[^>]*aria-label="Primary"[^>]*>([\s\S]*?)<\/nav>/)?.[1];
@@ -50,7 +58,7 @@ describe('rendered site structure', () => {
       const target = pages.find(p => p.route.replace(/\/$/, '') === url.pathname.replace(/\/$/, ''));
       if (!target) {
         if (!existsSync(join(dist, url.pathname))) errors.push(`${page.route} → ${href}`);
-      } else if (url.hash && !target.html.includes(`id="${decodeURIComponent(url.hash.slice(1))}"`)) {
+      } else if (url.hash && !idsOf(target.html).has(decodeURIComponent(url.hash.slice(1)))) {
         errors.push(`${page.route} → missing fragment ${href}`);
       }
     }
