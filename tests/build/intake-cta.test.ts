@@ -22,10 +22,11 @@ describe('Header + Footer thread `path` so intake CTAs never dead-end', () => {
   it('Header uses a real Contact destination rather than a missing intake fragment',()=>{expect(read('src/components/Header.astro')).toContain("['/contact','Contact']");expect(read('src/pages/contact.astro')).toContain('<Intake');});
 
   it('Footer derives an intakeHref from the current path', () => {
-    const src = read('src/components/Footer.astro');
-    expect(src).toMatch(/path\?:\s*string/);
-    expect(src).toMatch(/const\s+intakeHref\s*=\s*hasIntakeOnPage\s*\?\s*['"]#intake['"]\s*:\s*['"]\/audit#intake['"]/);
-    expect(src).not.toMatch(/href="#intake"/);
+    for (const [page, href] of [['websites', '#intake'], ['thanks', '/audit#intake']]) {
+      const html = read(`dist/${page}/index.html`);
+      const anchor = html.match(/<a\b[^>]*\sdata-cta="footer-intake"[^>]*>/)?.[0];
+      expect(anchor, page).toContain(` href="${href}"`);
+    }
   });
 
   it('every page that mounts Header or Footer passes its own path', () => {

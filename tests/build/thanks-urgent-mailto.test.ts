@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { runInNewContext } from 'node:vm';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
@@ -73,17 +74,23 @@ describe('/thanks urgent-email CTA carries context + bypasses CF EAO', () => {
   });
 
   it('hydration script wires href to mailto: on load with subject + body', () => {
-    // The inline is:inline script must (a) select the urgent-email
-    // anchor, (b) build addr from em-u + em-h, (c) encode subject + body
-    // into the query string, (d) set anchor.href.
-    // Textcontent replacement is intentionally omitted — the anchor sits
-    // mid-sentence and must keep its "email me directly" label.
-    expect(src).toMatch(/data-cta="thanks-urgent-email"/);
-    expect(src).toMatch(/dataset\.emU\s*\+\s*['"]@['"]\s*\+\s*.*dataset\.emH/);
-    expect(src).toMatch(/encodeURIComponent\(sub\)/);
-    expect(src).toMatch(/encodeURIComponent\(body\)/);
-    expect(src).toMatch(/a\.href\s*=\s*['"]mailto:['"]\s*\+\s*addr/);
-    // Preserving the sentence flow — no textContent overwrite.
-    expect(src).not.toMatch(/data-cta="thanks-urgent-email"[\s\S]*?a\.textContent\s*=\s*addr/);
+    const script = src.match(/<script is:inline>([\s\S]*?)<\/script>/)?.[1];
+    expect(script).toBeTruthy();
+    const anchor = {
+      href: '/audit?intent=book:urgent-review#intake',
+      textContent: 'email me directly',
+      dataset: { emU: 'review', emH: 'example.com', emSub: 'Urgent & time-sensitive', emBody: 'Deadline?\nFriday' },
+    };
+    runInNewContext(script!, {
+      document: {
+        querySelector: (selector: string) => selector === 'a[data-cta="thanks-urgent-email"]' ? anchor : null,
+      },
+    });
+    const mailto = new URL(anchor.href, 'https://m3mm.net');
+    expect(mailto.protocol).toBe('mailto:');
+    expect(mailto.pathname).toBe('review@example.com');
+    expect(mailto.searchParams.get('subject')).toBe(anchor.dataset.emSub);
+    expect(mailto.searchParams.get('body')).toBe(anchor.dataset.emBody);
+    expect(anchor.textContent).toBe('email me directly');
   });
 });

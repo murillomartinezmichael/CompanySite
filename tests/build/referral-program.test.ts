@@ -26,7 +26,10 @@ describe('referral capture — intake form', () => {
     expect(intake).toContain('REFERRAL_FIELD_LABEL');
     expect(intake).toMatch(/\{referralFieldLabel\}/);
     // Optional by contract — a required referral field would tax every lead.
-    expect(intake).not.toMatch(/name="referredBy"[\s\S]{0,200}\brequired\b/);
+    const html = read('dist/websites/index.html');
+    const input = html.match(/<input\b[^>]*\sname="referredBy"[^>]*>/)?.[0];
+    expect(input).toBeDefined();
+    expect(input).not.toMatch(/\srequired(?=[\s=>])/);
   });
 
   it('caps the field client-side at the same limit the server enforces', () => {

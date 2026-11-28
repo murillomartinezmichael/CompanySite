@@ -72,7 +72,13 @@ describe('/roadmap signup reaches the same success page as every other form', ()
   });
 
   it('lets the browser validate the email field on both paths', () => {
-    expect(src).not.toMatch(/novalidate/);
+    const html = read('dist/roadmap/index.html');
+    const form = html.match(/<form\b[^>]*\sid="roadmap-signup"[^>]*>[\s\S]*?<\/form>/)?.[0];
+    expect(form).toBeDefined();
+    expect(form).not.toMatch(/\s(?:form)?novalidate\b/i);
+    const email = form?.match(/<input\b[^>]*\sname="email"[^>]*>/)?.[0];
+    expect(email).toContain(' type="email"');
+    expect(email).toMatch(/\srequired(?=[\s=>])/);
   });
 
   it('uses the same neutral request note with or without JavaScript', () => {
