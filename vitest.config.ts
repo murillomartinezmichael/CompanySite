@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
@@ -16,6 +17,8 @@ export default defineConfig({
     },
   },
   resolve: {
-    alias: { '@': new URL('./src', import.meta.url).pathname },
+    // fileURLToPath, not .pathname: a URL pathname percent-encodes spaces and is
+    // '/C:/...' on Windows, which breaks every import through '@/'.
+    alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },
 });

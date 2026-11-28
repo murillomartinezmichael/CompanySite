@@ -22,7 +22,7 @@
  * and `functions/` (the Pages Functions that ship as Workers alongside it).
  */
 import { opendirSync, readFileSync, lstatSync, existsSync } from 'node:fs';
-import { join, extname, relative } from 'node:path';
+import { basename, join, extname, relative } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { PAYMENT_LINK_HOSTS, paymentLinkProblem, decodePercentLiterals } from './payment-link-policy.mjs';
 
@@ -129,7 +129,13 @@ export const redactDiagnostic = (value) => {
  * that is a deliberate product decision — revisit this rule then, don't route
  * around it.
  */
+const BACKUP_NAME = /\.(?:bak|orig|old|swp|swo|rej)(?:[-_.][\w-]*)?$|~$/i;
 export function scanFileName(name) {
+  // shipped-backup-file — public/og.png.bak-2026-08-24 served live from the
+  // site root. Backup and editor artifacts are never deliberate output.
+  if (BACKUP_NAME.test(basename(name))) {
+    return [{ rule: 'shipped-backup-file', message: 'backup/editor artifact must not ship — remove it from public/', samples: [redactDiagnostic(basename(name))] }];
+  }
   if (extname(name).toLowerCase() !== '.md') return [];
   return [
     {
@@ -186,10 +192,15 @@ export function scanDir(dir, limits = SCAN_LIMITS) {
       } finally { directory.closeSync(); }
     } else if (!stat.isFile()) {
       throw new Error('scanner refuses non-regular files');
-    } else if (isScannableFile(current)) {
-      totalBytes += stat.size;
-      if (stat.size > limits.fileBytes || totalBytes > limits.totalBytes) throw new Error('scanner text size limit exceeded');
-      const findings = [...scanFileName(current), ...scanText(readFileSync(current, 'utf8'))];
+    } else {
+      // Name rules apply to every file (binary backups included); content
+      // rules only to text.
+      const findings = scanFileName(current);
+      if (isScannableFile(current)) {
+        totalBytes += stat.size;
+        if (stat.size > limits.fileBytes || totalBytes > limits.totalBytes) throw new Error('scanner text size limit exceeded');
+        findings.push(...scanText(readFileSync(current, 'utf8')));
+      }
       if (findings.length > 0) results.push({ file: redactDiagnostic(relative(dir, current)), findings });
     }
   };
