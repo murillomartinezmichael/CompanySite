@@ -3,9 +3,10 @@ import { onRequestPost as chatPost } from '../../functions/api/chat';
 import { __resetBuckets } from '../../functions/_lib/rate';
 
 // Provider edge cases that run to completion (no client cancellation; see
-// chat-cancellation.test.ts for those). The widget (ChatWidget.astro) only
-// shows an error when an `error` line arrives before any delta text, and a
-// bare `done` with no text leaves an empty assistant bubble on screen.
+// chat-cancellation.test.ts for those). The widget (ChatWidget.astro) shows an
+// `error` line in place of the reply when no text arrived, or as a notice under
+// the partial answer otherwise; a bare `done` with no text leaves an empty
+// assistant bubble on screen.
 type Step = { text: string } | { throw: Error };
 const sdk = vi.hoisted(() => ({ steps: [] as unknown[], final: (async () => ({ stop_reason: 'end_turn' })) as () => Promise<unknown> }));
 vi.mock('@anthropic-ai/sdk', () => {
@@ -89,6 +90,15 @@ describe('/api/chat mid-stream upstream failures (pinned)', () => {
     expect(await lines()).toEqual([
       { type: 'delta', text: 'Whole answer' },
       { type: 'error', message: 'Something broke on send.' },
+    ]);
+  });
+
+  it('flags a reply cut off at max_tokens after partial text instead of a silent done', async () => {
+    sdk.steps = [{ text: 'Partial answer' }];
+    sdk.final = async () => ({ stop_reason: 'max_tokens' });
+    expect(await lines()).toEqual([
+      { type: 'delta', text: 'Partial answer' },
+      { type: 'error', reason: 'max_tokens', message: 'This answer was cut off because it ran long. Ask a follow-up for the rest.' },
     ]);
   });
 

@@ -17,7 +17,7 @@ import { LIMITS, validateLead, esc, UTM_FIELDS, type Lead } from '../_lib/valida
 import { checkRate, rateKey } from '../_lib/rate';
 import { sendToCockpit, leadIdempotencyKey } from '../_lib/cockpit-sink';
 import { storeInCockpit, SUBMISSION_ID } from '../_lib/cockpit-inbox';
-import { inquiryConfirmation } from '../_lib/inquiry-confirmation';
+import { inquiryConfirmation, inquiryFormProblem } from '../_lib/inquiry-confirmation';
 import { sendToN8n } from '../_lib/n8n-sink';
 import { referralOffer, referralShareUrl, REFERRAL_FIELD_LABEL } from '../_lib/referral';
 import { originAllowed, corsResponseHeaders, preflightResponse } from '../_lib/cors';
@@ -102,12 +102,31 @@ function jsonResponse(status: number, body: unknown, extraHeaders: Record<string
   });
 }
 
+/** Resend idempotency key, per email kind: the submission id (a public retry
+ * UUID, not a secret) plus a 64-bit content hash of the validated lead, so an
+ * edited lead never reuses a key. Synchronous on purpose: sendEmail's timeout
+ * timer must start in the same turn. Never includes secrets or raw PII. */
+function resendKey(kind: 'admin' | 'reply', lead: Lead, submissionId: string): string {
+  const text = JSON.stringify(lead);
+  let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+  for (let i = 0; i < text.length; i++) {
+    const c = text.charCodeAt(i);
+    h1 = Math.imul(h1 ^ c, 2654435761);
+    h2 = Math.imul(h2 ^ c, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  const hex = (n: number) => (n >>> 0).toString(16).padStart(8, '0');
+  return `m3mm-lead/${kind}/${submissionId}/${hex(h2)}${hex(h1)}`;
+}
+
 async function sendEmail(
   env: Env,
   to: string,
   subject: string,
   html: string,
-  replyTo?: string,
+  replyTo: string | undefined,
+  idempotencyKey: string,
 ): Promise<{ ok: boolean; skipped?: true; status?: number; error?: string }> {
   if (!env.RESEND_API_KEY) return { ok: false, skipped: true };
   const from = env.LEAD_FROM || 'M3MM Leads <onboarding@resend.dev>';
@@ -123,6 +142,10 @@ async function sendEmail(
       headers: {
         Authorization: `Bearer ${env.RESEND_API_KEY}`,
         'Content-Type': 'application/json',
+        // Resend: same key + same payload within 24h returns the original
+        // response without sending again (max 256 chars). A retry after a
+        // timed-out but accepted send therefore cannot double-send.
+        'Idempotency-Key': idempotencyKey,
       },
       body: JSON.stringify({ from, to, subject, html, ...(replyTo ? { reply_to: replyTo } : {}) }),
     });
@@ -207,7 +230,10 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
   }
 
   const rate = checkRate(rateKey('lead', ip), RATE_MAX, RATE_WINDOW_S);
-  if (!rate.ok) {
+  // A native form renders this response, so its 429 waits until the (capped)
+  // body is parsed and can be handed back. It still returns before the
+  // honeypot, validation and every outbound send below.
+  if (!rate.ok && !isForm) {
     return reply(
       429,
       { ok: false, error: 'rate_limited', retryAfter: rate.retryAfter },
@@ -294,6 +320,10 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
     };
   }
 
+  if (!rate.ok) {
+    return inquiryFormProblem(429, body, cors, { retryAfter: rate.retryAfter, submissionId: nativeSubmissionId });
+  }
+
   // Honeypot: bots gleefully fill the hidden field. Silent 200 so they
   // don't know they were caught.
   if (body.company_website) {
@@ -302,6 +332,7 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
 
   const result = validateLead(body);
   if (!result.ok) {
+    if (isForm) return inquiryFormProblem(400, body, cors, { errors: result.errors });
     return reply(400, { ok: false, error: 'validation', errors: result.errors });
   }
   const lead = result.lead;
@@ -338,6 +369,12 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
   }
 
   const to = env.LEAD_TO || 'murillomartinezmichael@gmail.com';
+
+  // Submission identity for the Resend keys: the JS caller's Idempotency-Key
+  // header or the retry page's hidden submissionId. A first native POST has
+  // neither, so mint one and hand it to the retry page below.
+  const offeredId = request.headers.get('Idempotency-Key') ?? nativeSubmissionId;
+  const deliveryId = offeredId !== null && SUBMISSION_ID.test(offeredId) ? offeredId.toLowerCase() : crypto.randomUUID();
 
   // Attribution block — CONVERSION_STANDARDS.md § 4. TikTok/IG bio-link
   // UTMs + intent travel with the lead POST via Intake.astro hidden inputs
@@ -442,11 +479,13 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
     </div>
   `;
 
-  const adminResult = await sendEmail(env, to, `M3MM intake · ${lead.name} (${lead.businessType})`, adminHtml, lead.email);
+  const adminKey = resendKey('admin', lead, deliveryId);
+  const replyKey = resendKey('reply', lead, deliveryId);
+  const adminResult = await sendEmail(env, to, `M3MM intake · ${lead.name} (${lead.businessType})`, adminHtml, lead.email, adminKey);
   // A receipt must follow operator-channel acceptance. Preserve the normal
   // email order; if admin delivery fails, wait for a fallback before replying.
   let replyResult = adminResult.ok
-    ? await sendEmail(env, lead.email, replySubject, replyHtml)
+    ? await sendEmail(env, lead.email, replySubject, replyHtml, undefined, replyKey)
     : { ok: false, skipped: true as const };
 
   // Fleet bond — forward to CockpitCloud kanban if configured. Env-gated,
@@ -459,7 +498,7 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
   const n8nResult = await sendToN8n(env, cockpitId, lead, ip);
   const operatorAccepted = adminResult.ok || cockpitResult.ok || n8nResult.ok;
   if (!adminResult.ok && operatorAccepted) {
-    replyResult = await sendEmail(env, lead.email, replySubject, replyHtml);
+    replyResult = await sendEmail(env, lead.email, replySubject, replyHtml, undefined, replyKey);
   }
 
   console.log(JSON.stringify({
@@ -487,8 +526,9 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
     // A native form POST renders this response to the visitor: raw JSON was a
     // dead end that also dropped what they typed. Same retry page as the inbox
     // path. A sink that answered non-2xx may still have kept it ("may already
-    // be saved"); the hidden submissionId is ignored on this path.
-    if (isForm) return inquiryConfirmation(lead, crypto.randomUUID(), 'uncertain', cors);
+    // be saved"). The page carries deliveryId so the retry reuses the same
+    // Resend idempotency keys.
+    if (isForm) return inquiryConfirmation(lead, deliveryId, 'uncertain', cors);
     return reply(503, { ok: false, error: 'delivery_unavailable' });
   }
   return succeed(lead.intent);

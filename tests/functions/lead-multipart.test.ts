@@ -117,7 +117,17 @@ describe('/api/lead multipart form submissions', () => {
   });
 
   it('still validates required fields before delivery', async () => {
-    await expectRejected(await invoke(post(form({ email: 'invalid' }))), 400, 'validation');
+    // A native form renders the reply, so the refusal is an HTML page that
+    // names the problem (tests/functions/lead-native-errors.test.ts).
+    const response = await invoke(post(form({ email: 'invalid' })));
+    // Same headers, except the page's documented same-origin Referrer-Policy
+    // (no-referrer would make the resubmit carry Origin: null).
+    expect(response.headers.get('Referrer-Policy')).toBe('same-origin');
+    expect(response.headers.get('Access-Control-Allow-Origin')).toBe('https://m3mm.net');
+    expect(response.status).toBe(400);
+    expect(response.headers.get('Location')).toBeNull();
+    expect(await response.text()).toContain('Email format looks off.');
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it.each(['name', 'attachment'])('rejects file parts in %s instead of coercing or forwarding them', async field => {
