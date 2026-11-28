@@ -16,7 +16,8 @@
     "test:watch": "vitest",
     "audit:canonicals": "node scripts/audit-canonicals.mjs",
     "resume:pdf": "node scripts/generate-resume-pdf.mjs",
-    "test:a11y": "node scripts/axe-home.mjs"
+    "test:a11y": "node scripts/axe-home.mjs",
+    "test:a11y:all": "node scripts/axe-all.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.120.0",
