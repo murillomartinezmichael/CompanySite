@@ -28,6 +28,8 @@ const SOURCE_MAX = 64;
 const INTENT_MAX = 64;
 const PATH_MAX = 256;
 const REFERRER_MAX = 512;
+// Client clocks drift; anything further out than this is forged or broken.
+const TS_SKEW_MS = 24 * 60 * 60 * 1000;
 
 type CTAEvent = {
   name?: string;
@@ -36,8 +38,13 @@ type CTAEvent = {
   intent?: string;
   path?: string;
   referrer?: string;
-  ts?: number;
+  ts?: unknown;
 };
+
+/** Client `ts` only when finite (JSON 1e400 parses to Infinity) and plausible. */
+function clientTs(ts: unknown, now: number): number {
+  return typeof ts === 'number' && Number.isFinite(ts) && Math.abs(ts - now) <= TS_SKEW_MS ? ts : now;
+}
 
 // `public/_headers` does NOT reach Pages Functions responses — see
 // ../_lib/security-headers.ts. Every reply off this beacon sets them itself.
@@ -104,7 +111,7 @@ const trackPost: PagesFunction<Env> = async ({ request, env }) => {
     referrer: clean(body.referrer, REFERRER_MAX) || undefined,
     ip,
     ua: ua.slice(0, 200),
-    ts: typeof body.ts === 'number' ? body.ts : Date.now(),
+    ts: clientTs(body.ts, Date.now()),
   }));
 
   return noContent();
