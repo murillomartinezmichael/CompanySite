@@ -77,7 +77,27 @@ describe('native form request errors render a page, not JSON', () => {
     expect(html).not.toContain('name="submissionId"');
   });
 
-  it('JSON callers keep their JSON replies and the 16 KB cap', async () => {
+  // The fetch handlers (Intake.astro, roadmap) post JSON, which spends up to 3
+  // bytes per UTF-16 unit on typed text. Every field at its cap in CJK is
+  // ~24 KB: the old 16 KB cap answered 413 and the page could only say
+  // "retry", which failed the same way forever.
+  it('a JSON inquiry with every field at its cap in CJK is accepted', async () => {
+    const cjk = (n: number) => '中'.repeat(n);
+    const lead = { name: cjk(LIMITS.name), email: `${'a'.repeat(LIMITS.email - 12)}@example.com`,
+      businessType: cjk(LIMITS.businessType), currentUrl: `https://example.invalid/${cjk(LIMITS.currentUrl - 24)}`,
+      frustration: cjk(LIMITS.frustration), preferredStart: cjk(LIMITS.preferredStart), source: cjk(LIMITS.source),
+      referredBy: cjk(LIMITS.referredBy), intent: cjk(LIMITS.intent), utm_source: cjk(LIMITS.utm),
+      utm_medium: cjk(LIMITS.utm), utm_campaign: cjk(LIMITS.utm), utm_content: cjk(LIMITS.utm), utm_term: cjk(LIMITS.utm),
+      company_website: '' };
+    const body = JSON.stringify(lead);
+    expect(new TextEncoder().encode(body).byteLength).toBeGreaterThan(16 * 1024);
+    expect(new TextEncoder().encode(body).byteLength).toBeLessThanOrEqual(LIMITS.bodyBytes);
+    const res = await call(body, 'application/json');
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ ok: true });
+  });
+
+  it('JSON callers keep their JSON 413 reply', async () => {
     const res = await call(JSON.stringify({ ...fields, pad: 'x'.repeat(LIMITS.bodyBytes) }), 'application/json');
     expect(res.status).toBe(413);
     expect(await res.json()).toMatchObject({ ok: false, error: 'payload_too_large', limit: LIMITS.bodyBytes });

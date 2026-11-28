@@ -1,7 +1,7 @@
 // POST /api/lead — the money path. Every TikTok click terminates here.
 //
 // Hardening (Rung 1, 2026-07-05):
-// - 16 KB JSON / 96 KB form body cap (reject bombs before parse)
+// - 32 KB JSON / 96 KB form body cap (reject bombs before parse)
 // - JSON, URL-encoded and multipart text forms supported
 // - Origin allowlist (m3mm.net + localhost dev variants)
 // - Per-IP rate limit 5 req / 60s with Retry-After
