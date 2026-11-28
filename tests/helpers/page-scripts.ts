@@ -17,7 +17,7 @@ export type FakeEl = {
   setAttribute(n: string, v: string): void; getAttribute(n: string): string | null; removeAttribute(n: string): void;
   toggleAttribute(n: string, on: boolean): void; focus(): void; contains(o: unknown): boolean;
   addEventListener(n: string, h: Handler): void; requestSubmit(): void; scrollTop: number; scrollHeight: number;
-  appendChild(): void; title: string;
+  appendChild(): void; title: string; querySelector(sel: string): FakeEl | null;
 };
 
 function scriptOf(file: string) {
@@ -40,6 +40,10 @@ export function loadPage() {
       focus() { doc.activeElement = this; }, appendChild() {}, requestSubmit: vi.fn(),
       contains(o) { for (let x = o as FakeEl | undefined; x; x = x.parent) if (x === this) return true; return false; },
       addEventListener(n, h) { (this.listeners[n] ||= []).push(h); },
+      // Enough selector support for the header: 'a' and 'a[aria-current]'.
+      querySelector(sel) {
+        return this.children.find((c) => sel === 'a' || (sel === 'a[aria-current]' && c.attrs['aria-current'] !== undefined)) ?? null;
+      },
     };
     parent?.children.push(e);
     return e;
