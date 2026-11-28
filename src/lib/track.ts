@@ -72,18 +72,20 @@ export function track(event: CTAEvent) {
 // `intent: undefined` and the funnel dashboard sees a hollow click bucket
 // even though `intake_submit` correctly carries the intent. Reading the
 // enclosing form's hidden intent as fallback closes the loop end-to-end.
+// Delegated on document so data-cta elements created after load (e.g. the
+// "Start a separate inquiry" recovery button) are tracked too.
 export function wireCTAs() {
-  document.querySelectorAll<HTMLElement>('[data-cta]').forEach((el) => {
-    el.addEventListener('click', () => {
-      const formIntent = el
-        .closest('form')
-        ?.querySelector<HTMLInputElement>('input[name="intent"]')?.value || undefined;
-      track({
-        name: el.dataset.cta || 'unknown',
-        section: el.dataset.section,
-        source: new URLSearchParams(location.search).get('src') || undefined,
-        intent: el.dataset.intent || formIntent,
-      });
-    }, { passive: true });
-  });
+  document.addEventListener('click', (e) => {
+    const el = (e.target as Element | null)?.closest?.<HTMLElement>('[data-cta]');
+    if (!el) return;
+    const formIntent = el
+      .closest('form')
+      ?.querySelector<HTMLInputElement>('input[name="intent"]')?.value || undefined;
+    track({
+      name: el.dataset.cta || 'unknown',
+      section: el.dataset.section,
+      source: new URLSearchParams(location.search).get('src') || undefined,
+      intent: el.dataset.intent || formIntent,
+    });
+  }, { passive: true });
 }

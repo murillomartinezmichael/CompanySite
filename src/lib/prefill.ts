@@ -59,6 +59,17 @@ export function isPriorPrefill(text: string): boolean {
   return text.includes(SEPARATOR);
 }
 
+// New textarea value for a CTA click, or null to leave it alone. Only our own
+// prefill (everything up to and including the first SEPARATOR) is swapped; the
+// visitor's text below the separator is carried over. Free-typed text with no
+// separator is never touched.
+export function replacePrefill(current: string, seed: string): string | null {
+  if (!current.trim()) return seed;
+  const at = current.indexOf(SEPARATOR);
+  if (at === -1) return null;
+  return seed + current.slice(at + SEPARATOR.length);
+}
+
 // Non-priced textarea seeds for `book:*` intents that land at
 // /audit#intake via cross-page fallbacks (thanks-urgent-email JS-off,
 // accessibility-contact JS-off, or a hostile CSP that blocked the
@@ -260,8 +271,9 @@ export function wirePrefill(): void {
         'form#intake-form textarea[name="frustration"]'
       );
       if (!ta) return;
-      if (ta.value.trim() && !isPriorPrefill(ta.value)) return;
-      ta.value = entry ? buildBrief(entry) : bookingSeed;
+      const next = replacePrefill(ta.value, entry ? buildBrief(entry) : bookingSeed);
+      if (next === null) return;
+      ta.value = next;
       ta.dispatchEvent(new Event('input', { bubbles: true }));
     },
     { passive: true }

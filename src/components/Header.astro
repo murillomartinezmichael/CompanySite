@@ -32,6 +32,18 @@ const active=(href:string)=>href==='/'?path==='/':href==='/services'?['/websites
     });
   }
   osLight.addEventListener('change', () => { sync(); window.dispatchEvent(new CustomEvent('m3mm:themechange')); });
+  // A bfcache-restored page or another open tab must pick up a choice saved
+  // elsewhere, or it shows the old theme and a toggle label that lies.
+  const applySaved = () => {
+    let saved: string | null = null;
+    try { saved = localStorage.getItem('m3mm-theme'); } catch {}
+    if ((saved !== 'light' && saved !== 'dark') || root.dataset.theme === saved) return;
+    root.dataset.theme = saved;
+    sync();
+    window.dispatchEvent(new CustomEvent('m3mm:themechange'));
+  };
+  window.addEventListener('pageshow', (e) => { if ((e as PageTransitionEvent).persisted) applySaved(); });
+  window.addEventListener('storage', (e) => { if ((e as StorageEvent).key === 'm3mm-theme') applySaved(); });
   sync();
 
 const menu=document.querySelector<HTMLButtonElement>('.m3-menu');

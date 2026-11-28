@@ -196,7 +196,14 @@ import { BASIC_SITE, HOSTING_PLAN, checkoutReady, hostingCheckoutReady } from '@
     if (!intake) return;
     intake.hidden = false;
     deposit?.setAttribute('hidden', '');
-    requestAnimationFrame(() => document.getElementById('intake')?.focus({ preventScroll: true }));
+    requestAnimationFrame(() => {
+      // <section id="intake"> is not focusable on its own; without a tabindex
+      // focus() is a silent no-op and assistive tech never reaches step 2.
+      const target = document.getElementById('intake');
+      if (!target) return;
+      if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+      target.focus({ preventScroll: true });
+    });
   };
 
   if (query.get('checkout') === 'complete') showIntake();

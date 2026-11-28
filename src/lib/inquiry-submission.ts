@@ -137,9 +137,14 @@ export function createInquirySubmission(createUUID: () => string = () => crypto.
   };
 }
 
+/** Removes the separate-inquiry button; call whenever its explaining status is hidden. */
+export function clearInquiryRecovery(form: HTMLFormElement): void {
+  form.ownerDocument.getElementById(`${form.id}-new-inquiry`)?.remove();
+}
+
 /** Explicitly authorizes a separate payload; the button itself sends nothing. */
 export function showInquiryRecovery(form: HTMLFormElement, status: HTMLElement, error: unknown, allow: () => Promise<void>): void {
-  form.ownerDocument.getElementById(`${form.id}-new-inquiry`)?.remove();
+  clearInquiryRecovery(form);
   if (!(error instanceof InquiryRetryError) || !['changed', 'confirmed'].includes(error.code)) return;
   const button = form.ownerDocument.createElement('button');
   button.type = 'button'; button.id = `${form.id}-new-inquiry`;
