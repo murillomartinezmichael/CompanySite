@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { onRequestPost } from '../../functions/api/lead';
 import { __resetBuckets } from '../../functions/_lib/rate';
+import { LIMITS } from '../../functions/_lib/validate';
 
 const fields = { name: 'Renée 😀', email: 'synthetic@example.invalid', businessType: 'Synthetic café',
   frustration: 'Keep "quotes", <script>bad()</script>, A&B and 😀 intact.', source: 'synthetic',
@@ -81,7 +82,7 @@ describe('native inbox retry confirmation', () => {
   });
   it('still enforces origin, body and field validation before confirmation', async () => {
     expect((await post(fields, false, { Origin: 'https://untrusted.example.invalid' })).status).toBe(403);
-    expect((await post({ ...fields, frustration: 'x'.repeat(20000) })).status).toBe(413);
+    expect((await post({ ...fields, frustration: 'x'.repeat(LIMITS.formBodyBytes) })).status).toBe(413);
     expect((await post({ ...fields, email: 'invalid' })).status).toBe(400);
     expect(fetchMock).not.toHaveBeenCalled();
   });

@@ -64,11 +64,16 @@ async function expectRedirect(response: Response, location = '/thanks') {
   expect(await response.text()).toBe('');
 }
 
+// A native form renders the refusal, so it is an HTML page, never raw JSON
+// (tests/functions/lead-native-request-errors.test.ts).
 async function expectRejected(response: Response, status: number, error: string) {
-  expectHeaders(response);
+  expect(response.headers.get('Cache-Control')).toBe('no-store');
+  expect(response.headers.get('Access-Control-Allow-Origin')).toBe('https://m3mm.net');
+  expect(response.headers.get('Referrer-Policy')).toBe('same-origin');
+  expect(response.headers.get('Content-Type')).toBe('text/html; charset=utf-8');
   expect(response.status).toBe(status);
   expect(response.headers.get('Location')).toBeNull();
-  expect(await response.json()).toMatchObject({ ok: false, error });
+  expect(await response.text()).toContain(error === 'payload_too_large' ? 'too long' : 'could not be read');
   expect(fetchMock).not.toHaveBeenCalled();
 }
 
@@ -148,10 +153,10 @@ describe('/api/lead multipart form submissions', () => {
     ['absent', {}],
     ['understated', { 'Content-Length': '100' }],
   ] as const)('rejects oversized multipart bytes with %s Content-Length before parsing', async (_label, headers) => {
-    const request = post(form({ ignoredPadding: 'é'.repeat(8000) }), headers);
+    const request = post(form({ ignoredPadding: 'é'.repeat(LIMITS.formBodyBytes / 2) }), headers);
     const bytes = await request.clone().arrayBuffer();
-    expect(bytes.byteLength).toBeGreaterThan(LIMITS.bodyBytes);
-    expect(new TextDecoder().decode(bytes).length).toBeLessThan(LIMITS.bodyBytes);
+    expect(bytes.byteLength).toBeGreaterThan(LIMITS.formBodyBytes);
+    expect(new TextDecoder().decode(bytes).length).toBeLessThan(LIMITS.formBodyBytes);
     const parser = vi.spyOn(Response.prototype, 'formData');
     await expectRejected(await invoke(request), 413, 'payload_too_large');
     expect(parser).not.toHaveBeenCalled();
@@ -164,8 +169,8 @@ describe('/api/lead multipart form submissions', () => {
     const prefix = Object.entries(FIELDS).map(([key, value]) => part(key, value)).join('');
     const suffix = `--${boundary}--\r\n`;
     const overhead = encoder.encode(prefix + part('ignoredPadding', '') + suffix).byteLength;
-    const body = prefix + part('ignoredPadding', 'x'.repeat(LIMITS.bodyBytes - overhead)) + suffix;
-    expect(encoder.encode(body).byteLength).toBe(LIMITS.bodyBytes);
+    const body = prefix + part('ignoredPadding', 'x'.repeat(LIMITS.formBodyBytes - overhead)) + suffix;
+    expect(encoder.encode(body).byteLength).toBe(LIMITS.formBodyBytes);
     await expectRedirect(await invoke(post(body, { 'Content-Type': `multipart/form-data; boundary="${boundary}"` })));
     expect(fetchMock).toHaveBeenCalledTimes(4);
   });

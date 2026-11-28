@@ -2,7 +2,15 @@
 // unit-test them without booting a Cloudflare Functions runtime.
 
 export const LIMITS = {
-  bodyBytes: 16 * 1024,        // 16 KB — a comfortable form headroom, blocks 10 MB bombs
+  // JSON callers (the fetch handlers). Typed text costs up to 3 bytes per
+  // UTF-16 unit, so every field at its cap in CJK is ~24 KB; 16 KB refused
+  // that legal inquiry. Still blocks 10 MB bombs.
+  bodyBytes: 32 * 1024,
+  // Native form encodings. URL-encoding spends up to 9 bytes per UTF-16 unit
+  // (%XX x 3 UTF-8 bytes), so 4000 CJK characters alone are ~36 KB. Every field
+  // at its own cap in that worst case is ~75 KB (tests/functions/
+  // lead-native-request-errors.test.ts); the field caps bound what is kept.
+  formBodyBytes: 96 * 1024,
   name: 120,
   email: 254,                  // RFC 5321 practical maximum
   businessType: 120,

@@ -7,7 +7,7 @@ import { withSecurityHeaders } from './security-headers';
  * No token, PII or query parameters are put into a redirect URL. */
 export function inquiryConfirmation(
   lead: Required<Omit<Lead, 'company_website'>>, submissionId: string,
-  state: 'confirm' | 'uncertain' | 'conflict', cors: Record<string, string>,
+  state: 'confirm' | 'uncertain' | 'conflict', cors: Record<string, string>, submittedAt?: number,
 ): Response {
   const message = state === 'confirm'
     ? 'Your inquiry has not been sent by this confirmation step. Confirm below to send it. If the result is uncertain, retry this same confirmation instead of starting over.'
@@ -17,13 +17,26 @@ export function inquiryConfirmation(
   const fields = Object.entries(lead).map(([name, value]) =>
     `<input type="hidden" name="${esc(name)}" value="${esc(value)}">`).join('');
   const form = state === 'conflict' ? '' : `<form action="/api/lead" method="post" enctype="application/x-www-form-urlencoded">
-    ${fields}<input type="hidden" name="submissionId" value="${esc(submissionId)}">
+    ${fields}<input type="hidden" name="submissionId" value="${esc(submissionId)}">${submittedAtField(submittedAt)}
     <button type="submit" data-cta="confirm-inquiry">${state === 'confirm' ? 'Confirm and send inquiry' : 'Retry this same inquiry'}</button></form>`;
   return inquiryPage(state === 'confirm' ? 200 : state === 'uncertain' ? 503 : 409,
     `<p role="status">${message}</p>${form}<p>Keep this page open until you receive confirmation.
     This page contains your inquiry details. Closing it or returning to a fresh form loses this retry reference.</p>`,
     cors, state === 'uncertain' ? { 'Retry-After': '5' } : {});
 }
+
+/** A native form POST refused before its fields could be read (413, an
+ * unparsable or unreadable body). Nothing to re-render, so plain guidance. */
+export function inquiryRequestProblem(status: 400 | 413, cors: Record<string, string>): Response {
+  const message = status === 413
+    ? 'Your inquiry was not sent because it is too long. Go back, shorten the longest field, and send again.'
+    : 'Your inquiry was not sent because it could not be read. Go back and send it again.';
+  return inquiryPage(status, `<p role="alert">${message}</p>`, cors, {});
+}
+
+/** First-submission time (ms) that keeps a retried reply's deadline stable. */
+const submittedAtField = (t?: number) =>
+  t === undefined ? '' : `<input type="hidden" name="submittedAt" value="${esc(String(t))}">`;
 
 function inquiryPage(status: number, body: string, cors: Record<string, string>, extra: Record<string, string>): Response {
   return new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8">
@@ -56,7 +69,7 @@ const CARRIED = ['source', 'referredBy', 'intent', ...UTM_FIELDS] as const;
  * where the contents did not need to change. */
 export function inquiryFormProblem(
   status: 400 | 429, input: Lead, cors: Record<string, string>,
-  detail: { errors?: FieldError[]; retryAfter?: number; submissionId?: string | null },
+  detail: { errors?: FieldError[]; retryAfter?: number; submissionId?: string | null; submittedAt?: number },
 ): Response {
   const raw = input as Record<string, unknown>;
   const message = status === 429
@@ -75,7 +88,7 @@ export function inquiryFormProblem(
     return value ? `<input type="hidden" name="${name}" value="${esc(value)}">` : '';
   }).join('');
   const retryId = status === 429 && detail.submissionId && SUBMISSION_ID.test(detail.submissionId)
-    ? `<input type="hidden" name="submissionId" value="${esc(detail.submissionId)}">` : '';
+    ? `<input type="hidden" name="submissionId" value="${esc(detail.submissionId)}">${submittedAtField(detail.submittedAt)}` : '';
   return inquiryPage(status, `<p role="alert">${message}</p>${errors ? `<ul>${errors}</ul>` : ''}
     <form action="/api/lead" method="post" enctype="application/x-www-form-urlencoded">${visible}${hidden}${retryId}
     <button type="submit" data-cta="resend-inquiry">Send inquiry</button></form>`,

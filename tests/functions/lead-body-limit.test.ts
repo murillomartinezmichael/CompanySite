@@ -90,7 +90,7 @@ describe('/api/lead request byte budget', () => {
     ['absent', {}],
     ['understated', { 'Content-Length': '100' }],
   ] as const)('rejects oversized UTF-8 with %s Content-Length', async (_label, headers) => {
-    const body = JSON.stringify({ ...FIELDS, ignoredPadding: 'é'.repeat(9000) });
+    const body = JSON.stringify({ ...FIELDS, ignoredPadding: 'é'.repeat(Math.ceil(LIMITS.bodyBytes * 0.6)) });
     expect(body.length).toBeLessThan(LIMITS.bodyBytes);
     expect(encoder.encode(body).byteLength).toBeGreaterThan(LIMITS.bodyBytes);
 
@@ -127,8 +127,8 @@ describe('/api/lead request byte budget', () => {
     ['never settles', () => new Promise<void>(() => {})],
   ] as const)('stops pulling and returns 413 even if cancellation %s', async (_label, cancellation) => {
     const fixture = streamed([
-      new Uint8Array(9000),
-      new Uint8Array(9000),
+      new Uint8Array(LIMITS.bodyBytes / 2 + 1000),
+      new Uint8Array(LIMITS.bodyBytes / 2 + 1000),
       encoder.encode('must remain unread'),
     ], cancellation);
 
