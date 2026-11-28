@@ -149,9 +149,11 @@ const handlePost: PagesFunction<Env> = async (ctx) => {
   try {
     return await leadPost(ctx);
   } catch (e) {
+    // Class only: an exception message can quote the inquiry, the visitor's
+    // email or an upstream body (same rule as functions/api/_middleware.ts).
     console.log(JSON.stringify({
       event: 'lead_unhandled_error',
-      error: e instanceof Error ? `${e.name}: ${e.message}` : 'unknown_error',
+      error: e instanceof Error ? e.name : 'unknown_error',
       ts: Date.now(),
     }));
     return jsonResponse(
