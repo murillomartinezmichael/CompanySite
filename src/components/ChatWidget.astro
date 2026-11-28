@@ -340,6 +340,9 @@
     });
 
     input.addEventListener('keydown', (e) => {
+      // Enter that confirms an IME composition (CJK input) must not send;
+      // Safari flags it only with keyCode 229.
+      if (e.isComposing || e.keyCode === 229) return;
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         form!.requestSubmit();
