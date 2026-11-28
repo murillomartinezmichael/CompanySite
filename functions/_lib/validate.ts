@@ -17,9 +17,17 @@ export const LIMITS = {
 } as const;
 
 // Real-world-tolerant email pattern. Not RFC-strict; RFC-strict rejects
-// addresses your grandmother uses. This is the same pattern the browser
-// uses for <input type="email"> without allow-list.
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// addresses your grandmother uses. Modelled on the browser's
+// <input type="email"> rule (dot-atom local part, LDH domain labels), with
+// Unicode letters/digits allowed for internationalised addresses.
+//
+// It must be ONE bare address: the value becomes the auto-reply `to`, the
+// operator email `reply_to` and a `mailto:` href. The old `[^\s@]+` shape let
+// name-addr / list syntax through (`Prize<victim@x.y>`, `a,b@x.y`,
+// `a@x.y?bcc=z`), which mail APIs and clients parse as something else.
+const EMAIL_LOCAL = "[\\p{L}\\p{N}.!#$%&'*+/=?^_`{|}~-]+";
+const EMAIL_LABEL = '[\\p{L}\\p{N}](?:[\\p{L}\\p{N}-]*[\\p{L}\\p{N}])?';
+const EMAIL_RE = new RegExp(`^${EMAIL_LOCAL}@${EMAIL_LABEL}(?:\\.${EMAIL_LABEL})+$`, 'u');
 
 const ALLOWED_URL_PROTOCOLS = new Set(['http:', 'https:']);
 
