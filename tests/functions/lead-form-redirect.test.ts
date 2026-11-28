@@ -92,6 +92,19 @@ describe('no-JS form submits land on a page, not on raw JSON', () => {
     }
   });
 
+  // A plain-object lookup also "finds" inherited keys: intent=constructor
+  // yielded Object itself, sent as `Location: function Object() { [native
+  // code] }`. The allowlist must only ever match its own entries.
+  it.each(['constructor', '__proto__', 'toString', 'hasOwnProperty', 'valueOf'])(
+    'an inherited Object key (%s) as intent still lands on the default page', async (intent) => {
+      const real = await leadPost(ctx(formPost({ intent }), '198.51.100.60'));
+      expect(real.status).toBe(303);
+      expect(real.headers.get('Location')).toBe('/thanks');
+      const honeypot = await leadPost(ctx(formPost({ intent, company_website: 'https://spam.example' }), '198.51.100.61'));
+      expect(honeypot.headers.get('Location')).toBe('/thanks');
+    },
+  );
+
   it('the honeypot success looks identical to a real one, so bots learn nothing', async () => {
     const res = await leadPost(ctx(formPost({ company_website: 'https://spam.example' })));
     expect(res.status).toBe(303);

@@ -71,8 +71,10 @@ const INTENT_SUCCESS_PATHS: Record<string, string> = {
 };
 
 function successPathFor(intent: string | undefined): string {
-  if (!intent) return FORM_SUCCESS_PATH;
-  return INTENT_SUCCESS_PATHS[intent] ?? FORM_SUCCESS_PATH;
+  // Own keys only: a bare index also returns inherited members, so
+  // intent=constructor used to put `function Object() {...}` in Location.
+  if (!intent || !Object.hasOwn(INTENT_SUCCESS_PATHS, intent)) return FORM_SUCCESS_PATH;
+  return INTENT_SUCCESS_PATHS[intent];
 }
 
 function redirectResponse(location: string, extraHeaders: Record<string, string> = {}): Response {
