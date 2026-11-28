@@ -420,8 +420,11 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
     <blockquote style="border-left:3px solid #FF3B5C;margin:0;padding:8px 14px;color:#333;">${esc(lead.frustration)}</blockquote>
     ${lead.preferredStart ? `<p><b>Preferred start:</b> ${esc(lead.preferredStart)}</p>` : ''}
     ${attributionHtml}
-    <p style="color:#888;font-size:12px;">IP: ${esc(ip)} &middot; Source: ${esc(lead.source)}</p>
+    <p style="color:#888;font-size:12px;">Source: ${esc(lead.source)}</p>
   `;
+  // No IP or clock value in a Resend body: it is keyed by resendKey, and Resend
+  // answers 409 invalid_idempotent_request when a retry (e.g. from another IP)
+  // reuses the key with a changed body. The IP stays in the log line below.
 
   // Deadline stamp — same 24h SLA the intake promises, made concrete.
   // Uses UTC so it renders identically regardless of the visitor's TZ; the

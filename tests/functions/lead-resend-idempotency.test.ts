@@ -14,9 +14,9 @@ const fields = { name: 'Synthetic Buyer', email: 'buyer@example.invalid', busine
   frustration: 'Synthetic inquiry details long enough.', intent: 'book:free-review', source: 'synthetic' };
 const id = '00000000-0000-4000-8000-0000000000a1';
 let resendStatus: number | 'timeout' = 200;
-const keys: Array<{ to: string; key: string | null }> = [];
+const keys: Array<{ to: string; key: string | null; body: string }> = [];
 const fetchMock = vi.fn(async (_url: unknown, init?: RequestInit) => {
-  keys.push({ to: JSON.parse(String(init?.body)).to, key: new Headers(init?.headers).get('Idempotency-Key') });
+  keys.push({ to: JSON.parse(String(init?.body)).to, key: new Headers(init?.headers).get('Idempotency-Key'), body: String(init?.body) });
   if (resendStatus === 'timeout') throw new DOMException('Synthetic timeout', 'AbortError');
   return new Response('{}', { status: resendStatus });
 });
@@ -47,6 +47,17 @@ describe('Resend Idempotency-Key', () => {
     const retried = await post(hiddenFields(await page.text()));
     expect(retried.status).toBe(303);
     expect(keys.find(k => k.to === env.LEAD_TO)!.key).toBe(first);
+  });
+
+  // Resend answers 409 invalid_idempotent_request when a key is reused with a
+  // different body, so the keyed payload must not vary between retries.
+  it('a retry from another IP sends a byte-identical operator email under the same key', async () => {
+    await post(fields, { 'Idempotency-Key': id }, true);
+    await post(fields, { 'Idempotency-Key': id, 'CF-Connecting-IP': '198.51.100.9' }, true);
+    const admin = keys.filter(k => k.to === env.LEAD_TO);
+    expect(admin).toHaveLength(2);
+    expect(admin[1].key).toBe(admin[0].key);
+    expect(admin[1].body).toBe(admin[0].body);
   });
 
   it('keys are per email, stable per submission id, never contain secrets, fit 256 chars', async () => {
