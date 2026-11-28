@@ -250,7 +250,7 @@ describe('$500 basic-site checkout', () => {
   });
 
   it('lists the public start route in the sitemap', () => {
-    expect(read('public/sitemap.xml')).toContain('<loc>https://m3mm.net/start</loc>');
+    expect(read('public/sitemap.xml')).toContain('<loc>https://m3mm.net/start/</loc>');
   });
 });
 
