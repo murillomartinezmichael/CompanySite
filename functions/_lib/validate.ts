@@ -11,7 +11,7 @@ export const LIMITS = {
   frustrationMin: 10,
   preferredStart: 80,
   source: 64,
-  intent: 64,                  // matches functions/api/track.ts INTENT_MAX
+  intent: 64,                  // matches TRACK_LIMITS.intent in functions/_lib/track-parse.ts
   utm: 240,                    // matches MAX_PARAM_LEN in src/lib/prefill.ts
   referredBy: 120,             // a person or business name — same ceiling as `name`
 } as const;

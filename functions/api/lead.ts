@@ -71,8 +71,10 @@ const INTENT_SUCCESS_PATHS: Record<string, string> = {
 };
 
 function successPathFor(intent: string | undefined): string {
-  if (!intent) return FORM_SUCCESS_PATH;
-  return INTENT_SUCCESS_PATHS[intent] ?? FORM_SUCCESS_PATH;
+  // Own keys only: a bare index also returns inherited members, so
+  // intent=constructor used to put `function Object() {...}` in Location.
+  if (!intent || !Object.hasOwn(INTENT_SUCCESS_PATHS, intent)) return FORM_SUCCESS_PATH;
+  return INTENT_SUCCESS_PATHS[intent];
 }
 
 function redirectResponse(location: string, extraHeaders: Record<string, string> = {}): Response {
@@ -482,6 +484,11 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
   }));
 
   if (!operatorAccepted) {
+    // A native form POST renders this response to the visitor: raw JSON was a
+    // dead end that also dropped what they typed. Same retry page as the inbox
+    // path. A sink that answered non-2xx may still have kept it ("may already
+    // be saved"); the hidden submissionId is ignored on this path.
+    if (isForm) return inquiryConfirmation(lead, crypto.randomUUID(), 'uncertain', cors);
     return reply(503, { ok: false, error: 'delivery_unavailable' });
   }
   return succeed(lead.intent);
