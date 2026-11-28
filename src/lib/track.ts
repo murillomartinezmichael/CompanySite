@@ -51,8 +51,8 @@ export function track(event: CTAEvent) {
     };
     if (typeof navigator !== 'undefined' && 'sendBeacon' in navigator) {
       const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-      navigator.sendBeacon('/api/track', blob);
-      return;
+      // false = the agent refused to queue it (quota full); fall through to fetch.
+      if (navigator.sendBeacon('/api/track', blob)) return;
     }
     fetch('/api/track', {
       method: 'POST',

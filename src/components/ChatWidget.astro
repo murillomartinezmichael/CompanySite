@@ -215,18 +215,26 @@
       input!.focus();
     }
     function closePanel() {
+      // The panel is non-modal: only pull focus back if it was inside the
+      // panel (or already lost), not from a field elsewhere on the page.
+      const active = document.activeElement;
+      const reclaim = !active || active === document.body || panel!.contains(active);
       opened = false;
       widget!.classList.remove('is-open');
       trigger!.setAttribute('aria-expanded', 'false');
       panel!.hidden = true;
-      trigger!.focus();
+      if (reclaim) trigger!.focus();
     }
 
     trigger.addEventListener('click', () => (opened ? closePanel() : openPanel()));
     closeBtn.addEventListener('click', closePanel);
+    // The panel floats above the header menu, so it takes Escape first
+    // (capture phase) and claims it; the header skips a claimed Escape.
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && opened) closePanel();
-    });
+      if (e.key !== 'Escape' || !opened || e.defaultPrevented) return;
+      e.preventDefault();
+      closePanel();
+    }, true);
 
     // Auto-grow the textarea up to its max-height, no library.
     input.addEventListener('input', () => {
@@ -324,7 +332,12 @@
         // just-sent user turn so history stays strictly alternating. Otherwise
         // the next send posts two user roles in a row, the API 400s, and every
         // turn after that fails too — bricking the chat until a page reload.
-        if (!assistantCommitted) history.pop();
+        if (!assistantCommitted) {
+          history.pop();
+          // Give the visitor their text back to retry, unless they already
+          // started typing something new while the request was in flight.
+          if (!input!.value.trim()) input!.value = message;
+        }
         inFlight = false;
         sendBtn!.disabled = false;
       }

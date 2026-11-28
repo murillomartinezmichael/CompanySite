@@ -34,7 +34,7 @@ const EMAIL_BODY = "Hey Mike,\n\nBusiness: \nCurrent site: \nWhat's frustrating 
   // on every page (~200 ms in the LCP critical chain).
   (function () {
     var a = document.querySelector('footer a[data-cta="footer-email"]');
-    if (!a) return;
+    if (!a || !a.dataset.emU || !a.dataset.emH) return;
     var u = a.dataset.emU, h = a.dataset.emH;
     var addr = u + '@' + h;
     var sub = a.dataset.emSub || '', body = a.dataset.emBody || '';
