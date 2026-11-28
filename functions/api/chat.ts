@@ -173,9 +173,11 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
         }, { signal: generation.signal });
 
         if (stopped) return;
+        let sentText = false;
         for await (const event of anthropicStream) {
           if (stopped) return;
-          if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
+          if (event.type === 'content_block_delta' && event.delta.type === 'text_delta' && event.delta.text) {
+            sentText = true;
             controller.enqueue(ndjsonLine({ type: 'delta', text: event.delta.text }));
           }
         }
@@ -185,6 +187,10 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
         if (stopped) return;
         if (final.stop_reason === 'refusal') {
           controller.enqueue(ndjsonLine({ type: 'error', message: 'The assistant declined to answer that.' }));
+        } else if (!sentText) {
+          // A `done` with no text leaves the widget showing an empty bubble and
+          // no error (e.g. max_tokens spent before any text). Say so instead.
+          controller.enqueue(ndjsonLine({ type: 'error', message: 'The assistant did not return an answer. Try asking again.' }));
         } else {
           controller.enqueue(ndjsonLine({ type: 'done' }));
         }
