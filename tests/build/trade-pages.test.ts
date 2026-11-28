@@ -153,7 +153,7 @@ describe('trade landing pages — message match + real proof only', () => {
   it('all trade pages are listed in the sitemap', () => {
     const sitemap = read('public/sitemap.xml');
     for (const t of TRADES) {
-      expect(sitemap).toContain(`<loc>https://m3mm.net${t.path}</loc>`);
+      expect(sitemap).toContain(`<loc>https://m3mm.net${t.path}/</loc>`);
     }
   });
 

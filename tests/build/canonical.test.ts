@@ -79,7 +79,7 @@ describe('canonical URL wiring', () => {
   it('Layout.astro emits <link rel="canonical"> from Astro.site', () => {
     const layout = read('src/layouts/Layout.astro');
     expect(layout).toMatch(/<link\s+rel="canonical"\s+href=\{canonical\}\s*\/>/);
-    expect(layout).toMatch(/const canonical = new URL\(path, Astro\.site\s*\?\?\s*['"]https:\/\/m3mm\.net['"]\)/);
+    expect(layout).toMatch(/const canonical = new URL\(servedPath\(path\), Astro\.site\s*\?\?\s*['"]https:\/\/m3mm\.net['"]\)/);
   });
 
   it('Layout.astro keeps og:url in sync with canonical', () => {
@@ -223,9 +223,9 @@ describe('canonical URL wiring', () => {
     );
     for (const { path, noindex } of PAGE_EXPECTATIONS) {
       // Sitemap always lists the fully-qualified URL. `/` becomes
-      // `${PROD_ORIGIN}/`; anything else drops the leading slash after
-      // the origin.
-      const expected = path === '/' ? `${PROD_ORIGIN}/` : `${PROD_ORIGIN}${path}`;
+      // `${PROD_ORIGIN}/`; anything else is the served slash form
+      // (`/about` -> `/about/`, see tests/build/sitemap-served-urls.test.ts).
+      const expected = path === '/' ? `${PROD_ORIGIN}/` : `${PROD_ORIGIN}${path}/`;
       if (noindex) {
         expect(locs, `${expected} is noindex — must NOT appear in sitemap.xml`).not.toContain(expected);
       } else {
