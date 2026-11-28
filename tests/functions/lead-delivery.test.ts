@@ -105,8 +105,46 @@ describe('lead success requires operator-channel acceptance', () => {
   });
 
   it.each<Encoding>(['json', 'urlencoded', 'multipart'])('never claims roadmap receipt after total delivery failure for %s', async encoding => {
-    await expectUnavailable(await invoke(env, encoding, { intent: 'book:roadmap-subscribe' }));
+    const response = await invoke(env, encoding, { intent: 'book:roadmap-subscribe' });
+    if (encoding === 'json') await expectUnavailable(response);
+    else expect(response.status).toBe(503);
+    expect(response.headers.get('Location')).toBeNull();
     expect(calls).not.toContain('reply');
+  });
+
+  // A native <form> POST shows the visitor whatever this route returns. Raw
+  // JSON there was a dead end that also dropped the typed inquiry; the
+  // visitor must be told delivery failed and be able to resend it as-is.
+  it.each<Encoding>(['urlencoded', 'multipart'])('gives a native %s submit a retry page that resends the same inquiry', async encoding => {
+    const response = await invoke(env, encoding, { intent: 'book:roadmap-subscribe', source: 'roadmap' });
+    expect(response.status).toBe(503);
+    expect(response.headers.get('Content-Type')).toContain('text/html');
+    expect(response.headers.get('Cache-Control')).toBe('no-store');
+    expect(response.headers.get('Access-Control-Allow-Origin')).toBe('https://m3mm.net');
+    for (const [key, value] of Object.entries(API_SECURITY_HEADERS)) {
+      if (key !== 'Content-Security-Policy' && key !== 'Referrer-Policy') expect(response.headers.get(key)).toBe(value);
+    }
+    const html = await response.text();
+    expect(html).toContain('Delivery was not confirmed.');
+    expect(html).toContain('action="/api/lead"');
+    const resend = new URLSearchParams();
+    for (const [, name, value] of html.matchAll(/<input type="hidden" name="([^"]+)" value="([^"]*)">/g)) {
+      resend.append(name, value.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&'));
+    }
+    for (const key of ['name', 'email', 'businessType', 'frustration', 'intent', 'source'] as const) {
+      expect(resend.get(key)).toBe({ ...fields, intent: 'book:roadmap-subscribe', source: 'roadmap' }[key]);
+    }
+    expect(calls).not.toContain('reply');
+
+    Object.assign(outcomes, { admin: 202 });
+    calls.length = 0;
+    const retry = await onRequestPost({
+      request: new Request('https://m3mm.net/api/lead', { method: 'POST', headers: { Origin: 'https://m3mm.net', 'CF-Connecting-IP': '192.0.2.9' }, body: resend }),
+      env,
+    } as unknown as Parameters<typeof onRequestPost>[0]);
+    expect(retry.status).toBe(303);
+    expect(retry.headers.get('Location')).toBe('/roadmap/thanks');
+    expect(calls).toEqual(['admin', 'reply', 'cockpit', 'n8n']);
   });
 
   it('handles thrown network errors without exposing provider details or sending a confirmation', async () => {

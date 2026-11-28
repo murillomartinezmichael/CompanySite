@@ -482,6 +482,11 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
   }));
 
   if (!operatorAccepted) {
+    // A native form POST renders this response to the visitor: raw JSON was a
+    // dead end that also dropped what they typed. Same retry page as the inbox
+    // path. A sink that answered non-2xx may still have kept it ("may already
+    // be saved"); the hidden submissionId is ignored on this path.
+    if (isForm) return inquiryConfirmation(lead, crypto.randomUUID(), 'uncertain', cors);
     return reply(503, { ok: false, error: 'delivery_unavailable' });
   }
   return succeed(lead.intent);
