@@ -1,4 +1,5 @@
 ---
+import { BASIC_SITE } from '@/config/offers';
 // Two-door chooser — competitor research 2026-07-19 (medium/M flow):
 // GoLive splits traffic at the top ('Shop Templates' vs 'Hire Our Team')
 // so no one bounces for being the wrong budget. Our SiteGuide downshift
@@ -26,7 +27,7 @@
         data-intent="book:free-review"
       >
         <span class="mono text-[10px] uppercase tracking-[0.22em] text-clay">Built for you</span>
-        <p class="font-medium text-bone">Custom site, one engineer, from $500</p>
+        <p class="font-medium text-bone">Custom site, one engineer, from ${BASIC_SITE.priceUsd}</p>
         <p class="text-sm text-bone-dim">
           Scoped, shipped, and handed off — no agency middlemen. Starts with the
           free video teardown below.
@@ -44,7 +45,7 @@
         data-intent="product:siteguide"
       >
         <span class="mono text-[10px] uppercase tracking-[0.22em] text-clay">Fast and cheap</span>
-        <p class="font-medium text-bone">Off-the-shelf template, under $500</p>
+        <p class="font-medium text-bone">Off-the-shelf template, under ${BASIC_SITE.priceUsd}</p>
         <p class="text-sm text-bone-dim">
           Twelve one-page SiteGuide templates in a working test storefront, with
           a clean upgrade path into a custom M3MM site later.

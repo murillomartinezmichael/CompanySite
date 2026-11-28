@@ -174,10 +174,10 @@ describe('$500 basic-site checkout', () => {
   const services = read('src/components/Services.astro');
 
   it('publishes the exact deposit amount and refund terms', () => {
-    expect(offers).toMatch(/priceUsd:\s*500/);
+    expect(BASIC_SITE.priceUsd).toBe(500);
     expect(offers).toMatch(/depositPercent:\s*20/);
     expect(offers).toMatch(/depositUsd:\s*100/);
-    expect(start).toContain('The $100 down payment is non-refundable. All other payments are refundable before launch.');
+    expect(read('dist/start/index.html')).toContain('The $100 down payment is non-refundable. All other payments are refundable before launch.');
     expect(start).not.toMatch(/full refund/i);
   });
 
@@ -313,6 +313,6 @@ describe('optional $100/month hosting + help plan', () => {
   it('keeps the plan optional and ownership intact in public copy', () => {
     expect(start).toContain('you still own the code');
     expect(faq).toContain('no monthly retainer is required');
-    expect(faq).toContain('optional $100/month hosting + help plan');
+    expect(read('dist/websites/index.html')).toContain('optional $100/month hosting + help plan');
   });
 });

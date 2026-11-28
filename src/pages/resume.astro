@@ -1,4 +1,5 @@
 ---
+import { emailUser, emailHost } from '@/config/contact';
 import Layout from '@/layouts/Layout.astro';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
@@ -150,8 +151,8 @@ import resume from '@/data/resume.json';
           data-cta="resume-contact" data-section="resume" data-intent="product:career"
           href="/audit#intake"
           class="text-clay underline underline-offset-4 hover:text-clay-glow"
-          data-em-u={resume.email.split('@')[0]}
-          data-em-h={resume.email.split('@')[1]}
+          data-em-u={emailUser}
+          data-em-h={emailHost}
           data-em-sub="Resume — m3mm.net"
         >Email me →</a>
         · {resume.linkedin} · {resume.github}

@@ -2,6 +2,7 @@
 import Layout from '@/layouts/Layout.astro';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
+import { BASIC_SITE } from '@/config/offers';
 
 const options = [
   { name: 'Build it yourself with Wix', fit: 'You want to edit pages yourself and can spend time on content, layout and setup.',
@@ -13,7 +14,7 @@ const options = [
     delivery: 'Ask who writes the copy, supplies licensed assets, checks mobile layouts and fixes problems after delivery.',
     handoff: 'Fiverr describes a default transfer of rights for delivered work, subject to its terms and offer exceptions. Confirm source files and account access in the offer.' },
   { name: 'Work directly with M3MM', fit: 'You want a custom business site and a direct working relationship with the engineer building it.',
-    cost: 'Basic site or cleanup: $500. Bounded business-site package: $1,000–$2,000. Larger custom work is quoted after scoping.',
+    cost: `Basic site or cleanup: $${BASIC_SITE.priceUsd}. Bounded business-site package: $1,000–$2,000. Larger custom work is quoted after scoping.`,
     delivery: 'Agree on the scope, content, contact path and launch requirements before work starts. View the project examples before deciding.',
     handoff: 'You own the delivered code. Confirm hosting, domain access, any third-party licenses and future changes in the project scope.' },
   { name: 'Hire a full-service agency', fit: 'Your brief needs several disciplines, stakeholders or an ongoing marketing program.',
@@ -73,7 +74,7 @@ const options = [
         <li>Which charges recur, and what happens if you stop paying for support?</li>
         <li>Who controls the domain, hosting and source files at handover?</li>
       </ol>
-      <p>For M3MM’s basic and bounded business-site packages, work starts after 20% down. The down payment is non-refundable; other payments are refundable before launch. Premium work sets its terms in the scoped agreement.</p>
+      <p>For M3MM’s basic and bounded business-site packages, work starts after {BASIC_SITE.depositPercent}% down. The down payment is non-refundable; other payments are refundable before launch. Premium work sets its terms in the scoped agreement.</p>
     </section>
 
     <section class="next-step" aria-labelledby="next-heading">

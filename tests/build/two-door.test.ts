@@ -43,8 +43,9 @@ describe('two-door chooser under the Hero', () => {
   });
 
   it('price framing matches the Services ladder (no invented numbers)', () => {
-    expect(twoDoor).toContain('from $500');
-    expect(twoDoor).toContain('under $500');
+    const html = read('dist/websites/index.html');
+    expect(html).toContain('Custom site, one engineer, from $500');
+    expect(html).toContain('Off-the-shelf template, under $500');
     // Established storefront fact (mirrors /thanks): twelve templates in a
     // working test storefront. If SiteGuide's catalog changes, update both.
     expect(twoDoor).toContain('Twelve one-page SiteGuide templates');

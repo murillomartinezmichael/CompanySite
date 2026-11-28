@@ -27,7 +27,7 @@ describe('website-department objection-handling FAQ', () => {
   it('answers all six confirmed-scope objections', () => {
     expect(faq.match(/^\s{4}question:/gm)).toHaveLength(6);
     for (const fact of ['$500', '$1,000-$2,000', 'over $2,000', 'You own the code', 'under $500', 'within 24 hours']) {
-      expect(faq, `FAQ must keep confirmed fact: ${fact}`).toContain(fact);
+      expect(read('dist/websites/index.html').match(/<section id="faq"[\s\S]*?<\/section>/)?.[0], `FAQ must keep confirmed fact: ${fact}`).toContain(fact);
     }
   });
 

@@ -15,6 +15,7 @@
 // prefill if the visitor then clicks a tier CTA, so a wrong URL param
 // can't lock them out of picking a different tier.
 
+import { basicSitePriceUsd } from '@/config/basic-site-price';
 import { track } from '@/lib/track';
 
 export type CatalogEntry = {
@@ -29,7 +30,7 @@ export type CatalogEntry = {
 export const CATALOG: Record<string, CatalogEntry> = {
   'tier:website:starter': {
     title: 'Basic site or cleanup',
-    from: '$500',
+    from: `$${basicSitePriceUsd}`,
     detail: 'One-page site, landing page, or refresh — mobile-first, clear CTA, contact path wired.',
   },
   'tier:website:business': {

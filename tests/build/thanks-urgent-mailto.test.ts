@@ -38,7 +38,7 @@ describe('/thanks urgent-email CTA carries context + bypasses CF EAO', () => {
   it('urgent-email anchor uses the data-em-* obfuscation pattern', () => {
     // The anchor is identifiable by its stable data-cta hook.
     // Extract its opening tag and assert all four data-em-* attrs present.
-    const anchor = src.match(/<a[^>]*data-cta="thanks-urgent-email"[^>]*>/);
+    const anchor = read('dist/thanks/index.html').match(/<a[^>]*data-cta="thanks-urgent-email"[^>]*>/);
     expect(anchor, 'thanks-urgent-email anchor not found').not.toBeNull();
     const tag = anchor![0];
     expect(tag).toMatch(/data-em-u="[^"]+"/);

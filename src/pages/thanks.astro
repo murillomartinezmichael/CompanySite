@@ -1,4 +1,5 @@
 ---
+import { emailUser, emailHost } from '@/config/contact';
 import Layout from '@/layouts/Layout.astro';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
@@ -90,8 +91,8 @@ const referral = referralOffer();
               data-cta="thanks-urgent-email"
               data-section="thanks"
               data-intent="book:urgent-review"
-              data-em-u="murillomartinezmichael"
-              data-em-h="gmail.com"
+              data-em-u={emailUser}
+              data-em-h={emailHost}
               data-em-sub="Urgent — from audit form (m3mm.net)"
               data-em-body={"Hey Mike,\n\nBusiness (so you can match this to my intake): \nWhat's urgent: \nDeadline: \n\n— sent from m3mm.net /thanks urgent path"}
             >email me directly</a>

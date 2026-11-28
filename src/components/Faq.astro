@@ -1,4 +1,5 @@
 ---
+import { BASIC_SITE, HOSTING_PLAN } from '@/config/offers';
 interface FaqItem {
   question: string;
   answer: string;
@@ -10,7 +11,7 @@ interface FaqItem {
 
 const faqs: readonly FaqItem[] = [
   {
-    question: 'What can I get for $500?',
+    question: `What can I get for $${BASIC_SITE.priceUsd}?`,
     answer: 'A basic one-page site, landing page, or cleanup: mobile-first layout, a clear call to action, a working contact path, and starter SEO and share-preview cleanup.',
   },
   {
@@ -23,10 +24,10 @@ const faqs: readonly FaqItem[] = [
   },
   {
     question: 'Do I own the site, and is a monthly retainer required?',
-    answer: 'You own the code. M3MM scopes the project, builds it, and hands it off; no monthly retainer is required. If you would rather not manage hosting yourself, an optional $100/month hosting + help plan is available.',
+    answer: `You own the code. M3MM scopes the project, builds it, and hands it off; no monthly retainer is required. If you would rather not manage hosting yourself, an optional $${HOSTING_PLAN.monthlyUsd}/month hosting + help plan is available.`,
   },
   {
-    question: 'What if my budget is under $500?',
+    question: `What if my budget is under $${BASIC_SITE.priceUsd}?`,
     answer: 'Start with an off-the-shelf SiteGuide template. It keeps the launch affordable and leaves a clean upgrade path into a custom M3MM site later.',
     link: {
       href: 'https://siteguide-production.up.railway.app/demos?utm_source=m3mm&utm_medium=faq&utm_campaign=downshift&utm_content=faq-under-500',
