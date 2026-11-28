@@ -145,7 +145,7 @@ describe.each([
     runInNewContext(code, {
       exports: {},
       require: (name: string) => {
-        if (name === '@/lib/inquiry-submission') return { createInquirySubmission: () => createInquirySubmission(uuid), isInquiryAccepted, InquiryRetryError, inquiryErrorMessage, showInquiryRecovery: vi.fn() };
+        if (name === '@/lib/inquiry-submission') return { createInquirySubmission: () => createInquirySubmission(uuid), isInquiryAccepted, InquiryRetryError, inquiryErrorMessage, showInquiryRecovery: vi.fn(), clearInquiryRecovery: vi.fn() };
         if (name === '@/lib/track') return { track };
         if (name === '@/lib/prefill') return { isPriorPrefill: () => false };
         if (name === '../../functions/_lib/validate') return { validateLead };
@@ -234,7 +234,7 @@ describe('intake rejects correctable fields before sending', () => {
     const fetch = vi.fn().mockResolvedValue({ ok: false, status: 503 });
     runInNewContext(code, {
       exports: {}, require: (name: string) => {
-        if (name === '@/lib/inquiry-submission') return { createInquirySubmission: () => createInquirySubmission(uuid), isInquiryAccepted, InquiryRetryError, inquiryErrorMessage, showInquiryRecovery: vi.fn() };
+        if (name === '@/lib/inquiry-submission') return { createInquirySubmission: () => createInquirySubmission(uuid), isInquiryAccepted, InquiryRetryError, inquiryErrorMessage, showInquiryRecovery: vi.fn(), clearInquiryRecovery: vi.fn() };
         if (name === '@/lib/track') return { track: vi.fn() };
         if (name === '@/lib/prefill') return { isPriorPrefill: () => false };
         if (name === '../../functions/_lib/validate') return { validateLead };

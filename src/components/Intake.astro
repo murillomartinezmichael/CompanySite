@@ -249,7 +249,7 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
 <script>
   import { track } from '@/lib/track';
   import { isPriorPrefill } from '@/lib/prefill';
-  import { createInquirySubmission, isInquiryAccepted, InquiryRetryError, inquiryErrorMessage, showInquiryRecovery } from '@/lib/inquiry-submission';
+  import { createInquirySubmission, isInquiryAccepted, InquiryRetryError, inquiryErrorMessage, showInquiryRecovery, clearInquiryRecovery } from '@/lib/inquiry-submission';
   import { validateLead } from '../../functions/_lib/validate';
 
   const form = document.getElementById('intake-form') as HTMLFormElement | null;
@@ -267,6 +267,7 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
       if (!form.querySelector<HTMLButtonElement>('button[type=submit]')?.disabled) {
         status.textContent = '';
         status.classList.add('hidden');
+        clearInquiryRecovery(form);
       }
     });
     // CONVERSION_STANDARDS.md § 4 — intake_start fires once, on the first
@@ -307,6 +308,7 @@ const referralFieldLabel = REFERRAL_FIELD_LABEL;
       if (!validation.ok) {
         status.textContent = '';
         status.classList.add('hidden');
+        clearInquiryRecovery(form);
         for (const error of validation.errors) {
           form.querySelector<HTMLInputElement | HTMLTextAreaElement>(`[name="${error.field}"]`)
             ?.setCustomValidity(error.message);
