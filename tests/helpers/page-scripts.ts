@@ -17,7 +17,7 @@ export type FakeEl = {
   setAttribute(n: string, v: string): void; getAttribute(n: string): string | null; removeAttribute(n: string): void;
   toggleAttribute(n: string, on: boolean): void; focus(): void; contains(o: unknown): boolean;
   addEventListener(n: string, h: Handler): void; requestSubmit(): void; scrollTop: number; scrollHeight: number;
-  appendChild(): void; title: string; querySelector(sel: string): FakeEl | null;
+  appendChild(c: FakeEl): void; title: string; querySelector(sel: string): FakeEl | null;
 };
 
 function scriptOf(file: string) {
@@ -27,7 +27,8 @@ function scriptOf(file: string) {
   }).outputText;
 }
 
-export function loadPage() {
+// `globals` adds names the scripts need for a given test (fetch, TextDecoder).
+export function loadPage(globals: Record<string, unknown> = {}) {
   const docListeners: Array<{ name: string; h: Handler; capture: boolean }> = [];
   const doc: Record<string, unknown> = { activeElement: null };
   const el = (id: string, parent?: FakeEl): FakeEl => {
@@ -37,7 +38,8 @@ export function loadPage() {
       setAttribute(n, v) { this.attrs[n] = String(v); }, getAttribute(n) { return this.attrs[n] ?? null; },
       removeAttribute(n) { delete this.attrs[n]; },
       toggleAttribute(n, on) { if (on) this.attrs[n] = ''; else delete this.attrs[n]; },
-      focus() { doc.activeElement = this; }, appendChild() {}, requestSubmit: vi.fn(),
+      focus() { doc.activeElement = this; }, requestSubmit: vi.fn(),
+      appendChild(c) { c.parent = this; this.children.push(c); },
       contains(o) { for (let x = o as FakeEl | undefined; x; x = x.parent) if (x === this) return true; return false; },
       addEventListener(n, h) { (this.listeners[n] ||= []).push(h); },
       // Enough selector support for the header: 'a' and 'a[aria-current]'.
@@ -82,6 +84,7 @@ export function loadPage() {
     localStorage: { getItem: () => null, setItem() {} },
     CustomEvent: class { constructor(readonly type: string) {} },
     window: { addEventListener() {}, dispatchEvent() {} },
+    ...globals,
   };
   runInNewContext(scriptOf('Header.astro'), ctx);
   runInNewContext(scriptOf('ChatWidget.astro'), ctx);

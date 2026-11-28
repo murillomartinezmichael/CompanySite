@@ -187,6 +187,9 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
         if (stopped) return;
         if (final.stop_reason === 'refusal') {
           controller.enqueue(ndjsonLine({ type: 'error', message: 'The assistant declined to answer that.' }));
+        } else if (final.stop_reason === 'max_tokens' && sentText) {
+          // A plain `done` here made a cut-off answer look complete.
+          controller.enqueue(ndjsonLine({ type: 'error', reason: 'max_tokens', message: 'This answer was cut off because it ran long. Ask a follow-up for the rest.' }));
         } else if (!sentText) {
           // A `done` with no text leaves the widget showing an empty bubble and
           // no error (e.g. max_tokens spent before any text). Say so instead.

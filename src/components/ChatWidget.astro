@@ -309,6 +309,10 @@
                 if (!replyText) {
                   replyEl.classList.add('chat-msg-error');
                   replyEl.textContent = event.message || 'Something went wrong.';
+                } else {
+                  // Partial answer (cut off at the length limit, or the
+                  // provider failed mid-reply): keep it, say it is incomplete.
+                  appendMessage('error', event.message || 'This answer is incomplete.');
                 }
               } else if (event.type === 'done') {
                 replyEl.classList.remove('chat-msg-pending');
