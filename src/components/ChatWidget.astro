@@ -324,7 +324,12 @@
         // just-sent user turn so history stays strictly alternating. Otherwise
         // the next send posts two user roles in a row, the API 400s, and every
         // turn after that fails too — bricking the chat until a page reload.
-        if (!assistantCommitted) history.pop();
+        if (!assistantCommitted) {
+          history.pop();
+          // Give the visitor their text back to retry, unless they already
+          // started typing something new while the request was in flight.
+          if (!input!.value.trim()) input!.value = message;
+        }
         inFlight = false;
         sendBtn!.disabled = false;
       }
