@@ -17,7 +17,7 @@ import { LIMITS, validateLead, esc, UTM_FIELDS, type Lead } from '../_lib/valida
 import { checkRate, rateKey } from '../_lib/rate';
 import { sendToCockpit, leadIdempotencyKey } from '../_lib/cockpit-sink';
 import { storeInCockpit, SUBMISSION_ID } from '../_lib/cockpit-inbox';
-import { inquiryConfirmation } from '../_lib/inquiry-confirmation';
+import { inquiryConfirmation, inquiryFormProblem } from '../_lib/inquiry-confirmation';
 import { sendToN8n } from '../_lib/n8n-sink';
 import { referralOffer, referralShareUrl, REFERRAL_FIELD_LABEL } from '../_lib/referral';
 import { originAllowed, corsResponseHeaders, preflightResponse } from '../_lib/cors';
@@ -207,7 +207,10 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
   }
 
   const rate = checkRate(rateKey('lead', ip), RATE_MAX, RATE_WINDOW_S);
-  if (!rate.ok) {
+  // A native form renders this response, so its 429 waits until the (capped)
+  // body is parsed and can be handed back. It still returns before the
+  // honeypot, validation and every outbound send below.
+  if (!rate.ok && !isForm) {
     return reply(
       429,
       { ok: false, error: 'rate_limited', retryAfter: rate.retryAfter },
@@ -294,6 +297,10 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
     };
   }
 
+  if (!rate.ok) {
+    return inquiryFormProblem(429, body, cors, { retryAfter: rate.retryAfter, submissionId: nativeSubmissionId });
+  }
+
   // Honeypot: bots gleefully fill the hidden field. Silent 200 so they
   // don't know they were caught.
   if (body.company_website) {
@@ -302,6 +309,7 @@ const leadPost: PagesFunction<Env> = async ({ request, env }) => {
 
   const result = validateLead(body);
   if (!result.ok) {
+    if (isForm) return inquiryFormProblem(400, body, cors, { errors: result.errors });
     return reply(400, { ok: false, error: 'validation', errors: result.errors });
   }
   const lead = result.lead;
