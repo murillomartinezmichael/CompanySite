@@ -9,14 +9,18 @@ export const TRACK_LIMITS = {
   ctaName: 80,
   section: 40,
   source: 64,
+  intent: 64,
   path: 256,
   referrer: 512,
+  // Client clocks drift; anything further out than this is forged or broken.
+  tsSkewMs: 24 * 60 * 60 * 1000,
 } as const;
 
 export type CTAEventInput = {
   name?: string;
   section?: string;
   source?: string;
+  intent?: string;
   path?: string;
   referrer?: string;
   ts?: unknown;    // typed unknown so we can honour "number or drop"
@@ -26,6 +30,7 @@ export type CTAEventCleaned = {
   cta: string;
   section?: string;
   source?: string;
+  intent?: string;
   path?: string;
   referrer?: string;
   ts: number;
@@ -51,6 +56,7 @@ export function parseTrackBody(raw: string): CTAEventInput {
         name: p.get('name') || undefined,
         section: p.get('section') || undefined,
         source: p.get('source') || undefined,
+        intent: p.get('intent') || undefined,
       };
     } catch {
       return {};
@@ -67,8 +73,11 @@ export function cleanTrackEvent(body: CTAEventInput, now = Date.now()): CTAEvent
     cta: clean(body.name, TRACK_LIMITS.ctaName) || 'unknown',
     section: clean(body.section, TRACK_LIMITS.section) || undefined,
     source: clean(body.source, TRACK_LIMITS.source) || undefined,
+    intent: clean(body.intent, TRACK_LIMITS.intent) || undefined,
     path: clean(body.path, TRACK_LIMITS.path) || undefined,
     referrer: clean(body.referrer, TRACK_LIMITS.referrer) || undefined,
-    ts: typeof body.ts === 'number' && Number.isFinite(body.ts) ? body.ts : now,
+    // Finite (JSON 1e400 parses to Infinity) and within a day of server time.
+    ts: typeof body.ts === 'number' && Number.isFinite(body.ts) && Math.abs(body.ts - now) <= TRACK_LIMITS.tsSkewMs
+      ? body.ts : now,
   };
 }

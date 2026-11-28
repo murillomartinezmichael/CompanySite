@@ -12,39 +12,18 @@
 //   depth against absurd log-line lengths.
 
 import { checkRate, rateKey } from '../_lib/rate';
-import { clean } from '../_lib/validate';
+import { parseTrackBody, cleanTrackEvent, TRACK_LIMITS } from '../_lib/track-parse';
 import { withSecurityHeaders } from '../_lib/security-headers';
 import { readBodyText } from '../_lib/read-body';
 import { originAllowed, type CorsEnv } from '../_lib/cors';
 
 type Env = CorsEnv;
 
-const MAX_BODY_BYTES = 4 * 1024;
+const MAX_BODY_BYTES = TRACK_LIMITS.bodyBytes;
 const RATE_MAX = 60;
 const RATE_WINDOW_S = 60;
-const CTA_NAME_MAX = 80;
-const SECTION_MAX = 40;
-const SOURCE_MAX = 64;
-const INTENT_MAX = 64;
-const PATH_MAX = 256;
-const REFERRER_MAX = 512;
-// Client clocks drift; anything further out than this is forged or broken.
-const TS_SKEW_MS = 24 * 60 * 60 * 1000;
-
-type CTAEvent = {
-  name?: string;
-  section?: string;
-  source?: string;
-  intent?: string;
-  path?: string;
-  referrer?: string;
-  ts?: unknown;
-};
-
-/** Client `ts` only when finite (JSON 1e400 parses to Infinity) and plausible. */
-function clientTs(ts: unknown, now: number): number {
-  return typeof ts === 'number' && Number.isFinite(ts) && Math.abs(ts - now) <= TS_SKEW_MS ? ts : now;
-}
+// Field caps, the URLSearchParams fallback and the client-ts bound live in
+// ../_lib/track-parse.ts so the unit tests exercise the code that runs here.
 
 // `public/_headers` does NOT reach Pages Functions responses — see
 // ../_lib/security-headers.ts. Every reply off this beacon sets them itself.
@@ -82,36 +61,23 @@ const trackPost: PagesFunction<Env> = async ({ request, env }) => {
   if (!bodyRead.ok) return noContent();
   const text = bodyRead.text;
 
-  let body: CTAEvent = {};
-  try {
-    const parsed: unknown = text ? JSON.parse(text) : {};
-    // `null` is valid JSON and used to survive this parse, then throw on the
-    // first property read below — an unhandled throw the beacon answers with
-    // Cloudflare's own error page instead of the hardened 204. Anything that
-    // is not a plain object simply carries no fields worth reading.
-    if (parsed !== null && typeof parsed === 'object' && !Array.isArray(parsed)) {
-      body = parsed as CTAEvent;
-    }
-  } catch {
-    // sendBeacon sometimes delivers as text; try URLSearchParams as fallback.
-    try {
-      const p = new URLSearchParams(text);
-      body = { name: p.get('name') || undefined, section: p.get('section') || undefined, source: p.get('source') || undefined, intent: p.get('intent') || undefined };
-    } catch { /* noop */ }
-  }
+  // Never throws: non-object JSON (including `null`) carries no fields, and
+  // malformed JSON falls back to URLSearchParams (sendBeacon text bodies).
+  const event = cleanTrackEvent(parseTrackBody(text), Date.now());
 
   const ua = request.headers.get('User-Agent') || 'unknown';
+  // Key order is the log contract (tests/functions/track-handler-golden.test.ts).
   console.log(JSON.stringify({
     event: 'cta',
-    cta: clean(body.name, CTA_NAME_MAX) || 'unknown',
-    section: clean(body.section, SECTION_MAX) || undefined,
-    source: clean(body.source, SOURCE_MAX) || undefined,
-    intent: clean(body.intent, INTENT_MAX) || undefined,
-    path: clean(body.path, PATH_MAX) || undefined,
-    referrer: clean(body.referrer, REFERRER_MAX) || undefined,
+    cta: event.cta,
+    section: event.section,
+    source: event.source,
+    intent: event.intent,
+    path: event.path,
+    referrer: event.referrer,
     ip,
     ua: ua.slice(0, 200),
-    ts: clientTs(body.ts, Date.now()),
+    ts: event.ts,
   }));
 
   return noContent();

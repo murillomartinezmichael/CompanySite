@@ -48,8 +48,9 @@ describe('cleanTrackEvent — shape + defaults', () => {
   it('trims + caps every field to its documented ceiling', () => {
     const huge = 'x'.repeat(1000);
     const r = cleanTrackEvent({
-      name: huge, section: huge, source: huge, path: huge, referrer: huge,
+      name: huge, section: huge, source: huge, intent: huge, path: huge, referrer: huge,
     });
+    expect((r.intent ?? '').length).toBeLessThanOrEqual(TRACK_LIMITS.intent);
     expect(r.cta.length).toBeLessThanOrEqual(TRACK_LIMITS.ctaName);
     expect((r.section ?? '').length).toBeLessThanOrEqual(TRACK_LIMITS.section);
     expect((r.source ?? '').length).toBeLessThanOrEqual(TRACK_LIMITS.source);
@@ -63,8 +64,8 @@ describe('cleanTrackEvent — shape + defaults', () => {
     expect(r.cta).toBe('unknown');
   });
 
-  it('accepts a client-supplied ts if it is a finite number', () => {
-    const r = cleanTrackEvent({ ts: 1_700_000_000_000 });
+  it('accepts a client-supplied ts if it is a finite number near server time', () => {
+    const r = cleanTrackEvent({ ts: 1_700_000_000_000 }, 1_700_000_005_000);
     expect(r.ts).toBe(1_700_000_000_000);
   });
 
@@ -102,7 +103,7 @@ describe('cleanTrackEvent — shape + defaults', () => {
 
 describe('TRACK_LIMITS — contract lock', () => {
   it('caps match the endpoint contract in functions/api/track.ts', () => {
-    // These match the constants at the top of track.ts. If the endpoint
+    // track.ts now reads these directly; this locks the public contract. If it
     // drifts, this test fails and both places get looked at together.
     expect(TRACK_LIMITS.bodyBytes).toBe(4 * 1024);
     expect(TRACK_LIMITS.ctaName).toBe(80);
@@ -110,5 +111,26 @@ describe('TRACK_LIMITS — contract lock', () => {
     expect(TRACK_LIMITS.source).toBe(64);
     expect(TRACK_LIMITS.path).toBe(256);
     expect(TRACK_LIMITS.referrer).toBe(512);
+    expect(TRACK_LIMITS.intent).toBe(64);
+    expect(TRACK_LIMITS.tsSkewMs).toBe(24 * 60 * 60 * 1000);
+  });
+});
+
+describe('parity with the /api/track handler', () => {
+  it('recovers intent from a url-encoded body', () => {
+    expect(parseTrackBody('name=cta-hero&intent=book%3Afree-review').intent).toBe('book:free-review');
+  });
+
+  it('keeps intent in the cleaned record', () => {
+    expect(cleanTrackEvent({ name: 'x', intent: '  checkout:basic-deposit ' }, 1).intent).toBe('checkout:basic-deposit');
+  });
+
+  const now = 1_700_000_000_000;
+  it.each([-1, 0, now - 86_400_001, now + 86_400_001])('rejects ts %s more than 24h from server time', (ts) => {
+    expect(cleanTrackEvent({ ts }, now).ts).toBe(now);
+  });
+
+  it('accepts ts exactly 24h from server time', () => {
+    expect(cleanTrackEvent({ ts: now + 86_400_000 }, now).ts).toBe(now + 86_400_000);
   });
 });
