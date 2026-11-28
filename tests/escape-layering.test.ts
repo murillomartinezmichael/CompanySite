@@ -20,7 +20,8 @@ describe('Escape with the mobile menu and chat both open', () => {
 
     keydown('Escape');
     expect(menu.getAttribute('aria-expanded')).toBe('false');
-    expect(doc.activeElement).toBe(menu);
+    // Focus was on the chat trigger, outside the nav, so it stays there.
+    expect(doc.activeElement).toBe(chat['chat-trigger']);
   });
 
   it('still closes each one on its own', () => {

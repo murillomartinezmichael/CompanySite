@@ -215,11 +215,15 @@
       input!.focus();
     }
     function closePanel() {
+      // The panel is non-modal: only pull focus back if it was inside the
+      // panel (or already lost), not from a field elsewhere on the page.
+      const active = document.activeElement;
+      const reclaim = !active || active === document.body || panel!.contains(active);
       opened = false;
       widget!.classList.remove('is-open');
       trigger!.setAttribute('aria-expanded', 'false');
       panel!.hidden = true;
-      trigger!.focus();
+      if (reclaim) trigger!.focus();
     }
 
     trigger.addEventListener('click', () => (opened ? closePanel() : openPanel()));

@@ -53,9 +53,10 @@ export function loadPage() {
   const menu = el('menu');
   menu.attrs['aria-expanded'] = 'false';
   const widget = el('chat-widget');
-  const chat = Object.fromEntries(['chat-trigger', 'chat-panel', 'chat-close', 'chat-messages', 'chat-form', 'chat-input', 'chat-send']
-    .map((id) => [id, el(id, widget)])) as Record<string, FakeEl>;
-  chat['chat-widget'] = widget;
+  const panel = el('chat-panel', widget);
+  const chat: Record<string, FakeEl> = { 'chat-widget': widget, 'chat-trigger': el('chat-trigger', widget), 'chat-panel': panel };
+  for (const id of ['chat-close', 'chat-messages', 'chat-form', 'chat-input', 'chat-send']) chat[id] = el(id, panel);
+  const outside = el('intake-field'); // an unrelated focusable control on the page
   const byId: Record<string, FakeEl> = { 'company-navigation': nav, ...chat };
 
   const queries: Record<string, { matches: boolean; listeners: Array<() => void> }> = {};
@@ -96,5 +97,5 @@ export function loadPage() {
     mq.matches = matches;
     mq.listeners.forEach((h) => h());
   };
-  return { doc, nav, navLinks, menu, chat, keydown, click, setDesktop };
+  return { doc, nav, navLinks, menu, chat, outside, keydown, click, setDesktop };
 }
