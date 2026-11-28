@@ -204,6 +204,19 @@
   if (widget && trigger && panel && closeBtn && messagesEl && form && input && sendBtn) {
     const history: ChatMessage[] = [];
     const MAX_HISTORY = 20; // must match MAX_HISTORY_MESSAGES in functions/api/chat.ts
+    // Must match MAX_MESSAGE_CHARS / MAX_BODY_BYTES in functions/api/chat.ts. A
+    // reply can run past the per-message cap, and the server rejects the whole
+    // request when any message or the body is over, every turn after.
+    const MAX_MESSAGE_CHARS = 4000;
+    const MAX_BODY_BYTES = 16 * 1024;
+    function utf8Bytes(s: string): number {
+      let n = 0;
+      for (let i = 0; i < s.length; i++) {
+        const c = s.charCodeAt(i);
+        n += c < 0x80 ? 1 : c < 0x800 ? 2 : c >= 0xd800 && c <= 0xdbff ? (i++, 4) : 3;
+      }
+      return n;
+    }
     let opened = false;
     let inFlight = false;
 
@@ -260,6 +273,7 @@
       // Stay within the backend's message cap, trimming whole user/assistant
       // pairs so the window still starts on a user turn (the API requires it).
       while (history.length > MAX_HISTORY) history.splice(0, 2);
+      while (history.length > 1 && utf8Bytes(JSON.stringify({ messages: history })) > MAX_BODY_BYTES) history.splice(0, 2);
       appendMessage('user', message);
 
       const replyEl = appendMessage('assistant', '', true);
@@ -324,7 +338,11 @@
         }
 
         if (replyText) {
-          history.push({ role: 'assistant', content: replyText });
+          // The visitor still sees the whole reply; only the copy sent back as
+          // context is capped (never ending on half a surrogate pair).
+          let content = replyText.slice(0, MAX_MESSAGE_CHARS);
+          if (/[\ud800-\udbff]$/.test(content)) content = content.slice(0, -1);
+          history.push({ role: 'assistant', content });
           assistantCommitted = true;
         }
       } catch {
