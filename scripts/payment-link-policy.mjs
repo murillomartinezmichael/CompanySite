@@ -18,7 +18,7 @@ export function paymentLinkProblem(link, allowedHosts = PAYMENT_LINK_HOSTS) {
   if (parsed.protocol !== 'https:') return 'it must use https://';
   if (parsed.username || parsed.password || parsed.port) return 'credentials and custom ports are not allowed';
   if (!allowedHosts.includes(parsed.hostname)) return 'its host is not in the verified payment-host allowlist';
-  if (parsed.hash) return 'fragments are not supported';
+  if (link.includes('#')) return 'fragments are not supported';
   // Inspect the original path too: URL() otherwise normalizes /a/../id away.
   const rawPath = link.match(/^https:\/\/[^/]+(\/[^?#]*)/i)?.[1];
   if (rawPath !== parsed.pathname) return 'its path is not canonical';

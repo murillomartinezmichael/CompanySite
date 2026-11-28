@@ -15,9 +15,12 @@ describe('shared payment URL syntax policy', () => {
     expect(resolvePaymentLink(link)).toBe(link);
     expect(scanText(`<a href="${link}">Pay</a>`)).toEqual([]);
   });
+  it('accepts an encoded hash in a payment-link query', () => {
+    expect(paymentLinkProblem(base + '?client_reference_id=order%2312')).toBeNull();
+  });
   it.each([
     'https://u:p@buy.stripe.com/abc123', 'https://buy.stripe.com:8443/abc123',
-    'https://buy.stripe.com/a/../abc123', base + '/extra', base + '#complete',
+    'https://buy.stripe.com/a/../abc123', base + '/extra', base + '#complete', base + '#',
     'https://buy.stripe.com/test_abc123?utm_campaign=live',
     'https://buy.stripe.com/%74est_abc123', 'https://buy.stripe.com.evil.test/abc123',
   ])('rejects malformed or unauthorized URL %s', (link) => {
