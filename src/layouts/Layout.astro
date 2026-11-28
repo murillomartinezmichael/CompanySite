@@ -4,6 +4,7 @@ import '@/styles/global.css';
 import '@/styles/redesign.css';
 // Claude-powered assistant, replaced the SiteGuide embed 2026-08-20.
 import ChatWidget from '@/components/ChatWidget.astro';
+import { servedPath } from '@/lib/servedUrl';
 
 interface BreadcrumbItem {
   name: string;
@@ -33,7 +34,8 @@ const {
   extraJsonLd,
 } = Astro.props;
 
-const canonical = new URL(path, Astro.site ?? 'https://m3mm.net').toString();
+// servedPath: Pages 308-redirects `/about` to `/about/`; canonical must be the 200 URL.
+const canonical = new URL(servedPath(path), Astro.site ?? 'https://m3mm.net').toString();
 
 // CONVERSION_STANDARDS.md § 1 — no dead-end CTAs. Only `/websites`, `/audit`, and
 // the `/for/*` trade pages mount <Intake>; on those pages the sticky CTA is

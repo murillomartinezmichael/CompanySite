@@ -101,7 +101,7 @@ describe('resume.pdf builds', () => {
     // company chrome rather than importing the old standalone site's own.
     expect(html, 'hub Header brand mark missing').toContain('/official-logo-192.png');
     expect(html, 'hub Footer missing').toMatch(/Modernize\. Mobilize\. Multiply\./);
-    expect(html, 'canonical is not the hub URL').toContain('href="https://m3mm.net/resume"');
+    expect(html, 'canonical is not the hub URL').toContain('href="https://m3mm.net/resume/"');
     // The retired accent token from the standalone site must not survive the
     // port — a stray `text-signal` renders as an unstyled class on the hub.
     expect(html, 'stale `signal` accent classes ported from the old site').not.toMatch(/\b(?:text|bg|border)-signal\b/);

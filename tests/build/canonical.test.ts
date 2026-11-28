@@ -79,7 +79,7 @@ describe('canonical URL wiring', () => {
   it('Layout.astro emits <link rel="canonical"> from Astro.site', () => {
     const layout = read('src/layouts/Layout.astro');
     expect(layout).toMatch(/<link\s+rel="canonical"\s+href=\{canonical\}\s*\/>/);
-    expect(layout).toMatch(/const canonical = new URL\(path, Astro\.site\s*\?\?\s*['"]https:\/\/m3mm\.net['"]\)/);
+    expect(layout).toMatch(/const canonical = new URL\(servedPath\(path\), Astro\.site\s*\?\?\s*['"]https:\/\/m3mm\.net['"]\)/);
   });
 
   it('Layout.astro keeps og:url in sync with canonical', () => {
