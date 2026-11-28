@@ -39,3 +39,33 @@ export function wireLazyVideos() {
 
   videos.forEach((v) => io.observe(v));
 }
+
+// Set `<video data-poster-srcset>` posters only when the video nears the
+// viewport, choosing the smallest candidate covering its rendered width
+// (DPR capped at 2). A bare `poster` downloads at full size on first load.
+export function wireLazyPosters() {
+  const videos = document.querySelectorAll<HTMLVideoElement>('video[data-poster-srcset]');
+  if (videos.length === 0) return;
+  const setPoster = (video: HTMLVideoElement) => {
+    if (video.poster) return;
+    const candidates = (video.dataset.posterSrcset ?? '').split(',').map((entry) => {
+      const [url, width] = entry.trim().split(/\s+/);
+      return { url, width: parseInt(width ?? '', 10) || Infinity };
+    }).filter((c) => c.url).sort((a, b) => a.width - b.width);
+    if (candidates.length === 0) return;
+    const needed = (video.clientWidth || window.innerWidth) * Math.min(window.devicePixelRatio || 1, 2);
+    video.poster = (candidates.find((c) => c.width >= needed) ?? candidates[candidates.length - 1]).url;
+  };
+  if (!('IntersectionObserver' in window)) {
+    videos.forEach(setPoster);
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      setPoster(entry.target as HTMLVideoElement);
+      io.unobserve(entry.target);
+    }
+  }, { rootMargin: '600px 0px' });
+  videos.forEach((video) => io.observe(video));
+}

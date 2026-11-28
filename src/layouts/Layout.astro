@@ -306,11 +306,12 @@ const stickyIntakeHref = hasIntakeOnPage ? '#intake' : '/audit#intake';
       import { wireMotion } from '@/lib/motion';
       import { wireCTAs } from '@/lib/track';
       import { wirePrefill } from '@/lib/prefill';
-      import { wireLazyVideos } from '@/lib/lazyVideo';
+      import { wireLazyPosters, wireLazyVideos } from '@/lib/lazyVideo';
       wireMotion();
       wireCTAs();
       wirePrefill();
       wireLazyVideos();
+      wireLazyPosters();
     </script>
 
     <ChatWidget />

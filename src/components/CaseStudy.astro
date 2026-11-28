@@ -12,7 +12,12 @@ const { entry, index } = Astro.props;
 const d = entry.data;
 const hideLiveHeader = entry.id === 'big7';
 const previewStill = entry.id === 'aries' ? '/videos/aries-walkthrough-still.webp' : d.poster;
-const conceptPoster = d.conceptCover ? (await getImage({src:d.conceptCover,width:1600,format:'webp'})).src : undefined;
+// Video posters are fetched eagerly at full size, so they ship as a srcset that
+// src/lib/lazyVideo.ts resolves once the video nears the viewport.
+const posterWidths = [960, 1280, 1600];
+const posterSrcset = d.conceptCover
+  ? (await Promise.all(posterWidths.map(async w => `${(await getImage({ src: d.conceptCover!, width: w, format: 'webp' })).src} ${w}w`))).join(', ')
+  : d.poster ?? previewStill;
 const cover = d.conceptCover ?? d.image;
 const coverAlt = d.conceptCover ? d.conceptAlt ?? 'AI-generated architectural concept, not completed client work' : d.imageAlt ?? '';
 
@@ -45,7 +50,7 @@ if (d.liveUrl) {
         playsinline
         muted
         controls
-        poster={conceptPoster ?? d.poster ?? previewStill}
+        data-poster-srcset={posterSrcset}
       >
         <source src={d.video} type="video/mp4" />
         <track kind="captions" srclang="en" label="Muted video description" src="/videos/project-preview-muted.en.vtt" default />
