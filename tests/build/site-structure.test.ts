@@ -19,6 +19,16 @@ const hrefOf = (tag: string) => tag.match(/\bhref="([^"]+)"/)?.[1]?.replace(/&am
 const urlOf = (href: string, route: string) => new URL(href, 'https://m3mm.net' + route);
 
 describe('rendered site structure', () => {
+  it.each(['/services', '/audit'])('marks only exact primary navigation matches on %s', route => {
+    const page = pages.find(p => p.route === route + '/');
+    const nav = page?.html.match(/<nav\b[^>]*aria-label="Primary"[^>]*>([\s\S]*?)<\/nav>/)?.[1];
+    expect(nav).toBeDefined();
+    const links = anchors(nav!);
+    const current = links.filter(tag => tag.includes('aria-current="page"'));
+    expect(current.map(hrefOf)).toEqual(route === '/services' ? ['/services'] : []);
+    expect(links.filter(tag => tag.includes('data-active-section')).map(hrefOf)).toEqual(['/services']);
+  });
+
   it('every internal navigation target and fragment resolves in the build', () => {
     const errors: string[] = [];
     for (const page of pages) for (const tag of anchors(page.html)) {
