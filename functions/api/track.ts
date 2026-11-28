@@ -15,8 +15,9 @@ import { checkRate, rateKey } from '../_lib/rate';
 import { clean } from '../_lib/validate';
 import { withSecurityHeaders } from '../_lib/security-headers';
 import { readBodyText } from '../_lib/read-body';
+import { originAllowed, type CorsEnv } from '../_lib/cors';
 
-type Env = {};
+type Env = CorsEnv;
 
 const MAX_BODY_BYTES = 4 * 1024;
 const RATE_MAX = 60;
@@ -55,7 +56,12 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
   }
 };
 
-const trackPost: PagesFunction<Env> = async ({ request }) => {
+const trackPost: PagesFunction<Env> = async ({ request, env }) => {
+  // The beacon is sent same-origin only (src/lib/track.ts). A foreign page can
+  // otherwise make each of its visitors post forged events, one IP apiece, so
+  // the per-IP limit below never engages. Same allowlist as /api/lead.
+  if (!originAllowed(env, request.headers.get('Origin'))) return noContent();
+
   const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
 
   // Soft rate — even a hostile client can't drown the tail.
